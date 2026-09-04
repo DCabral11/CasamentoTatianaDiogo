@@ -1,15 +1,16 @@
 ﻿@{
     Layout = "_Layout";
-    ViewData["Title"] = "Admin Login";
+    ViewData["Title"] = "Área de administração";
 }
 
 <div class="container py-5 narrow">
     <form method="post" class="elegant-card p-4">
         @Html.AntiForgeryToken()
-        <h1>Admin Login</h1>
-        <input name="email" class="form-control mb-3" placeholder="Email" />
-        <input name="password" type="password" class="form-control mb-3" placeholder="Password" />
-        <button class="btn btn-primary">Login</button>
+        <h1>Área de administração</h1>
+        <p class="text-muted">Inicia sessão para gerir o site do casamento.</p>
+        <input name="email" type="email" class="form-control mb-3" placeholder="E-mail" aria-label="E-mail" />
+        <input name="password" type="password" class="form-control mb-3" placeholder="Palavra-passe" aria-label="Palavra-passe" />
+        <button class="btn btn-primary">Entrar</button>
         <div asp-validation-summary="All" class="text-danger mt-3"></div>
     </form>
 </div>

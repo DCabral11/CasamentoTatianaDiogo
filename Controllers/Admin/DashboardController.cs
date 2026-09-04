@@ -40,9 +40,9 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             var r = await signInManager.PasswordSignInAsync(email, password, false, true);
 
             if (r.Succeeded)
-                return LocalRedirect(returnUrl ?? "Admin/Dashboard/Index");
+                return LocalRedirect(returnUrl ?? "/Admin/Dashboard/Index");
 
-            ModelState.AddModelError("", "Login inválido!");
+            ModelState.AddModelError("", "Não foi possível iniciar sessão. Confirma o e-mail e a palavra-passe.");
 
             return View("~/Views/Admin/Login.cshtml");
         }

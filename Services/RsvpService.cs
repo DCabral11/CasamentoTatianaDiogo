@@ -40,12 +40,12 @@ namespace CasamentoTatianaDiogo.Services
         public async Task<(bool ok, string message)> SubmitAsync(RsvpSubmitViewModel model, string? ip, string? userAgent)
         {
             if (model.Status is null)
-                return (false, "Por favor, selecione uma opção de presença.");
+                return (false, "Escolhe se vais estar presente antes de continuares.");
 
             var guest = await db.Guests.Include(g => g.Family).Include(g => g.PlusOnes).FirstOrDefaultAsync(g => g.Id == model.GuestId);
 
             if (guest == null)
-                return (false, "Convidado não encontrado.");
+                return (false, "Não encontrámos este convidado. Volta à pesquisa e tenta novamente.");
 
             var guestsToRespond = new List<Guest> { guest };
 
@@ -64,14 +64,14 @@ namespace CasamentoTatianaDiogo.Services
             }
 
             if (await db.RsvpResponses.AnyAsync(r => guestsToRespond.Select(g => g.Id).Contains(r.GuestId)) && !model.ConfirmOverwrite)
-                return (false, "Já existe uma resposta registrada. Por favor, confirme que deseja substituir a resposta existente.");
+                return (false, "Já existe uma resposta para um dos convidados selecionados. Assinala a opção de atualização para a substituir.");
 
             var plusOne = model.PlusOneId.HasValue
                 ? guest.PlusOnes.FirstOrDefault(p => p.Id == model.PlusOneId.Value)
                 : null;
 
             if (model.PlusOneAttending && plusOne == null)
-                return (false, "O acompanhante selecionado não é válido.");
+                return (false, "Não foi possível associar esse acompanhante. Atualiza a página e tenta novamente.");
 
             var emailDetails = new List<RsvpEmailDetail>();
 
@@ -115,7 +115,7 @@ namespace CasamentoTatianaDiogo.Services
             await db.SaveChangesAsync();
             await emailNotifications.SendAsync(emailDetails);
 
-            return (true, "A resposta foi guardada com sucesso. Agradecemos por confirmar sua presença!");
+            return (true, "A resposta foi guardada. Obrigado por confirmares a tua presença!");
         }
     }
 }

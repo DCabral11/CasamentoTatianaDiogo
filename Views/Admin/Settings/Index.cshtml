@@ -1,23 +1,58 @@
-﻿@model WeddingSettings
+@model WeddingSettings
+@{
+    ViewData["Title"] = "Definições do casamento";
+}
 
-<div class="container py-5">
-    <h1>Wedding Settings</h1>
+<div class="container py-5 narrow">
+    <h1>Definições do casamento</h1>
+    <p class="text-muted">Atualiza aqui todos os dados apresentados aos convidados. As alterações ficam disponíveis de imediato no site.</p>
+
     <form method="post" class="admin-form">
         @Html.AntiForgeryToken()
         <input type="hidden" asp-for="Id" />
-        <div class="row g-3">
-            @foreach (var p in new[] { "BrideName", "GroomName", "WeddingDateTime", "CeremonyLocationName", "CeremonyAddress", "CeremonyGoogleMapsUrl", "CeremonyGoogleMapsEmbedUrl", "ReceptionLocationName", "ReceptionAddress", "ReceptionGoogleMapsUrl", "ReceptionGoogleMapsEmbedUrl", "BridePhone", "BrideEmail", "GroomPhone", "GroomEmail", "HomeHeroTitle", "HomeHeroSubtitle", "LogoPath", "PrimaryColor", "SecondaryColor" })
-            {
-                 <div class="col-md-6">
-                     <label class="form-label">@p</label>
-                     <input name="@p" value="@Model.GetType().GetProperty(p)!.GetValue(Model)" class="form-control" />
-                 </div>   
-            }
-            <div class="col-12">
-                <label>CoupleStory</label>
-                <textarea asp-for="CoupleStory" class="form-control" rows="5"></textarea>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <fieldset class="admin-fieldset">
+            <legend>O casal e a página inicial</legend>
+            <div class="row g-3">
+                <div class="col-md-6"><label asp-for="BrideName" class="form-label">Nome da noiva</label><input asp-for="BrideName" class="form-control" /></div>
+                <div class="col-md-6"><label asp-for="GroomName" class="form-label">Nome do noivo</label><input asp-for="GroomName" class="form-control" /></div>
+                <div class="col-12"><label asp-for="HomeHeroTitle" class="form-label">Mensagem principal</label><input asp-for="HomeHeroTitle" class="form-control" placeholder="Ex.: Estamos a casar!" /></div>
+                <div class="col-12"><label asp-for="HomeHeroSubtitle" class="form-label">Mensagem de apoio</label><textarea asp-for="HomeHeroSubtitle" class="form-control" rows="2"></textarea></div>
+                <div class="col-12"><label asp-for="CoupleStory" class="form-label">A nossa história</label><textarea asp-for="CoupleStory" class="form-control" rows="5" placeholder="Conta aos convidados um pouco da vossa história."></textarea></div>
+                <div class="col-12"><label asp-for="LogoPath" class="form-label">Caminho do logótipo</label><input asp-for="LogoPath" class="form-control" placeholder="/images/navbar.png" /></div>
             </div>
-        </div>
-        <button class="btn btn-primary mt-3">Save</button>
+        </fieldset>
+
+        <fieldset class="admin-fieldset">
+            <legend>Data e locais</legend>
+            <div class="row g-3">
+                <div class="col-12"><label asp-for="WeddingDateTime" class="form-label">Data e hora do casamento</label><input asp-for="WeddingDateTime" type="datetime-local" class="form-control" /></div>
+                <div class="col-md-6"><label asp-for="CeremonyLocationName" class="form-label">Local da cerimónia</label><input asp-for="CeremonyLocationName" class="form-control" /></div>
+                <div class="col-md-6"><label asp-for="CeremonyAddress" class="form-label">Morada da cerimónia</label><input asp-for="CeremonyAddress" class="form-control" /></div>
+                <div class="col-12"><label asp-for="CeremonyGoogleMapsUrl" class="form-label">Ligação Google Maps da cerimónia</label><input asp-for="CeremonyGoogleMapsUrl" type="url" class="form-control" /></div>
+                <div class="col-12"><label asp-for="CeremonyGoogleMapsEmbedUrl" class="form-label">Mini-mapa da cerimónia</label><textarea asp-for="CeremonyGoogleMapsEmbedUrl" class="form-control" rows="3" placeholder="Cola a ligação de incorporação ou o código &lt;iframe&gt; do Google Maps."></textarea></div>
+                <div class="col-md-6"><label asp-for="ReceptionLocationName" class="form-label">Local do copo d'água</label><input asp-for="ReceptionLocationName" class="form-control" /></div>
+                <div class="col-md-6"><label asp-for="ReceptionAddress" class="form-label">Morada do copo d'água</label><input asp-for="ReceptionAddress" class="form-control" /></div>
+                <div class="col-12"><label asp-for="ReceptionGoogleMapsUrl" class="form-label">Ligação Google Maps do copo d'água</label><input asp-for="ReceptionGoogleMapsUrl" type="url" class="form-control" /></div>
+                <div class="col-12"><label asp-for="ReceptionGoogleMapsEmbedUrl" class="form-label">Mini-mapa do copo d'água</label><textarea asp-for="ReceptionGoogleMapsEmbedUrl" class="form-control" rows="3" placeholder="Cola a ligação de incorporação ou o código &lt;iframe&gt; do Google Maps."></textarea></div>
+            </div>
+        </fieldset>
+
+        <fieldset class="admin-fieldset">
+            <legend>Contactos e cores</legend>
+            <div class="row g-3">
+                <div class="col-md-6"><label asp-for="BridePhone" class="form-label">Telefone da noiva</label><input asp-for="BridePhone" type="tel" class="form-control" /></div>
+                <div class="col-md-6"><label asp-for="GroomPhone" class="form-label">Telefone do noivo</label><input asp-for="GroomPhone" type="tel" class="form-control" /></div>
+                <div class="col-md-6"><label asp-for="BrideEmail" class="form-label">E-mail da noiva</label><input asp-for="BrideEmail" type="email" class="form-control" /></div>
+                <div class="col-md-6"><label asp-for="GroomEmail" class="form-label">E-mail do noivo</label><input asp-for="GroomEmail" type="email" class="form-control" /></div>
+                <div class="col-md-6"><label asp-for="PrimaryColor" class="form-label">Cor principal</label><input asp-for="PrimaryColor" type="color" class="form-control form-control-color" /></div>
+                <div class="col-md-6"><label asp-for="SecondaryColor" class="form-label">Cor de fundo</label><input asp-for="SecondaryColor" type="color" class="form-control form-control-color" /></div>
+            </div>
+        </fieldset>
+
+        <button class="btn btn-primary btn-lg mt-2"><i class="bi bi-check2-circle"></i> Guardar alterações</button>
     </form>
 </div>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

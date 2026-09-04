@@ -1,17 +1,17 @@
 ﻿@model IEnumerable<Guest>
 
 <div class="container py-5">
-    <h1>RSVP Management</h1>
+    <h1>Respostas de presença</h1>
     <a class="btn btn-outline-primary" href="/Admin/Rsvp/ExportCsv">
-        Export CSV
+        <i class="bi bi-download"></i> Exportar CSV
     </a>
     <table class="table">
         <thead>
             <tr>
-                <th>Guest</th>
-                <th>Family</th>
-                <th>Status</th>
-                <th>Set</th>
+                <th>Convidado</th>
+                <th>Família</th>
+                <th>Resposta</th>
+                <th>Atualizar</th>
             </tr>
         </thead>
         <tbody>
@@ -25,11 +25,11 @@
                         <form method="post" action="/Admin/Rsvp/SetStatus/@g.Id">
                             @Html.AntiForgeryToken()
                             <select name="status" class="form-select form-select-sm d-inline w-auto">
-                                <option>Pending</option>
-                                <option>Attending</option>
-                                <option>NotAttending</option>
+                                <option value="Pending" selected="@(g.CurrentStatus == CasamentoTatianaDiogo.Models.Enums.RsvpStatus.Pending ? "selected" : null)">Por responder</option>
+                                <option value="Attending" selected="@(g.CurrentStatus == CasamentoTatianaDiogo.Models.Enums.RsvpStatus.Attending ? "selected" : null)">Confirmado</option>
+                                <option value="NotAttending" selected="@(g.CurrentStatus == CasamentoTatianaDiogo.Models.Enums.RsvpStatus.NotAttending ? "selected" : null)">Não vai estar presente</option>
                             </select>
-                            <button class="btn btn-sm btn-primary">Save</button>
+                            <button class="btn btn-sm btn-primary">Guardar</button>
                         </form>
                     </td>
                 </tr>

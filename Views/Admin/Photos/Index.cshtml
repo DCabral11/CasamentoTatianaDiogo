@@ -1,15 +1,15 @@
 ﻿@model IEnumerable<PhotoUpload>
 
 <div class="container py-5">
-    <h1>Photo Records</h1>
+    <h1>Fotografias recebidas</h1>
     <table class="table">
         <thead>
             <tr>
-                <th>Date</th>
-                <th>File</th>
-                <th>Guest</th>
-                <th>Size</th>
-                <th>Drive</th>
+                <th>Data</th>
+                <th>Ficheiro</th>
+                <th>Convidado</th>
+                <th>Tamanho</th>
+                <th>Google Drive</th>
                 <th></th>
             </tr>
         </thead>
@@ -22,12 +22,12 @@
                     <th>@p.GuestName</th>
                     <th>@p.SizeBytes</th>
                     <td>
-                        <a href="@p.GoogleDriveWebViewLink" target="_blank">Open</a>
+                        <a href="@p.GoogleDriveWebViewLink" target="_blank" rel="noopener">Abrir</a>
                     </td>
                     <td>
                         <form method="post" action="/Admin/Photos/Delete/@p.Id">
                             @Html.AntiForgeryToken()
-                            <button class="btn btn-sm btn-danger">Delete Metadata</button>
+                            <button class="btn btn-sm btn-danger" onclick="return confirm('Remover o registo desta fotografia? O ficheiro no Drive não será apagado.')">Remover registo</button>
                         </form>
                     </td>
                 </tr>

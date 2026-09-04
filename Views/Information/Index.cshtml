@@ -7,9 +7,20 @@
     var receptionQuery = $"{settings.ReceptionLocationName}, {settings.ReceptionAddress}";
     var ceremonyMapUrl = settings.CeremonyGoogleMapsUrl ?? $"https://www.google.com/maps/search/?api=1&query={Uri.EscapeDataString(ceremonyQuery)}";
     var receptionMapUrl = settings.ReceptionGoogleMapsUrl ?? $"https://www.google.com/maps/search/?api=1&query={Uri.EscapeDataString(receptionQuery)}";
-    var ceremonyEmbedUrl = settings.CeremonyGoogleMapsEmbedUrl ?? $"https://www.google.com/maps?q={Uri.EscapeDataString(ceremonyQuery)}&output=embed";
-    var receptionEmbedUrl = settings.ReceptionGoogleMapsEmbedUrl ?? $"https://www.google.com/maps?q={Uri.EscapeDataString(receptionQuery)}&output=embed";
+    var ceremonyEmbedUrl = GetEmbedUrl(settings.CeremonyGoogleMapsEmbedUrl, $"https://www.google.com/maps?q={Uri.EscapeDataString(ceremonyQuery)}&output=embed");
+    var receptionEmbedUrl = GetEmbedUrl(settings.ReceptionGoogleMapsEmbedUrl, $"https://www.google.com/maps?q={Uri.EscapeDataString(receptionQuery)}&output=embed");
     var arrival = Model.TimelineEvents.FirstOrDefault();
+}
+
+@functions {
+    public static string GetEmbedUrl(string? value, string fallback)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return fallback;
+
+        var match = System.Text.RegularExpressions.Regex.Match(value, "src=[\\\"']([^\\\"']+)", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+        return match.Success ? System.Net.WebUtility.HtmlDecode(match.Groups[1].Value) : value;
+    }
 }
 
 <div class="information-page">

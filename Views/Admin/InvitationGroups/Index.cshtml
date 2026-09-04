@@ -1,17 +1,17 @@
 ﻿@model IEnumerable<Family>
 
 <div class="container py-5">
-    <h1>InvitationGroups</h1>
+    <h1>Famílias</h1>
     <p>
-        <a class="btn btn-primary" href="/Admin/InvitationGroups/Create">Create</a>
+        <a class="btn btn-primary" href="/Admin/InvitationGroups/Create">Adicionar família</a>
     </p>
     <table class="table table-striped">
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Name</th>
-                <th>GroupCode</th>
-                <th>AllowGroupRsvp</th>
+                <th>Nome</th>
+                <th>Código</th>
+                <th>Respostas múltiplas</th>
                 <th></th>
             </tr>
         </thead>
@@ -24,10 +24,10 @@
                     <td>@item.GroupCode</td>
                     <td>@item.AllowGroupRsvp</td>
                     <td>
-                        <a href="/Admin/InvitationGroups/Edit/@item.Id">Edit</a>
+                        <a href="/Admin/InvitationGroups/Edit/@item.Id">Editar</a>
                         <form method="post" action="/Admin/InvitationGroups/Delete/@item.Id" class="d-inline">
                             @Html.AntiForgeryToken()
-                            <button class="btn btn-sm btn-link text-danger">Delete</button>
+                            <button class="btn btn-sm btn-link text-danger" onclick="return confirm('Remover esta família?')">Remover</button>
                         </form>
                     </td>
                 </tr>

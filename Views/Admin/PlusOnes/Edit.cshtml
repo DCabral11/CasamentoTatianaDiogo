@@ -1,0 +1,17 @@
+@model PlusOne
+@{
+    ViewData["Title"] = Model.Id == 0 ? "Adicionar acompanhante" : "Editar acompanhante";
+}
+
+<div class="container py-5 narrow">
+    <h1>@ViewData["Title"]</h1>
+    <form method="post" asp-action="Save" class="admin-form">
+        @Html.AntiForgeryToken()<input asp-for="Id" type="hidden" /><div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="mb-3"><label asp-for="MainGuestId" class="form-label">Convidado associado</label><select asp-for="MainGuestId" asp-items="ViewBag.Guests" class="form-select"><option value="">Seleciona um convidado</option></select></div>
+        <div class="row g-3"><div class="col-md-6"><label asp-for="PlusOneFirstName" class="form-label">Primeiro nome</label><input asp-for="PlusOneFirstName" class="form-control" /></div><div class="col-md-6"><label asp-for="PlusOneLastName" class="form-label">Apelido</label><input asp-for="PlusOneLastName" class="form-control" /></div></div>
+        <div class="mt-3"><label asp-for="PlusOneDisplayName" class="form-label">Nome a apresentar</label><input asp-for="PlusOneDisplayName" class="form-control" placeholder="Preenchido automaticamente se ficar vazio" /></div>
+        <div class="mt-3"><label asp-for="PlusOneDietaryRestrictions" class="form-label">Restrições alimentares</label><textarea asp-for="PlusOneDietaryRestrictions" class="form-control" rows="3"></textarea></div>
+        <button class="btn btn-primary mt-4">Guardar acompanhante</button><a class="btn btn-link mt-4" asp-action="Index">Cancelar</a>
+    </form>
+</div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

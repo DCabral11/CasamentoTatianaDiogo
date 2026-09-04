@@ -1,47 +1,19 @@
-﻿@model Guest
-
+@model Guest
+@{
+    ViewData["Title"] = Model.Id == 0 ? "Adicionar convidado" : "Editar convidado";
+}
 <div class="container py-5 narrow">
-    <h1>Edit Guest</h1>
-    <form method="post" action="/Admin/Guests/Save">
-        @Html.AntiForgeryToken()
-
-        <input type="hidden" asp-for="Id" />
-        <div class="mb-3">
-            <label class="form-label">FamilyId</label>
-            <input name="FamilyId" value="@Model.FamilyId" class="form-control" />
-        </div>
-        <div class="mb-3">
-            <label class="form-label">FirstName</label>
-            <input name="FirstName" value="@Model.FirstName" class="form-control" />
-        </div>
-        <div class="mb-3">
-            <label class="form-label">LastName</label>
-            <input name="LastName" value="@Model.LastName" class="form-control" />
-        </div>
-        <div class="mb-3">
-            <label class="form-label">DisplayName</label>
-            <input name="DisplayName" value="@Model.DisplayName" class="form-control" />
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Email</label>
-            <input name="Email" value="@Model.Email" class="form-control" />
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Phone</label>
-            <input name="Phone" value="@Model.Phone" class="form-control" />
-        </div>
-        <div class="mb-3">
-            <label class="form-label">AllowPlusOne</label>
-            <input name="AllowPlusOne" value="@Model.AllowPlusOne" class="form-control" />
-        </div>
-        <div class="mb-3">
-            <label class="form-label">IsChild</label>
-            <input name="IsChild" value="@Model.IsChild" class="form-control" />
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Notes</label>
-            <input name="Notes" value="@Model.Notes" class="form-control" />
-        </div>
-        <button class="btn btn-primary">Save</button>
+    <h1>@ViewData["Title"]</h1><p class="text-muted">Define os dados de contacto e as opções de resposta deste convidado.</p>
+    <form method="post" action="/Admin/Guests/Save" class="admin-form">
+        @Html.AntiForgeryToken()<input asp-for="Id" type="hidden" /><div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="mb-3"><label asp-for="FamilyId" class="form-label">Família</label><select asp-for="FamilyId" asp-items="ViewBag.Families" class="form-select"><option value="">Seleciona uma família</option></select></div>
+        <div class="row g-3"><div class="col-md-6"><label asp-for="FirstName" class="form-label">Primeiro nome</label><input asp-for="FirstName" class="form-control" /></div><div class="col-md-6"><label asp-for="LastName" class="form-label">Apelido</label><input asp-for="LastName" class="form-control" /></div></div>
+        <div class="mt-3"><label asp-for="DisplayName" class="form-label">Nome a apresentar</label><input asp-for="DisplayName" class="form-control" placeholder="Preenchido automaticamente se ficar vazio" /></div>
+        <div class="row g-3 mt-1"><div class="col-md-6"><label asp-for="Email" class="form-label">E-mail</label><input asp-for="Email" type="email" class="form-control" /></div><div class="col-md-6"><label asp-for="Phone" class="form-label">Telefone</label><input asp-for="Phone" type="tel" class="form-control" /></div></div>
+        <div class="form-check mt-4"><input asp-for="AllowPlusOne" class="form-check-input" /><label asp-for="AllowPlusOne" class="form-check-label">Pode levar acompanhante</label></div>
+        <div class="form-check mt-2"><input asp-for="IsChild" class="form-check-input" /><label asp-for="IsChild" class="form-check-label">É criança</label></div>
+        <div class="mt-3"><label asp-for="Notes" class="form-label">Notas internas</label><textarea asp-for="Notes" class="form-control" rows="3"></textarea></div>
+        <button class="btn btn-primary mt-4">Guardar convidado</button><a class="btn btn-link mt-4" href="/Admin/Guests/Index">Cancelar</a>
     </form>
 </div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

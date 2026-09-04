@@ -1,34 +1,17 @@
-﻿@model TimelineEvent
-
+@model TimelineEvent
+@{
+    ViewData["Title"] = Model.Id == 0 ? "Adicionar momento" : "Editar momento";
+}
 <div class="container py-5 narrow">
-    <h1>Edit TimelineEvent</h1>
-    <form method="post" action="/Admin/Timeline/Save">
-        @Html.AntiForgeryToken()
-        <input type="hidden" asp-for="Id" />
-        <div class="mb-3">
-            <label class="form-label">Title</label>
-            <input name="Title" value="@Model.Title" class="form-control" />
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Description</label>
-            <input name="Description" value="@Model.Description" class="form-control" />
-        </div>
-        <div class="mb-3">
-            <label class="form-label">EventDateTime</label>
-            <input name="EventDateTime" value="@Model.EventDateTime" class="form-control" />
-        </div>
-        <div class="mb-3">
-            <label class="form-label">DisplayOrder</label>
-            <input name="DisplayOrder" value="@Model.DisplayOrder" class="form-control" />
-        </div>
-        <div class="mb-3">
-            <label class="form-label">IconName</label>
-            <input name="IconName" value="@Model.IconName" class="form-control" />
-        </div>
-        <div class="mb-3">
-            <label class="form-label">IsActive</label>
-            <input name="IsActive" value="@Model.IsActive" class="form-control" />
-        </div>
-        <button class="btn btn-primary">Save</button>
+    <h1>@ViewData["Title"]</h1><p class="text-muted">Este momento será apresentado no horário visível aos convidados.</p>
+    <form method="post" action="/Admin/Timeline/Save" class="admin-form">
+        @Html.AntiForgeryToken()<input asp-for="Id" type="hidden" /><div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="mb-3"><label asp-for="Title" class="form-label">Título</label><input asp-for="Title" class="form-control" placeholder="Ex.: Cerimónia" /></div>
+        <div class="mb-3"><label asp-for="Description" class="form-label">Descrição</label><textarea asp-for="Description" class="form-control" rows="3" placeholder="Informação útil para os convidados."></textarea></div>
+        <div class="row g-3"><div class="col-md-6"><label asp-for="EventDateTime" class="form-label">Data e hora</label><input asp-for="EventDateTime" type="datetime-local" class="form-control" /></div><div class="col-md-6"><label asp-for="DisplayOrder" class="form-label">Ordem de apresentação</label><input asp-for="DisplayOrder" type="number" min="1" class="form-control" /></div></div>
+        <div class="mt-3"><label asp-for="IconName" class="form-label">Ícone Bootstrap</label><input asp-for="IconName" class="form-control" placeholder="Ex.: bi-heart" /><div class="form-text">Consulta os nomes em icons.getbootstrap.com.</div></div>
+        <div class="form-check mt-3"><input asp-for="IsActive" class="form-check-input" /><label asp-for="IsActive" class="form-check-label">Mostrar este momento aos convidados</label></div>
+        <button class="btn btn-primary mt-4">Guardar momento</button><a class="btn btn-link mt-4" href="/Admin/Timeline/Index">Cancelar</a>
     </form>
 </div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

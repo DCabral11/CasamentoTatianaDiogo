@@ -1,18 +1,18 @@
 ﻿@model IEnumerable<Guest>
 
 <div class="container py-5">
-    <h1>Guests</h1>
+    <h1>Convidados</h1>
     <p>
-        <a class="btn btn-primary" href="/Admin/Guests/Create">Create</a>
+        <a class="btn btn-primary" href="/Admin/Guests/Create">Adicionar convidado</a>
     </p>
     <table class="table table-striped">
         <thead>
             <tr>
                 <th>Id</th>
-                <th>DisplayName</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>CurrentStatus</th>
+                <th>Nome</th>
+                <th>E-mail</th>
+                <th>Telefone</th>
+                <th>Resposta</th>
                 <th></th>
             </tr>
         </thead>
@@ -26,10 +26,10 @@
                     <td>@item.Phone</td>
                     <td>@item.CurrentStatus</td>
                     <td>
-                        <a href="/Admin/Guests/Edit/@item.Id">Edit</a>
+                        <a href="/Admin/Guests/Edit/@item.Id">Editar</a>
                         <form method="post" action="/Admin/Guests/Delete/@item.Id" class="d-inline">
                             @Html.AntiForgeryToken()
-                            <button class="btn btn-sm btn-link btn-danger">Delete</button>
+                            <button class="btn btn-sm btn-link btn-danger" onclick="return confirm('Remover este convidado?')">Remover</button>
                         </form>
                     </td>
                 </tr>

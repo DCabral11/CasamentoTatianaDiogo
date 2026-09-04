@@ -1,19 +1,19 @@
 ﻿@model IEnumerable<TimelineEvent>
 
 <div class="container py-5">
-    <h1>Timeline</h1>
+    <h1>Horário do dia</h1>
     <p>
-        <a class="btn btn-primary" href="/Admin/Timeline/Create">Create</a>
+        <a class="btn btn-primary" href="/Admin/Timeline/Create">Adicionar momento</a>
     </p>
     <table class="table table-striped">
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Title</th>
-                <th>EventDateTime</th>
-                <th>DisplayOrder</th>
-                <th>IconName</th>
-                <th>IsActive</th>
+                <th>Título</th>
+                <th>Data e hora</th>
+                <th>Ordem</th>
+                <th>Ícone</th>
+                <th>Visível</th>
                 <th></th>
             </tr>
         </thead>
@@ -28,10 +28,10 @@
                     <td>@item.IconName</td>
                     <td>@item.IsActive</td>
                     <td>
-                        <a href="/Admin/Timeline/Edit/@item.Id">Edit</a>
+                        <a href="/Admin/Timeline/Edit/@item.Id">Editar</a>
                         <form method="post" action="/Admin/Timeline/Delete/@item.Id" class="d-inline">
                             @Html.AntiForgeryToken()
-                            <button class="btn btn-sm btn-link text-danger">Delete</button>
+                            <button class="btn btn-sm btn-link text-danger" onclick="return confirm('Remover este momento?')">Remover</button>
                         </form>
                     </td>
                 </tr>

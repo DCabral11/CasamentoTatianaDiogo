@@ -482,6 +482,23 @@ body {
     border-radius: 1rem;
 }
 
+.admin-fieldset {
+    margin: 0 0 1.75rem;
+    padding: 1.5rem;
+    border: 1px solid rgba(189, 71, 66, 0.18);
+    border-radius: 1rem;
+}
+
+.admin-fieldset legend {
+    float: none;
+    width: auto;
+    margin: 0;
+    padding: 0 0.4rem;
+    color: var(--primary);
+    font-family: Georgia, serif;
+    font-size: 1.3rem;
+}
+
 @media (max-width: 768px) {
     .hero-content {
         display: flex;
