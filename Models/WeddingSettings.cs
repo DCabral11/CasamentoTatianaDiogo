@@ -62,10 +62,10 @@ namespace CasamentoTatianaDiogo.Models
         public string LogoPath { get; set; } = "/images/navbar.png";
         
         [StringLength(20)] 
-        public string PrimaryColor { get; set; } = "#8f5f76";
+        public string PrimaryColor { get; set; } = "#bd4742";
         
         [StringLength(20)] 
-        public string SecondaryColor { get; set; } = "#f6eee9";
+        public string SecondaryColor { get; set; } = "#fce8e4";
         
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         

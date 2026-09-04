@@ -1,6 +1,6 @@
 :root {
     --primary: #bd4742;
-    --secondary: #bd4742;
+    --secondary: #fce8e4;
     --ink: #121212;
 }
 
@@ -45,7 +45,7 @@ body {
 .hero-img,
 .story-img {
     border-radius: 2rem;
-    box-shadow: 0 20px 70px rgba(79, 44, 57, 0.18);
+    box-shadow: 0 20px 70px rgba(189, 71, 66, 0.18);
     object-fit: cover;
     width: 100%;
     max-height: 620px;
@@ -63,9 +63,10 @@ body {
 .guest-result,
 .stat {
     background: rgba(255, 255, 255, 0.86);
-    border: 1px solid rgba(143, 95, 118, 0.15);
+    border: 1px solid rgba(189, 71, 66, 0.15);
     border-radius: 1.5rem;
-    box-shadow: 0 12px 40px rgba(79, 44, 57, 0.08);
+    border-color: rgba(189, 71, 66, 0.15);
+    box-shadow: 0 12px 40px rgba(189, 71, 66, 0.08);
 }
 
 .countdown div {
@@ -87,12 +88,12 @@ body {
 .btn-primary {
     --bs-btn-bg: var(--primary);
     --bs-btn-border-color: var(--primary);
-    --bs-btn-hover-bg: #744b60;
-    --bs-btn-hover-border-color: #744b60;
+    --bs-btn-hover-bg: #9e3834;
+    --bs-btn-hover-border-color: #9e3834;
 }
 
 .page-header {
-    background: linear-gradient(135deg, #f6eee9, #fff);
+    background: linear-gradient(135deg, var(--secondary), #fff);
     padding: 4rem 0;
 }
 
@@ -114,7 +115,7 @@ body {
     top: 0;
     bottom: 0;
     width: 2px;
-    background: #ead4de;
+    background: #da9b92;
 }
 
 .timeline-item {
@@ -164,11 +165,12 @@ body {
 }
 
 .dropzone {
-    border: 2px dashed #d9b9c7;
+    border: 2px dashed #da9b92;
     border-radius: 1.5rem;
     padding: 2rem;
     text-align: center;
     background: #fff;
+    border-color: #df9995;
 }
 
 .dropzone i {

@@ -33,7 +33,9 @@ namespace CasamentoTatianaDiogo.Data
                     await userManager.AddToRoleAsync(admin, "Admin");
             }
 
-            if (!await db.WeddingSettings.AnyAsync())
+            var settings = await db.WeddingSettings.FirstOrDefaultAsync();
+
+            if (settings == null)
                 db.WeddingSettings.Add(new WeddingSettings
                 {
                     WeddingDateTime = new DateTime(2027, 6, 5, 11, 0, 0),
@@ -43,6 +45,12 @@ namespace CasamentoTatianaDiogo.Data
                     ReceptionLocationName = "Quinta da Tareca",
                     ReceptionAddress = "Colares, Sintra"
                 });
+            else if (settings.PrimaryColor == "#8f5f76" && settings.SecondaryColor == "#f6eee9")
+            {
+                // Upgrade only the original palette, preserving any colors customized by an administrator.
+                settings.PrimaryColor = "#bd4742";
+                settings.SecondaryColor = "#fce8e4";
+            }
 
             if (!await db.PhotoUploadSettings.AnyAsync())
                 db.PhotoUploadSettings.Add(new PhotoUploadSettings
