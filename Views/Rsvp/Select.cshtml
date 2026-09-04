@@ -7,7 +7,7 @@
     <div class="elegant-card p-4">
         <h2>@Model.Guest.DisplayName</h2>
         <p>Família: @Model.Guest.Family?.Name</p>
-        <p>Plus-One: @Model.Guest.AllowPlusOne ? "Escolhe o teu Plus-One" : "Não podes levar Plus-One"</p>
+        <p>Plus-One: @(Model.Guest.AllowPlusOne ? "Escolhe o teu Plus-One" : "Não podes levar Plus-One")</p>
 
         @if(Model.RelatedGuests.Any())
         {
