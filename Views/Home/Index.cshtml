@@ -8,46 +8,38 @@
 
 <section class="hero hero-photo" style="--primary: @settings.PrimaryColor; --secondary: @settings.SecondaryColor">
     <div class="container hero-content">
-        @if (settings.WeddingDateTime.HasValue)
-        {
-            <div id="countdown" class="countdown" data-wedding-date="@settings.WeddingDateTime.Value.ToString("yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture)">
-                <div>
-                    <strong data-days>--</strong>
-                    <span>Dias</span>
-                </div>
-                <div>
-                    <strong data-hours>--</strong>
-                    <span>Horas</span>
-                </div>
-                <div>
-                    <strong data-minutes>--</strong>
-                    <span>Mins.</span>
-                </div>
-                <div>
-                    <strong data-seconds>--</strong>
-                    <span>Segs.</span>
-                </div>
-            </div>
-        }
+        <div class="hero-intro">
+            <h1 class="couple-names">@settings.BrideName<br /><span>&amp;</span>@settings.GroomName</h1>
 
-        <h1 class="couple-names">@settings.BrideName<br /><span>&amp;</span>@settings.GroomName</h1>
+            @if (settings.WeddingDateTime.HasValue)
+            {
+                <div id="countdown" class="countdown" data-wedding-date="@settings.WeddingDateTime.Value.ToString("yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture)">
+                    <div><strong data-days>--</strong><span>Dias</span></div>
+                    <div><strong data-hours>--</strong><span>Horas</span></div>
+                    <div><strong data-minutes>--</strong><span>Mins.</span></div>
+                    <div><strong data-seconds>--</strong><span>Segs.</span></div>
+                </div>
+            }
 
-        @if (settings.WeddingDateTime.HasValue)
-        {
+            <a class="btn btn-primary btn-lg rounded-pill hero-rsvp" asp-controller="Rsvp" asp-action="Index">Confirmar Presença</a>
+        </div>
+
+        <div class="event-cards">
+            @if (settings.WeddingDateTime.HasValue)
+            {
+                <div class="event-card">
+                    <i class="bi bi-calendar-heart event-icon" aria-hidden="true"></i>
+                    <p class="event-day">@settings.WeddingDateTime.Value.ToString("dddd", new CultureInfo("pt-PT"))</p>
+                    <p class="event-date">@settings.WeddingDateTime.Value.ToString("dd 'de' MMMM 'de' yyyy", new CultureInfo("pt-PT"))</p>
+                </div>
+            }
+
             <div class="event-card">
-                <p class="event-day">@settings.WeddingDateTime.Value.ToString("dddd", new CultureInfo("pt-PT"))</p>
-                <p class="event-date">@settings.WeddingDateTime.Value.ToString("dd 'de' MMMM 'de' yyyy", new CultureInfo("pt-PT"))</p>
-                <div class="event-divider"></div>
+                <i class="bi bi-geo-alt-fill event-icon" aria-hidden="true"></i>
                 <p class="event-location">@settings.CeremonyLocationName, @settings.CeremonyAddress</p>
                 <p class="event-location">@settings.ReceptionLocationName, @settings.ReceptionAddress</p>
             </div>
-        }
-        else
-        {
-            <div class="event-card">A data do nosso casamento será anunciada em breve.</div>
-        }
-
-        <a class="btn btn-primary btn-lg rounded-pill hero-rsvp" asp-controller="Rsvp" asp-action="Index">Confirmar Presença</a>
+        </div>
     </div>
 </section>
 
