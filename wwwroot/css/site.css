@@ -15,6 +15,10 @@ body {
     object-fit: contain;
 }
 
+.navbar-logo-bg {
+    background-color: #f8f0e3;
+}
+
 .navbar .nav-link {
     font-weight: 600;
 }
