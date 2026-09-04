@@ -10,7 +10,7 @@ namespace CasamentoTatianaDiogo.ViewModels
 
     public class RsvpSearchViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "Escreve o teu nome para começarmos a pesquisa.")]
         public string Query { get; set; } = string.Empty;
 
         public List<Guest> Results { get; set; } = [];
@@ -65,6 +65,12 @@ namespace CasamentoTatianaDiogo.ViewModels
 
         [StringLength(1000)]
         public string? DietaryRestrictions { get; set; }
+
+        [StringLength(1000)]
+        public string? Message { get; set; }
+
+        [StringLength(200)]
+        public string? MusicRequest { get; set; }
     }
 
     public class PhotoUploadViewModel

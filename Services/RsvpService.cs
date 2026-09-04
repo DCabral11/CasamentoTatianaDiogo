@@ -93,8 +93,8 @@ namespace CasamentoTatianaDiogo.Services
                 var familyResponse = responsesByGuestId.GetValueOrDefault(responseGuest.Id);
                 response.Status = responseGuest.Id == guest.Id ? model.Status.Value : familyResponse!.Status!.Value;
                 response.DietaryRestrictions = responseGuest.Id == guest.Id ? model.DietaryRestrictions : familyResponse?.DietaryRestrictions;
-                response.Message = responseGuest.Id == guest.Id ? model.Message : null;
-                response.MusicRequest = responseGuest.Id == guest.Id ? model.MusicRequest : null;
+                response.Message = responseGuest.Id == guest.Id ? model.Message : familyResponse?.Message;
+                response.MusicRequest = responseGuest.Id == guest.Id ? model.MusicRequest : familyResponse?.MusicRequest;
                 response.PlusOneAttending = responseGuest.Id == guest.Id && model.PlusOneAttending;
                 response.PlusOneId = responseGuest.Id == guest.Id && model.PlusOneAttending ? plusOne?.Id : null;
                 response.UpdatedAt = DateTime.UtcNow;
