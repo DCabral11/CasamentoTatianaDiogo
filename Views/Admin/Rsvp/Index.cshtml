@@ -2,6 +2,18 @@
 
 <div class="container py-5">
     <h1>Respostas de presença</h1>
+    @if (TempData["Success"] is string success)
+    {
+        <div class="alert alert-success" role="alert">@success</div>
+    }
+    @if (TempData["Info"] is string info)
+    {
+        <div class="alert alert-info" role="alert">@info</div>
+    }
+    @if (TempData["Error"] is string error)
+    {
+        <div class="alert alert-danger" role="alert">@error</div>
+    }
     <a class="btn btn-outline-primary" href="/Admin/Rsvp/ExportCsv">
         <i class="bi bi-download"></i> Exportar CSV
     </a>
@@ -31,6 +43,15 @@
                             </select>
                             <button class="btn btn-sm btn-primary">Guardar</button>
                         </form>
+                        @if (g.RsvpResponses.Any())
+                        {
+                            <form method="post" action="/Admin/Rsvp/Delete/@g.Id" class="d-inline" onsubmit="return confirm('Pretende mesmo apagar a resposta de @g.DisplayName? Esta ação volta a deixar o convite por responder.');">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm btn-outline-danger mt-2">
+                                    <i class="bi bi-trash3"></i> Apagar resposta
+                                </button>
+                            </form>
+                        }
                     </td>
                 </tr>
             }

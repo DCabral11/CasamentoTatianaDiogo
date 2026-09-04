@@ -30,6 +30,32 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id, int? familyId)
+        {
+            var guest = await db.Guests
+                .Include(g => g.RsvpResponses)
+                .FirstOrDefaultAsync(g => g.Id == id);
+
+            if (guest == null)
+            {
+                TempData["Error"] = "Não encontrámos a resposta que pretendia apagar.";
+            }
+            else if (guest.RsvpResponses.Count == 0)
+            {
+                TempData["Info"] = $"{guest.DisplayName} ainda não tinha uma resposta enviada.";
+            }
+            else
+            {
+                db.RsvpResponses.RemoveRange(guest.RsvpResponses);
+                guest.CurrentStatus = RsvpStatus.Pending;
+                await db.SaveChangesAsync();
+                TempData["Success"] = $"A resposta de {guest.DisplayName} foi apagada. O estado voltou a ‘Por responder’.";
+            }
+
+            return RedirectToAction(nameof(Index), new { familyId });
+        }
+
         public async Task<FileResult> ExportCsv()
         {
             var rows = await db.Guests.Include(g => g.Family).ToListAsync();
