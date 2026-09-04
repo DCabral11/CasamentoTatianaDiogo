@@ -428,6 +428,15 @@ body {
     font-size: 1.5rem;
 }
 
+.rsvp-family-selectors {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.6rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    background: rgba(248, 240, 227, 0.86);
+}
+
 .rsvp-family-card,
 .rsvp-plus-one-card {
     background: #fffaf7;
