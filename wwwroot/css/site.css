@@ -210,6 +210,7 @@ body {
 
 .information-page .page-header {
     background: transparent;
+    padding: 2.5rem 0 1.5rem;
 }
 
 .information-page h2 {
@@ -221,6 +222,46 @@ body {
 
 .information-page .elegant-card {
     background: rgba(255, 250, 247, 0.76);
+}
+
+.information-page .py-5 {
+    padding-top: 2.5rem !important;
+    padding-bottom: 2.5rem !important;
+}
+
+.information-essentials {
+    padding-top: 0.5rem;
+}
+
+.information-tip {
+    display: flex;
+    gap: 1rem;
+    padding: 1.35rem;
+    border: 1px solid rgba(189, 71, 66, 0.18);
+    border-radius: 1.25rem;
+    background: rgba(255, 250, 247, 0.58);
+}
+
+.information-tip > i {
+    color: var(--primary);
+    font-size: 1.65rem;
+}
+
+.information-tip h3 {
+    margin: 0 0 0.25rem;
+    font-family: Georgia, serif;
+    font-size: 1.25rem;
+}
+
+.information-tip p {
+    margin: 0 0 0.45rem;
+    font-size: 0.94rem;
+}
+
+.information-tip a {
+    color: var(--primary);
+    font-weight: 700;
+    text-decoration: none;
 }
 
 .information-schedule .timeline {
@@ -247,7 +288,7 @@ body {
     display: grid;
     grid-template-columns: 4rem 1fr;
     gap: 1rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 .timeline-content {
@@ -289,6 +330,14 @@ body {
 
 .location-card .map {
     height: 210px;
+}
+
+.information-contacts {
+    padding-bottom: 2rem !important;
+}
+
+.contact-card p {
+    margin-bottom: 0;
 }
 
 .narrow {

@@ -9,6 +9,7 @@
     var receptionMapUrl = settings.ReceptionGoogleMapsUrl ?? $"https://www.google.com/maps/search/?api=1&query={Uri.EscapeDataString(receptionQuery)}";
     var ceremonyEmbedUrl = settings.CeremonyGoogleMapsEmbedUrl ?? $"https://www.google.com/maps?q={Uri.EscapeDataString(ceremonyQuery)}&output=embed";
     var receptionEmbedUrl = settings.ReceptionGoogleMapsEmbedUrl ?? $"https://www.google.com/maps?q={Uri.EscapeDataString(receptionQuery)}&output=embed";
+    var arrival = Model.TimelineEvents.FirstOrDefault();
 }
 
 <div class="information-page">
@@ -19,6 +20,40 @@
         </h1>
 
         <p>Tudo o que precisam de saber para o dia do casamento.</p>
+    </div>
+</section>
+
+<section class="container information-essentials">
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="information-tip h-100">
+                <i class="bi bi-clock-history"></i>
+                <div>
+                    <h3>Chegada</h3>
+                    <p>Pedimos que cheguem até às @(arrival?.EventDateTime.ToString("HH:mm") ?? "horas indicadas") para aproveitarem o início da celebração.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="information-tip h-100">
+                <i class="bi bi-envelope-check"></i>
+                <div>
+                    <h3>Confirmação</h3>
+                    <p>Indiquem a vossa presença e eventuais restrições alimentares com antecedência.</p>
+                    <a asp-controller="Rsvp" asp-action="Index">Confirmar presença <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="information-tip h-100">
+                <i class="bi bi-signpost-split"></i>
+                <div>
+                    <h3>Como chegar</h3>
+                    <p>Guardem as localizações no telemóvel antes de sair.</p>
+                    <a href="@ceremonyMapUrl" target="_blank" rel="noopener">Abrir rota <i class="bi bi-arrow-up-right"></i></a>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
@@ -48,7 +83,7 @@
     <h2>Localizações</h2>
     <div class="row g-4">
         <div class="col-md-6">
-            <div class="elegant-card p-4 h-100">
+            <div class="elegant-card location-card p-4 h-100">
                 <h3>
                     <i class="bi bi-geo-alt"></i> Cerimónia
                 </h3>
@@ -65,7 +100,7 @@
         </div>
 
         <div class="col-md-6">
-            <div class="elegant-card p-4 h-100">
+            <div class="elegant-card location-card p-4 h-100">
                 <h3>
                     <i class="bi bi-geo-alt"></i> Copo D'Água
                 </h3>
@@ -83,12 +118,12 @@
     </div>
 </section>
 
-<section class="container py-5">
+<section class="container py-4 information-contacts">
     <h2>Contactos</h2>
 
     <div class="row g-3">
         <div class="col-md-6">
-            <div class="elegant-card p-4">
+            <div class="elegant-card contact-card p-3 h-100">
                 <h4>@settings.BrideName</h4>
                 <p>
                     <i class="bi bi-phone"></i> @settings.BridePhone <br/>
@@ -97,7 +132,7 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="elegant-card p-4">
+            <div class="elegant-card contact-card p-3 h-100">
                 <h4>@settings.GroomName</h4>
                 <p>
                     <i class="bi bi-phone"></i> @settings.GroomPhone <br />
