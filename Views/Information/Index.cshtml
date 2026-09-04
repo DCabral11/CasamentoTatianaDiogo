@@ -3,8 +3,15 @@
     ViewData["Title"] = "Informações";
 
     var settings = Model.Settings;
+    var ceremonyQuery = $"{settings.CeremonyLocationName}, {settings.CeremonyAddress}";
+    var receptionQuery = $"{settings.ReceptionLocationName}, {settings.ReceptionAddress}";
+    var ceremonyMapUrl = settings.CeremonyGoogleMapsUrl ?? $"https://www.google.com/maps/search/?api=1&query={Uri.EscapeDataString(ceremonyQuery)}";
+    var receptionMapUrl = settings.ReceptionGoogleMapsUrl ?? $"https://www.google.com/maps/search/?api=1&query={Uri.EscapeDataString(receptionQuery)}";
+    var ceremonyEmbedUrl = settings.CeremonyGoogleMapsEmbedUrl ?? $"https://www.google.com/maps?q={Uri.EscapeDataString(ceremonyQuery)}&output=embed";
+    var receptionEmbedUrl = settings.ReceptionGoogleMapsEmbedUrl ?? $"https://www.google.com/maps?q={Uri.EscapeDataString(receptionQuery)}&output=embed";
 }
 
+<div class="information-page">
 <section class="page-header">
     <div class="container">
         <h1>
@@ -15,7 +22,7 @@
     </div>
 </section>
 
-<section class="container py-5">
+<section class="container py-5 information-schedule">
     <h2>Horário</h2>
 
     <div class="timeline">
@@ -25,16 +32,20 @@
                 <div class="timeline-icon">
                     <i class="bi @e.IconName"></i>
                 </div>
-                <div>
+                <div class="timeline-content">
                     <strong>@e.EventDateTime.ToString("HH:mm") - @e.Title</strong>
-                    <p>@e.Description</p>
+                    @if (!string.IsNullOrWhiteSpace(e.Description))
+                    {
+                        <p>@e.Description</p>
+                    }
                 </div>
             </div>
         }
     </div>
 </section>
 
-<section class="container py-5">
+<section class="container py-5 information-locations">
+    <h2>Localizações</h2>
     <div class="row g-4">
         <div class="col-md-6">
             <div class="elegant-card p-4 h-100">
@@ -46,35 +57,27 @@
                     <br/> @settings.CeremonyAddress
                 </p>
 
-                <a class="btn btn-outline-primary" href="@settings.CeremonyGoogleMapsUrl" target="_blank">
-                    <i class="bi bi-map"></i> Google Maps
+                <iframe class="map" src="@ceremonyEmbedUrl" title="Mapa da cerimónia" loading="lazy"></iframe>
+                <a class="btn btn-outline-primary mt-3" href="@ceremonyMapUrl" target="_blank" rel="noopener">
+                    <i class="bi bi-map"></i> Abrir no Google Maps
                 </a>
-
-                @if(!string.IsNullOrWhiteSpace(settings.CeremonyGoogleMapsEmbedUrl))
-                {
-                    <iframe class="map" src="@settings.CeremonyGoogleMapsEmbedUrl" loading="lazy"></iframe>
-                }
             </div>
         </div>
 
         <div class="col-md-6">
             <div class="elegant-card p-4 h-100">
                 <h3>
-                    <i class="bi bi-geo-alt"></i> Cerimónia
+                    <i class="bi bi-geo-alt"></i> Receção
                 </h3>
                 <p>
                     <strong>@settings.ReceptionLocationName</strong>
                     <br /> @settings.ReceptionAddress
                 </p>
 
-                <a class="btn btn-outline-primary" href="@settings.ReceptionGoogleMapsUrl" target="_blank">
-                    <i class="bi bi-map"></i> Google Maps
+                <iframe class="map" src="@receptionEmbedUrl" title="Mapa da receção" loading="lazy"></iframe>
+                <a class="btn btn-outline-primary mt-3" href="@receptionMapUrl" target="_blank" rel="noopener">
+                    <i class="bi bi-map"></i> Abrir no Google Maps
                 </a>
-
-                @if (!string.IsNullOrWhiteSpace(settings.ReceptionGoogleMapsEmbedUrl))
-                {
-                    <iframe class="map" src="@settings.ReceptionGoogleMapsEmbedUrl" loading="lazy"></iframe>
-                }
             </div>
         </div>
     </div>
@@ -104,3 +107,4 @@
         </div>
     </div>
 </section>
+</div>

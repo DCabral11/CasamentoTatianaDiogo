@@ -203,6 +203,31 @@ body {
     font-size: clamp(2.5rem, 6vw, 4.5rem);
 }
 
+.information-page {
+    min-height: 100%;
+    background: #f8f0e3;
+}
+
+.information-page .page-header {
+    background: transparent;
+}
+
+.information-page h2 {
+    margin-bottom: 2rem;
+    color: var(--primary);
+    font-family: Georgia, serif;
+    text-align: center;
+}
+
+.information-page .elegant-card {
+    background: rgba(255, 250, 247, 0.76);
+}
+
+.information-schedule .timeline {
+    width: min(100%, 720px);
+    margin: 0 auto;
+}
+
 .timeline {
     position: relative;
     margin-left: 1rem;
@@ -225,6 +250,20 @@ body {
     margin-bottom: 1.5rem;
 }
 
+.timeline-content {
+    align-self: center;
+    text-align: center;
+}
+
+.timeline-content strong {
+    display: block;
+    font-size: 1.08rem;
+}
+
+.timeline-content p {
+    margin: 0.35rem 0 0;
+}
+
 .timeline-icon {
     background: var(--primary);
     color: white;
@@ -242,6 +281,14 @@ body {
     border: 0;
     border-radius: 1rem;
     margin-top: 1rem;
+}
+
+.location-card h3 i {
+    color: var(--primary);
+}
+
+.location-card .map {
+    height: 210px;
 }
 
 .narrow {

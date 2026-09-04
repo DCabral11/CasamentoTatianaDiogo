@@ -4,6 +4,7 @@
     ViewData["Title"] = "Home";
 
     var settings = Model.Settings;
+    var portugueseCulture = new CultureInfo("pt-PT");
 }
 
 <section class="hero hero-photo" style="--primary: @settings.PrimaryColor; --secondary: @settings.SecondaryColor">
@@ -27,10 +28,15 @@
         <div class="event-cards">
             @if (settings.WeddingDateTime.HasValue)
             {
+                var weddingDay = settings.WeddingDateTime.Value.ToString("dddd", portugueseCulture);
+                var monthName = settings.WeddingDateTime.Value.ToString("MMMM", portugueseCulture);
+                var weddingDate = settings.WeddingDateTime.Value.ToString("dd 'de' MMMM 'de' yyyy", portugueseCulture)
+                    .Replace(monthName, $"{char.ToUpper(monthName[0], portugueseCulture)}{monthName[1..]}");
+
                 <div class="event-card">
                     <i class="bi bi-calendar-heart event-icon" aria-hidden="true"></i>
-                    <p class="event-day">@settings.WeddingDateTime.Value.ToString("dddd", new CultureInfo("pt-PT"))</p>
-                    <p class="event-date">@settings.WeddingDateTime.Value.ToString("dd 'de' MMMM 'de' yyyy", new CultureInfo("pt-PT"))</p>
+                    <p class="event-day">@($"{char.ToUpper(weddingDay[0], portugueseCulture)}{weddingDay[1..]}")</p>
+                    <p class="event-date">@weddingDate</p>
                 </div>
             }
 
