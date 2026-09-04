@@ -17,10 +17,18 @@ body {
 
 .navbar-logo-bg {
     background-color: #f8f0e3;
+    border-bottom: 1px solid rgba(189, 71, 66, 0.14);
 }
 
 .navbar .nav-link {
     font-weight: 600;
+    color: #332d2a;
+    transition: color 0.2s ease;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link:focus {
+    color: var(--primary);
 }
 
 .hero-photo {
@@ -213,6 +221,13 @@ body {
     padding: 2.5rem 0 1.5rem;
 }
 
+.page-header p {
+    max-width: 620px;
+    margin-bottom: 0;
+    color: #625854;
+    font-size: 1.08rem;
+}
+
 .information-page h2 {
     margin-bottom: 2rem;
     color: var(--primary);
@@ -358,6 +373,24 @@ body {
 .guest-result:hover {
     transform: translateY(-2px);
     border-color: var(--primary);
+}
+
+.btn {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 14px rgba(189, 71, 66, 0.16);
+}
+
+.elegant-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.elegant-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 42px rgba(189, 71, 66, 0.12);
 }
 
 .rsvp-header {

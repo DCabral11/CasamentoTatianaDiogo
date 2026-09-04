@@ -1,41 +1,28 @@
-﻿@model PhotoUploadViewModel
+@model PhotoUploadViewModel
+@inject CasamentoTatianaDiogo.Services.Interfaces.ISiteContentService SiteContent
 @{
     ViewData["Title"] = "Galeria";
+    var siteText = await SiteContent.GetAsync();
 }
 
 <section class="page-header">
-    <div class="container">
-        <h1>
-            <i class="bi bi-camera"></i> Galeria de Fotografias
-        </h1>
-        <p>@Model.Message</p>
-    </div>
+    <div class="container"><h1><i class="bi bi-camera"></i> Galeria de fotografias</h1><p>@Model.Message</p></div>
 </section>
 
 <div class="container py-5 narrow">
-    @if(!Model.IsOpen)
+    @if (!Model.IsOpen)
     {
-        <div class="elegant-card p-5 text-center">
-            <i class="bi bi-camera display-1"></i>
-            <h2>@Model.Message</h2>
-        </div>
+        <div class="elegant-card p-5 text-center"><i class="bi bi-camera display-1"></i><h2>@Model.Message</h2></div>
     }
     else
     {
         <form asp-action="Upload" enctype="multipart/form-data" method="post" class="elegant-card p-4">
             @Html.AntiForgeryToken()
-            
-            <input asp-for="GuestName" class="form-control mb-3" placeholder="O teu nome (opcional)"/>
-            <textarea asp-for="Notes" class="form-control mb-3" placeholder="Mensagem (opcional)"></textarea>
-
-            <div class="dropzone">
-                <i class="bi bi-cloud-arrow-up"></i>
-                <input asp-for="Files" type="file" multiple accept=".jpg,.jpeg,.png,.heic,image/jpeg,image/png,image/heic" class="form-control"/>
-            </div>
-
-            <small>Tamanho máximo do ficheiro: @Model.Settings.MaxFilesSizeMb MB. Ficheiros permitidos: @Model.Settings.AllowedExtensionsCsv</small>
-
-            <button class="btn btn-primary rounded-pill mt-3">Carregar Fotografias</button>
+            <input asp-for="GuestName" class="form-control mb-3" placeholder="@siteText.GetValueOrDefault("PhotosNamePlaceholder", "O teu nome (opcional)")" />
+            <textarea asp-for="Notes" class="form-control mb-3" placeholder="@siteText.GetValueOrDefault("PhotosMessagePlaceholder", "Mensagem (opcional)")"></textarea>
+            <div class="dropzone"><i class="bi bi-cloud-arrow-up"></i><input asp-for="Files" type="file" multiple accept=".jpg,.jpeg,.png,.heic,image/jpeg,image/png,image/heic" class="form-control" /></div>
+            <small>Tamanho máximo: @Model.Settings.MaxFilesSizeMb MB. Formatos permitidos: @Model.Settings.AllowedExtensionsCsv</small>
+            <button class="btn btn-primary rounded-pill mt-3">Carregar fotografias</button>
         </form>
     }
 </div>

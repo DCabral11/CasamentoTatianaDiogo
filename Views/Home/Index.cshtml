@@ -1,10 +1,12 @@
 ﻿@using System.Globalization
 @model HomeViewModel
+@inject CasamentoTatianaDiogo.Services.Interfaces.ISiteContentService SiteContent
 @{
     ViewData["Title"] = "Home";
 
     var settings = Model.Settings;
     var portugueseCulture = new CultureInfo("pt-PT");
+    var siteText = await SiteContent.GetAsync();
 }
 
 <section class="hero hero-photo" style="--primary: @settings.PrimaryColor; --secondary: @settings.SecondaryColor">
@@ -22,7 +24,7 @@
                 </div>
             }
 
-            <a class="btn btn-primary btn-lg rounded-pill hero-rsvp" asp-controller="Rsvp" asp-action="Index">Confirmar Presença</a>
+            <a class="btn btn-primary btn-lg rounded-pill hero-rsvp" asp-controller="Rsvp" asp-action="Index">@siteText.GetValueOrDefault("HomeRsvpCta", "Confirmar presença")</a>
         </div>
 
         <div class="event-cards">
@@ -52,7 +54,7 @@
 <section class="container py-5">
     <div class="row g-4 align-items-center">
         <div class="col-lg-6">
-            <h2>A Nossa História</h2>
+            <h2>@siteText.GetValueOrDefault("HomeStoryTitle", "A nossa história")</h2>
             <p class="story">@settings.CoupleStory</p>
         </div>
 

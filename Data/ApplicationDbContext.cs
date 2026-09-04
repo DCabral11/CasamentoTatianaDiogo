@@ -16,12 +16,14 @@ namespace CasamentoTatianaDiogo.Data
         public DbSet<RsvpResponse> RsvpResponses => Set<RsvpResponse>();
         public DbSet<PhotoUploadSettings> PhotoUploadSettings => Set<PhotoUploadSettings>();
         public DbSet<PhotoUpload> PhotoUploads => Set<PhotoUpload>();
+        public DbSet<SiteContent> SiteContents => Set<SiteContent>();
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
             builder.Entity<WeddingSettings>().HasIndex(x => x.Id).IsUnique();
+            builder.Entity<SiteContent>().HasIndex(x => x.Key).IsUnique();
 
             builder.Entity<TimelineEvent>().HasIndex(x => new { x.IsActive, x.DisplayOrder, x.EventDateTime });
 

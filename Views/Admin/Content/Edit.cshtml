@@ -1,0 +1,10 @@
+@model SiteContent
+@{ ViewData["Title"] = "Editar texto"; }
+<div class="container py-5 narrow">
+    <h1>Editar texto</h1><p class="text-muted">@Model.Description</p>
+    <form method="post" asp-action="Save" class="admin-form">@Html.AntiForgeryToken()<input asp-for="Id" type="hidden" /><input asp-for="Key" type="hidden" /><input asp-for="Description" type="hidden" /><input asp-for="IsHtml" type="hidden" />
+        <label asp-for="Value" class="form-label">Texto</label><textarea asp-for="Value" class="form-control" rows="6"></textarea><span asp-validation-for="Value" class="text-danger"></span>
+        <button class="btn btn-primary mt-4">Guardar texto</button><a class="btn btn-link mt-4" asp-action="Index">Cancelar</a>
+    </form>
+</div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

@@ -13,6 +13,20 @@ namespace CasamentoTatianaDiogo.Data
 
             await db.Database.EnsureCreatedAsync();
 
+            await db.Database.ExecuteSqlRawAsync("""
+                IF OBJECT_ID(N'[SiteContents]', N'U') IS NULL
+                BEGIN
+                    CREATE TABLE [SiteContents] (
+                        [Id] int IDENTITY(1,1) NOT NULL PRIMARY KEY,
+                        [Key] nvarchar(100) NOT NULL,
+                        [Value] nvarchar(max) NOT NULL,
+                        [Description] nvarchar(300) NOT NULL,
+                        [IsHtml] bit NOT NULL
+                    );
+                    CREATE UNIQUE INDEX [IX_SiteContents_Key] ON [SiteContents] ([Key]);
+                END
+                """);
+
             var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
             var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
 
@@ -59,6 +73,20 @@ namespace CasamentoTatianaDiogo.Data
                     OpensAt = new DateTime(2027, 6, 5, 0, 0, 0),
                     ClosesAt = new DateTime(2027, 6, 6, 23, 59, 59)
                 });
+
+            if (!await db.SiteContents.AnyAsync())
+            {
+                db.SiteContents.AddRange(
+                    new SiteContent { Key = "NavHome", Value = "Início", Description = "Navegação: página inicial" },
+                    new SiteContent { Key = "NavInformation", Value = "Informações", Description = "Navegação: informações" },
+                    new SiteContent { Key = "NavRsvp", Value = "Confirmar presença", Description = "Navegação: confirmação de presença" },
+                    new SiteContent { Key = "NavPhotos", Value = "Galeria", Description = "Navegação: galeria" },
+                    new SiteContent { Key = "HomeStoryTitle", Value = "A nossa história", Description = "Página inicial: título da história" },
+                    new SiteContent { Key = "HomeRsvpCta", Value = "Confirmar presença", Description = "Página inicial: botão de confirmação" },
+                    new SiteContent { Key = "FooterText", Value = "Feito com amor por Diogo", Description = "Rodapé do site" },
+                    new SiteContent { Key = "PhotosNamePlaceholder", Value = "O teu nome (opcional)", Description = "Galeria: campo de nome" },
+                    new SiteContent { Key = "PhotosMessagePlaceholder", Value = "Mensagem (opcional)", Description = "Galeria: campo de mensagem" });
+            }
 
             if (!await db.TimelineEvents.AnyAsync())
             {
