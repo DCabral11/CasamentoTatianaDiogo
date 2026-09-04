@@ -53,7 +53,7 @@ namespace CasamentoTatianaDiogo.Services
                 .GroupBy(response => response.GuestId)
                 .ToDictionary(group => group.Key, group => group.Last());
 
-            if (model.ApplyToGroup && guest.Family?.AllowGroupRsvp == true)
+            if (guest.Family?.AllowGroupRsvp == true)
             {
                 var familyGuests = await db.Guests
                     .Where(g => g.FamilyId == guest.FamilyId && g.Id != guest.Id)
