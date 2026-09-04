@@ -1,72 +1,130 @@
-﻿@model RsvpSelectionViewModel
+@model RsvpSelectionViewModel
 @{
     ViewData["Title"] = "Confirmar Presença";
 }
 
-<div class="container py-5 narrow">
-    <div class="elegant-card p-4">
-        <h2>@Model.Guest.DisplayName</h2>
-        <p>Família: @Model.Guest.Family?.Name</p>
-        <p>Plus-One: @(Model.Guest.AllowPlusOne ? "Escolhe o teu Plus-One" : "Não podes levar Plus-One")</p>
+<section class="page-header rsvp-header">
+    <div class="container narrow">
+        <h1><i class="bi bi-envelope-heart"></i> Confirmar Presença</h1>
+        <p>Indica-nos quem poderá celebrar connosco.</p>
+    </div>
+</section>
 
-        @if(Model.RelatedGuests.Any())
-        {
-            <p>Convidados Relacionados: @string.Join(", ", Model.RelatedGuests.Select(g => g.DisplayName))</p>
-        }
+<div class="container py-4 narrow rsvp-selection">
+    @if (Model.HasExistingResponse)
+    {
+        <div class="alert alert-warning">Já existe uma resposta para este convidado. Seleciona a opção no fim do formulário para a atualizar.</div>
+    }
 
-        @if(Model.HasExistingResponse)
-        {
-            <div class="alert alert-warning">Já confirmaste a tua presença. Se quiseres substituir seleciona a opção para esse propósito.</div>
-        }
+    <form asp-action="Submit" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="GuestId" value="@Model.Guest.Id" />
 
-        <form asp-action="Submit" method="post">
-            @Html.AntiForgeryToken()
-            <input type="hidden" name="GuestId" value="@Model.Guest.Id" />
+        <article class="rsvp-response-card">
+            <div class="rsvp-card-heading">
+                <i class="bi bi-person-heart"></i>
+                <div>
+                    <p class="rsvp-card-label">Convidado</p>
+                    <h2>@Model.Guest.DisplayName</h2>
+                    <p class="mb-0">@Model.Guest.Family?.Name</p>
+                </div>
+            </div>
 
             <div class="mb-3">
-                <label class="form-label">Presença</label>
-                <select name="Status" class="form-select" required>
+                <label class="form-label" for="guest-status">Vais estar presente?</label>
+                <select id="guest-status" name="Status" class="form-select" required>
                     <option value="">Escolhe...</option>
-                    <option value="Attending">Sim</option>
-                    <option value="NotAttending">Não</option>
+                    <option value="Attending">Sim, estarei presente</option>
+                    <option value="NotAttending">Não poderei estar presente</option>
                 </select>
             </div>
 
-            @if(Model.Guest.Family?.AllowGroupRsvp == true)
-            {
-              <div class="form-check mb-3">
-                  <input class="form-check-input" type="checkbox" name="ApplyToGroup" value="true" id="grp" />
-                  <label for="grp" class="form-check-label">Aplicar a resposta para todos os convidados da família</label>
-              </div>      
-            }
+            <textarea name="DietaryRestrictions" class="form-control mb-3" placeholder="Restrições alimentares (opcional)"></textarea>
+            <textarea name="Message" class="form-control mb-3" placeholder="Mensagem para os noivos (opcional)"></textarea>
+            <input name="MusicRequest" class="form-control" placeholder="Uma música que gostasses de ouvir (opcional)" />
+        </article>
 
-            <textarea name="DietaryRestrictions" class="form-control mb-3" placeholder="Restrições Alimentares"></textarea>
-            <textarea name="Message" class="form-control mb-3" placeholder="Messagem para os noivos"></textarea>
-            
-            <input name="MusicRequest" class="form-control mb-3" placeholder="Uma música que queiras mesmo ouvir"/>
-
-            @if(Model.Guest.AllowPlusOne && Model.PlusOnes.Any())
-            {
-               <div class="form-check mb-2">
-                   <input class="form-check-input" type="checkbox" name="PlusOneAttending" value="true" id="po" />
-                   <label class="form-check-label" for="po">Plus-One vai?</label>
-               </div>
-               
-               <select class="form-select mb-3" name="PlusOneId">
-                   <option value="">Seleciona o Plus-One</option>
-                   @foreach(var p in Model.PlusOnes)
-                    {
-                        <option value="@p.Id">@p.PlusOneDisplayName</option>        
-                    }
-                </select>
-            }
-
-            <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" name="ConfirmOverwrite" value="true" id="ow" />
-                <label class="form-check-label" for="ow">Se já submeste uma resposta, seleciona a opção para substituir</label>
+        @if (Model.Guest.Family?.AllowGroupRsvp == true && Model.RelatedGuests.Any())
+        {
+            <div class="form-check rsvp-family-toggle">
+                <input class="form-check-input" type="checkbox" name="ApplyToGroup" value="true" id="group-rsvp" data-group-toggle />
+                <label for="group-rsvp" class="form-check-label">Confirmar também para a família @Model.Guest.Family.Name</label>
             </div>
 
-            <button class="btn btn-primary rounded-pill">Submeter Presença</button>
-        </form>
-    </div>
+            <section id="family-response-cards" class="rsvp-family-cards" hidden>
+                <h2>Respostas da família</h2>
+                @for (var i = 0; i < Model.RelatedGuests.Count; i++)
+                {
+                    var familyGuest = Model.RelatedGuests[i];
+                    <article class="rsvp-response-card rsvp-family-card">
+                        <div class="rsvp-card-heading">
+                            <i class="bi bi-person"></i>
+                            <div>
+                                <p class="rsvp-card-label">Convidado da família</p>
+                                <h3>@familyGuest.DisplayName</h3>
+                            </div>
+                        </div>
+                        <input type="hidden" name="FamilyResponses[@i].GuestId" value="@familyGuest.Id" />
+                        <label class="form-label" for="family-status-@i">Vai estar presente?</label>
+                        <select id="family-status-@i" name="FamilyResponses[@i].Status" class="form-select" data-family-status>
+                            <option value="">Escolhe...</option>
+                            <option value="Attending">Sim, estará presente</option>
+                            <option value="NotAttending">Não poderá estar presente</option>
+                        </select>
+                        <textarea name="FamilyResponses[@i].DietaryRestrictions" class="form-control mt-3" placeholder="Restrições alimentares (opcional)"></textarea>
+                    </article>
+                }
+            </section>
+        }
+
+        @if (Model.PlusOnes.Any())
+        {
+            var plusOne = Model.PlusOnes.First();
+            <article class="rsvp-response-card rsvp-plus-one-card">
+                <div class="rsvp-card-heading">
+                    <i class="bi bi-person-plus"></i>
+                    <div>
+                        <p class="rsvp-card-label">Acompanhante</p>
+                        <h2>@plusOne.PlusOneDisplayName</h2>
+                    </div>
+                </div>
+                <input type="hidden" name="PlusOneId" value="@plusOne.Id" />
+                <p>O/a @plusOne.PlusOneFirstName também vai estar presente?</p>
+                <div class="d-flex gap-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="PlusOneAttending" value="true" id="plus-one-yes" />
+                        <label class="form-check-label" for="plus-one-yes">Sim</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="PlusOneAttending" value="false" id="plus-one-no" checked />
+                        <label class="form-check-label" for="plus-one-no">Não</label>
+                    </div>
+                </div>
+            </article>
+        }
+
+        <div class="form-check rsvp-overwrite">
+            <input class="form-check-input" type="checkbox" name="ConfirmOverwrite" value="true" id="overwrite-rsvp" />
+            <label class="form-check-label" for="overwrite-rsvp">Confirmo que quero substituir uma resposta anterior, caso exista.</label>
+        </div>
+
+        <button class="btn btn-primary btn-lg rounded-pill">Submeter respostas</button>
+    </form>
 </div>
+
+@section Scripts {
+    <script>
+        const groupToggle = document.querySelector('[data-group-toggle]');
+        const familyCards = document.getElementById('family-response-cards');
+
+        if (groupToggle && familyCards) {
+            const updateFamilyCards = () => {
+                familyCards.hidden = !groupToggle.checked;
+                familyCards.querySelectorAll('[data-family-status]').forEach(select => select.required = groupToggle.checked);
+            };
+
+            groupToggle.addEventListener('change', updateFamilyCards);
+            updateFamilyCards();
+        }
+    </script>
+}

@@ -360,6 +360,79 @@ body {
     border-color: var(--primary);
 }
 
+.rsvp-header {
+    padding: 2.75rem 0;
+}
+
+.rsvp-selection form {
+    display: grid;
+    gap: 1.25rem;
+}
+
+.rsvp-response-card {
+    padding: 1.5rem;
+    border: 1px solid rgba(189, 71, 66, 0.2);
+    border-radius: 1.5rem;
+    background: rgba(255, 255, 255, 0.88);
+    box-shadow: 0 12px 34px rgba(189, 71, 66, 0.08);
+}
+
+.rsvp-card-heading {
+    display: flex;
+    gap: 0.9rem;
+    align-items: center;
+    margin-bottom: 1.25rem;
+}
+
+.rsvp-card-heading > i {
+    display: grid;
+    width: 2.9rem;
+    height: 2.9rem;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--primary);
+    color: #fff;
+    font-size: 1.25rem;
+}
+
+.rsvp-card-heading h2,
+.rsvp-card-heading h3 {
+    margin: 0;
+    font-family: Georgia, serif;
+}
+
+.rsvp-card-label {
+    margin: 0 0 0.15rem;
+    color: var(--primary);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.rsvp-family-toggle,
+.rsvp-overwrite {
+    padding: 1rem 1.25rem;
+    border-radius: 1rem;
+    background: rgba(248, 240, 227, 0.86);
+}
+
+.rsvp-family-cards {
+    display: grid;
+    gap: 1rem;
+}
+
+.rsvp-family-cards > h2 {
+    margin: 0.4rem 0 0;
+    font-family: Georgia, serif;
+    font-size: 1.5rem;
+}
+
+.rsvp-family-card,
+.rsvp-plus-one-card {
+    background: #fffaf7;
+}
+
 .dropzone {
     border: 2px dashed #da9b92;
     border-radius: 1.5rem;

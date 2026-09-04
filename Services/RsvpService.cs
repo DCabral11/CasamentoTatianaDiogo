@@ -47,45 +47,61 @@ namespace CasamentoTatianaDiogo.Services
             if (guest == null)
                 return (false, "Convidado não encontrado.");
 
-            if (await db.RsvpResponses.AnyAsync(r => r.GuestId == guest.Id) && !model.ConfirmOverwrite)
-                return (false, "Já existe uma resposta registrada para este convidado. Por favor, confirme que deseja substituir a resposta existente.");
-
-            if (model.PlusOneAttending && guest.AllowPlusOne && model.PlusOneId == null)
-                return (false, "Por favor, selecione o convidado acompanhante.");
-
-            var guestIds = new List<int> { guest.Id };
+            var guestsToRespond = new List<Guest> { guest };
 
             if (model.ApplyToGroup && guest.Family?.AllowGroupRsvp == true)
-                guestIds = await db.Guests.Where(g => g.FamilyId == guest.FamilyId).Select(g => g.Id).ToListAsync();
+                guestsToRespond = await db.Guests.Where(g => g.FamilyId == guest.FamilyId).ToListAsync();
 
-            foreach (var guestId in guestIds)
+            var responsesByGuestId = model.FamilyResponses
+                .GroupBy(response => response.GuestId)
+                .ToDictionary(group => group.Key, group => group.Last());
+
+            if (model.ApplyToGroup)
             {
-                var response = await db.RsvpResponses.OrderByDescending(r => r.SubmittedAt).FirstOrDefaultAsync(r => r.GuestId == guestId);
+                var missingResponse = guestsToRespond.FirstOrDefault(g =>
+                    g.Id != guest.Id && (!responsesByGuestId.TryGetValue(g.Id, out var response) || response.Status is null));
+
+                if (missingResponse != null)
+                    return (false, $"Indique a presença de {missingResponse.DisplayName}.");
+            }
+
+            if (await db.RsvpResponses.AnyAsync(r => guestsToRespond.Select(g => g.Id).Contains(r.GuestId)) && !model.ConfirmOverwrite)
+                return (false, "Já existe uma resposta registrada. Por favor, confirme que deseja substituir a resposta existente.");
+
+            var plusOne = model.PlusOneId.HasValue
+                ? guest.PlusOnes.FirstOrDefault(p => p.Id == model.PlusOneId.Value)
+                : null;
+
+            if (model.PlusOneAttending && plusOne == null)
+                return (false, "O acompanhante selecionado não é válido.");
+
+            foreach (var responseGuest in guestsToRespond)
+            {
+                var response = await db.RsvpResponses.OrderByDescending(r => r.SubmittedAt).FirstOrDefaultAsync(r => r.GuestId == responseGuest.Id);
 
                 if (response == null)
                 {
                     response = new RsvpResponse
                     {
-                        GuestId = guestId,
+                        GuestId = responseGuest.Id,
                         SubmittedAt = DateTime.UtcNow
                     };
 
                     db.RsvpResponses.Add(response);
                 }
 
-                response.Status = model.Status.Value;
-                response.Message = model.Message;
-                response.MusicRequest = model.MusicRequest;
-                response.PlusOneAttending = guestId == guest.Id && model.PlusOneAttending;
-                response.PlusOneId = guestId == guest.Id ? model.PlusOneId : null;
+                var familyResponse = responsesByGuestId.GetValueOrDefault(responseGuest.Id);
+                response.Status = responseGuest.Id == guest.Id ? model.Status.Value : familyResponse!.Status!.Value;
+                response.DietaryRestrictions = responseGuest.Id == guest.Id ? model.DietaryRestrictions : familyResponse?.DietaryRestrictions;
+                response.Message = responseGuest.Id == guest.Id ? model.Message : null;
+                response.MusicRequest = responseGuest.Id == guest.Id ? model.MusicRequest : null;
+                response.PlusOneAttending = responseGuest.Id == guest.Id && model.PlusOneAttending;
+                response.PlusOneId = responseGuest.Id == guest.Id && model.PlusOneAttending ? plusOne?.Id : null;
                 response.UpdatedAt = DateTime.UtcNow;
                 response.SubmittedFromIp = ip;
                 response.UserAgent = userAgent;
 
-                var g = await db.Guests.FindAsync(guestId);
-
-                if (g != null)
-                    g.CurrentStatus = model.Status.Value;
+                responseGuest.CurrentStatus = response.Status;
             }
 
             await db.SaveChangesAsync();
