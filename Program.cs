@@ -32,6 +32,7 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddScoped<IWeddingSettingsService, WeddingSettingsService>();
 builder.Services.AddScoped<IRsvpService, RsvpService>();
+builder.Services.AddScoped<IRsvpEmailNotificationService, RsvpEmailNotificationService>();
 builder.Services.AddScoped<IGoogleDriveService, GoogleDriveService>();
 builder.Services.AddScoped<IPhotoUploadService, PhotoUploadService>();
 

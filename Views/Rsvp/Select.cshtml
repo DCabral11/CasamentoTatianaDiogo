@@ -48,7 +48,7 @@
         {
             <div class="form-check rsvp-family-toggle">
                 <input class="form-check-input" type="checkbox" name="ApplyToGroup" value="true" id="group-rsvp" data-group-toggle />
-                <label for="group-rsvp" class="form-check-label">Confirmar também para a família @Model.Guest.Family.Name</label>
+                <label for="group-rsvp" class="form-check-label">Adicionar respostas de outros convidados da família @Model.Guest.Family.Name</label>
             </div>
 
             <section id="family-response-cards" class="rsvp-family-cards" hidden>
@@ -65,7 +65,7 @@
                             </div>
                         </div>
                         <input type="hidden" name="FamilyResponses[@i].GuestId" value="@familyGuest.Id" />
-                        <label class="form-label" for="family-status-@i">Vai estar presente?</label>
+                        <label class="form-label" for="family-status-@i">Vai estar presente? <span class="text-muted">(opcional)</span></label>
                         <select id="family-status-@i" name="FamilyResponses[@i].Status" class="form-select" data-family-status>
                             <option value="">Escolhe...</option>
                             <option value="Attending">Sim, estará presente</option>
@@ -122,7 +122,7 @@
         if (groupToggle && familyCards) {
             const updateFamilyCards = () => {
                 familyCards.hidden = !groupToggle.checked;
-                familyCards.querySelectorAll('[data-family-status]').forEach(select => select.required = groupToggle.checked);
+                familyCards.querySelectorAll('[data-family-status]').forEach(select => select.required = false);
             };
 
             groupToggle.addEventListener('change', updateFamilyCards);

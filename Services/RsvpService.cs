@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CasamentoTatianaDiogo.Services
 {
-    public class RsvpService(ApplicationDbContext db) : IRsvpService
+    public class RsvpService(ApplicationDbContext db, IRsvpEmailNotificationService emailNotifications) : IRsvpService
     {
         public async Task<List<Guest>> SearchGuestsAsync(string query)
         {
@@ -49,20 +49,18 @@ namespace CasamentoTatianaDiogo.Services
 
             var guestsToRespond = new List<Guest> { guest };
 
-            if (model.ApplyToGroup && guest.Family?.AllowGroupRsvp == true)
-                guestsToRespond = await db.Guests.Where(g => g.FamilyId == guest.FamilyId).ToListAsync();
-
             var responsesByGuestId = model.FamilyResponses
                 .GroupBy(response => response.GuestId)
                 .ToDictionary(group => group.Key, group => group.Last());
 
-            if (model.ApplyToGroup)
+            if (model.ApplyToGroup && guest.Family?.AllowGroupRsvp == true)
             {
-                var missingResponse = guestsToRespond.FirstOrDefault(g =>
-                    g.Id != guest.Id && (!responsesByGuestId.TryGetValue(g.Id, out var response) || response.Status is null));
+                var familyGuests = await db.Guests
+                    .Where(g => g.FamilyId == guest.FamilyId && g.Id != guest.Id)
+                    .ToListAsync();
 
-                if (missingResponse != null)
-                    return (false, $"Indique a presença de {missingResponse.DisplayName}.");
+                guestsToRespond.AddRange(familyGuests.Where(g =>
+                    responsesByGuestId.TryGetValue(g.Id, out var response) && response.Status is not null));
             }
 
             if (await db.RsvpResponses.AnyAsync(r => guestsToRespond.Select(g => g.Id).Contains(r.GuestId)) && !model.ConfirmOverwrite)
@@ -74,6 +72,8 @@ namespace CasamentoTatianaDiogo.Services
 
             if (model.PlusOneAttending && plusOne == null)
                 return (false, "O acompanhante selecionado não é válido.");
+
+            var emailDetails = new List<RsvpEmailDetail>();
 
             foreach (var responseGuest in guestsToRespond)
             {
@@ -102,9 +102,18 @@ namespace CasamentoTatianaDiogo.Services
                 response.UserAgent = userAgent;
 
                 responseGuest.CurrentStatus = response.Status;
+
+                emailDetails.Add(new RsvpEmailDetail(
+                    responseGuest.DisplayName,
+                    response.Status == CasamentoTatianaDiogo.Models.Enums.RsvpStatus.Attending ? "Confirmada" : "Não confirmada",
+                    response.DietaryRestrictions,
+                    response.Message,
+                    response.MusicRequest,
+                    response.PlusOneAttending ? plusOne?.PlusOneDisplayName : null));
             }
 
             await db.SaveChangesAsync();
+            await emailNotifications.SendAsync(emailDetails);
 
             return (true, "A resposta foi guardada com sucesso. Agradecemos por confirmar sua presença!");
         }
