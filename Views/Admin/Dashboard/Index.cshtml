@@ -1,0 +1,40 @@
+﻿@model CasamentoTatianaDiogo.ViewModels.Admin.DashboardViewModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="container py-5">
+    <h1>Admin Dashboard</h1>
+    <div class="admin-grid">
+        <div class="stat">
+            @Model.GuestCount
+            <small>Guests</small>
+        </div>
+        <div class="stat">
+            @Model.Attending
+            <small>Attending</small>
+        </div>
+        <div class="stat">
+            @Model.NotAttending
+            <small>Not Attending</small>
+        </div>
+        <div class="stat">
+            @Model.Pending
+            <small>Pending</small>
+        </div>
+        <div class="stat">
+            @Model.UploadedPhotos
+            <small>Photos</small>
+        </div>
+    </div>
+
+    <div class="list-group mt-4">
+        <a class="list-group-item" href="/Admin/Settings/Index">Wedding Settings</a>
+        <a class="list-group-item" href="/Admin/Timeline/Index">Wedding Timeline</a>
+        <a class="list-group-item" href="/Admin/Guests/Index">Guests List</a>
+        <a class="list-group-item" href="/Admin/InvitationGroups/Index">Invitation Groups (Families)</a>
+        <a class="list-group-item" href="/Admin/Rsvp/Index">RSVP Management</a>
+        <a class="list-group-item" href="/Admin/Photos/Settings">Photo Settings</a>
+        <a class="list-group-item" href="/Admin/Photos/Index">Photo Records</a>
+    </div>
+</div>

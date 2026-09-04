@@ -1,0 +1,57 @@
+﻿@model RsvpSearchViewModel
+@{
+    ViewData["Title"] = "RSVP";
+}
+
+<section class="page-header">
+    <div class="container">
+        <h1>
+            <i class="bi bi-envelope-heart"></i> Confirmar Presença
+        </h1>
+        <p>Pesquisa por primeiro ou último nome.</p>
+    </div>
+</section>
+
+<div class="container py-5 narrow">
+    <form asp-action="Search" method="post" class="elegant-card p-4">
+        @Html.AntiForgeryToken()
+
+        <label class="form-label">Nome do Convidado</label>
+
+        <div class="input-group">
+            <input asp-for="Query" class="form-control" placeholder="Primeiro ou Último Nome" />
+            <button class="btn btn-primary">
+                <i class="bi bi-search"></i> Pesquisar
+            </button>
+        </div>
+        <span asp-validation-for="Query" class="text-danger"></span>
+    </form>
+
+    @if(Model.Message != null)
+    {
+        <div class="alert alert-warning mt-3">
+            @Model.Message
+        </div>
+    }
+
+    @if(Model.Results.Any())
+    {
+        <div class="mt-4">
+            <h3>Seleciona o teu Nome</h3>
+
+            @foreach(var guest in Model.Results)
+            {
+                <a class="guest-result" asp-action="Select" asp-route-id="@guest.Id">
+                    <i class="bi bi-person-heart"></i>
+                    <span>@guest.DisplayName</span>
+                    <small>@guest.Family?.Name</small>
+                </a>
+            }
+        </div>
+    }
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

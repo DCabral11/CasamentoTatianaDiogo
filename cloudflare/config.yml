@@ -1,0 +1,7 @@
+﻿tunnel: <TUNNEL_ID>
+credentials-file: C:/Users/<User>/.cloudflared/<TUNNEL_ID>.json
+
+ingress:
+  - hostname: wedding.tatiana-diogo.com
+    service: http://localhost:8080
+  - service: http_status:404

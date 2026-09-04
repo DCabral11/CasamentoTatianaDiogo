@@ -1,0 +1,41 @@
+﻿@model IEnumerable<TimelineEvent>
+
+<div class="container py-5">
+    <h1>Timeline</h1>
+    <p>
+        <a class="btn btn-primary" href="/Admin/Timeline/Create">Create</a>
+    </p>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>EventDateTime</th>
+                <th>DisplayOrder</th>
+                <th>IconName</th>
+                <th>IsActive</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Title</td>
+                    <td>@item.EventDateTime</td>
+                    <td>@item.DisplayOrder</td>
+                    <td>@item.IconName</td>
+                    <td>@item.IsActive</td>
+                    <td>
+                        <a href="/Admin/Timeline/Edit/@item.Id">Edit</a>
+                        <form method="post" action="/Admin/Timeline/Delete/@item.Id" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <button class="btn btn-sm btn-link text-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

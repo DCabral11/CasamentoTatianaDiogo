@@ -1,0 +1,22 @@
+﻿@model PhotoUploadSettings
+
+<div class="container py-5 narrow">
+    <h1>Photo Upload Settings</h1>
+    <form method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Id"/>
+        <label>IsEnabled</label>
+        <input asp-for="IsEnabled" class="form-check-input d-block mb-3" />
+        <label>OpensAt</label>
+        <input asp-for="OpensAt" class="form-check-input d-block mb-3" />
+        <label>ClosesAt</label>
+        <input asp-for="ClosesAt" class="form-check-input d-block mb-3" />
+        <label>GoogleDriveFolderId</label>
+        <input asp-for="GoogleDriveFolderId" class="form-check-input d-block mb-3" />
+        <label>MaxFileSizeMb</label>
+        <input asp-for="MaxFilesSizeMb" class="form-check-input d-block mb-3" />
+        <label>AllowedExtensionsCsv</label>
+        <input asp-for="AllowedExtensionsCsv" class="form-check-input d-block mb-3" />
+        <button class="btn btn-primary">Save</button>
+    </form>
+</div>

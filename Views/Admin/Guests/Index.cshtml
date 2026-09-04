@@ -1,0 +1,39 @@
+﻿@model IEnumerable<Guest>
+
+<div class="container py-5">
+    <h1>Guests</h1>
+    <p>
+        <a class="btn btn-primary" href="/Admin/Guests/Create">Create</a>
+    </p>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>DisplayName</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>CurrentStatus</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.DisplayName</td>
+                    <td>@item.Email</td>
+                    <td>@item.Phone</td>
+                    <td>@item.CurrentStatus</td>
+                    <td>
+                        <a href="/Admin/Guests/Edit/@item.Id">Edit</a>
+                        <form method="post" action="/Admin/Guests/Delete/@item.Id" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <button class="btn btn-sm btn-link btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

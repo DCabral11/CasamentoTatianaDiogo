@@ -1,0 +1,37 @@
+﻿@model IEnumerable<PhotoUpload>
+
+<div class="container py-5">
+    <h1>Photo Records</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>File</th>
+                <th>Guest</th>
+                <th>Size</th>
+                <th>Drive</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var p in Model)
+            {
+                <tr>
+                    <th>@p.UploadedAt</th>
+                    <th>@p.OriginalFileName</th>
+                    <th>@p.GuestName</th>
+                    <th>@p.SizeBytes</th>
+                    <td>
+                        <a href="@p.GoogleDriveWebViewLink" target="_blank">Open</a>
+                    </td>
+                    <td>
+                        <form method="post" action="/Admin/Photos/Delete/@p.Id">
+                            @Html.AntiForgeryToken()
+                            <button class="btn btn-sm btn-danger">Delete Metadata</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

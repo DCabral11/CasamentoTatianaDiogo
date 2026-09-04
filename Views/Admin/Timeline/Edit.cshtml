@@ -1,0 +1,34 @@
+﻿@model TimelineEvent
+
+<div class="container py-5 narrow">
+    <h1>Edit TimelineEvent</h1>
+    <form method="post" action="/Admin/Timeline/Save">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Id" />
+        <div class="mb-3">
+            <label class="form-label">Title</label>
+            <input name="Title" value="@Model.Title" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Description</label>
+            <input name="Description" value="@Model.Description" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">EventDateTime</label>
+            <input name="EventDateTime" value="@Model.EventDateTime" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">DisplayOrder</label>
+            <input name="DisplayOrder" value="@Model.DisplayOrder" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">IconName</label>
+            <input name="IconName" value="@Model.IconName" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">IsActive</label>
+            <input name="IsActive" value="@Model.IsActive" class="form-control" />
+        </div>
+        <button class="btn btn-primary">Save</button>
+    </form>
+</div>

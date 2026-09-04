@@ -1,0 +1,15 @@
+﻿@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Admin Login";
+}
+
+<div class="container py-5 narrow">
+    <form method="post" class="elegant-card p-4">
+        @Html.AntiForgeryToken()
+        <h1>Admin Login</h1>
+        <input name="email" class="form-control mb-3" placeholder="Email" />
+        <input name="password" type="password" class="form-control mb-3" placeholder="Password" />
+        <button class="btn btn-primary">Login</button>
+        <div asp-validation-summary="All" class="text-danger mt-3"></div>
+    </form>
+</div>

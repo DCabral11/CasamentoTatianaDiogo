@@ -1,0 +1,47 @@
+﻿@model Guest
+
+<div class="container py-5 narrow">
+    <h1>Edit Guest</h1>
+    <form method="post" action="/Admin/Guests/Save">
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" asp-for="Id" />
+        <div class="mb-3">
+            <label class="form-label">FamilyId</label>
+            <input name="FamilyId" value="@Model.FamilyId" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">FirstName</label>
+            <input name="FirstName" value="@Model.FirstName" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">LastName</label>
+            <input name="LastName" value="@Model.LastName" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">DisplayName</label>
+            <input name="DisplayName" value="@Model.DisplayName" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input name="Email" value="@Model.Email" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Phone</label>
+            <input name="Phone" value="@Model.Phone" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">AllowPlusOne</label>
+            <input name="AllowPlusOne" value="@Model.AllowPlusOne" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">IsChild</label>
+            <input name="IsChild" value="@Model.IsChild" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Notes</label>
+            <input name="Notes" value="@Model.Notes" class="form-control" />
+        </div>
+        <button class="btn btn-primary">Save</button>
+    </form>
+</div>

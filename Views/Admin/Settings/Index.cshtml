@@ -1,0 +1,23 @@
+﻿@model WeddingSettings
+
+<div class="container py-5">
+    <h1>Wedding Settings</h1>
+    <form method="post" class="admin-form">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Id" />
+        <div class="row g-3">
+            @foreach (var p in new[] { "BrideName", "GroomName", "WeddingDateTime", "CeremonyLocationName", "CeremonyAddress", "CeremonyGoogleMapsUrl", "CeremonyGoogleMapsEmbedUrl", "ReceptionLocationName", "ReceptionAddress", "ReceptionGoogleMapsUrl", "ReceptionGoogleMapsEmbedUrl", "BridePhone", "BrideEmail", "GroomPhone", "GroomEmail", "HomeHeroTitle", "HomeHeroSubtitle", "LogoPath", "PrimaryColor", "SecondaryColor" })
+            {
+                 <div class="col-md-6">
+                     <label class="form-label">@p</label>
+                     <input name="@p" value="@Model.GetType().GetProperty(p)!.GetValue(Model)" class="form-control" />
+                 </div>   
+            }
+            <div class="col-12">
+                <label>CoupleStory</label>
+                <textarea asp-for="CoupleStory" class="form-control" rows="5"></textarea>
+            </div>
+        </div>
+        <button class="btn btn-primary mt-3">Save</button>
+    </form>
+</div>

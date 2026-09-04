@@ -1,0 +1,72 @@
+﻿@model RsvpSelectionViewModel
+@{
+    ViewData["Title"] = "Confirmar Presença";
+}
+
+<div class="container py-5 narrow">
+    <div class="elegant-card p-4">
+        <h2>@Model.Guest.DisplayName</h2>
+        <p>Família: @Model.Guest.Family?.Name</p>
+        <p>Plus-One: @Model.Guest.AllowPlusOne ? "Escolhe o teu Plus-One" : "Não podes levar Plus-One"</p>
+
+        @if(Model.RelatedGuests.Any())
+        {
+            <p>Convidados Relacionados: @string.Join(", ", Model.RelatedGuests.Select(g => g.DisplayName))</p>
+        }
+
+        @if(Model.HasExistingResponse)
+        {
+            <div class="alert alert-warning">Já confirmaste a tua presença. Se quiseres substituir seleciona a opção para esse propósito.</div>
+        }
+
+        <form asp-action="Submit" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="GuestId" value="@Model.Guest.Id" />
+
+            <div class="mb-3">
+                <label class="form-label">Presença</label>
+                <select name="Status" class="form-select" required>
+                    <option value="">Escolhe...</option>
+                    <option value="Attending">Sim</option>
+                    <option value="NotAttending">Não</option>
+                </select>
+            </div>
+
+            @if(Model.Guest.Family?.AllowGroupRsvp == true)
+            {
+              <div class="form-check mb-3">
+                  <input class="form-check-input" type="checkbox" name="ApplyToGroup" value="true" id="grp" />
+                  <label for="grp" class="form-check-label">Aplicar a resposta para todos os convidados da família</label>
+              </div>      
+            }
+
+            <textarea name="DietaryRestrictions" class="form-control mb-3" placeholder="Restrições Alimentares"></textarea>
+            <textarea name="Message" class="form-control mb-3" placeholder="Messagem para os noivos"></textarea>
+            
+            <input name="MusicRequest" class="form-control mb-3" placeholder="Uma música que queiras mesmo ouvir"/>
+
+            @if(Model.Guest.AllowPlusOne && Model.PlusOnes.Any())
+            {
+               <div class="form-check mb-2">
+                   <input class="form-check-input" type="checkbox" name="PlusOneAttending" value="true" id="po" />
+                   <label class="form-check-label" for="po">Plus-One vai?</label>
+               </div>
+               
+               <select class="form-select mb-3" name="PlusOneId">
+                   <option value="">Seleciona o Plus-One</option>
+                   @foreach(var p in Model.PlusOnes)
+                    {
+                        <option value="@p.Id">@p.PlusOneDisplayName</option>        
+                    }
+                </select>
+            }
+
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" name="ConfirmOverwrite" value="true" id="ow" />
+                <label class="form-check-label" for="ow">Se já submeste uma resposta, seleciona a opção para substituir</label>
+            </div>
+
+            <button class="btn btn-primary rounded-pill">Submeter Presença</button>
+        </form>
+    </div>
+</div>
