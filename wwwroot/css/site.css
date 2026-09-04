@@ -1,13 +1,18 @@
 :root {
     --primary: #bd4742;
     --secondary: #fce8e4;
-    --ink: #121212;
+    --ink: #332d2a;
+    --canvas: #fffaf7;
+    --surface: #fffaf7;
+    --surface-soft: #f8f0e3;
+    --line: #da9b92;
+    --muted: #625854;
 }
 
 body {
     font-family: Inter, system-ui, -apple-system, Segoe UI, sans-serif;
     color: var(--ink);
-    background: #fffaf7;
+    background: var(--canvas);
 }
 
 .nav-logo {
@@ -16,13 +21,13 @@ body {
 }
 
 .navbar-logo-bg {
-    background-color: #f8f0e3;
+    background-color: var(--surface-soft);
     border-bottom: 1px solid rgba(189, 71, 66, 0.14);
 }
 
 .navbar .nav-link {
     font-weight: 600;
-    color: #332d2a;
+    color: var(--ink);
     transition: color 0.2s ease;
 }
 
@@ -213,7 +218,7 @@ body {
 
 .information-page {
     min-height: 100%;
-    background: #f8f0e3;
+    background: var(--surface-soft);
 }
 
 .information-page .page-header {
@@ -224,7 +229,7 @@ body {
 .page-header p {
     max-width: 620px;
     margin-bottom: 0;
-    color: #625854;
+    color: var(--muted);
     font-size: 1.08rem;
 }
 
@@ -296,7 +301,7 @@ body {
     top: 0;
     bottom: 0;
     width: 2px;
-    background: #da9b92;
+    background: var(--line);
 }
 
 .timeline-item {
@@ -472,16 +477,16 @@ body {
 
 .rsvp-family-card,
 .rsvp-plus-one-card {
-    background: #fffaf7;
+    background: var(--canvas);
 }
 
 .dropzone {
-    border: 2px dashed #da9b92;
+    border: 2px dashed var(--line);
     border-radius: 1.5rem;
     padding: 2rem;
     text-align: center;
     background: #fff;
-    border-color: #df9995;
+    border-color: var(--line);
 }
 
 .dropzone i {

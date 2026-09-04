@@ -10,7 +10,7 @@ using System.Text;
 namespace CasamentoTatianaDiogo.Controllers.Admin
 {
     [Authorize(Roles = "Admin")]
-    [Route("Admin/[controller]/[action]/{id?}")]
+    [Route("Admin/Rsvp/[action]/{id?}")]
     public class RsvpAdminController(ApplicationDbContext db) : Controller
     {
         public async Task<IActionResult> Index(int? familyId) => View("~/Views/Admin/Rsvp/Index.cshtml", await db.Guests.Include(g => g.Family).Include(g => g.RsvpResponses).Where(g => !familyId.HasValue || g.FamilyId == familyId).OrderBy(g => g.DisplayName).ToListAsync());
