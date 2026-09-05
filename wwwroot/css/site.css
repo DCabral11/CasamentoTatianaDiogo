@@ -817,6 +817,36 @@ footer,
     text-transform: uppercase;
 }
 
+/* Larger type scale for the information cards. */
+.information-tip h3 {
+    font-size: 1.4rem;
+}
+
+.information-tip p,
+.information-tip a {
+    font-size: 1.04rem;
+}
+
+.location-card h3 {
+    font-size: 1.75rem;
+}
+
+.location-card p {
+    font-size: 1.2rem;
+}
+
+.location-card p strong {
+    font-size: 1.32rem;
+}
+
+.contact-card h4 {
+    font-size: 1.65rem;
+}
+
+.contact-details a {
+    font-size: 1.08rem;
+}
+
 @media (max-width: 768px) {
     .hero-content {
         display: flex;
