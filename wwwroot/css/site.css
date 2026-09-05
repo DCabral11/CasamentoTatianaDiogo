@@ -9,6 +9,24 @@
     --muted: #625854;
 }
 
+/* Navigation hover states need a solid contrast treatment on the cream background. */
+.navbar .nav-link {
+    padding: 0.5rem 0.8rem;
+    border-radius: 999px;
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link:focus {
+    color: #fff;
+    background-color: var(--primary);
+}
+
+.navbar .btn-outline-primary:hover,
+.navbar .btn-outline-primary:focus {
+    color: #fff;
+}
+
 body {
     font-family: Inter, system-ui, -apple-system, Segoe UI, sans-serif;
     color: var(--ink);
