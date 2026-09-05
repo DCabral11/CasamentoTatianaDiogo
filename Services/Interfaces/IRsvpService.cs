@@ -9,7 +9,10 @@ namespace CasamentoTatianaDiogo.Services.Interfaces
         string? DietaryRestrictions,
         string? Message,
         string? MusicRequest,
-        string? PlusOneName);
+        string? PlusOneName,
+        string? PlusOneDietaryRestrictions,
+        string? PlusOneMessage,
+        string? PlusOneMusicRequest);
 
     public interface IRsvpService
     {

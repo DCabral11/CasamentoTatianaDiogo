@@ -16,7 +16,17 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
     {
         async Task Load()
         {
-            ViewBag.Families = new SelectList(await db.Families.OrderBy(f => f.Name).ToListAsync(), "Id", "Name");
+            var families = await db.Families
+                .OrderBy(f => f.Name)
+                .ThenBy(f => f.GroupCode)
+                .Select(f => new
+                {
+                    f.Id,
+                    Name = string.IsNullOrWhiteSpace(f.GroupCode) ? f.Name : $"{f.Name} — {f.GroupCode}"
+                })
+                .ToListAsync();
+
+            ViewBag.Families = new SelectList(families, "Id", "Name");
         }
 
         public async Task<IActionResult> Index() => View("~/Views/Admin/Guests/Index.cshtml", await db.Guests.Include(g => g.Family).OrderBy(g => g.DisplayName).ToListAsync());

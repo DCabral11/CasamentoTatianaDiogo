@@ -10,12 +10,12 @@
     </div>
     <div class="table-responsive">
         <table class="table align-middle">
-            <thead><tr><th>Acompanhante</th><th>Convidado associado</th><th>Restrições alimentares</th><th class="text-end">Ações</th></tr></thead>
+            <thead><tr><th>Acompanhante</th><th>Convidado associado</th><th class="text-end">Ações</th></tr></thead>
             <tbody>
             @foreach (var plusOne in Model)
             {
                 <tr>
-                    <td>@plusOne.PlusOneDisplayName</td><td>@plusOne.MainGuest?.DisplayName</td><td>@(plusOne.PlusOneDietaryRestrictions ?? "—")</td>
+                    <td>@plusOne.PlusOneDisplayName</td><td>@plusOne.MainGuest?.DisplayName</td>
                     <td class="text-end"><a class="btn btn-sm btn-outline-primary" asp-action="Edit" asp-route-id="@plusOne.Id">Editar</a>
                         <form method="post" asp-action="Delete" asp-route-id="@plusOne.Id" class="d-inline">@Html.AntiForgeryToken()<button class="btn btn-sm btn-outline-danger" onclick="return confirm('Remover este acompanhante?')">Remover</button></form></td>
                 </tr>

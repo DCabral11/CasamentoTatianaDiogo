@@ -13,6 +13,18 @@ namespace CasamentoTatianaDiogo.Data
 
             await db.Database.EnsureCreatedAsync();
 
+            // EnsureCreated does not apply model changes to databases that already exist.
+            // Keep this upgrade idempotent so the RSVP form can save the additional
+            // accompaniment details without requiring a manual database intervention.
+            await db.Database.ExecuteSqlRawAsync("""
+                IF COL_LENGTH(N'[RsvpResponses]', N'PlusOneDietaryRestrictions') IS NULL
+                    ALTER TABLE [RsvpResponses] ADD [PlusOneDietaryRestrictions] nvarchar(1000) NULL;
+                IF COL_LENGTH(N'[RsvpResponses]', N'PlusOneMessage') IS NULL
+                    ALTER TABLE [RsvpResponses] ADD [PlusOneMessage] nvarchar(1000) NULL;
+                IF COL_LENGTH(N'[RsvpResponses]', N'PlusOneMusicRequest') IS NULL
+                    ALTER TABLE [RsvpResponses] ADD [PlusOneMusicRequest] nvarchar(200) NULL;
+                """);
+
             await db.Database.ExecuteSqlRawAsync("""
                 IF OBJECT_ID(N'[SiteContents]', N'U') IS NULL
                 BEGIN

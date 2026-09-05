@@ -1,0 +1,41 @@
+@model RsvpResponse
+@{
+    ViewData["Title"] = "Recibo de resposta";
+    var attendance = Model.Status == CasamentoTatianaDiogo.Models.Enums.RsvpStatus.Attending
+        ? "Vai estar presente" : "Não vai estar presente";
+}
+
+<div class="container py-5 narrow">
+    <div class="d-flex justify-content-between align-items-start gap-3 mb-4">
+        <div>
+            <p class="text-uppercase small text-muted mb-1">Recibo de resposta</p>
+            <h1 class="mb-1">@Model.Guest?.DisplayName</h1>
+            <p class="text-muted mb-0">@Model.Guest?.Family?.Name</p>
+        </div>
+        <a class="btn btn-outline-primary" href="/Admin/Rsvp/Index"><i class="bi bi-arrow-left"></i> Voltar</a>
+    </div>
+
+    <article class="admin-form">
+        <dl class="row mb-0">
+            <dt class="col-sm-4">Intenção de presença</dt><dd class="col-sm-8">@attendance</dd>
+            <dt class="col-sm-4">Enviada em</dt><dd class="col-sm-8">@Model.SubmittedAt.ToLocalTime().ToString("dd/MM/yyyy 'às' HH:mm")</dd>
+            @if (Model.UpdatedAt.HasValue) { <dt class="col-sm-4">Atualizada em</dt><dd class="col-sm-8">@Model.UpdatedAt.Value.ToLocalTime().ToString("dd/MM/yyyy 'às' HH:mm")</dd> }
+            @if (!string.IsNullOrWhiteSpace(Model.DietaryRestrictions)) { <dt class="col-sm-4">Restrições alimentares</dt><dd class="col-sm-8">@Model.DietaryRestrictions</dd> }
+            @if (!string.IsNullOrWhiteSpace(Model.MusicRequest)) { <dt class="col-sm-4">Sugestão musical</dt><dd class="col-sm-8">@Model.MusicRequest</dd> }
+            @if (!string.IsNullOrWhiteSpace(Model.Message)) { <dt class="col-sm-4">Mensagem</dt><dd class="col-sm-8">@Model.Message</dd> }
+        </dl>
+    </article>
+
+    @if (Model.PlusOneAttending && Model.PlusOne != null)
+    {
+        <article class="admin-form mt-4">
+            <h2 class="h4">Acompanhante: @Model.PlusOne.PlusOneDisplayName</h2>
+            <dl class="row mb-0">
+                <dt class="col-sm-4">Presença</dt><dd class="col-sm-8">Vai estar presente</dd>
+                @if (!string.IsNullOrWhiteSpace(Model.PlusOneDietaryRestrictions)) { <dt class="col-sm-4">Restrições alimentares</dt><dd class="col-sm-8">@Model.PlusOneDietaryRestrictions</dd> }
+                @if (!string.IsNullOrWhiteSpace(Model.PlusOneMusicRequest)) { <dt class="col-sm-4">Sugestão musical</dt><dd class="col-sm-8">@Model.PlusOneMusicRequest</dd> }
+                @if (!string.IsNullOrWhiteSpace(Model.PlusOneMessage)) { <dt class="col-sm-4">Mensagem</dt><dd class="col-sm-8">@Model.PlusOneMessage</dd> }
+            </dl>
+        </article>
+    }
+</div>

@@ -19,7 +19,5 @@ namespace CasamentoTatianaDiogo.Models
         [Required, StringLength(220)]
         public string PlusOneDisplayName { get; set; } = string.Empty;
 
-        [StringLength(1000)]
-        public string? PlusOneDietaryRestrictions { get; set; }
     }
 }

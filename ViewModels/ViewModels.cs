@@ -52,6 +52,15 @@ namespace CasamentoTatianaDiogo.ViewModels
 
         public int? PlusOneId { get; set; }
 
+        [StringLength(1000)]
+        public string? PlusOneDietaryRestrictions { get; set; }
+
+        [StringLength(1000)]
+        public string? PlusOneMessage { get; set; }
+
+        [StringLength(200)]
+        public string? PlusOneMusicRequest { get; set; }
+
         public bool ConfirmOverwrite { get; set; }
 
         public List<FamilyGuestRsvpInput> FamilyResponses { get; set; } = [];

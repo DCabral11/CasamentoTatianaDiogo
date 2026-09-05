@@ -7,7 +7,7 @@
     <form method="post" action="/Admin/InvitationGroups/Save" class="admin-form">
         @Html.AntiForgeryToken()<input asp-for="Id" type="hidden" /><div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="mb-3"><label asp-for="Name" class="form-label">Nome da família</label><input asp-for="Name" class="form-control" placeholder="Ex.: Família Silva" /></div>
-        <div class="mb-3"><label asp-for="GroupCode" class="form-label">Código do grupo</label><input asp-for="GroupCode" class="form-control" placeholder="Opcional" /></div>
+        <div class="mb-3"><label asp-for="GroupCode" class="form-label">Nome de referência</label><input asp-for="GroupCode" class="form-control" placeholder="Ex.: Colegas do trabalho" /><div class="form-text">Uso interno para distinguir famílias com o mesmo nome. Este nome aparece ao escolher a família de um convidado.</div></div>
         <div class="form-check mb-3"><input asp-for="AllowGroupRsvp" class="form-check-input" /><label asp-for="AllowGroupRsvp" class="form-check-label">Permitir respostas por vários membros da família</label></div>
         <div class="mb-3"><label asp-for="Notes" class="form-label">Notas internas</label><textarea asp-for="Notes" class="form-control" rows="3"></textarea></div>
         <button class="btn btn-primary">Guardar família</button><a class="btn btn-link" href="/Admin/InvitationGroups/Index">Cancelar</a>

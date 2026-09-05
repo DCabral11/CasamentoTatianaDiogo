@@ -41,6 +41,12 @@ namespace CasamentoTatianaDiogo.Services
                     body.AppendLine($"Sugestão musical: {response.MusicRequest}");
                 if (!string.IsNullOrWhiteSpace(response.Message))
                     body.AppendLine($"Mensagem: {response.Message}");
+                if (!string.IsNullOrWhiteSpace(response.PlusOneDietaryRestrictions))
+                    body.AppendLine($"Restrições alimentares do/a acompanhante: {response.PlusOneDietaryRestrictions}");
+                if (!string.IsNullOrWhiteSpace(response.PlusOneMusicRequest))
+                    body.AppendLine($"Sugestão musical do/a acompanhante: {response.PlusOneMusicRequest}");
+                if (!string.IsNullOrWhiteSpace(response.PlusOneMessage))
+                    body.AppendLine($"Mensagem do/a acompanhante: {response.PlusOneMessage}");
             }
 
             try

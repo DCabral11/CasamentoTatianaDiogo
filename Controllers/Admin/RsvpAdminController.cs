@@ -13,21 +13,23 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
     [Route("Admin/Rsvp/[action]/{id?}")]
     public class RsvpAdminController(ApplicationDbContext db) : Controller
     {
-        public async Task<IActionResult> Index(int? familyId) => View("~/Views/Admin/Rsvp/Index.cshtml", await db.Guests.Include(g => g.Family).Include(g => g.RsvpResponses).Where(g => !familyId.HasValue || g.FamilyId == familyId).OrderBy(g => g.DisplayName).ToListAsync());
+        public async Task<IActionResult> Index(int? familyId) => View("~/Views/Admin/Rsvp/Index.cshtml", await db.Guests
+            .Include(g => g.Family)
+            .Include(g => g.RsvpResponses)
+            .Where(g => g.RsvpResponses.Any() && (!familyId.HasValue || g.FamilyId == familyId))
+            .OrderBy(g => g.DisplayName)
+            .ToListAsync());
 
-        [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> SetStatus(int id, RsvpStatus status)
+        public async Task<IActionResult> Details(int id)
         {
-            var g = await db.Guests.FindAsync(id);
+            var response = await db.RsvpResponses
+                .Include(r => r.Guest)!.ThenInclude(g => g!.Family)
+                .Include(r => r.PlusOne)
+                .Where(r => r.GuestId == id)
+                .OrderByDescending(r => r.SubmittedAt)
+                .FirstOrDefaultAsync();
 
-            if (g != null)
-            {
-                g.CurrentStatus = status;
-
-                await db.SaveChangesAsync();
-            }
-
-            return RedirectToAction(nameof(Index));
+            return response == null ? NotFound() : View("~/Views/Admin/Rsvp/Details.cshtml", response);
         }
 
         [HttpPost, ValidateAntiForgeryToken]

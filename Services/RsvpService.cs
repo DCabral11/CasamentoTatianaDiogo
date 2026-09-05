@@ -97,6 +97,9 @@ namespace CasamentoTatianaDiogo.Services
                 response.MusicRequest = responseGuest.Id == guest.Id ? model.MusicRequest : familyResponse?.MusicRequest;
                 response.PlusOneAttending = responseGuest.Id == guest.Id && model.PlusOneAttending;
                 response.PlusOneId = responseGuest.Id == guest.Id && model.PlusOneAttending ? plusOne?.Id : null;
+                response.PlusOneDietaryRestrictions = response.PlusOneAttending ? model.PlusOneDietaryRestrictions : null;
+                response.PlusOneMessage = response.PlusOneAttending ? model.PlusOneMessage : null;
+                response.PlusOneMusicRequest = response.PlusOneAttending ? model.PlusOneMusicRequest : null;
                 response.UpdatedAt = DateTime.UtcNow;
                 response.SubmittedFromIp = ip;
                 response.UserAgent = userAgent;
@@ -109,7 +112,10 @@ namespace CasamentoTatianaDiogo.Services
                     response.DietaryRestrictions,
                     response.Message,
                     response.MusicRequest,
-                    response.PlusOneAttending ? plusOne?.PlusOneDisplayName : null));
+                    response.PlusOneAttending ? plusOne?.PlusOneDisplayName : null,
+                    response.PlusOneDietaryRestrictions,
+                    response.PlusOneMessage,
+                    response.PlusOneMusicRequest));
             }
 
             await db.SaveChangesAsync();
