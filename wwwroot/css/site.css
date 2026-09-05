@@ -315,18 +315,22 @@ body {
 .timeline:before {
     content: "";
     position: absolute;
-    left: 1.8rem;
-    top: 0;
-    bottom: 0;
+    left: 2.5rem;
+    top: var(--timeline-line-start, 2.5rem);
+    bottom: var(--timeline-line-end, 2.5rem);
     width: 2px;
     background: var(--line);
 }
 
 .timeline-item {
     display: grid;
-    grid-template-columns: 4rem 1fr;
-    gap: 1rem;
-    margin-bottom: 1rem;
+    grid-template-columns: 5rem 1fr;
+    gap: 1.35rem;
+    margin-bottom: 1.5rem;
+}
+
+.timeline-item:last-child {
+    margin-bottom: 0;
 }
 
 .timeline-content {
@@ -336,9 +340,9 @@ body {
 
 .timeline-time {
     display: block;
-    margin-bottom: 0.2rem;
+    margin-bottom: 0.28rem;
     color: var(--primary);
-    font-size: 0.82rem;
+    font-size: clamp(1.1rem, 2.5vw, 1.35rem);
     font-weight: 800;
     letter-spacing: 0.12em;
     line-height: 1.2;
@@ -348,7 +352,7 @@ body {
     margin: 0;
     color: var(--ink);
     font-family: Georgia, serif;
-    font-size: clamp(1.3rem, 3vw, 1.7rem);
+    font-size: clamp(1.45rem, 3.2vw, 1.9rem);
     line-height: 1.15;
 }
 
@@ -356,19 +360,20 @@ body {
     max-width: 580px;
     margin: 0.5rem auto 0;
     color: var(--muted);
-    font-size: 1rem;
+    font-size: 1.06rem;
     line-height: 1.55;
 }
 
 .timeline-icon {
     background: var(--primary);
     color: white;
-    width: 3.6rem;
-    height: 3.6rem;
+    width: 5rem;
+    height: 5rem;
     border-radius: 50%;
     display: grid;
     place-items: center;
     align-self: center;
+    font-size: 2rem;
     z-index: 1;
 }
 
