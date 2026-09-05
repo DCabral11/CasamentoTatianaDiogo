@@ -354,17 +354,22 @@ body {
 
 .timeline-time {
     color: var(--primary);
-    font-family: Georgia, serif;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
     font-size: clamp(1.45rem, 3.2vw, 1.9rem);
     font-weight: 400;
     letter-spacing: 0.03em;
     line-height: 1.2;
 }
 
+.timeline-time::after {
+    content: "-";
+    margin-left: 0.55rem;
+}
+
 .timeline-content h3 {
     margin: 0;
     color: var(--primary);
-    font-family: Georgia, serif;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
     font-size: clamp(1.45rem, 3.2vw, 1.9rem);
     font-weight: 400;
     line-height: 1.15;
