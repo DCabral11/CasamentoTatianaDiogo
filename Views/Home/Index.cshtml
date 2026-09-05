@@ -62,7 +62,16 @@
         </div>
 
         <div class="col-lg-6 story-media">
-            <div id="storyCarousel" class="carousel slide elegant-card story-carousel" data-bs-ride="carousel">
+            <div id="storyCarousel" class="carousel slide carousel-fade elegant-card story-carousel" data-bs-ride="carousel">
+                @if (Model.CarouselImages.Count > 1)
+                {
+                    <div class="carousel-indicators">
+                        @for (var i = 0; i < Model.CarouselImages.Count; i++)
+                        {
+                            <button type="button" data-bs-target="#storyCarousel" data-bs-slide-to="@i" class="@(i == 0 ? "active" : null)" aria-current="@(i == 0 ? "true" : null)" aria-label="Imagem @(i + 1)"></button>
+                        }
+                    </div>
+                }
                 <div class="carousel-inner">
                     @for (var i = 0; i < Model.CarouselImages.Count; i++)
                     {
