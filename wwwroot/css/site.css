@@ -358,7 +358,7 @@ body {
 
 .timeline-content h3 {
     margin: 0;
-    color: var(--primary);
+    color: var(--ink);
     font-family: Georgia, serif;
     font-size: clamp(1.45rem, 3.2vw, 1.9rem);
     font-weight: 400;
