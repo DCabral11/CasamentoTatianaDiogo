@@ -114,6 +114,71 @@ body {
     max-height: 620px;
 }
 
+.home-story-section {
+    padding-top: 5rem !important;
+    padding-bottom: 5rem !important;
+}
+
+.story-copy {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-right: clamp(0rem, 2vw, 2.5rem);
+}
+
+.story-copy h2 {
+    position: relative;
+    margin-bottom: 1.4rem;
+    color: var(--primary);
+    font-family: Georgia, serif;
+    font-size: clamp(2.25rem, 4vw, 3.4rem);
+}
+
+.story-copy h2::after {
+    content: "";
+    display: block;
+    width: 3.8rem;
+    height: 2px;
+    margin-top: 1rem;
+    background: var(--primary);
+}
+
+.story {
+    max-width: 60ch;
+    margin: 0;
+    color: var(--muted);
+    font-size: clamp(1.05rem, 1.5vw, 1.2rem);
+    line-height: 1.8;
+    text-align: justify;
+    hyphens: auto;
+}
+
+.story-media {
+    display: flex;
+}
+
+.story-carousel {
+    flex: 1;
+    min-height: 360px;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--line) 45%, transparent);
+    border-radius: 2rem;
+    background: var(--surface-soft);
+}
+
+.story-carousel .carousel-inner,
+.story-carousel .carousel-item {
+    height: 100%;
+}
+
+.story-carousel .story-img {
+    height: 100%;
+    max-height: none;
+    border-radius: 0;
+    background: var(--surface-soft);
+    object-fit: contain;
+}
+
 .countdown {
     display: grid;
     grid-template-columns: repeat(4, 1fr);

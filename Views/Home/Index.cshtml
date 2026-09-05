@@ -54,15 +54,15 @@
     </div>
 </section>
 
-<section class="container py-5">
-    <div class="row g-4 align-items-center">
-        <div class="col-lg-6">
+<section class="container py-5 home-story-section">
+    <div class="row g-5 align-items-stretch">
+        <div class="col-lg-6 story-copy">
             <h2>@siteText.GetValueOrDefault("HomeStoryTitle", "A nossa história")</h2>
             <p class="story">@settings.CoupleStory</p>
         </div>
 
-        <div class="col-lg-6">
-            <div id="storyCarousel" class="carousel slide elegant-card" data-bs-ride="carousel">
+        <div class="col-lg-6 story-media">
+            <div id="storyCarousel" class="carousel slide elegant-card story-carousel" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     @for (var i = 0; i < Model.CarouselImages.Count; i++)
                     {
