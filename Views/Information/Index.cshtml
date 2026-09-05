@@ -79,7 +79,8 @@
                     <i class="bi @e.IconName"></i>
                 </div>
                 <div class="timeline-content">
-                    <strong>@e.EventDateTime.ToString("HH:mm") - @e.Title</strong>
+                    <time class="timeline-time">@e.EventDateTime.ToString("HH:mm")</time>
+                    <h3>@e.Title</h3>
                     @if (!string.IsNullOrWhiteSpace(e.Description))
                     {
                         <p>@e.Description</p>
