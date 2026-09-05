@@ -15,11 +15,15 @@ document.querySelectorAll('[data-family-card-toggle]').forEach((toggle) => {
 });
 
 function updateFamilyCards() {
-    const canRespondForFamily = mainStatus?.value === 'Attending';
+    const canRespondForFamily = Boolean(mainStatus?.value);
 
     familyCards.forEach(({ toggle, card, status }) => {
+        toggle.disabled = !canRespondForFamily;
         card.hidden = !canRespondForFamily || !toggle.checked;
         status.required = canRespondForFamily && toggle.checked;
+        card.querySelectorAll('input, select, textarea').forEach((field) => {
+            field.disabled = !canRespondForFamily;
+        });
     });
 }
 

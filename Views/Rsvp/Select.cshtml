@@ -55,7 +55,7 @@
 
         @if (Model.Guest.Family?.AllowGroupRsvp == true && Model.RelatedGuests.Any())
         {
-            <section class="rsvp-family-cards" data-rsvp-attendance-dependent>
+            <section class="rsvp-family-cards" data-rsvp-family-section>
                 <h2>Respostas da família</h2>
                 <p class="text-muted mb-0">Seleciona as pessoas para quem queres responder.</p>
                 <div class="rsvp-family-selectors">
@@ -76,6 +76,7 @@
                                     }
                                 </span>
                                 <span>@familyGuest.DisplayName</span>
+                                <span class="rsvp-family-selector-state"><i class="bi bi-check-lg"></i></span>
                             </label>
                         </div>
                     }

@@ -77,7 +77,6 @@ namespace CasamentoTatianaDiogo.Services
                 model.PlusOneDietaryRestrictions = null;
                 model.PlusOneMessage = null;
                 model.PlusOneMusicRequest = null;
-                model.FamilyResponses = [];
             }
 
             var guestsToRespond = new List<Guest> { guest };
