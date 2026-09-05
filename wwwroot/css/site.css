@@ -307,6 +307,13 @@ body {
     margin: 0 auto;
 }
 
+.information-schedule > h2 {
+    width: min(100%, 720px);
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 6.35rem;
+}
+
 .timeline {
     position: relative;
     margin-left: 1rem;
@@ -338,13 +345,19 @@ body {
     text-align: center;
 }
 
+.timeline-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.65rem;
+}
+
 .timeline-time {
-    display: block;
-    margin-bottom: 0.28rem;
     color: var(--primary);
-    font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+    font-family: Georgia, serif;
+    font-size: clamp(1.45rem, 3.2vw, 1.9rem);
     font-weight: 800;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.03em;
     line-height: 1.2;
 }
 
