@@ -4,8 +4,10 @@
 }
 
 <div class="container py-5 narrow">
-    <h1>Definições do casamento</h1>
-    <p class="text-muted">Atualiza aqui todos os dados apresentados aos convidados. As alterações ficam disponíveis de imediato no site.</p>
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-3">
+        <div><h1 class="mb-1">Definições do casamento</h1><p class="text-muted mb-0">Atualiza aqui todos os dados apresentados aos convidados. As alterações ficam disponíveis de imediato no site.</p></div>
+        <a class="btn btn-outline-primary" href="/Admin/Dashboard/Index"><i class="bi bi-arrow-left"></i> Voltar ao painel</a>
+    </div>
 
     <form method="post" class="admin-form">
         @Html.AntiForgeryToken()
@@ -51,7 +53,7 @@
             </div>
         </fieldset>
 
-        <button class="btn btn-primary btn-lg mt-2"><i class="bi bi-check2-circle"></i> Guardar alterações</button>
+        <div class="d-flex flex-wrap gap-2 mt-2"><button class="btn btn-primary btn-lg"><i class="bi bi-check2-circle"></i> Guardar alterações</button><a class="btn btn-outline-primary btn-lg" href="/Admin/Dashboard/Index"><i class="bi bi-arrow-left"></i> Voltar ao painel</a></div>
     </form>
 </div>
 

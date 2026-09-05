@@ -3,14 +3,14 @@
     ViewData["Title"] = "Definições da galeria";
 }
 <div class="container py-5 narrow">
-    <h1>Definições da galeria</h1><p class="text-muted">Controla quando os convidados podem enviar fotografias e quais os ficheiros aceites.</p>
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-3"><div><h1 class="mb-1">Definições da galeria</h1><p class="text-muted mb-0">Controla quando os convidados podem enviar fotografias e quais os ficheiros aceites.</p></div><a class="btn btn-outline-primary" href="/Admin/Dashboard/Index"><i class="bi bi-arrow-left"></i> Voltar ao painel</a></div>
     <form method="post" class="admin-form">
         @Html.AntiForgeryToken()<input asp-for="Id" type="hidden" /><div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-check mb-4"><input asp-for="IsEnabled" class="form-check-input" /><label asp-for="IsEnabled" class="form-check-label">Permitir envio de fotografias</label></div>
         <div class="row g-3"><div class="col-md-6"><label asp-for="OpensAt" class="form-label">Abre em</label><input asp-for="OpensAt" type="datetime-local" class="form-control" /></div><div class="col-md-6"><label asp-for="ClosesAt" class="form-label">Fecha em</label><input asp-for="ClosesAt" type="datetime-local" class="form-control" /></div></div>
         <div class="mt-3"><label asp-for="GoogleDriveFolderId" class="form-label">ID da pasta Google Drive</label><input asp-for="GoogleDriveFolderId" class="form-control" /><div class="form-text">Encontras o ID no endereço da pasta do Google Drive.</div></div>
         <div class="row g-3 mt-1"><div class="col-md-6"><label asp-for="MaxFilesSizeMb" class="form-label">Tamanho máximo por ficheiro (MB)</label><input asp-for="MaxFilesSizeMb" type="number" min="1" max="100" class="form-control" /></div><div class="col-md-6"><label asp-for="AllowedExtensionsCsv" class="form-label">Formatos permitidos</label><input asp-for="AllowedExtensionsCsv" class="form-control" /><div class="form-text">Separa os formatos por vírgulas.</div></div></div>
-        <button class="btn btn-primary mt-4">Guardar definições</button>
+        <div class="d-flex flex-wrap gap-2 mt-4"><button class="btn btn-primary">Guardar definições</button><a class="btn btn-outline-primary" href="/Admin/Dashboard/Index"><i class="bi bi-arrow-left"></i> Voltar ao painel</a></div>
     </form>
 </div>
 @section Scripts { <partial name="_ValidationScriptsPartial" /> }
