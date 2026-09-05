@@ -613,7 +613,7 @@ footer,
     display: block;
     width: fit-content;
     margin: 0 0 1.25rem;
-    color: #fff;
+    color: var(--primary);
     font-family: Georgia, serif;
     font-size: 2rem;
     line-height: 1;
