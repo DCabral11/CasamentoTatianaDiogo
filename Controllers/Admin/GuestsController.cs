@@ -12,7 +12,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
 {
     [Authorize(Roles = "Admin")]
     [Route("Admin/[controller]/[action]/{id?}")]
-    public class GuestsController(ApplicationDbContext db) : Controller
+    public class GuestsController(ApplicationDbContext db, IWebHostEnvironment environment) : Controller
     {
         async Task Load()
         {
@@ -27,6 +27,18 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
                 .ToListAsync();
 
             ViewBag.Families = new SelectList(families, "Id", "Name");
+
+            var avatarsDirectory = Path.Combine(environment.WebRootPath, "images", "guests");
+            var validExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { ".jpg", ".jpeg", ".png", ".webp" };
+            var avatars = Directory.Exists(avatarsDirectory)
+                ? Directory.EnumerateFiles(avatarsDirectory)
+                    .Where(path => validExtensions.Contains(Path.GetExtension(path)))
+                    .Select(Path.GetFileName)
+                    .OrderBy(fileName => fileName, StringComparer.OrdinalIgnoreCase)
+                    .ToList()
+                : [];
+
+            ViewBag.Avatars = new SelectList(avatars);
         }
 
         public async Task<IActionResult> Index() => View("~/Views/Admin/Guests/Index.cshtml", await db.Guests.Include(g => g.Family).OrderBy(g => g.DisplayName).ToListAsync());
@@ -50,6 +62,14 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
         {
             if (string.IsNullOrWhiteSpace(m.DisplayName))
                 m.DisplayName = $"{m.FirstName} {m.LastName}";
+
+            var avatarsDirectory = Path.Combine(environment.WebRootPath, "images", "guests");
+            if (!string.IsNullOrWhiteSpace(m.AvatarFileName))
+            {
+                m.AvatarFileName = Path.GetFileName(m.AvatarFileName);
+                if (!System.IO.File.Exists(Path.Combine(avatarsDirectory, m.AvatarFileName)))
+                    ModelState.AddModelError(nameof(m.AvatarFileName), "Seleciona uma imagem disponível na lista.");
+            }
 
             if (!ModelState.IsValid)
             {

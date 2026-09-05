@@ -23,6 +23,8 @@ namespace CasamentoTatianaDiogo.Data
                     ALTER TABLE [RsvpResponses] ADD [PlusOneMessage] nvarchar(1000) NULL;
                 IF COL_LENGTH(N'[RsvpResponses]', N'PlusOneMusicRequest') IS NULL
                     ALTER TABLE [RsvpResponses] ADD [PlusOneMusicRequest] nvarchar(200) NULL;
+                IF COL_LENGTH(N'[Guests]', N'AvatarFileName') IS NULL
+                    ALTER TABLE [Guests] ADD [AvatarFileName] nvarchar(255) NULL;
                 """);
 
             await db.Database.ExecuteSqlRawAsync("""

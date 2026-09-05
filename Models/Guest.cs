@@ -27,6 +27,9 @@ namespace CasamentoTatianaDiogo.Models
         [Phone, StringLength(50)]
         public string? Phone { get; set; }
 
+        [StringLength(255)]
+        public string? AvatarFileName { get; set; }
+
         public bool AllowPlusOne { get; set; }
 
         public bool IsChild { get; set; }

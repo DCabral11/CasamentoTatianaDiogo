@@ -49,9 +49,14 @@ namespace CasamentoTatianaDiogo.Services
             var extensions = new[] { ".jpg", ".jpeg", ".png", ".webp" };
             foreach (var guest in guests)
             {
-                var fileName = extensions
-                    .SelectMany(extension => new[] { $"guest-{guest.Id}{extension}", $"{guest.Id}{extension}" })
-                    .FirstOrDefault(name => File.Exists(Path.Combine(imagesDirectory, name)));
+                var selectedFileName = Path.GetFileName(guest.AvatarFileName ?? string.Empty);
+                var fileName = !string.IsNullOrWhiteSpace(selectedFileName) &&
+                               extensions.Contains(Path.GetExtension(selectedFileName), StringComparer.OrdinalIgnoreCase) &&
+                               File.Exists(Path.Combine(imagesDirectory, selectedFileName))
+                    ? selectedFileName
+                    : extensions
+                        .SelectMany(extension => new[] { $"guest-{guest.Id}{extension}", $"{guest.Id}{extension}" })
+                        .FirstOrDefault(name => File.Exists(Path.Combine(imagesDirectory, name)));
 
                 if (fileName != null)
                     guest.ProfileImagePath = $"/images/guests/{Uri.EscapeDataString(fileName)}";
