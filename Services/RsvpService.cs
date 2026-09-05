@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CasamentoTatianaDiogo.Services
 {
-    public class RsvpService(ApplicationDbContext db, IRsvpEmailNotificationService emailNotifications) : IRsvpService
+    public class RsvpService(ApplicationDbContext db, IRsvpEmailNotificationService emailNotifications, IWebHostEnvironment environment) : IRsvpService
     {
         public async Task<List<Guest>> SearchGuestsAsync(string query)
         {
@@ -15,7 +15,9 @@ namespace CasamentoTatianaDiogo.Services
             if (query.Length < 2)
                 return [];
 
-            return await db.Guests.Include(g => g.Family).Where(g => g.FirstName.Contains(query) || g.LastName.Contains(query) || g.DisplayName.Contains(query)).OrderBy(g => g.DisplayName).Take(20).ToListAsync();
+            var guests = await db.Guests.Include(g => g.Family).Where(g => g.FirstName.Contains(query) || g.LastName.Contains(query) || g.DisplayName.Contains(query)).OrderBy(g => g.DisplayName).Take(20).ToListAsync();
+            PopulateProfileImagePaths(guests);
+            return guests;
         }
 
         public async Task<RsvpSelectionViewModel?> GetSelectionAsync(int guestId)
@@ -27,6 +29,7 @@ namespace CasamentoTatianaDiogo.Services
 
             var related = await db.Guests.Where(g => g.FamilyId == guest.FamilyId && g.Id != guest.Id).OrderBy(g => g.DisplayName).ToListAsync();
             var hasExisting = await db.RsvpResponses.AnyAsync(r => r.GuestId == guestId);
+            PopulateProfileImagePaths([guest, .. related]);
 
             return new RsvpSelectionViewModel
             {
@@ -35,6 +38,24 @@ namespace CasamentoTatianaDiogo.Services
                 PlusOnes = guest.PlusOnes.ToList(),
                 HasExistingResponse = hasExisting
             };
+        }
+
+        private void PopulateProfileImagePaths(IEnumerable<Guest> guests)
+        {
+            var imagesDirectory = Path.Combine(environment.WebRootPath, "images", "guests");
+            if (!Directory.Exists(imagesDirectory))
+                return;
+
+            var extensions = new[] { ".jpg", ".jpeg", ".png", ".webp" };
+            foreach (var guest in guests)
+            {
+                var fileName = extensions
+                    .SelectMany(extension => new[] { $"guest-{guest.Id}{extension}", $"{guest.Id}{extension}" })
+                    .FirstOrDefault(name => File.Exists(Path.Combine(imagesDirectory, name)));
+
+                if (fileName != null)
+                    guest.ProfileImagePath = $"/images/guests/{Uri.EscapeDataString(fileName)}";
+            }
         }
 
         public async Task<(bool ok, string message)> SubmitAsync(RsvpSubmitViewModel model, string? ip, string? userAgent)
@@ -46,6 +67,18 @@ namespace CasamentoTatianaDiogo.Services
 
             if (guest == null)
                 return (false, "Não encontrámos este convidado. Volta à pesquisa e tenta novamente.");
+
+            if (model.Status == CasamentoTatianaDiogo.Models.Enums.RsvpStatus.NotAttending)
+            {
+                model.DietaryRestrictions = null;
+                model.MusicRequest = null;
+                model.PlusOneAttending = false;
+                model.PlusOneId = null;
+                model.PlusOneDietaryRestrictions = null;
+                model.PlusOneMessage = null;
+                model.PlusOneMusicRequest = null;
+                model.FamilyResponses = [];
+            }
 
             var guestsToRespond = new List<Guest> { guest };
 

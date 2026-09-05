@@ -1,5 +1,6 @@
 ﻿using CasamentoTatianaDiogo.Models.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CasamentoTatianaDiogo.Models
 {
@@ -38,5 +39,8 @@ namespace CasamentoTatianaDiogo.Models
         public ICollection<RsvpResponse> RsvpResponses { get; set; } = [];
 
         public ICollection<PlusOne> PlusOnes { get; set; } = [];
+
+        [NotMapped]
+        public string? ProfileImagePath { get; set; }
     }
 }

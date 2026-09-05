@@ -13,13 +13,13 @@
 </section>
 
 <div class="container py-5 narrow">
-    <form asp-action="Search" method="post" class="elegant-card p-4">
+    <form asp-action="Search" method="post" class="elegant-card p-4 rsvp-search-card" autocomplete="off">
         @Html.AntiForgeryToken()
 
-        <label class="form-label">Nome do Convidado</label>
+        <label class="form-label" for="guest-search">Nome do Convidado</label>
 
         <div class="input-group">
-            <input asp-for="Query" class="form-control" placeholder="Primeiro ou Último Nome" />
+            <input asp-for="Query" id="guest-search" class="form-control" placeholder="Primeiro ou Último Nome" autocomplete="off" spellcheck="false" />
             <button class="btn btn-primary">
                 <i class="bi bi-search"></i> Pesquisar
             </button>
@@ -37,14 +37,23 @@
     @if (Model.Results?.Any() == true)
     {
         <div class="mt-4">
-            <h3>Seleciona o teu Nome</h3>
+            <h3 class="rsvp-results-title">Seleciona o teu Nome</h3>
 
             @foreach(var guest in Model.Results)
             {
                 <a class="guest-result" asp-action="Select" asp-route-id="@guest.Id">
-                    <i class="bi bi-person-heart"></i>
-                    <span>@guest.DisplayName</span>
-                    <small>@guest.Family?.Name</small>
+                    <span class="guest-result-avatar">
+                        @if (!string.IsNullOrWhiteSpace(guest.ProfileImagePath))
+                        {
+                            <img src="@guest.ProfileImagePath" alt="" />
+                        }
+                        else
+                        {
+                            <i class="bi bi-person-heart"></i>
+                        }
+                    </span>
+                    <span class="guest-result-details"><strong>@guest.DisplayName</strong><small>@guest.Family?.Name</small></span>
+                    <i class="bi bi-arrow-right-short guest-result-arrow" aria-hidden="true"></i>
                 </a>
             }
         </div>

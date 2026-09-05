@@ -757,6 +757,139 @@ body {
     background: var(--canvas);
 }
 
+.rsvp-search-card {
+    border: 1px solid color-mix(in srgb, var(--line) 48%, transparent);
+    border-radius: 1.75rem;
+    box-shadow: 0 18px 48px rgba(94, 51, 42, 0.09);
+}
+
+.rsvp-search-card .form-label {
+    color: var(--primary);
+    font-family: Georgia, serif;
+    font-size: 1.35rem;
+}
+
+.rsvp-search-card .form-control {
+    min-height: 3.2rem;
+}
+
+.rsvp-results-title {
+    margin-bottom: 1.1rem;
+    color: var(--primary);
+    font-family: Georgia, serif;
+    font-size: 1.7rem;
+}
+
+.guest-result {
+    min-height: 6.4rem;
+    margin: 0.85rem 0;
+    padding: 1rem 1.2rem;
+    border: 1px solid color-mix(in srgb, var(--line) 48%, transparent);
+    border-radius: 1.4rem;
+    background: var(--surface);
+    box-shadow: 0 9px 24px rgba(94, 51, 42, 0.06);
+}
+
+.guest-result-avatar,
+.rsvp-guest-avatar,
+.rsvp-family-avatar {
+    display: grid;
+    flex: 0 0 auto;
+    overflow: hidden;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--secondary);
+    color: var(--primary);
+}
+
+.guest-result-avatar {
+    width: 4.25rem;
+    height: 4.25rem;
+    font-size: 1.55rem;
+}
+
+.guest-result-avatar img,
+.rsvp-guest-avatar img,
+.rsvp-family-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.guest-result-details {
+    display: grid;
+    gap: 0.25rem;
+}
+
+.guest-result-details strong {
+    color: var(--ink);
+    font-family: Georgia, serif;
+    font-size: 1.35rem;
+    font-weight: 400;
+}
+
+.guest-result-details small {
+    color: var(--muted);
+    font-size: 0.98rem;
+}
+
+.guest-result-arrow {
+    margin-left: auto;
+    color: var(--primary);
+    font-size: 1.8rem;
+}
+
+.rsvp-selection form > .rsvp-response-card:first-of-type {
+    padding: clamp(1.75rem, 4vw, 2.5rem);
+    border-color: color-mix(in srgb, var(--line) 65%, transparent);
+    box-shadow: 0 18px 46px rgba(94, 51, 42, 0.11);
+}
+
+.rsvp-guest-avatar {
+    width: 4.5rem;
+    height: 4.5rem;
+    font-size: 1.75rem;
+}
+
+.rsvp-family-selector {
+    margin: 0;
+    padding: 0;
+}
+
+.rsvp-family-selector .form-check-input {
+    margin-top: 1.05rem;
+    margin-left: 0.9rem;
+}
+
+.rsvp-family-selector .form-check-label {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    width: 100%;
+    min-height: 4.1rem;
+    padding: 0.6rem 0.8rem 0.6rem 2.25rem;
+    border: 1px solid color-mix(in srgb, var(--line) 42%, transparent);
+    border-radius: 1rem;
+    background: var(--surface);
+    cursor: pointer;
+}
+
+.rsvp-family-selector .form-check-input:checked + .form-check-label {
+    border-color: var(--primary);
+    box-shadow: 0 4px 14px rgba(189, 71, 66, 0.12);
+}
+
+.rsvp-family-avatar {
+    width: 2.8rem;
+    height: 2.8rem;
+    font-size: 1.1rem;
+}
+
+.rsvp-section-disabled {
+    opacity: 0.48;
+    filter: grayscale(0.2);
+}
+
 .dropzone {
     border: 2px dashed var(--line);
     border-radius: 1.5rem;
