@@ -394,20 +394,123 @@ body {
     margin-top: 1rem;
 }
 
+.information-locations {
+    position: relative;
+}
+
 .location-card h3 i {
     color: var(--primary);
 }
 
+.location-card {
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--line) 55%, transparent);
+    box-shadow: 0 18px 44px rgba(94, 51, 42, 0.1);
+}
+
+.location-card-heading,
+.contact-card-heading {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.location-card-heading {
+    margin-bottom: 1rem;
+}
+
+.location-marker,
+.contact-card-heading > i {
+    display: grid;
+    flex: 0 0 auto;
+    width: 2.65rem;
+    height: 2.65rem;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--secondary);
+    color: var(--primary);
+    font-size: 1.15rem;
+}
+
+.location-card h3 {
+    margin: 0;
+    color: var(--primary);
+    font-family: Georgia, serif;
+    font-size: 1.55rem;
+}
+
+.location-card p {
+    min-height: 3.2rem;
+    margin-bottom: 1.2rem;
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+.location-card p strong {
+    display: inline-block;
+    color: var(--ink);
+    font-family: Georgia, serif;
+    font-size: 1.15rem;
+}
+
 .location-card .map {
     height: 210px;
+    margin-top: 0;
+    border: 1px solid color-mix(in srgb, var(--line) 45%, transparent);
+    border-radius: 1.2rem;
+    box-shadow: 0 8px 24px rgba(94, 51, 42, 0.1);
 }
 
 .information-contacts {
     padding-bottom: 2rem !important;
 }
 
-.contact-card p {
-    margin-bottom: 0;
+.contact-card {
+    padding: 1.4rem !important;
+    border: 1px solid color-mix(in srgb, var(--line) 48%, transparent);
+    box-shadow: 0 14px 34px rgba(94, 51, 42, 0.08);
+}
+
+.contact-card-heading {
+    margin-bottom: 1rem;
+}
+
+.contact-card h4 {
+    margin: 0;
+    color: var(--ink);
+    font-family: Georgia, serif;
+    font-size: 1.45rem;
+}
+
+.contact-details {
+    display: grid;
+    gap: 0.55rem;
+}
+
+.contact-details a {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    width: fit-content;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.contact-details a:hover,
+.contact-details a:focus {
+    color: var(--primary);
+    transform: translateX(2px);
+}
+
+.contact-details i {
+    display: grid;
+    width: 1.85rem;
+    height: 1.85rem;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--surface-soft);
+    color: var(--primary);
 }
 
 .narrow {

@@ -94,9 +94,7 @@
     <div class="row g-4">
         <div class="col-md-6">
             <div class="elegant-card location-card p-4 h-100">
-                <h3>
-                    <i class="bi bi-geo-alt"></i> Cerimónia
-                </h3>
+                <div class="location-card-heading"><span class="location-marker"><i class="bi bi-heart-fill"></i></span><h3>Cerimónia</h3></div>
                 <p>
                     <strong>@settings.CeremonyLocationName</strong>
                     <br/> @settings.CeremonyAddress
@@ -108,9 +106,7 @@
 
         <div class="col-md-6">
             <div class="elegant-card location-card p-4 h-100">
-                <h3>
-                    <i class="bi bi-geo-alt"></i> Copo D'Água
-                </h3>
+                <div class="location-card-heading"><span class="location-marker"><i class="bi bi-cup-hot-fill"></i></span><h3>Copo D'Água</h3></div>
                 <p>
                     <strong>@settings.ReceptionLocationName</strong>
                     <br /> @settings.ReceptionAddress
@@ -128,20 +124,20 @@
     <div class="row g-3">
         <div class="col-md-6">
             <div class="elegant-card contact-card p-3 h-100">
-                <h4>@settings.BrideName</h4>
-                <p>
-                    <i class="bi bi-phone"></i> @settings.BridePhone <br/>
-                    <i class="bi bi-envelope"></i> @settings.BrideEmail
-                </p>
+                <div class="contact-card-heading"><i class="bi bi-person-heart"></i><h4>@settings.BrideName</h4></div>
+                <div class="contact-details">
+                    @if (!string.IsNullOrWhiteSpace(settings.BridePhone)) { <a href="tel:@settings.BridePhone"><i class="bi bi-phone"></i><span>@settings.BridePhone</span></a> }
+                    @if (!string.IsNullOrWhiteSpace(settings.BrideEmail)) { <a href="mailto:@settings.BrideEmail"><i class="bi bi-envelope"></i><span>@settings.BrideEmail</span></a> }
+                </div>
             </div>
         </div>
         <div class="col-md-6">
             <div class="elegant-card contact-card p-3 h-100">
-                <h4>@settings.GroomName</h4>
-                <p>
-                    <i class="bi bi-phone"></i> @settings.GroomPhone <br />
-                    <i class="bi bi-envelope"></i> @settings.GroomEmail
-                </p>
+                <div class="contact-card-heading"><i class="bi bi-person-heart"></i><h4>@settings.GroomName</h4></div>
+                <div class="contact-details">
+                    @if (!string.IsNullOrWhiteSpace(settings.GroomPhone)) { <a href="tel:@settings.GroomPhone"><i class="bi bi-phone"></i><span>@settings.GroomPhone</span></a> }
+                    @if (!string.IsNullOrWhiteSpace(settings.GroomEmail)) { <a href="mailto:@settings.GroomEmail"><i class="bi bi-envelope"></i><span>@settings.GroomEmail</span></a> }
+                </div>
             </div>
         </div>
     </div>
