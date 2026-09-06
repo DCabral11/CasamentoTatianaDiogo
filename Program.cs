@@ -36,6 +36,7 @@ builder.Services.AddScoped<IRsvpEmailNotificationService, RsvpEmailNotificationS
 builder.Services.AddScoped<IGoogleDriveService, GoogleDriveService>();
 builder.Services.AddScoped<IPhotoUploadService, PhotoUploadService>();
 builder.Services.AddScoped<ISiteContentService, SiteContentService>();
+builder.Services.AddSingleton<IAppMessageService, AppMessageService>();
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();

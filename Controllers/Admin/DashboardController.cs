@@ -1,6 +1,7 @@
 ﻿using CasamentoTatianaDiogo.Data;
 using CasamentoTatianaDiogo.Models;
 using CasamentoTatianaDiogo.Models.Enums;
+using CasamentoTatianaDiogo.Common.Errors;
 using CasamentoTatianaDiogo.ViewModels.Admin;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -24,7 +25,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
     }
 
     [Route("Admin/[action]")]
-    public class AdminController(SignInManager<ApplicationUser> signInManager) : Controller
+    public class AdminController(SignInManager<ApplicationUser> signInManager, Services.Interfaces.IAppMessageService messages) : Controller
     {
         [AllowAnonymous]
         public IActionResult Login(string? returnUrl = null)
@@ -42,7 +43,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             if (r.Succeeded)
                 return LocalRedirect(returnUrl ?? "/Admin/Dashboard/Index");
 
-            ModelState.AddModelError("", "Não foi possível iniciar sessão. Confirma o e-mail e a palavra-passe.");
+            ModelState.AddModelError("", messages.Get(ErrorCode.AdminLoginFailed));
 
             return View("~/Views/Admin/Login.cshtml");
         }

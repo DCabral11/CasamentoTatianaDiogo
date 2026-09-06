@@ -20,7 +20,7 @@ namespace CasamentoTatianaDiogo.Services.Interfaces
 
         Task<RsvpSelectionViewModel?> GetSelectionAsync(int guestId);
 
-        Task<(bool ok, string message)> SubmitAsync(RsvpSubmitViewModel model, string? ip, string? userAgent);
+        Task<CasamentoTatianaDiogo.Common.Errors.AppResult> SubmitAsync(RsvpSubmitViewModel model, string? ip, string? userAgent);
     }
 
     public interface IRsvpEmailNotificationService

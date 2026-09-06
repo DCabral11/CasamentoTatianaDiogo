@@ -7,12 +7,13 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using System.Text;
+using CasamentoTatianaDiogo.Common.Errors;
 
 namespace CasamentoTatianaDiogo.Controllers.Admin
 {
     [Authorize(Roles = "Admin")]
     [Route("Admin/[controller]/[action]/{id?}")]
-    public class GuestsController(ApplicationDbContext db, IWebHostEnvironment environment) : Controller
+    public class GuestsController(ApplicationDbContext db, IWebHostEnvironment environment, Services.Interfaces.IAppMessageService messages) : Controller
     {
         async Task Load()
         {
@@ -68,7 +69,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             {
                 m.AvatarFileName = Path.GetFileName(m.AvatarFileName);
                 if (!System.IO.File.Exists(Path.Combine(avatarsDirectory, m.AvatarFileName)))
-                    ModelState.AddModelError(nameof(m.AvatarFileName), "Seleciona uma imagem disponível na lista.");
+                    ModelState.AddModelError(nameof(m.AvatarFileName), messages.Get(ErrorCode.GuestAvatarNotFound));
             }
 
             if (!ModelState.IsValid)

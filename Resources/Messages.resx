@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="RsvpSearchNoResults" xml:space="preserve"><value>Não foram encontrados convidados. Por favor tenta outro nome ou contacta os noivos.</value></data>
+  <data name="RsvpStatusRequired" xml:space="preserve"><value>Escolhe se vais estar presente antes de continuares.</value></data>
+  <data name="RsvpGuestNotFound" xml:space="preserve"><value>Não encontrámos este convidado. Volta à pesquisa e tenta novamente.</value></data>
+  <data name="RsvpExistingResponse" xml:space="preserve"><value>Já existe uma resposta para um dos convidados selecionados. Assinala a opção de atualização para a substituir.</value></data>
+  <data name="RsvpInvalidPlusOne" xml:space="preserve"><value>Não foi possível associar esse acompanhante. Atualiza a página e tenta novamente.</value></data>
+  <data name="RsvpSaved" xml:space="preserve"><value>A resposta foi guardada. Obrigado por confirmares a tua presença!</value></data>
+  <data name="AdminLoginFailed" xml:space="preserve"><value>Não foi possível iniciar sessão. Confirma o e-mail e a palavra-passe.</value></data>
+  <data name="GuestAvatarNotFound" xml:space="preserve"><value>Seleciona uma imagem disponível na lista.</value></data>
+  <data name="UnexpectedError" xml:space="preserve"><value>Algo não correu como esperado. Estamos a tratar deste imprevisto. Podes voltar ao início ou tentar novamente dentro de instantes.</value></data>
+  <data name="PageNotFound" xml:space="preserve"><value>Esta página já não está aqui. O endereço pode estar incompleto ou a página pode ter mudado.</value></data>
+  <data name="AccessDenied" xml:space="preserve"><value>Não tens acesso a esta página. Inicia sessão com uma conta autorizada e volta a tentar.</value></data>
+  <data name="InvalidRequest" xml:space="preserve"><value>Não foi possível concluir o pedido. Confirma a informação preenchida e tenta novamente.</value></data>
+  <data name="PageUnavailable" xml:space="preserve"><value>Não foi possível abrir esta página. Tenta novamente dentro de instantes.</value></data>
+</root>

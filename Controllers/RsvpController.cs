@@ -1,10 +1,11 @@
 ﻿using CasamentoTatianaDiogo.Services.Interfaces;
 using CasamentoTatianaDiogo.ViewModels;
+using CasamentoTatianaDiogo.Common.Errors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CasamentoTatianaDiogo.Controllers
 {
-    public class RsvpController(IRsvpService rsvp) : Controller
+    public class RsvpController(IRsvpService rsvp, IAppMessageService messages) : Controller
     {
         public IActionResult Index(bool submitted = false)
         {
@@ -21,7 +22,7 @@ namespace CasamentoTatianaDiogo.Controllers
             model.Results = await rsvp.SearchGuestsAsync(model.Query);
 
             if (!model.Results.Any())
-                model.Message = "Não foram encontrados convidados. Por favor tenta outro nome ou contacta os noivos!";
+                model.Message = messages.Get(ErrorCode.RsvpSearchNoResults);
 
             return View("Index", model);
         }
@@ -46,9 +47,11 @@ namespace CasamentoTatianaDiogo.Controllers
                 });
 
             var result = await rsvp.SubmitAsync(model, HttpContext.Connection.RemoteIpAddress?.ToString(), Request.Headers.UserAgent.ToString());
-            TempData[result.ok ? "Success" : "Error"] = result.message;
+            TempData[result.Succeeded ? "Success" : "Error"] = result.Succeeded
+                ? messages.Get(ErrorCode.RsvpSaved)
+                : result.Message;
 
-            return result.ok ? RedirectToAction(nameof(Index), new { submitted = true }) : RedirectToAction(nameof(Select), new
+            return result.Succeeded ? RedirectToAction(nameof(Index), new { submitted = true }) : RedirectToAction(nameof(Select), new
             {
                 id = model.GuestId
             });

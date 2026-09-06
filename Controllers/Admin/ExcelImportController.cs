@@ -1,4 +1,5 @@
 using CasamentoTatianaDiogo.Data;
+using CasamentoTatianaDiogo.Common.Extensions;
 using CasamentoTatianaDiogo.Models;
 using CasamentoTatianaDiogo.ViewModels.Admin;
 using ClosedXML.Excel;
@@ -231,7 +232,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
         }
 
         private static string Value(ImportRow row, string column) => row.Values.GetValueOrDefault(column, string.Empty).Trim();
-        private static string? EmptyToNull(string value) => string.IsNullOrWhiteSpace(value) ? null : value.Trim();
+        private static string? EmptyToNull(string value) => value.NullIfWhiteSpace();
 
         private static FileResult CreateTemplate(string sheetName, IReadOnlyList<string> headers, string note, string fileName)
         {

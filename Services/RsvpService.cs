@@ -1,14 +1,14 @@
 ﻿using CasamentoTatianaDiogo.Data;
 using CasamentoTatianaDiogo.Models;
+using CasamentoTatianaDiogo.Common.Errors;
+using CasamentoTatianaDiogo.Common.Extensions;
 using CasamentoTatianaDiogo.Services.Interfaces;
 using CasamentoTatianaDiogo.ViewModels;
 using Microsoft.EntityFrameworkCore;
-using System.Globalization;
-using System.Text;
 
 namespace CasamentoTatianaDiogo.Services
 {
-    public class RsvpService(ApplicationDbContext db, IRsvpEmailNotificationService emailNotifications, IWebHostEnvironment environment) : IRsvpService
+    public class RsvpService(ApplicationDbContext db, IRsvpEmailNotificationService emailNotifications, IWebHostEnvironment environment, IAppMessageService messages) : IRsvpService
     {
         public async Task<List<Guest>> SearchGuestsAsync(string query)
         {
@@ -17,15 +17,15 @@ namespace CasamentoTatianaDiogo.Services
             if (query.Length < 2)
                 return [];
 
-            var normalizedQuery = NormalizeSearchText(query);
+            var normalizedQuery = query.NormalizeForSearch();
             var guests = (await db.Guests
                 .AsNoTracking()
                 .Include(g => g.Family)
                 .OrderBy(g => g.DisplayName)
                 .ToListAsync())
-                .Where(guest => NormalizeSearchText(guest.FirstName).Contains(normalizedQuery) ||
-                                NormalizeSearchText(guest.LastName).Contains(normalizedQuery) ||
-                                NormalizeSearchText(guest.DisplayName).Contains(normalizedQuery))
+                .Where(guest => guest.FirstName.NormalizeForSearch().Contains(normalizedQuery) ||
+                                guest.LastName.NormalizeForSearch().Contains(normalizedQuery) ||
+                                guest.DisplayName.NormalizeForSearch().Contains(normalizedQuery))
                 .Take(20)
                 .ToList();
             PopulateProfileImagePaths(guests);
@@ -75,21 +75,15 @@ namespace CasamentoTatianaDiogo.Services
             }
         }
 
-        private static string NormalizeSearchText(string? value) => string.Concat((value ?? string.Empty)
-            .Normalize(NormalizationForm.FormD)
-            .Where(character => CharUnicodeInfo.GetUnicodeCategory(character) != UnicodeCategory.NonSpacingMark))
-            .Normalize(NormalizationForm.FormC)
-            .ToUpperInvariant();
-
-        public async Task<(bool ok, string message)> SubmitAsync(RsvpSubmitViewModel model, string? ip, string? userAgent)
+        public async Task<AppResult> SubmitAsync(RsvpSubmitViewModel model, string? ip, string? userAgent)
         {
             if (model.Status is null)
-                return (false, "Escolhe se vais estar presente antes de continuares.");
+                return AppResult.Failure(ErrorCode.RsvpStatusRequired, messages.Get(ErrorCode.RsvpStatusRequired));
 
             var guest = await db.Guests.Include(g => g.Family).Include(g => g.PlusOnes).FirstOrDefaultAsync(g => g.Id == model.GuestId);
 
             if (guest == null)
-                return (false, "Não encontrámos este convidado. Volta à pesquisa e tenta novamente.");
+                return AppResult.Failure(ErrorCode.RsvpGuestNotFound, messages.Get(ErrorCode.RsvpGuestNotFound));
 
             if (model.Status == CasamentoTatianaDiogo.Models.Enums.RsvpStatus.NotAttending)
             {
@@ -119,14 +113,14 @@ namespace CasamentoTatianaDiogo.Services
             }
 
             if (await db.RsvpResponses.AnyAsync(r => guestsToRespond.Select(g => g.Id).Contains(r.GuestId)) && !model.ConfirmOverwrite)
-                return (false, "Já existe uma resposta para um dos convidados selecionados. Assinala a opção de atualização para a substituir.");
+                return AppResult.Failure(ErrorCode.RsvpExistingResponse, messages.Get(ErrorCode.RsvpExistingResponse));
 
             var plusOne = model.PlusOneId.HasValue
                 ? guest.PlusOnes.FirstOrDefault(p => p.Id == model.PlusOneId.Value)
                 : null;
 
             if (model.PlusOneAttending && plusOne == null)
-                return (false, "Não foi possível associar esse acompanhante. Atualiza a página e tenta novamente.");
+                return AppResult.Failure(ErrorCode.RsvpInvalidPlusOne, messages.Get(ErrorCode.RsvpInvalidPlusOne));
 
             var emailDetails = new List<RsvpEmailDetail>();
 
@@ -176,7 +170,7 @@ namespace CasamentoTatianaDiogo.Services
             await db.SaveChangesAsync();
             await emailNotifications.SendAsync(emailDetails);
 
-            return (true, "A resposta foi guardada. Obrigado por confirmares a tua presença!");
+            return AppResult.Success();
         }
     }
 }
