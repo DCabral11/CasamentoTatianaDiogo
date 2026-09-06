@@ -25,6 +25,15 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             if (!ModelState.IsValid)
                 return View("~/Views/Admin/Timeline/Edit.cshtml", m);
 
+            m.EventDateTime = new DateTime(
+                m.EventDateTime.Year,
+                m.EventDateTime.Month,
+                m.EventDateTime.Day,
+                m.EventDateTime.Hour,
+                m.EventDateTime.Minute,
+                0,
+                m.EventDateTime.Kind);
+
             if (m.Id == 0)
                 db.Add(m);
             else
