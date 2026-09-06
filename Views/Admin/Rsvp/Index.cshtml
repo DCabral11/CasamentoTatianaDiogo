@@ -41,7 +41,7 @@
                         @if (g.RsvpResponses.Any())
                         {
                             <a class="btn btn-sm btn-outline-primary" href="/Admin/Rsvp/Details/@g.Id"><i class="bi bi-receipt"></i> Consultar</a>
-                            <form method="post" action="/Admin/Rsvp/Delete/@g.Id" class="d-inline" onsubmit="return confirm('Pretende mesmo apagar a resposta de @g.DisplayName? Esta ação volta a deixar o convite por responder.');">
+                            <form method="post" action="/Admin/Rsvp/Delete/@g.Id" class="d-inline" data-delete-confirmation data-delete-message="Queres mesmo apagar a resposta de «@g.DisplayName»? O convite voltará a ficar por responder.">
                                 @Html.AntiForgeryToken()
                                 <button type="submit" class="btn btn-sm btn-outline-danger">
                                     <i class="bi bi-trash3"></i> Apagar resposta

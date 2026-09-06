@@ -23,7 +23,7 @@
         <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     </head>
 
-    <body>
+    <body class="@(isAdminScreen ? "admin-screen" : "")">
         <nav class="navbar navbar-expand-lg navbar-light navbar-logo-bg shadow-sm sticky-top">
             <div class="container">
                 <a class="navbar-brand" asp-controller="Home" asp-action="Index">
@@ -96,9 +96,33 @@
             @siteText.GetValueOrDefault("FooterText", "Feito com amor por Diogo") <i class="bi bi-heart-fill text-danger"></i>
         </footer> 
 
+        @if (isAdminScreen)
+        {
+            <div class="modal fade" id="delete-confirmation-modal" tabindex="-1" aria-labelledby="delete-confirmation-title" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content delete-confirmation-card">
+                        <div class="modal-body text-center p-4 p-md-5">
+                            <span class="delete-confirmation-icon" aria-hidden="true"><i class="bi bi-trash3"></i></span>
+                            <p class="delete-confirmation-label">Eliminar registo</p>
+                            <h2 id="delete-confirmation-title">Confirmar eliminação?</h2>
+                            <p class="delete-confirmation-message mb-0" data-delete-confirmation-message>Esta ação não pode ser anulada.</p>
+                        </div>
+                        <div class="modal-footer justify-content-center border-0 pt-0 pb-4 px-4 px-md-5 gap-2">
+                            <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Manter registo</button>
+                            <button type="button" class="btn btn-danger" data-delete-confirmation-accept><i class="bi bi-trash3 me-1"></i> Eliminar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
         <script src="~/js/form-feedback.js" asp-append-version="true"></script>
+        @if (isAdminScreen)
+        {
+            <script src="~/js/admin-delete-confirmation.js" asp-append-version="true"></script>
+        }
 
         @await RenderSectionAsync("Scripts", required: false)
     </body>

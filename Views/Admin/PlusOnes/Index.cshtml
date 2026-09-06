@@ -17,7 +17,7 @@
                 <tr>
                     <td>@plusOne.PlusOneDisplayName</td><td>@plusOne.MainGuest?.DisplayName</td>
                     <td class="text-end"><a class="btn btn-sm btn-outline-primary" asp-action="Edit" asp-route-id="@plusOne.Id">Editar</a>
-                        <form method="post" asp-action="Delete" asp-route-id="@plusOne.Id" class="d-inline">@Html.AntiForgeryToken()<button class="btn btn-sm btn-outline-danger" onclick="return confirm('Remover este acompanhante?')">Remover</button></form></td>
+                        <form method="post" asp-action="Delete" asp-route-id="@plusOne.Id" class="d-inline" data-delete-confirmation data-delete-message="Queres mesmo eliminar o acompanhante «@plusOne.PlusOneDisplayName»? Esta ação não pode ser anulada.">@Html.AntiForgeryToken()<button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash3"></i> Remover</button></form></td>
                 </tr>
             }
             </tbody>
