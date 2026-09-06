@@ -25,6 +25,12 @@ namespace CasamentoTatianaDiogo.Data
                     ALTER TABLE [RsvpResponses] ADD [PlusOneMusicRequest] nvarchar(200) NULL;
                 IF COL_LENGTH(N'[Guests]', N'AvatarFileName') IS NULL
                     ALTER TABLE [Guests] ADD [AvatarFileName] nvarchar(255) NULL;
+                IF COL_LENGTH(N'[Guests]', N'AvatarScale') IS NULL
+                    ALTER TABLE [Guests] ADD [AvatarScale] float NOT NULL CONSTRAINT [DF_Guests_AvatarScale] DEFAULT 1;
+                IF COL_LENGTH(N'[Guests]', N'AvatarPositionX') IS NULL
+                    ALTER TABLE [Guests] ADD [AvatarPositionX] int NOT NULL CONSTRAINT [DF_Guests_AvatarPositionX] DEFAULT 50;
+                IF COL_LENGTH(N'[Guests]', N'AvatarPositionY') IS NULL
+                    ALTER TABLE [Guests] ADD [AvatarPositionY] int NOT NULL CONSTRAINT [DF_Guests_AvatarPositionY] DEFAULT 50;
                 """);
 
             await db.Database.ExecuteSqlRawAsync("""

@@ -22,7 +22,7 @@
             {
                 <tr>
                     <td>@item.Id</td>
-                    <td><span class="guest-avatar admin-guest-avatar">@if (!string.IsNullOrWhiteSpace(item.AvatarFileName)) { <img src="@($"/images/guests/{System.Uri.EscapeDataString(item.AvatarFileName)}")" alt="" /> } else { <i class="bi bi-person-heart"></i> }</span></td>
+                    <td><span class="guest-avatar admin-guest-avatar" style="--avatar-scale:@item.AvatarScale.ToString(System.Globalization.CultureInfo.InvariantCulture);--avatar-position-x:@item.AvatarPositionX%;--avatar-position-y:@item.AvatarPositionY%;">@if (!string.IsNullOrWhiteSpace(item.AvatarFileName)) { <img src="@($"/images/guests/{System.Uri.EscapeDataString(item.AvatarFileName)}")" alt="" /> } else { <i class="bi bi-person-heart"></i> }</span></td>
                     <td>@item.DisplayName</td>
                     <td>@item.Email</td>
                     <td>@item.Phone</td>

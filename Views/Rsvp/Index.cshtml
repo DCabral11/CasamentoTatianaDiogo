@@ -42,7 +42,7 @@
             @foreach(var guest in Model.Results)
             {
                 <a class="guest-result" asp-action="Select" asp-route-id="@guest.Id">
-                    <span class="guest-avatar guest-result-avatar">
+                    <span class="guest-avatar guest-result-avatar" style="--avatar-scale:@guest.AvatarScale.ToString(System.Globalization.CultureInfo.InvariantCulture);--avatar-position-x:@guest.AvatarPositionX%;--avatar-position-y:@guest.AvatarPositionY%;">
                         @if (!string.IsNullOrWhiteSpace(guest.ProfileImagePath))
                         {
                             <img src="@guest.ProfileImagePath" alt="" />

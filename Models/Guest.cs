@@ -30,6 +30,15 @@ namespace CasamentoTatianaDiogo.Models
         [StringLength(255)]
         public string? AvatarFileName { get; set; }
 
+        [Range(1, 2.5)]
+        public double AvatarScale { get; set; } = 1;
+
+        [Range(0, 100)]
+        public int AvatarPositionX { get; set; } = 50;
+
+        [Range(0, 100)]
+        public int AvatarPositionY { get; set; } = 50;
+
         public bool AllowPlusOne { get; set; }
 
         public bool IsChild { get; set; }
