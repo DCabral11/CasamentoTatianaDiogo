@@ -1,0 +1,43 @@
+@model CasamentoTatianaDiogo.ViewModels.Admin.ExcelImportViewModel
+@{
+    ViewData["Title"] = Model.Title;
+    var importErrors = ViewBag.ImportErrors as IReadOnlyList<string>;
+}
+
+<div class="container py-5 narrow">
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+        <div>
+            <h1 class="mb-1"><i class="bi bi-file-earmark-excel"></i> @Model.Title</h1>
+            <p class="text-muted mb-0">@Model.Description</p>
+        </div>
+        <a class="btn btn-outline-primary" asp-controller="@(Model.ImportType == "families" ? "InvitationGroups" : "Guests")" asp-action="Index"><i class="bi bi-arrow-left"></i> Voltar à lista</a>
+    </div>
+
+    @if (importErrors?.Count > 0)
+    {
+        <div class="feedback-card feedback-card-error form-feedback-card mb-4" role="alert">
+            <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+            <div><p class="form-feedback-heading">O ficheiro não foi importado</p><ul>@foreach (var error in importErrors) { <li>@error</li> }</ul></div>
+        </div>
+    }
+
+    <section class="admin-form excel-import-card">
+        <span class="excel-import-icon" aria-hidden="true"><i class="bi bi-table"></i></span>
+        <h2>1. Descarrega o modelo</h2>
+        <p>Preenche o ficheiro sem alterar o nome da folha <strong>@Model.ExpectedSheetName</strong> nem os títulos das colunas.</p>
+        <a class="btn btn-outline-primary" asp-action="@Model.TemplateAction"><i class="bi bi-download"></i> Descarregar modelo Excel</a>
+
+        <hr />
+
+        <h2>2. Carrega o ficheiro preenchido</h2>
+        <p class="mb-3">São aceites ficheiros <strong>.xlsx</strong>. A importação só é concluída se todas as linhas forem válidas.</p>
+        <form asp-action="@Model.SubmitAction" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <input asp-for="ImportType" type="hidden" />
+            <label asp-for="File" class="form-label">Ficheiro Excel</label>
+            <input asp-for="File" class="form-control" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+            <div class="form-text">Colunas esperadas: @string.Join(" · ", Model.Columns)</div>
+            <button class="btn btn-primary mt-4"><i class="bi bi-cloud-arrow-up"></i> Validar e importar</button>
+        </form>
+    </section>
+</div>
