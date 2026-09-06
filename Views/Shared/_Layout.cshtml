@@ -6,6 +6,8 @@
 
 @{
     var siteText = await SiteContent.GetAsync();
+    var isAdminScreen = Context.Request.Path.StartsWithSegments("/Admin");
+    var isAdminDashboard = Context.Request.Path.StartsWithSegments("/Admin/Dashboard");
 }
 
 <!DOCTYPE html>
@@ -46,10 +48,20 @@
                             <a class="nav-link" asp-controller="Photos" asp-action="Index">@siteText.GetValueOrDefault("NavPhotos", "Galeria")</a>
                         </li>
                         <li class="nav-item">
-                            <a class="btn btn-outline-primary rounded-pill ms-lg-2" href="/Admin/Dashboard/Index">
-                                <i class="bi bi-person"></i>
-                                Admin
-                            </a>
+                            @if (isAdminScreen && User.IsInRole("Admin"))
+                            {
+                                <a class="btn btn-outline-primary rounded-pill ms-lg-2" href="@(isAdminDashboard ? "/" : "/Admin/Dashboard/Index")">
+                                    <i class="bi bi-arrow-left"></i>
+                                    @(isAdminDashboard ? "Voltar ao site" : "Voltar ao painel")
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-outline-primary rounded-pill ms-lg-2" href="/Admin/Dashboard/Index">
+                                    <i class="bi bi-person"></i>
+                                    Admin
+                                </a>
+                            }
                         </li>
                     </ul>
                 </div>
