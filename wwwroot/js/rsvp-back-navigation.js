@@ -7,12 +7,16 @@
     }
 
     const modal = window.bootstrap.Modal.getOrCreateInstance(modalElement, { backdrop: "static", keyboard: false });
-    const currentUrl = window.location.href;
+    const returnUrl = new URL(window.location.href);
+    const guardedUrl = new URL(window.location.href);
+    guardedUrl.searchParams.set("rsvpGuard", "1");
     const guardState = { rsvpSubmissionGuard: true };
     let navigatingToSearch = false;
 
-    // A second entry lets us intercept Back without returning to the submitted POST.
-    window.history.pushState(guardState, "", currentUrl);
+    // The distinct guard URL prevents browsers from coalescing duplicate history entries.
+    // Back always lands on the safe RSVP search URL first, never on the submitted POST.
+    window.history.replaceState({ rsvpSubmissionComplete: true }, "", returnUrl);
+    window.history.pushState(guardState, "", guardedUrl);
 
     window.addEventListener("popstate", () => {
         modal.show();
@@ -29,7 +33,7 @@
 
     modalElement.addEventListener("hidden.bs.modal", () => {
         if (!navigatingToSearch) {
-            window.history.pushState(guardState, "", currentUrl);
+            window.history.pushState(guardState, "", guardedUrl);
         }
     });
 }());
