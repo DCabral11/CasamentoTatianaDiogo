@@ -3,6 +3,8 @@ using CasamentoTatianaDiogo.Models;
 using CasamentoTatianaDiogo.Services.Interfaces;
 using CasamentoTatianaDiogo.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
+using System.Text;
 
 namespace CasamentoTatianaDiogo.Services
 {
@@ -15,7 +17,17 @@ namespace CasamentoTatianaDiogo.Services
             if (query.Length < 2)
                 return [];
 
-            var guests = await db.Guests.Include(g => g.Family).Where(g => g.FirstName.Contains(query) || g.LastName.Contains(query) || g.DisplayName.Contains(query)).OrderBy(g => g.DisplayName).Take(20).ToListAsync();
+            var normalizedQuery = NormalizeSearchText(query);
+            var guests = (await db.Guests
+                .AsNoTracking()
+                .Include(g => g.Family)
+                .OrderBy(g => g.DisplayName)
+                .ToListAsync())
+                .Where(guest => NormalizeSearchText(guest.FirstName).Contains(normalizedQuery) ||
+                                NormalizeSearchText(guest.LastName).Contains(normalizedQuery) ||
+                                NormalizeSearchText(guest.DisplayName).Contains(normalizedQuery))
+                .Take(20)
+                .ToList();
             PopulateProfileImagePaths(guests);
             return guests;
         }
@@ -62,6 +74,12 @@ namespace CasamentoTatianaDiogo.Services
                     guest.ProfileImagePath = $"/images/guests/{Uri.EscapeDataString(fileName)}";
             }
         }
+
+        private static string NormalizeSearchText(string? value) => string.Concat((value ?? string.Empty)
+            .Normalize(NormalizationForm.FormD)
+            .Where(character => CharUnicodeInfo.GetUnicodeCategory(character) != UnicodeCategory.NonSpacingMark))
+            .Normalize(NormalizationForm.FormC)
+            .ToUpperInvariant();
 
         public async Task<(bool ok, string message)> SubmitAsync(RsvpSubmitViewModel model, string? ip, string? userAgent)
         {
