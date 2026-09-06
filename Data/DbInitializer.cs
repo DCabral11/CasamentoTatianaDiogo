@@ -7,7 +7,7 @@ namespace CasamentoTatianaDiogo.Data
 {
     public static class DbInitializer
     {
-        public static async Task InitializeAsync(IServiceProvider services, IConfiguration config)
+        public static async Task InitializeAsync(IServiceProvider services, IConfiguration config, IHostEnvironment environment)
         {
             var db = services.GetRequiredService<ApplicationDbContext>();
 
@@ -53,11 +53,11 @@ namespace CasamentoTatianaDiogo.Data
             if (!await roleManager.RoleExistsAsync("Admin"))
                 await roleManager.CreateAsync(new IdentityRole("Admin"));
 
-            var email = config["AdminSeed:Email"] ?? "admin@tatiana-diogo.local";
-            var password = config["AdminSeed:Password"] ?? "ChangeMe!2027Wedding";
-            var admin = await userManager.FindByEmailAsync(email);
+            var email = config["AdminSeed:Email"] ?? (environment.IsDevelopment() ? "admin@tatiana-diogo.local" : null);
+            var password = config["AdminSeed:Password"] ?? (environment.IsDevelopment() ? "ChangeMe!2027Wedding" : null);
+            var admin = string.IsNullOrWhiteSpace(email) ? null : await userManager.FindByEmailAsync(email);
 
-            if (admin == null)
+            if (admin == null && !string.IsNullOrWhiteSpace(email) && !string.IsNullOrWhiteSpace(password))
             {
                 admin = new ApplicationUser { UserName = email, Email = email, EmailConfirmed = true };
 
