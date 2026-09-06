@@ -185,6 +185,13 @@ body {
     background: rgba(255, 250, 247, 0.84);
 }
 
+.admin-screen .btn-outline-primary:hover,
+.admin-screen .btn-outline-primary:focus-visible {
+    color: #fff !important;
+    border-color: var(--primary);
+    background: var(--primary) !important;
+}
+
 .admin-screen .btn-outline-danger,
 .admin-screen .btn-danger {
     border-color: #b63c38;
