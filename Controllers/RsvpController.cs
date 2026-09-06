@@ -6,7 +6,11 @@ namespace CasamentoTatianaDiogo.Controllers
 {
     public class RsvpController(IRsvpService rsvp) : Controller
     {
-        public IActionResult Index() => View(new RsvpSearchViewModel());
+        public IActionResult Index(bool submitted = false)
+        {
+            ViewData["RsvpJustSubmitted"] = submitted;
+            return View(new RsvpSearchViewModel());
+        }
 
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Search(RsvpSearchViewModel model)
@@ -44,7 +48,7 @@ namespace CasamentoTatianaDiogo.Controllers
             var result = await rsvp.SubmitAsync(model, HttpContext.Connection.RemoteIpAddress?.ToString(), Request.Headers.UserAgent.ToString());
             TempData[result.ok ? "Success" : "Error"] = result.message;
 
-            return result.ok ? RedirectToAction(nameof(Index)) : RedirectToAction(nameof(Select), new
+            return result.ok ? RedirectToAction(nameof(Index), new { submitted = true }) : RedirectToAction(nameof(Select), new
             {
                 id = model.GuestId
             });
