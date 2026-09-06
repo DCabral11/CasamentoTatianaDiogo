@@ -45,19 +45,15 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
     await DbInitializer.InitializeAsync(scope.ServiceProvider, app.Configuration);
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-    app.UseMigrationsEndPoint();
-}
-else
-{
-    app.UseExceptionHandler("/Home/Error");
+// The same friendly recovery screen is used locally and after publishing.
+app.UseExceptionHandler("/Home/Error");
+
+if (!app.Environment.IsDevelopment())
     app.UseHsts();
-}
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseStatusCodePagesWithReExecute("/Home/Status/{0}");
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();

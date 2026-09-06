@@ -13,7 +13,7 @@
 <div class="container py-4 narrow rsvp-selection">
     @if (Model.HasExistingResponse)
     {
-        <div class="alert alert-warning">Já existe uma resposta para este convidado. Seleciona a opção no fim do formulário para a atualizar.</div>
+        <div class="feedback-card feedback-card-warning mb-3" role="status"><i class="bi bi-info-circle" aria-hidden="true"></i><span>Já existe uma resposta para este convidado. Seleciona a opção no fim do formulário para a atualizar.</span></div>
     }
 
     <form asp-action="Submit" method="post">

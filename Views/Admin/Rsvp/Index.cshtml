@@ -4,22 +4,22 @@
     <h1>Respostas de presença</h1>
     @if (TempData["Success"] is string success)
     {
-        <div class="alert alert-success" role="alert">@success</div>
+        <div class="feedback-card feedback-card-success" role="status"><i class="bi bi-check2-circle" aria-hidden="true"></i><span>@success</span></div>
     }
     @if (TempData["Info"] is string info)
     {
-        <div class="alert alert-info" role="alert">@info</div>
+        <div class="feedback-card feedback-card-info" role="status"><i class="bi bi-info-circle" aria-hidden="true"></i><span>@info</span></div>
     }
     @if (TempData["Error"] is string error)
     {
-        <div class="alert alert-danger" role="alert">@error</div>
+        <div class="feedback-card feedback-card-error" role="alert"><i class="bi bi-exclamation-circle" aria-hidden="true"></i><span>@error</span></div>
     }
     <a class="btn btn-outline-primary" href="/Admin/Rsvp/ExportCsv">
         <i class="bi bi-download"></i> Exportar CSV
     </a>
     @if (!Model.Any())
     {
-        <div class="alert alert-info mt-4 mb-0">Ainda não foi submetida nenhuma resposta de presença.</div>
+        <div class="feedback-card feedback-card-info mt-4 mb-0" role="status"><i class="bi bi-envelope-open-heart" aria-hidden="true"></i><span>Ainda não foi submetida nenhuma resposta de presença.</span></div>
     }
     <table class="table">
         <thead>

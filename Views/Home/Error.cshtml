@@ -1,0 +1,18 @@
+@{
+    ViewData["Title"] = ViewData["ErrorLabel"] ?? "Ocorreu um imprevisto";
+}
+
+<section class="error-page">
+    <div class="container py-5">
+        <div class="error-card mx-auto text-center">
+            <span class="error-card-icon" aria-hidden="true"><i class="bi @(ViewData["ErrorIcon"] ?? "bi-exclamation-circle")"></i></span>
+            <p class="error-card-label">@ViewData["ErrorLabel"]</p>
+            <h1>@ViewData["ErrorTitle"]</h1>
+            <p class="error-card-message">@ViewData["ErrorMessage"]</p>
+            <div class="d-flex justify-content-center flex-wrap gap-2 mt-4">
+                <a class="btn btn-primary" asp-controller="Home" asp-action="Index"><i class="bi bi-house-heart me-1"></i> Voltar ao início</a>
+                <button class="btn btn-outline-primary" type="button" onclick="history.back()"><i class="bi bi-arrow-left me-1"></i> Página anterior</button>
+            </div>
+        </div>
+    </div>
+</section>
