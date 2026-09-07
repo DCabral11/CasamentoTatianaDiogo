@@ -36,11 +36,16 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddHealthChecks().AddDbContextCheck<ApplicationDbContext>("database");
 
-if (!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME")))
+var dataProtectionKeysPath = Environment.GetEnvironmentVariable("DATA_PROTECTION_KEYS_PATH");
+if (string.IsNullOrWhiteSpace(dataProtectionKeysPath) && !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME")))
 {
-    var keyDirectory = Path.Combine(Environment.GetEnvironmentVariable("HOME") ?? builder.Environment.ContentRootPath, "data", "protection-keys");
-    Directory.CreateDirectory(keyDirectory);
-    builder.Services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(keyDirectory)).SetApplicationName("CasamentoTatianaDiogo");
+    dataProtectionKeysPath = Path.Combine(Environment.GetEnvironmentVariable("HOME") ?? builder.Environment.ContentRootPath, "data", "protection-keys");
+}
+
+if (!string.IsNullOrWhiteSpace(dataProtectionKeysPath))
+{
+    Directory.CreateDirectory(dataProtectionKeysPath);
+    builder.Services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(dataProtectionKeysPath)).SetApplicationName("CasamentoTatianaDiogo");
 }
 
 builder.Services.AddScoped<IWeddingSettingsService, WeddingSettingsService>();

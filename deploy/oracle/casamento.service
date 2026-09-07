@@ -1,0 +1,27 @@
+[Unit]
+Description=Site do casamento Tatiana e Diogo
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+WorkingDirectory=/opt/casamento/current
+ExecStart=/usr/bin/dotnet /opt/casamento/current/CasamentoTatianaDiogo.dll
+Restart=always
+RestartSec=10
+KillSignal=SIGINT
+TimeoutStopSec=30
+SyslogIdentifier=casamento
+User=casamento
+Group=casamento
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment=ASPNETCORE_URLS=http://127.0.0.1:5000
+Environment=DATA_PROTECTION_KEYS_PATH=/var/lib/casamento/protection-keys
+EnvironmentFile=/etc/casamento/casamento.env
+StateDirectory=casamento
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target
