@@ -42,7 +42,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddAntiforgery(options => options.HeaderName = "X-CSRF-TOKEN");
-builder.Services.AddHealthChecks().AddDbContextCheck<ApplicationDbContext>("database");
+builder.Services.AddHealthChecks().AddCheck<ApplicationReadinessHealthCheck>("database", timeout: TimeSpan.FromSeconds(15));
 
 var isVercel = builder.Configuration["VERCEL"] == "1" || builder.Configuration.GetValue<bool>("Hosting:Vercel");
 var protection = builder.Services.AddDataProtection().SetApplicationName("CasamentoTatianaDiogo");

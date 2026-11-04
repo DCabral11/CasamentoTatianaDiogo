@@ -34,6 +34,52 @@ public class HttpTests
     }
 
     [Fact]
+    public async Task MissingDatabaseSchemaShowsARecoveryPageInsteadOfAnEmpty500()
+    {
+        using var app = new TestApplication(initializeSchema: false);
+        using var client = app.Client();
+        var response = await client.GetAsync("/");
+        Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        var body = await response.Content.ReadAsStringAsync();
+        Assert.Contains("Algo não correu como esperado", WebUtility.HtmlDecode(body));
+        Assert.DoesNotContain("SqliteException", body);
+        Assert.DoesNotContain("ConnectionStrings", body);
+    }
+
+    [Fact]
+    public async Task DatabaseWithoutSchemaFailsReadinessWhileTheProcessRemainsLive()
+    {
+        using var app = new TestApplication(initializeSchema: false);
+        using var client = app.Client();
+        Assert.Equal(HttpStatusCode.OK, (await client.GetAsync("/health/live")).StatusCode);
+        Assert.Equal(HttpStatusCode.ServiceUnavailable, (await client.GetAsync("/health")).StatusCode);
+    }
+
+    [Fact]
+    public async Task MissingSeedSettingsFailReadiness()
+    {
+        using var app = new TestApplication();
+        using var client = app.Client();
+        using (var scope = app.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            db.WeddingSettings.RemoveRange(db.WeddingSettings);
+            await db.SaveChangesAsync();
+        }
+        Assert.Equal(HttpStatusCode.ServiceUnavailable, (await client.GetAsync("/health")).StatusCode);
+    }
+
+    [Fact]
+    public async Task NotFoundPageStillRendersWhenDatabaseTablesAreMissing()
+    {
+        using var app = new TestApplication(initializeSchema: false);
+        using var client = app.Client();
+        var response = await client.GetAsync("/pagina-inexistente");
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        Assert.Contains("Esta página já não está aqui", WebUtility.HtmlDecode(await response.Content.ReadAsStringAsync()));
+    }
+
+    [Fact]
     public async Task HttpUploadRequiresAntiforgeryAndAcceptsALargePhotoInSmallRequests()
     {
         using var app = new TestApplication();
@@ -96,7 +142,12 @@ public class HttpTests
     private class TestApplication : WebApplicationFactory<Program>
     {
         private readonly SqliteConnection connection = new("Data Source=:memory:");
-        public TestApplication() => connection.Open();
+        private readonly bool schemaReady;
+        public TestApplication(bool initializeSchema = true)
+        {
+            connection.Open();
+            schemaReady = initializeSchema;
+        }
         public HttpClient Client() => CreateClient(new WebApplicationFactoryClientOptions { BaseAddress = new Uri("https://localhost"), AllowAutoRedirect = false });
 
         protected override IHost CreateHost(IHostBuilder builder)
@@ -125,11 +176,14 @@ public class HttpTests
                 services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(connection));
                 services.RemoveAll<IGoogleDriveService>();
                 services.AddSingleton<IGoogleDriveService, HttpDrive>();
-                using var db = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().UseSqlite(connection).Options);
-                db.Database.EnsureCreated();
-                db.WeddingSettings.Add(new WeddingSettings());
-                db.PhotoUploadSettings.Add(new PhotoUploadSettings { IsEnabled = true, GoogleDriveFolderId = "test-folder" });
-                db.SaveChanges();
+                if (schemaReady)
+                {
+                    using var db = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().UseSqlite(connection).Options);
+                    db.Database.EnsureCreated();
+                    db.WeddingSettings.Add(new WeddingSettings());
+                    db.PhotoUploadSettings.Add(new PhotoUploadSettings { IsEnabled = true, GoogleDriveFolderId = "test-folder" });
+                    db.SaveChanges();
+                }
             });
         }
 

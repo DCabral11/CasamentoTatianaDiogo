@@ -62,7 +62,7 @@ Deploy through the Vercel Git integration or `vercel --prod`. The app stores aut
 After deployment, verify:
 
 - `/health/live` returns 200 when the application process is running.
-- `/health` returns 200 when the database can be queried.
+- `/health` returns 200 when the database is reachable, PostgreSQL migrations are applied, essential tables exist and initial site/photo settings have been seeded. It returns 503 for incomplete setup; details remain in server logs.
 - The home, information and RSVP pages load, and administrator login works.
 - A test RSVP saves successfully.
 - If photos are enabled, send a photo larger than 4.5 MB and check it appears in the admin list and Drive.
@@ -94,6 +94,20 @@ docker run --rm --env-file .env.docker -p 8080:8080 casamento-vercel
 For the last command, create an ignored `.env.docker` containing real `DATABASE_URL` and any optional integration settings. Initialize the target database first. Use one `NAME=value` entry per line without shell assignments or surrounding quotes. The container runs as a non-root user. Application files are read-only at runtime; only request buffering may use temporary scratch space.
 
 The regression suite checks PostgreSQL migrations and timestamp mappings, shared protection keys, Lisbon daylight saving time, upload limits, chunk retries and HTTP routes. Its isolated application database is SQLite; it does not contact your production database or Drive account.
+
+## HTTP 500 after the first deployment
+
+If the runtime logs show `42P01: relation "WeddingSettings" does not exist` or `relation "SiteContents" does not exist`, the application can reach PostgreSQL but its schema has not been initialized in the database/branch used by the deployment.
+
+Run the initialization command from the repository root:
+
+```powershell
+.\deploy\vercel\Initialize-Database.ps1
+```
+
+Use the direct/unpooled connection URL for **the same Neon branch and database** as Vercel's runtime `DATABASE_URL`, then provide the initial administrator email/password locally. Wait for `Database initialized successfully.` before reloading the website. Initializing another branch or database will not fix the deployed site's missing tables. If the deployed runtime URL is already correct, creating the tables does not itself require a redeploy; changes to environment variables do require one.
+
+The error page uses a separate layout without database queries, so a database failure can still display a recovery message and request reference. A redeploy installs this error-page/readiness improvement; initializing the production database resolves the missing-table cause.
 
 ## References
 
