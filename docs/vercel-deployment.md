@@ -1,12 +1,26 @@
 # Deploy to Vercel
 
-The application runs as a .NET 10 Linux container on Vercel with an external PostgreSQL database. Vercel's Container Runtime is currently in beta. The root `Dockerfile` and `vercel.json` select the Container preset, HTTP port 8080 and the Paris (`cdg1`) region. Place the database nearby.
+The application runs as a .NET 10 Linux container on Vercel with an external PostgreSQL database. Vercel's Container Runtime is currently in beta. The root `Dockerfile` and `vercel.json` select the Container preset, HTTP port 8080 and Washington, D.C. (`iad1`), matching the supplied Neon database's AWS `us-east-1` region. If the database moves, update the function region too.
 
 ## 1. Create the database
 
 Create PostgreSQL through the Vercel Marketplace (for example, Neon) or use an existing PostgreSQL service. Connect it to the Vercel project and obtain the connection URL. The application accepts `postgres://` and `postgresql://` URLs, including percent-encoded usernames/passwords, `sslmode` and `channel_binding` parameters. It also accepts an Npgsql connection string through `ConnectionStrings__DefaultConnection` when `DATABASE_URL` is absent.
 
-Use `DATABASE_URL` for the runtime connection. A provider's pooled URL is suitable for requests; the application uses a small local connection pool. Set `DATABASE_URL_UNPOOLED` for the database setup command if the provider supplies a direct connection. The initialization command prefers that direct URL. Use TLS for remote databases; URLs default to certificate-verified TLS when `sslmode` is omitted.
+Use `DATABASE_URL` for the runtime connection and `DATABASE_URL_UNPOOLED` for database setup. For Neon, the runtime hostname contains `-pooler` and the direct hostname does not. The supplied `sslmode=require` and `channel_binding=require` URL options are supported. Neon pooled URL connections use at most two local connections per app instance, alongside Neon's PgBouncer pool. Database setup rejects a Neon pooled hostname so migrations cannot accidentally use a transaction-pooling connection. This follows [Neon's serverless connection guidance](https://neon.com/docs/guides/serverless-connection-pooling).
+
+The equivalent Neon/Vercel environment variable forms are also supported:
+
+| Purpose | Accepted variables (in priority order) |
+| --- | --- |
+| Runtime URL | `DATABASE_URL`, `POSTGRES_URL`, `POSTGRES_PRISMA_URL` |
+| Direct setup URL | `DATABASE_URL_UNPOOLED`, `POSTGRES_URL_NON_POOLING` |
+| Runtime host components | `PGHOST`, or `POSTGRES_HOST` |
+| Direct host components | `PGHOST_UNPOOLED`, or `POSTGRES_HOST_UNPOOLED` |
+| Credentials and database components | `PGUSER` / `POSTGRES_USER`, `PGPASSWORD` / `POSTGRES_PASSWORD`, `PGDATABASE` / `POSTGRES_DATABASE` |
+
+Blank values are ignored. Setup prefers a direct URL, then direct host components. Runtime prefers a runtime URL, then `ConnectionStrings__DefaultConnection`, then runtime components, with direct settings as a fallback. Component connections default to certificate-verified TLS and required channel binding; optional `PGSSLMODE`, `PGCHANNELBINDING`, `PGPORT` and `PGCONNECT_TIMEOUT` override those defaults. The `POSTGRES_URL_NO_SSL` alias is not selected. URL options take precedence over component options for the selected URL.
+
+Keep all credentials in environment variables. If a database password was shared in chat or another public location, rotate it in Neon and update every configured URL/password variable. The examples use placeholders; no production password is stored in the repository.
 
 This prepares a **new PostgreSQL database**. Existing SQL Server records are not automatically copied or deleted. Back up the existing database and transfer any existing guests, RSVP records, settings and accounts before switching a live site. SQL Server remains supported through `Database__Provider=SqlServer` and `ConnectionStrings__DefaultConnection`; override the PostgreSQL setting in Vercel if keeping an externally reachable SQL Server instead. A local SQL Server/LocalDB instance is not reachable from Vercel.
 
@@ -20,13 +34,13 @@ From the repository root on a computer with .NET SDK 10:
 
 The script prompts for the database URL, administrator email and password, runs PostgreSQL migrations and seeds the site settings. It restores the previous process environment afterward and does not write passwords to files. The password needs at least 12 characters, uppercase and lowercase letters, a digit and a symbol. Production setup does not create the development test guests. Keep the selected administrator credentials for login.
 
-Alternatively, set `ASPNETCORE_ENVIRONMENT=Production`, `Database__Provider=PostgreSql`, `DATABASE_URL` (or `DATABASE_URL_UNPOOLED`), `AdminSeed__Email` and `AdminSeed__Password` in the process environment, then run:
+Alternatively, set `ASPNETCORE_ENVIRONMENT=Production`, `Database__Provider=PostgreSql`, `DATABASE_URL_UNPOOLED` (or `POSTGRES_URL_NON_POOLING`), `AdminSeed__Email` and `AdminSeed__Password` in the process environment, then run:
 
 ```powershell
 dotnet run --configuration Release --no-launch-profile -- --initialize-database
 ```
 
-Repeat this command before deploying changes that introduce a database migration. Initialization is an explicit operation: normal production startup does not migrate or seed the database. Do not run it during every container start or attach production initialization to preview builds. Initialization is also required once for a new production SQL Server database.
+Repeat this command before deploying changes that introduce a database migration. PostgreSQL setup is explicit in every environment, including development; normal web startup does not migrate or seed PostgreSQL. Local SQL Server development retains its automatic bootstrap. Do not run setup during every container start or attach production initialization to preview builds. Initialization is also required once for a new production SQL Server database.
 
 ## 3. Configure Vercel and deploy
 
@@ -36,7 +50,8 @@ Add these environment variables in Project Settings:
 
 | Variable | Purpose |
 | --- | --- |
-| `DATABASE_URL` | Required PostgreSQL runtime connection URL. Marketplace integrations may supply it automatically. |
+| `DATABASE_URL` (or `POSTGRES_URL`) | PostgreSQL pooled runtime connection URL. The Neon Marketplace integration can supply it automatically. |
+| `DATABASE_URL_UNPOOLED` (or `POSTGRES_URL_NON_POOLING`) | Direct connection for the environment running database setup; ignored during normal runtime when a runtime URL is configured. |
 | `GoogleDrive__CredentialsBase64` | Optional service-account JSON encoded as Base64; required when enabling photos unless another supported credential format is configured. |
 | `RsvpEmail__*` | Optional SMTP configuration; see `.env.example`. Notifications are disabled by default. |
 

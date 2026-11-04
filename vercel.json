@@ -1,7 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "container",
-  "regions": ["cdg1"],
+  "regions": ["iad1"],
   "env": {
     "PORT": "8080",
     "ASPNETCORE_HTTP_PORTS": "8080",

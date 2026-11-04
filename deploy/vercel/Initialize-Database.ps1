@@ -10,9 +10,13 @@ foreach ($name in $variableNames) { $previousValues[$name] = [Environment]::GetE
 try {
     $env:ASPNETCORE_ENVIRONMENT = 'Production'
     $env:Database__Provider = 'PostgreSql'
-    if (-not $env:DATABASE_URL -and -not $env:DATABASE_URL_UNPOOLED) {
-        $secureUrl = Read-Host 'PostgreSQL connection URL (prefer the direct/unpooled URL)' -AsSecureString
-        $env:DATABASE_URL = [Net.NetworkCredential]::new('', $secureUrl).Password
+    $directUrl = $env:DATABASE_URL_UNPOOLED -or $env:POSTGRES_URL_NON_POOLING
+    $directParameters = ($env:PGHOST_UNPOOLED -or $env:POSTGRES_HOST_UNPOOLED) -and
+        ($env:PGUSER -or $env:POSTGRES_USER) -and ($env:PGDATABASE -or $env:POSTGRES_DATABASE) -and
+        ($env:PGPASSWORD -or $env:POSTGRES_PASSWORD)
+    if (-not $directUrl -and -not $directParameters) {
+        $secureUrl = Read-Host 'PostgreSQL direct/unpooled connection URL (without -pooler in the Neon hostname)' -AsSecureString
+        $env:DATABASE_URL_UNPOOLED = [Net.NetworkCredential]::new('', $secureUrl).Password
     }
     if (-not $env:AdminSeed__Email) {
         $env:AdminSeed__Email = Read-Host 'Initial administrator email (leave blank if an administrator already exists)'

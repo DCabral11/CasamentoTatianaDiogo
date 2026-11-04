@@ -18,10 +18,7 @@ if (!string.IsNullOrWhiteSpace(localSettingsPath))
     builder.Configuration.AddEnvironmentVariables();
 }
 
-if (initializeDatabase && !string.IsNullOrWhiteSpace(builder.Configuration["DATABASE_URL_UNPOOLED"]))
-    builder.Configuration["DATABASE_URL"] = builder.Configuration["DATABASE_URL_UNPOOLED"];
-
-builder.Services.AddWeddingDatabase(builder.Configuration);
+builder.Services.AddWeddingDatabase(builder.Configuration, initializeDatabase);
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
@@ -93,7 +90,9 @@ var app = builder.Build();
 if (initializeDatabase || app.Environment.IsDevelopment())
 {
     using var scope = app.Services.CreateScope();
-    await DbInitializer.InitializeAsync(scope.ServiceProvider, app.Configuration, app.Environment);
+    // Local SQL Server keeps its development bootstrap; PostgreSQL setup always uses the explicit command.
+    if (initializeDatabase || scope.ServiceProvider.GetRequiredService<ApplicationDbContext>().Database.IsSqlServer())
+        await DbInitializer.InitializeAsync(scope.ServiceProvider, app.Configuration, app.Environment);
     if (initializeDatabase)
     {
         app.Logger.LogInformation("Database initialized successfully.");

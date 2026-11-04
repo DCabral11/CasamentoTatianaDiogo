@@ -5,16 +5,17 @@ namespace CasamentoTatianaDiogo.Data;
 
 public static class DatabaseConfiguration
 {
-    public static void AddWeddingDatabase(this IServiceCollection services, IConfiguration config)
+    private static readonly string[] RuntimeUrlKeys = ["DATABASE_URL", "POSTGRES_URL", "POSTGRES_PRISMA_URL"];
+    private static readonly string[] DirectUrlKeys = ["DATABASE_URL_UNPOOLED", "POSTGRES_URL_NON_POOLING"];
+
+    public static void AddWeddingDatabase(this IServiceCollection services, IConfiguration config, bool initializeDatabase = false)
     {
-        var provider = config["Database:Provider"] ?? (string.IsNullOrWhiteSpace(config["DATABASE_URL"]) ? "SqlServer" : "PostgreSql");
+        var hasPostgresSettings = FirstConfigured(config, RuntimeUrlKeys) != null || FirstConfigured(config, DirectUrlKeys) != null ||
+            FirstConfigured(config, "PGHOST", "PGHOST_UNPOOLED", "POSTGRES_HOST", "POSTGRES_HOST_UNPOOLED") != null;
+        var provider = FirstConfigured(config, "Database:Provider") ?? (hasPostgresSettings ? "PostgreSql" : "SqlServer");
         if (provider.Equals("PostgreSql", StringComparison.OrdinalIgnoreCase))
         {
-            var connection = config["DATABASE_URL"] ?? config.GetConnectionString("DefaultConnection");
-            if (string.IsNullOrWhiteSpace(connection))
-                throw new InvalidOperationException("Configure DATABASE_URL ou ConnectionStrings__DefaultConnection para PostgreSQL.");
-
-            connection = NormalizePostgresConnection(connection);
+            var connection = ResolvePostgresConnection(config, initializeDatabase);
             services.AddDbContext<PostgreSqlApplicationDbContext>(options => options.UseNpgsql(connection, sql => sql.EnableRetryOnFailure()));
             services.AddScoped<ApplicationDbContext>(sp => sp.GetRequiredService<PostgreSqlApplicationDbContext>());
         }
@@ -27,6 +28,59 @@ public static class DatabaseConfiguration
         else
             throw new InvalidOperationException("Database__Provider deve ser PostgreSql ou SqlServer.");
     }
+
+    public static string ResolvePostgresConnection(IConfiguration config, bool initializeDatabase = false)
+    {
+        // Migration commands must bypass PgBouncer; web requests keep using the pooled URL.
+        var connection = initializeDatabase ? FirstConfigured(config, DirectUrlKeys) : null;
+        if (connection == null && initializeDatabase)
+            connection = ConnectionFromParameters(config, unpooled: true);
+        connection ??= FirstConfigured(config, RuntimeUrlKeys)
+            ?? FirstConfigured(config, "ConnectionStrings:DefaultConnection")
+            ?? ConnectionFromParameters(config, unpooled: false)
+            ?? FirstConfigured(config, DirectUrlKeys)
+            ?? ConnectionFromParameters(config, unpooled: true);
+        if (connection == null)
+            throw new InvalidOperationException("Configure DATABASE_URL, POSTGRES_URL, ConnectionStrings__DefaultConnection ou os parâmetros PGHOST/PGUSER/PGDATABASE/PGPASSWORD.");
+
+        var settings = new NpgsqlConnectionStringBuilder(NormalizePostgresConnection(connection));
+        if (initializeDatabase && IsNeonPooler(settings.Host))
+            throw new InvalidOperationException("A inicialização do Neon requer uma ligação direta. Configure DATABASE_URL_UNPOOLED, POSTGRES_URL_NON_POOLING ou PGHOST_UNPOOLED com os restantes parâmetros PG*.");
+        return settings.ConnectionString;
+    }
+
+    private static string? ConnectionFromParameters(IConfiguration config, bool unpooled)
+    {
+        var host = unpooled ? FirstConfigured(config, "PGHOST_UNPOOLED", "POSTGRES_HOST_UNPOOLED")
+            : FirstConfigured(config, "PGHOST", "POSTGRES_HOST");
+        if (host == null)
+            return null;
+        var user = FirstConfigured(config, "PGUSER", "POSTGRES_USER");
+        var database = FirstConfigured(config, "PGDATABASE", "POSTGRES_DATABASE");
+        var password = FirstConfigured(config, "PGPASSWORD", "POSTGRES_PASSWORD");
+        if (user == null || database == null || password == null)
+            throw new InvalidOperationException("Os parâmetros PostgreSQL requerem host, utilizador, base de dados e password (PG* ou POSTGRES_*).");
+
+        var settings = new NpgsqlConnectionStringBuilder
+        {
+            Host = host,
+            Port = int.Parse(FirstConfigured(config, "PGPORT", "POSTGRES_PORT") ?? "5432", System.Globalization.CultureInfo.InvariantCulture),
+            Username = user,
+            Database = database,
+            Password = password,
+            SslMode = Enum.Parse<SslMode>((FirstConfigured(config, "PGSSLMODE") ?? "verify-full").Replace("-", ""), true),
+            ChannelBinding = Enum.Parse<ChannelBinding>(FirstConfigured(config, "PGCHANNELBINDING") ?? "require", true),
+            MaxPoolSize = IsNeonPooler(host) ? 2 : 10,
+            Timeout = int.Parse(FirstConfigured(config, "PGCONNECT_TIMEOUT") ?? "15", System.Globalization.CultureInfo.InvariantCulture)
+        };
+        return settings.ConnectionString;
+    }
+
+    private static string? FirstConfigured(IConfiguration config, params string[] keys) =>
+        keys.Select(key => config[key]).FirstOrDefault(value => !string.IsNullOrWhiteSpace(value));
+
+    private static bool IsNeonPooler(string? host) => host != null && host.EndsWith(".neon.tech", StringComparison.OrdinalIgnoreCase) &&
+        host.Contains("-pooler.", StringComparison.OrdinalIgnoreCase);
 
     public static string NormalizePostgresConnection(string connection)
     {
@@ -47,7 +101,7 @@ public static class DatabaseConfiguration
             Username = Uri.UnescapeDataString(userInfo[0]),
             Password = Uri.UnescapeDataString(userInfo[1]),
             SslMode = SslMode.VerifyFull,
-            MaxPoolSize = 10,
+            MaxPoolSize = IsNeonPooler(uri.Host) ? 2 : 10,
             Timeout = 15
         };
 
