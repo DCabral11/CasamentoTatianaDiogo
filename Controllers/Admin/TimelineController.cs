@@ -8,13 +8,13 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
 {
     [Authorize(Roles = "Admin")]
     [Route("Admin/[controller]/[action]/{id?}")]
-    public class TimelineController(ApplicationDbContext db) : Controller
+    public class TimelineController(ApplicationDbContext db, CasamentoTatianaDiogo.Services.WeddingClock clock) : Controller
     {
         public async Task<IActionResult> Index() => View("~/Views/Admin/Timeline/Index.cshtml", await db.TimelineEvents.OrderBy(x => x.DisplayOrder).ToListAsync());
 
         public IActionResult Create() => View("~/Views/Admin/Timeline/Edit.cshtml", new TimelineEvent
         {
-            EventDateTime = DateTime.Now
+            EventDateTime = clock.Now
         });
 
         public async Task<IActionResult> Edit(int id) => View("~/Views/Admin/Timeline/Edit.cshtml", await db.TimelineEvents.FindAsync(id));

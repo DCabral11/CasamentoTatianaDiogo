@@ -18,7 +18,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             if (!ModelState.IsValid)
                 return View("~/Views/Admin/Settings/Index.cshtml", m);
 
-            m.UpdatedAt = DateTime.Now;
+            m.UpdatedAt = DateTime.UtcNow;
 
             db.Update(m);
             await db.SaveChangesAsync();

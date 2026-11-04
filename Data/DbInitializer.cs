@@ -1,4 +1,4 @@
-﻿using CasamentoTatianaDiogo.Models;
+using CasamentoTatianaDiogo.Models;
 using CasamentoTatianaDiogo.Models.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -11,47 +11,76 @@ namespace CasamentoTatianaDiogo.Data
         {
             var db = services.GetRequiredService<ApplicationDbContext>();
 
-            await db.Database.EnsureCreatedAsync();
+            if (db.Database.IsNpgsql())
+                await db.Database.MigrateAsync();
+            else
+            {
+                await db.Database.EnsureCreatedAsync();
 
-            // EnsureCreated does not apply model changes to databases that already exist.
-            // Keep this upgrade idempotent so the RSVP form can save the additional
-            // accompaniment details without requiring a manual database intervention.
-            await db.Database.ExecuteSqlRawAsync("""
-                IF COL_LENGTH(N'[RsvpResponses]', N'PlusOneDietaryRestrictions') IS NULL
-                    ALTER TABLE [RsvpResponses] ADD [PlusOneDietaryRestrictions] nvarchar(1000) NULL;
-                IF COL_LENGTH(N'[RsvpResponses]', N'PlusOneMessage') IS NULL
-                    ALTER TABLE [RsvpResponses] ADD [PlusOneMessage] nvarchar(1000) NULL;
-                IF COL_LENGTH(N'[RsvpResponses]', N'PlusOneMusicRequest') IS NULL
-                    ALTER TABLE [RsvpResponses] ADD [PlusOneMusicRequest] nvarchar(200) NULL;
-                IF COL_LENGTH(N'[Guests]', N'AvatarFileName') IS NULL
-                    ALTER TABLE [Guests] ADD [AvatarFileName] nvarchar(255) NULL;
-                IF COL_LENGTH(N'[Guests]', N'AvatarScale') IS NULL
-                    ALTER TABLE [Guests] ADD [AvatarScale] float NOT NULL CONSTRAINT [DF_Guests_AvatarScale] DEFAULT 1;
-                IF COL_LENGTH(N'[Guests]', N'AvatarPositionX') IS NULL
-                    ALTER TABLE [Guests] ADD [AvatarPositionX] int NOT NULL CONSTRAINT [DF_Guests_AvatarPositionX] DEFAULT 50;
-                IF COL_LENGTH(N'[Guests]', N'AvatarPositionY') IS NULL
-                    ALTER TABLE [Guests] ADD [AvatarPositionY] int NOT NULL CONSTRAINT [DF_Guests_AvatarPositionY] DEFAULT 50;
-                """);
+                // EnsureCreated does not apply model changes to databases that already exist.
+                // Keep this upgrade idempotent so the RSVP form can save the additional
+                // accompaniment details without requiring a manual database intervention.
+                await db.Database.ExecuteSqlRawAsync("""
+                    IF COL_LENGTH(N'[RsvpResponses]', N'PlusOneDietaryRestrictions') IS NULL
+                        ALTER TABLE [RsvpResponses] ADD [PlusOneDietaryRestrictions] nvarchar(1000) NULL;
+                    IF COL_LENGTH(N'[RsvpResponses]', N'PlusOneMessage') IS NULL
+                        ALTER TABLE [RsvpResponses] ADD [PlusOneMessage] nvarchar(1000) NULL;
+                    IF COL_LENGTH(N'[RsvpResponses]', N'PlusOneMusicRequest') IS NULL
+                        ALTER TABLE [RsvpResponses] ADD [PlusOneMusicRequest] nvarchar(200) NULL;
+                    IF COL_LENGTH(N'[Guests]', N'AvatarFileName') IS NULL
+                        ALTER TABLE [Guests] ADD [AvatarFileName] nvarchar(255) NULL;
+                    IF COL_LENGTH(N'[Guests]', N'AvatarScale') IS NULL
+                        ALTER TABLE [Guests] ADD [AvatarScale] float NOT NULL CONSTRAINT [DF_Guests_AvatarScale] DEFAULT 1;
+                    IF COL_LENGTH(N'[Guests]', N'AvatarPositionX') IS NULL
+                        ALTER TABLE [Guests] ADD [AvatarPositionX] int NOT NULL CONSTRAINT [DF_Guests_AvatarPositionX] DEFAULT 50;
+                    IF COL_LENGTH(N'[Guests]', N'AvatarPositionY') IS NULL
+                        ALTER TABLE [Guests] ADD [AvatarPositionY] int NOT NULL CONSTRAINT [DF_Guests_AvatarPositionY] DEFAULT 50;
+                    """);
 
-            await db.Database.ExecuteSqlRawAsync("""
-                IF OBJECT_ID(N'[SiteContents]', N'U') IS NULL
-                BEGIN
-                    CREATE TABLE [SiteContents] (
-                        [Id] int IDENTITY(1,1) NOT NULL PRIMARY KEY,
-                        [Key] nvarchar(100) NOT NULL,
-                        [Value] nvarchar(max) NOT NULL,
-                        [Description] nvarchar(300) NOT NULL,
-                        [IsHtml] bit NOT NULL
-                    );
-                    CREATE UNIQUE INDEX [IX_SiteContents_Key] ON [SiteContents] ([Key]);
-                END
-                """);
+                await db.Database.ExecuteSqlRawAsync("""
+                    IF OBJECT_ID(N'[SiteContents]', N'U') IS NULL
+                    BEGIN
+                        CREATE TABLE [SiteContents] (
+                            [Id] int IDENTITY(1,1) NOT NULL PRIMARY KEY,
+                            [Key] nvarchar(100) NOT NULL,
+                            [Value] nvarchar(max) NOT NULL,
+                            [Description] nvarchar(300) NOT NULL,
+                            [IsHtml] bit NOT NULL
+                        );
+                        CREATE UNIQUE INDEX [IX_SiteContents_Key] ON [SiteContents] ([Key]);
+                    END
+                    """);
+
+                await db.Database.ExecuteSqlRawAsync("""
+                    IF OBJECT_ID(N'[DataProtectionKeys]', N'U') IS NULL
+                        CREATE TABLE [DataProtectionKeys] ([Id] int IDENTITY(1,1) NOT NULL PRIMARY KEY, [FriendlyName] nvarchar(max) NULL, [Xml] nvarchar(max) NULL);
+                    IF OBJECT_ID(N'[PendingPhotoUploads]', N'U') IS NULL
+                    BEGIN
+                        CREATE TABLE [PendingPhotoUploads] (
+                            [Id] uniqueidentifier NOT NULL PRIMARY KEY,
+                            [UploadUri] nvarchar(4000) NOT NULL,
+                            [DriveFileId] nvarchar(200) NOT NULL,
+                            [OriginalFileName] nvarchar(255) NOT NULL,
+                            [ContentType] nvarchar(100) NOT NULL,
+                            [SizeBytes] bigint NOT NULL,
+                            [UploadedBytes] bigint NOT NULL,
+                            [GuestName] nvarchar(220) NULL,
+                            [Notes] nvarchar(1000) NULL,
+                            [UploadIp] nvarchar(64) NULL,
+                            [ExpiresAt] datetime2 NOT NULL,
+                            [PhotoUploadId] int NULL REFERENCES [PhotoUploads] ([Id]) ON DELETE CASCADE
+                        );
+                        CREATE INDEX [IX_PendingPhotoUploads_ExpiresAt] ON [PendingPhotoUploads] ([ExpiresAt]);
+                        CREATE INDEX [IX_PendingPhotoUploads_PhotoUploadId] ON [PendingPhotoUploads] ([PhotoUploadId]);
+                    END
+                    """);
+            }
 
             var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
             var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
 
             if (!await roleManager.RoleExistsAsync("Admin"))
-                await roleManager.CreateAsync(new IdentityRole("Admin"));
+                EnsureSuccess(await roleManager.CreateAsync(new IdentityRole("Admin")));
 
             var email = config["AdminSeed:Email"] ?? (environment.IsDevelopment() ? "admin@tatiana-diogo.local" : null);
             var password = config["AdminSeed:Password"] ?? (environment.IsDevelopment() ? "ChangeMe!2027Wedding" : null);
@@ -63,9 +92,13 @@ namespace CasamentoTatianaDiogo.Data
 
                 var result = await userManager.CreateAsync(admin, password);
 
-                if (result.Succeeded)
-                    await userManager.AddToRoleAsync(admin, "Admin");
+                EnsureSuccess(result);
             }
+
+            if (admin != null && !await userManager.IsInRoleAsync(admin, "Admin"))
+                EnsureSuccess(await userManager.AddToRoleAsync(admin, "Admin"));
+            if (!environment.IsDevelopment() && (await userManager.GetUsersInRoleAsync("Admin")).Count == 0)
+                throw new InvalidOperationException("Configure AdminSeed__Email e AdminSeed__Password antes de inicializar uma base de dados nova.");
 
             var settings = await db.WeddingSettings.FirstOrDefaultAsync();
 
@@ -121,7 +154,7 @@ namespace CasamentoTatianaDiogo.Data
                     );
             }
 
-            if (!await db.Families.AnyAsync())
+            if (environment.IsDevelopment() && !await db.Families.AnyAsync())
             {
                 var testFamily = new Family
                 {
@@ -154,6 +187,12 @@ namespace CasamentoTatianaDiogo.Data
             }
             
             await db.SaveChangesAsync();
+        }
+
+        private static void EnsureSuccess(IdentityResult result)
+        {
+            if (!result.Succeeded)
+                throw new InvalidOperationException("Não foi possível preparar o administrador: " + string.Join("; ", result.Errors.Select(x => x.Description)));
         }
     }
 }

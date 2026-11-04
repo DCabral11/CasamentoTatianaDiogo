@@ -6,12 +6,12 @@ using System.Text.RegularExpressions;
 
 namespace CasamentoTatianaDiogo.Services
 {
-    public class PhotoUploadService(ApplicationDbContext db, IWeddingSettingsService settingsSvc, IGoogleDriveService drive, ILogger<PhotoUploadService> logger) : IPhotoUploadService
+    public class PhotoUploadService(ApplicationDbContext db, IWeddingSettingsService settingsSvc, IGoogleDriveService drive, WeddingClock clock) : IPhotoUploadService
     {
         public async Task<(bool open, string message, PhotoUploadSettings settings)> GetWindowAsync()
         {
             var s = await settingsSvc.GetPhotoSettingsAsync();
-            var now = DateTime.Now;
+            var now = clock.Now;
 
             if (!s.IsEnabled)
                 return (false, "O envio de fotografias não está disponível neste momento.", s);
@@ -33,6 +33,8 @@ namespace CasamentoTatianaDiogo.Services
                 return (false, window.message);
 
             var s = window.settings;
+            if (vm.Files.Count == 0 || vm.Files.All(file => file.Length == 0))
+                return (false, "Escolhe pelo menos uma fotografia.");
             var folder = s.GoogleDriveFolderId;
 
             if (string.IsNullOrWhiteSpace(folder))

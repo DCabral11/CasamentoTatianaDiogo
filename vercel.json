@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "container",
+  "regions": ["cdg1"],
+  "env": {
+    "PORT": "8080",
+    "ASPNETCORE_HTTP_PORTS": "8080",
+    "ASPNETCORE_ENVIRONMENT": "Production",
+    "Hosting__Vercel": "true",
+    "Database__Provider": "PostgreSql"
+  }
+}

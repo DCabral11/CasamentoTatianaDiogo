@@ -1,12 +1,17 @@
 ﻿using CasamentoTatianaDiogo.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 
 namespace CasamentoTatianaDiogo.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IDataProtectionKeyContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+        protected ApplicationDbContext(DbContextOptions options) : base(options) { }
+
+        public DbSet<DataProtectionKey> DataProtectionKeys => Set<DataProtectionKey>();
+        public DbSet<PendingPhotoUpload> PendingPhotoUploads => Set<PendingPhotoUpload>();
 
         public DbSet<WeddingSettings> WeddingSettings => Set<WeddingSettings>();
         public DbSet<TimelineEvent> TimelineEvents => Set<TimelineEvent>();
@@ -40,6 +45,8 @@ namespace CasamentoTatianaDiogo.Data
             builder.Entity<RsvpResponse>().HasOne(x => x.PlusOne).WithMany().HasForeignKey(x => x.PlusOneId).OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<PhotoUpload>().HasIndex(x => new { x.UploadedAt });
+            builder.Entity<PendingPhotoUpload>().HasIndex(x => x.ExpiresAt);
+            builder.Entity<PendingPhotoUpload>().HasOne(x => x.PhotoUpload).WithMany().HasForeignKey(x => x.PhotoUploadId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
