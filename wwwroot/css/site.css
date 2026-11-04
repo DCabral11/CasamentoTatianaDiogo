@@ -2,7 +2,7 @@
     --primary: #bd4742;
     --secondary: #fce8e4;
     --ink: #332d2a;
-    --canvas: #fffaf7;
+    --canvas: var(--surface-soft);
     --surface: #fffaf7;
     --surface-soft: #f8f0e3;
     --line: #da9b92;
@@ -27,10 +27,34 @@
     color: #fff;
 }
 
+html {
+    min-height: 100%;
+    background: var(--canvas);
+}
+
 body {
+    display: flex;
+    min-height: 100vh;
+    min-height: 100dvh;
+    flex-direction: column;
+    margin: 0;
     font-family: Inter, system-ui, -apple-system, Segoe UI, sans-serif;
     color: var(--ink);
     background: var(--canvas);
+}
+
+body > main {
+    flex: 1 0 auto;
+    min-width: 0;
+}
+
+body > .navbar,
+body > footer {
+    flex-shrink: 0;
+}
+
+.error-screen > main {
+    display: grid;
 }
 
 /* Friendly feedback replaces browser pop-ups and technical-looking alerts. */
@@ -79,7 +103,7 @@ body {
     min-height: min(68vh, 720px);
     display: grid;
     align-items: center;
-    background: radial-gradient(circle at 50% 12%, rgba(252, 232, 228, 0.9), transparent 45%), var(--surface-soft);
+    background: var(--canvas);
 }
 
 .error-card {
@@ -1300,7 +1324,7 @@ main,
 footer,
 .page-header,
 .information-page {
-    background: var(--surface-soft);
+    background: var(--canvas);
 }
 
 .page-header {
