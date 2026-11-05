@@ -420,11 +420,12 @@ body > footer {
 
 .home-story-section {
     padding-block: clamp(2.5rem, 6vw, 6rem);
+    padding-inline: clamp(0.5rem, 2vw, 2rem);
 }
 
 .story-page {
     display: flow-root;
-    max-width: 58rem;
+    max-width: 90rem;
     margin-inline: auto;
     padding: clamp(1.25rem, 4vw, 3.5rem);
     background: var(--surface);
