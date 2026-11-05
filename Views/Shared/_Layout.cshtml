@@ -6,6 +6,7 @@
 
 @{
     var siteText = await SiteContent.GetAsync();
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
     var isAdminScreen = Context.Request.Path.StartsWithSegments("/Admin");
     var isAdminDashboard = Context.Request.Path.StartsWithSegments("/Admin/Dashboard");
 }
@@ -29,45 +30,35 @@
     </head>
 
     <body class="@(isAdminScreen ? "admin-screen" : "")">
-        <nav class="navbar navbar-expand-lg navbar-light navbar-logo-bg shadow-sm sticky-top">
+        <nav class="navbar navbar-expand-lg navbar-light navbar-logo-bg shadow-sm sticky-top" aria-label="Navegação principal">
             <div class="container">
-                <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index" aria-label="@siteText.GetValueOrDefault("NavHome", "Início")">
                     <img src="/images/navbar.png" class="nav-logo" alt="Tatiana & Diogo Logo" />
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Menu principal">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
                 <div id="nav" class="collapse navbar-collapse">
                     <ul class="navbar-nav ms-auto align-items-lg-center">
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Index">@siteText.GetValueOrDefault("NavHome", "Início")</a>
+                            <a class="nav-link" asp-controller="Rsvp" asp-action="Index" aria-current="@(currentController == "Rsvp" ? "location" : null)">@siteText.GetValueOrDefault("NavRsvp", "Confirmar presença")</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Information" asp-action="Index">@siteText.GetValueOrDefault("NavInformation", "Informações")</a>
+                            <a class="nav-link" asp-controller="Information" asp-action="Index" aria-current="@(currentController == "Information" ? "location" : null)">@siteText.GetValueOrDefault("NavInformation", "Informações")</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Rsvp" asp-action="Index">@siteText.GetValueOrDefault("NavRsvp", "Confirmar presença")</a>
+                            <a class="nav-link" asp-controller="Photos" asp-action="Index" aria-current="@(currentController == "Photos" ? "location" : null)">@siteText.GetValueOrDefault("NavPhotos", "Enviar fotografias")</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Photos" asp-action="Index">@siteText.GetValueOrDefault("NavPhotos", "Galeria")</a>
-                        </li>
-                        <li class="nav-item">
-                            @if (isAdminScreen && User.IsInRole("Admin"))
-                            {
-                                <a class="btn btn-outline-primary rounded-pill ms-lg-2" href="@(isAdminDashboard ? "/" : "/Admin/Dashboard/Index")">
+                        @if (isAdminScreen && User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" href="@(isAdminDashboard ? "/" : "/Admin/Dashboard/Index")">
                                     <i class="bi bi-arrow-left"></i>
                                     @(isAdminDashboard ? "Voltar ao site" : "Voltar ao painel")
                                 </a>
-                            }
-                            else
-                            {
-                                <a class="btn btn-outline-primary rounded-pill ms-lg-2" href="/Admin/Dashboard/Index">
-                                    <i class="bi bi-person"></i>
-                                    Admin
-                                </a>
-                            }
-                        </li>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
@@ -99,6 +90,7 @@
 
         <footer class="py-5 text-center text-muted">
             @siteText.GetValueOrDefault("FooterText", "Feito com amor por Diogo") <i class="bi bi-heart-fill text-danger"></i>
+            <div class="mt-2"><a class="small text-muted" href="/Admin/Dashboard/Index">Administração</a></div>
         </footer> 
 
         @if (isAdminScreen)

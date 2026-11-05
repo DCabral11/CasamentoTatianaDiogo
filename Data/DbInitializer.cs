@@ -136,7 +136,7 @@ namespace CasamentoTatianaDiogo.Data
                     new SiteContent { Key = "NavHome", Value = "Início", Description = "Navegação: Página Inicial" },
                     new SiteContent { Key = "NavInformation", Value = "Informações", Description = "Navegação: Informações" },
                     new SiteContent { Key = "NavRsvp", Value = "Confirmar Presença", Description = "Navegação: Confirmação de Presença" },
-                    new SiteContent { Key = "NavPhotos", Value = "Galeria", Description = "Navegação: Galeria" },
+                    new SiteContent { Key = "NavPhotos", Value = "Enviar fotografias", Description = "Navegação: envio de fotografias" },
                     new SiteContent { Key = "HomeStoryTitle", Value = "A Nossa História", Description = "Página Inicial: Título da História" },
                     new SiteContent { Key = "HomeRsvpCta", Value = "Confirmar Presença", Description = "Página Inicial: Botão de Confirmação" },
                     new SiteContent { Key = "FooterText", Value = "Feito com Amor por Diogo", Description = "Rodapé do site" },

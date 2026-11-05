@@ -348,6 +348,11 @@ body > footer {
     border-bottom: 1px solid rgba(189, 71, 66, 0.14);
 }
 
+.navbar-nav [aria-current="location"] {
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+}
+
 .navbar .nav-link {
     font-weight: 600;
     color: var(--ink);
@@ -681,10 +686,6 @@ body > footer {
 
 .event-location + .event-location {
     margin-top: 0.25rem;
-}
-
-.hero-rsvp {
-    margin-top: 1.5rem;
 }
 
 .btn-primary {
