@@ -32,6 +32,9 @@ public sealed class SiteTheme
         Variables = $"--primary:{Hex(primary)};--primary-rgb:{Rgb(primary)};--secondary:{Hex(secondary)};" +
             $"--on-primary:{Hex(onPrimary)};--accent-ink:{Hex(accent)};--accent-rgb:{Rgb(accent)};" +
             $"--primary-hover:{Hex(Mix(primary, onPrimary == Color.White ? Color.Black : Color.White))}";
+        // The original palette pairs its pink accents with the cream page background in site.css.
+        if (Hex(secondary) != "#FCE8E4")
+            Variables += $";--canvas:{Hex(secondary)}";
     }
 
     public static string? NormalizeLogo(string? path)

@@ -8,7 +8,7 @@
     --primary-hover: #913632;
     --paper: white;
     --ink: var(--bs-emphasis-color);
-    --canvas: var(--secondary);
+    --canvas: #f8f0e3;
     --surface: color-mix(in srgb, var(--secondary) 18%, var(--paper));
     --surface-soft: color-mix(in srgb, var(--secondary) 65%, var(--paper));
     --line: color-mix(in srgb, var(--accent-ink) 43%, var(--surface));
