@@ -27,6 +27,8 @@ namespace CasamentoTatianaDiogo.ViewModels
         public List<PlusOne> PlusOnes { get; set; } = [];
 
         public bool HasExistingResponse { get; set; }
+        public string VerifiedContact { get; set; } = string.Empty;
+        public RsvpSubmitViewModel Input { get; set; } = new();
     }
 
     public class RsvpSubmitViewModel

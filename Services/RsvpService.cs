@@ -5,10 +5,11 @@ using CasamentoTatianaDiogo.Common.Extensions;
 using CasamentoTatianaDiogo.Services.Interfaces;
 using CasamentoTatianaDiogo.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using Enums = CasamentoTatianaDiogo.Models.Enums;
 
 namespace CasamentoTatianaDiogo.Services
 {
-    public class RsvpService(ApplicationDbContext db, IRsvpEmailNotificationService emailNotifications, IWebHostEnvironment environment, IAppMessageService messages) : IRsvpService
+    public class RsvpService(ApplicationDbContext db, IRsvpEmailNotificationService emailNotifications, IWebHostEnvironment environment, IAppMessageService messages, RsvpVerificationService verification, TimeProvider time) : IRsvpService
     {
         public async Task<List<Guest>> SearchGuestsAsync(string query)
         {
@@ -32,8 +33,10 @@ namespace CasamentoTatianaDiogo.Services
             return guests;
         }
 
-        public async Task<RsvpSelectionViewModel?> GetSelectionAsync(int guestId)
+        public async Task<RsvpSelectionViewModel?> GetSelectionAsync(int guestId, string? verificationToken)
         {
+            var access = await verification.GetAccessAsync(verificationToken, guestId);
+            if (access == null) return null;
             var guest = await db.Guests.Include(g => g.Family).Include(g => g.PlusOnes).FirstOrDefaultAsync(g => g.Id == guestId);
 
             if (guest == null) 
@@ -41,6 +44,10 @@ namespace CasamentoTatianaDiogo.Services
 
             var related = await db.Guests.Where(g => g.FamilyId == guest.FamilyId && g.Id != guest.Id).OrderBy(g => g.DisplayName).ToListAsync();
             var hasExisting = await db.RsvpResponses.AnyAsync(r => r.GuestId == guestId);
+            var guestIds = related.Select(x => x.Id).Append(guestId).ToList();
+            var responses = await db.RsvpResponses.AsNoTracking().Where(x => guestIds.Contains(x.GuestId))
+                .OrderByDescending(x => x.SubmittedAt).ToListAsync();
+            var current = responses.FirstOrDefault(x => x.GuestId == guestId);
             PopulateProfileImagePaths([guest, .. related]);
 
             return new RsvpSelectionViewModel
@@ -48,7 +55,25 @@ namespace CasamentoTatianaDiogo.Services
                 Guest = guest,
                 RelatedGuests = related,
                 PlusOnes = guest.PlusOnes.ToList(),
-                HasExistingResponse = hasExisting
+                HasExistingResponse = hasExisting,
+                VerifiedContact = RsvpContact.Mask(access.Channel, access.Contact),
+                Input = new RsvpSubmitViewModel
+                {
+                    GuestId = guestId, Status = current?.Status, DietaryRestrictions = current?.DietaryRestrictions,
+                    Message = current?.Message, MusicRequest = current?.MusicRequest,
+                    PlusOneId = current?.PlusOneId, PlusOneAttending = current?.PlusOneAttending == true,
+                    PlusOneDietaryRestrictions = current?.PlusOneDietaryRestrictions,
+                    PlusOneMessage = current?.PlusOneMessage, PlusOneMusicRequest = current?.PlusOneMusicRequest,
+                    FamilyResponses = related.Select(person =>
+                    {
+                        var response = responses.FirstOrDefault(x => x.GuestId == person.Id);
+                        return new FamilyGuestRsvpInput
+                        {
+                            GuestId = person.Id, Status = response?.Status, DietaryRestrictions = response?.DietaryRestrictions,
+                            Message = response?.Message, MusicRequest = response?.MusicRequest
+                        };
+                    }).ToList()
+                }
             };
         }
 
@@ -75,9 +100,12 @@ namespace CasamentoTatianaDiogo.Services
             }
         }
 
-        public async Task<AppResult> SubmitAsync(RsvpSubmitViewModel model, string? ip, string? userAgent)
+        public async Task<AppResult> SubmitAsync(RsvpSubmitViewModel model, string? verificationToken, string? ip, string? userAgent)
         {
-            if (model.Status is null)
+            var access = await verification.GetAccessAsync(verificationToken, model.GuestId);
+            if (access == null)
+                return AppResult.Failure(ErrorCode.AccessDenied, "Verifica o teu contacto antes de confirmar ou alterar a resposta.");
+            if (model.Status is not (Enums.RsvpStatus.Attending or Enums.RsvpStatus.NotAttending))
                 return AppResult.Failure(ErrorCode.RsvpStatusRequired, messages.Get(ErrorCode.RsvpStatusRequired));
 
             var guest = await db.Guests.Include(g => g.Family).Include(g => g.PlusOnes).FirstOrDefaultAsync(g => g.Id == model.GuestId);
@@ -97,6 +125,14 @@ namespace CasamentoTatianaDiogo.Services
             }
 
             var guestsToRespond = new List<Guest> { guest };
+
+            if (model.FamilyResponses.Any(x => x.Status.HasValue &&
+                x.Status is not (Enums.RsvpStatus.Attending or Enums.RsvpStatus.NotAttending)))
+                return AppResult.Failure(ErrorCode.InvalidRequest, "Escolhe uma resposta de presença válida.");
+            var requestedIds = model.FamilyResponses.Where(x => x.Status.HasValue).Select(x => x.GuestId).Distinct().ToList();
+            if (requestedIds.Count > 0 && (guest.Family?.AllowGroupRsvp != true ||
+                await db.Guests.CountAsync(x => requestedIds.Contains(x.Id) && x.FamilyId == access.FamilyId && x.Id != guest.Id) != requestedIds.Count))
+                return AppResult.Failure(ErrorCode.AccessDenied, "Só podes responder pelos convidados autorizados deste convite.");
 
             var responsesByGuestId = model.FamilyResponses
                 .GroupBy(response => response.GuestId)
@@ -167,7 +203,28 @@ namespace CasamentoTatianaDiogo.Services
                     response.PlusOneMusicRequest));
             }
 
-            await db.SaveChangesAsync();
+            var binding = await db.RsvpInvitationContacts.AsNoTracking().SingleOrDefaultAsync(x => x.FamilyId == access.FamilyId);
+            if (binding != null && (binding.Channel != access.Channel || binding.NormalizedContact != access.Contact))
+                return AppResult.Failure(ErrorCode.AccessDenied, RsvpVerificationService.ContactUnavailable);
+            var bindingAdded = binding == null;
+            if (bindingAdded)
+                db.RsvpInvitationContacts.Add(new RsvpInvitationContact
+                {
+                    FamilyId = access.FamilyId, Channel = access.Channel,
+                    NormalizedContact = access.Contact, ConfirmedAt = time.GetUtcNow().UtcDateTime
+                });
+            var challenge = await db.RsvpVerificationChallenges.FindAsync(access.ChallengeId);
+            challenge!.SessionExpiresAt = time.GetUtcNow().UtcDateTime;
+            try
+            {
+                // The contact claim and all responses are committed in one SaveChanges transaction.
+                await db.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex) when (bindingAdded && RsvpVerificationService.IsUniqueViolation(ex))
+            {
+                db.ChangeTracker.Clear();
+                return AppResult.Failure(ErrorCode.AccessDenied, RsvpVerificationService.ContactUnavailable);
+            }
             await emailNotifications.SendAsync(emailDetails);
 
             return AppResult.Success();

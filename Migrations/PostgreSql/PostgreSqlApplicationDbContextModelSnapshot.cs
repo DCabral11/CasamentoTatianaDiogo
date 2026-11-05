@@ -368,6 +368,30 @@ namespace CasamentoTatianaDiogo.Migrations.PostgreSql
                     b.ToTable("PlusOnes");
                 });
 
+            modelBuilder.Entity("CasamentoTatianaDiogo.Models.RsvpInvitationContact", b =>
+                {
+                    b.Property<int>("FamilyId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Channel")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("ConfirmedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("NormalizedContact")
+                        .IsRequired()
+                        .HasMaxLength(254)
+                        .HasColumnType("character varying(254)");
+
+                    b.HasKey("FamilyId");
+
+                    b.HasIndex("Channel", "NormalizedContact")
+                        .IsUnique();
+
+                    b.ToTable("RsvpInvitationContacts");
+                });
+
             modelBuilder.Entity("CasamentoTatianaDiogo.Models.RsvpResponse", b =>
                 {
                     b.Property<int>("Id")
@@ -433,6 +457,79 @@ namespace CasamentoTatianaDiogo.Migrations.PostgreSql
                     b.HasIndex("GuestId", "SubmittedAt");
 
                     b.ToTable("RsvpResponses");
+                });
+
+            modelBuilder.Entity("CasamentoTatianaDiogo.Models.RsvpVerificationChallenge", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Attempts")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Channel")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("CodeHash")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("FamilyId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("GuestId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("NormalizedContact")
+                        .IsRequired()
+                        .HasMaxLength(254)
+                        .HasColumnType("character varying(254)");
+
+                    b.Property<DateTime?>("SessionExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("VerifiedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("GuestId");
+
+                    b.HasIndex("FamilyId", "Channel", "NormalizedContact");
+
+                    b.ToTable("RsvpVerificationChallenges");
+                });
+
+            modelBuilder.Entity("CasamentoTatianaDiogo.Models.RsvpVerificationLimit", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("NextAllowedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("WindowEndsAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WindowEndsAt");
+
+                    b.ToTable("RsvpVerificationLimits");
                 });
 
             modelBuilder.Entity("CasamentoTatianaDiogo.Models.SiteContent", b =>
@@ -798,6 +895,15 @@ namespace CasamentoTatianaDiogo.Migrations.PostgreSql
                     b.Navigation("MainGuest");
                 });
 
+            modelBuilder.Entity("CasamentoTatianaDiogo.Models.RsvpInvitationContact", b =>
+                {
+                    b.HasOne("CasamentoTatianaDiogo.Models.Family", null)
+                        .WithMany()
+                        .HasForeignKey("FamilyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("CasamentoTatianaDiogo.Models.RsvpResponse", b =>
                 {
                     b.HasOne("CasamentoTatianaDiogo.Models.Guest", "Guest")
@@ -814,6 +920,15 @@ namespace CasamentoTatianaDiogo.Migrations.PostgreSql
                     b.Navigation("Guest");
 
                     b.Navigation("PlusOne");
+                });
+
+            modelBuilder.Entity("CasamentoTatianaDiogo.Models.RsvpVerificationChallenge", b =>
+                {
+                    b.HasOne("CasamentoTatianaDiogo.Models.Guest", null)
+                        .WithMany()
+                        .HasForeignKey("GuestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

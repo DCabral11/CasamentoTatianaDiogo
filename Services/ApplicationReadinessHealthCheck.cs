@@ -24,6 +24,9 @@ public class ApplicationReadinessHealthCheck(IServiceScopeFactory scopes) : IHea
             await db.SiteContents.AsNoTracking().Select(x => x.Id).Take(1).ToListAsync(cancellationToken);
             await db.DataProtectionKeys.AsNoTracking().Select(x => x.Id).Take(1).ToListAsync(cancellationToken);
             await db.PendingPhotoUploads.AsNoTracking().Select(x => x.Id).Take(1).ToListAsync(cancellationToken);
+            await db.RsvpInvitationContacts.AsNoTracking().Select(x => x.FamilyId).Take(1).ToListAsync(cancellationToken);
+            await db.RsvpVerificationChallenges.AsNoTracking().Select(x => x.Id).Take(1).ToListAsync(cancellationToken);
+            await db.RsvpVerificationLimits.AsNoTracking().Select(x => x.Id).Take(1).ToListAsync(cancellationToken);
             if (settings.Count == 0 || photos.Count == 0)
                 return HealthCheckResult.Unhealthy("A configuração inicial está incompleta. Execute --initialize-database.");
 

@@ -54,6 +54,7 @@ Add these environment variables in Project Settings:
 | `DATABASE_URL_UNPOOLED` (or `POSTGRES_URL_NON_POOLING`) | Direct connection for the environment running database setup; ignored during normal runtime when a runtime URL is configured. |
 | `GoogleDrive__CredentialsBase64` | Optional service-account JSON encoded as Base64; required when enabling photos unless another supported credential format is configured. |
 | `RsvpEmail__*` | Optional SMTP configuration; see `.env.example`. Notifications are disabled by default. |
+| `RsvpVerification__Email__Enabled` | Enable RSVP verification emails using the SMTP settings above. See the [step-by-step Gmail/Vercel setup guide](rsvp-verification.md) for values and where to obtain them. |
 
 The bootstrap admin variables are only needed in the environment running the setup command, and can be removed afterward. `.env.example` lists the available secret settings. ASP.NET does not automatically load `.env` files; use process environment variables for local commands. Keep preview deployments on their own database or database branch so they cannot change production RSVPs. Do not point an uninitialized preview database at the app and expect startup to create its tables.
 
@@ -64,7 +65,7 @@ After deployment, verify:
 - `/health/live` returns 200 when the application process is running.
 - `/health` returns 200 when the database is reachable, PostgreSQL migrations are applied, essential tables exist and initial site/photo settings have been seeded. It returns 503 for incomplete setup; details remain in server logs.
 - The home, information and RSVP pages load, and administrator login works.
-- A test RSVP saves successfully.
+- Email verification works and a test RSVP saves successfully. Configure SMTP and enable email verification before opening RSVPs.
 - If photos are enabled, send a photo larger than 4.5 MB and check it appears in the admin list and Drive.
 
 ## 4. Enable Google Drive photos

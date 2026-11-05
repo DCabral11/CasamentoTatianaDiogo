@@ -18,9 +18,9 @@ namespace CasamentoTatianaDiogo.Services.Interfaces
     {
         Task<List<Guest>> SearchGuestsAsync(string query);
 
-        Task<RsvpSelectionViewModel?> GetSelectionAsync(int guestId);
+        Task<RsvpSelectionViewModel?> GetSelectionAsync(int guestId, string? verificationToken);
 
-        Task<CasamentoTatianaDiogo.Common.Errors.AppResult> SubmitAsync(RsvpSubmitViewModel model, string? ip, string? userAgent);
+        Task<CasamentoTatianaDiogo.Common.Errors.AppResult> SubmitAsync(RsvpSubmitViewModel model, string? verificationToken, string? ip, string? userAgent);
     }
 
     public interface IRsvpEmailNotificationService

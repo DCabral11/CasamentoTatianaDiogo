@@ -76,6 +76,9 @@ namespace CasamentoTatianaDiogo.Data
                     """);
             }
 
+            if (db.Database.IsSqlServer())
+                await RsvpVerificationSchema.UpgradeSqlServerAsync(db);
+
             var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
             var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
 

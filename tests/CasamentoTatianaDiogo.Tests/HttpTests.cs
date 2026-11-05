@@ -131,7 +131,7 @@ public class HttpTests
         Assert.Equal(HttpStatusCode.OK, (await client.GetAsync("/Admin/Dashboard/Index")).StatusCode);
     }
 
-    private static async Task<string> AntiforgeryToken(HttpClient client, string route)
+    internal static async Task<string> AntiforgeryToken(HttpClient client, string route)
     {
         var html = await client.GetStringAsync(route);
         var token = Regex.Match(html, "name=\"__RequestVerificationToken\"[^>]*value=\"([^\"]+)\"");
@@ -139,14 +139,16 @@ public class HttpTests
         return WebUtility.HtmlDecode(token.Groups[1].Value);
     }
 
-    private class TestApplication : WebApplicationFactory<Program>
+    internal class TestApplication : WebApplicationFactory<Program>
     {
         private readonly SqliteConnection connection = new("Data Source=:memory:");
         private readonly bool schemaReady;
-        public TestApplication(bool initializeSchema = true)
+        private readonly IRsvpVerificationSender? verificationSender;
+        public TestApplication(bool initializeSchema = true, IRsvpVerificationSender? verificationSender = null)
         {
             connection.Open();
             schemaReady = initializeSchema;
+            this.verificationSender = verificationSender;
         }
         public HttpClient Client() => CreateClient(new WebApplicationFactoryClientOptions { BaseAddress = new Uri("https://localhost"), AllowAutoRedirect = false });
 
@@ -176,6 +178,11 @@ public class HttpTests
                 services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(connection));
                 services.RemoveAll<IGoogleDriveService>();
                 services.AddSingleton<IGoogleDriveService, HttpDrive>();
+                if (verificationSender != null)
+                {
+                    services.RemoveAll<IRsvpVerificationSender>();
+                    services.AddSingleton(verificationSender);
+                }
                 if (schemaReady)
                 {
                     using var db = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().UseSqlite(connection).Options);

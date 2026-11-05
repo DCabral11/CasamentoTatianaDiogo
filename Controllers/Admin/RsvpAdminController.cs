@@ -29,7 +29,10 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
                 .OrderByDescending(r => r.SubmittedAt)
                 .FirstOrDefaultAsync();
 
-            return response == null ? NotFound() : View("~/Views/Admin/Rsvp/Details.cshtml", response);
+            if (response == null) return NotFound();
+            ViewData["VerifiedInvitationContact"] = await db.RsvpInvitationContacts.AsNoTracking()
+                .SingleOrDefaultAsync(x => x.FamilyId == response.Guest!.FamilyId);
+            return View("~/Views/Admin/Rsvp/Details.cshtml", response);
         }
 
         [HttpPost, ValidateAntiForgeryToken]

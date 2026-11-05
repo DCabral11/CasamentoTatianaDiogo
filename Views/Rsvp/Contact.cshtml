@@ -1,0 +1,39 @@
+@model RsvpContactViewModel
+@{
+    ViewData["Title"] = "Verificar email";
+}
+<section class="page-header">
+    <div class="container"><h1><i class="bi bi-shield-check" aria-hidden="true"></i> Verificar email</h1><p>Recebe um código por email para confirmar a tua presença.</p></div>
+</section>
+<div class="container py-5 narrow">
+    <form asp-action="SendCode" method="post" class="elegant-card p-4">
+        @Html.AntiForgeryToken()
+        <input asp-for="GuestId" type="hidden" />
+        <h2 class="h4">@Model.GuestName</h2>
+        <p class="text-muted">@Model.FamilyName</p>
+        <div asp-validation-summary="All" class="text-danger" role="alert"></div>
+        @if (Model.RequiresSupport)
+        {
+            <p>Para atualizar este convite, contacta os noivos.</p>
+        }
+        else if (Model.HasExistingContact)
+        {
+            <p>Este convite já tem uma resposta. Usa o mesmo email da primeira confirmação para o consultar ou atualizar.</p>
+        }
+        else
+        {
+            <p>Indica o email que queres associar a este convite. Depois de guardares a resposta, as atualizações serão feitas através desse mesmo email.</p>
+        }
+        <div class="mb-3">
+            <label asp-for="Contact" class="form-label">O teu email</label>
+            <input asp-for="Contact" type="email" class="form-control" required aria-describedby="contact-help" autocomplete="email" spellcheck="false" placeholder="nome@exemplo.pt" />
+            <div id="contact-help" class="form-text">Cada email só pode confirmar um convite. Usa um endereço ao qual tenhas acesso.</div>
+        </div>
+        @if (!Model.EmailAvailable)
+        {
+            <p class="text-muted" role="status">O envio de códigos para este convite está indisponível de momento. Tenta mais tarde ou contacta os noivos.</p>
+        }
+        <button class="btn btn-primary rounded-pill" disabled="@(!Model.EmailAvailable)">Receber código por email</button>
+        <a asp-action="Index" class="btn btn-link">Escolher outro convidado</a>
+    </form>
+</div>

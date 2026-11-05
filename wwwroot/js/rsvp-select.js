@@ -22,7 +22,7 @@ function updateFamilyCards() {
         card.hidden = !canRespondForFamily || !toggle.checked;
         status.required = canRespondForFamily && toggle.checked;
         card.querySelectorAll('input, select, textarea').forEach((field) => {
-            field.disabled = !canRespondForFamily;
+            field.disabled = !canRespondForFamily || !toggle.checked;
         });
     });
 }

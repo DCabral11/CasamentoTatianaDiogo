@@ -76,6 +76,8 @@ builder.Services.AddSingleton<WeddingClock>();
 builder.Services.AddScoped<IWeddingSettingsService, WeddingSettingsService>();
 builder.Services.AddScoped<IRsvpService, RsvpService>();
 builder.Services.AddScoped<IRsvpEmailNotificationService, RsvpEmailNotificationService>();
+builder.Services.AddScoped<RsvpVerificationService>();
+builder.Services.AddScoped<IRsvpVerificationSender, RsvpVerificationSender>();
 builder.Services.AddSingleton<IGoogleDriveService, GoogleDriveService>();
 builder.Services.AddScoped<IPhotoUploadService, PhotoUploadService>();
 builder.Services.AddScoped<ResumablePhotoUploadService>();

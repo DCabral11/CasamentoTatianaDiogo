@@ -12,6 +12,9 @@ namespace CasamentoTatianaDiogo.Data
 
         public DbSet<DataProtectionKey> DataProtectionKeys => Set<DataProtectionKey>();
         public DbSet<PendingPhotoUpload> PendingPhotoUploads => Set<PendingPhotoUpload>();
+        public DbSet<RsvpInvitationContact> RsvpInvitationContacts => Set<RsvpInvitationContact>();
+        public DbSet<RsvpVerificationChallenge> RsvpVerificationChallenges => Set<RsvpVerificationChallenge>();
+        public DbSet<RsvpVerificationLimit> RsvpVerificationLimits => Set<RsvpVerificationLimit>();
 
         public DbSet<WeddingSettings> WeddingSettings => Set<WeddingSettings>();
         public DbSet<TimelineEvent> TimelineEvents => Set<TimelineEvent>();
@@ -47,6 +50,14 @@ namespace CasamentoTatianaDiogo.Data
             builder.Entity<PhotoUpload>().HasIndex(x => new { x.UploadedAt });
             builder.Entity<PendingPhotoUpload>().HasIndex(x => x.ExpiresAt);
             builder.Entity<PendingPhotoUpload>().HasOne(x => x.PhotoUpload).WithMany().HasForeignKey(x => x.PhotoUploadId).OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<RsvpInvitationContact>().HasKey(x => x.FamilyId);
+            builder.Entity<RsvpInvitationContact>().HasIndex(x => new { x.Channel, x.NormalizedContact }).IsUnique();
+            builder.Entity<RsvpInvitationContact>().HasOne<Family>().WithMany().HasForeignKey(x => x.FamilyId).OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<RsvpVerificationChallenge>().HasOne<Guest>().WithMany().HasForeignKey(x => x.GuestId).OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<RsvpVerificationChallenge>().HasIndex(x => x.CreatedAt);
+            builder.Entity<RsvpVerificationChallenge>().HasIndex(x => new { x.FamilyId, x.Channel, x.NormalizedContact });
+            builder.Entity<RsvpVerificationLimit>().HasIndex(x => x.WindowEndsAt);
         }
     }
 }

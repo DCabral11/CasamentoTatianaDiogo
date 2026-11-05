@@ -38,7 +38,8 @@ public class DeploymentTests
         Assert.Contains("PendingPhotoUploads", script);
         Assert.Equal("timestamp without time zone", db.Model.FindEntityType(typeof(WeddingSettings))!.FindProperty("WeddingDateTime")!.GetColumnType());
         Assert.Equal("timestamp with time zone", db.Model.FindEntityType(typeof(PhotoUpload))!.FindProperty("UploadedAt")!.GetColumnType());
-        Assert.Single(db.Database.GetMigrations());
+        Assert.Contains(db.Database.GetMigrations(), migration => migration.EndsWith("_AddRsvpContactVerification"));
+        Assert.Contains("CREATE UNIQUE INDEX \"IX_RsvpInvitationContacts_Channel_NormalizedContact\"", script);
         Assert.False(db.Database.HasPendingModelChanges());
     }
 
