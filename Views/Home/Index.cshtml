@@ -54,42 +54,46 @@
     </div>
 </section>
 
-<section class="container py-5 home-story-section">
-    <div class="row g-5 align-items-stretch">
-        <div class="col-lg-6 story-copy">
-            <h2>@siteText.GetValueOrDefault("HomeStoryTitle", "A nossa história")</h2>
+<section class="container py-5 home-story-section" aria-labelledby="story-title">
+    <div class="story-layout @(Model.CarouselImages.Count == 0 ? "story-layout-text-only" : null)">
+        <div class="story-copy">
+            <h2 id="story-title">@siteText.GetValueOrDefault("HomeStoryTitle", "A nossa história")</h2>
             <p class="story">@settings.CoupleStory</p>
         </div>
 
-        <div class="col-lg-6 story-media">
-            <div id="storyCarousel" class="carousel slide carousel-fade elegant-card story-carousel" data-bs-ride="carousel">
-                @if (Model.CarouselImages.Count > 1)
-                {
-                    <div class="carousel-indicators">
+        @if (Model.CarouselImages.Count > 0)
+        {
+            <div class="story-media">
+                <div id="storyCarousel" class="carousel slide carousel-fade story-carousel" data-bs-ride="carousel" role="region" aria-label="Fotografias da nossa história" aria-roledescription="carrossel">
+                    <div class="carousel-inner">
                         @for (var i = 0; i < Model.CarouselImages.Count; i++)
                         {
-                            <button type="button" data-bs-target="#storyCarousel" data-bs-slide-to="@i" class="@(i == 0 ? "active" : null)" aria-current="@(i == 0 ? "true" : null)" aria-label="Imagem @(i + 1)"></button>
+                            <div class="carousel-item @(i == 0 ? "active" : null)">
+                                <img src="@Model.CarouselImages[i]" class="d-block w-100 story-img" alt="Fotografia @(i + 1) da nossa história" loading="@(i == 0 ? "eager" : "lazy")" decoding="async" />
+                            </div>
                         }
                     </div>
-                }
-                <div class="carousel-inner">
-                    @for (var i = 0; i < Model.CarouselImages.Count; i++)
+
+                    @if (Model.CarouselImages.Count > 1)
                     {
-                        <div class="carousel-item @(i == 0? " active" : "")">
-                            <img src="@Model.CarouselImages[i]" class="d-block w-100 story-img" alt="Story Image" />
+                        <div class="story-carousel-toolbar">
+                            <button class="carousel-control-prev" type="button" data-bs-target="#storyCarousel" data-bs-slide="prev" aria-label="Fotografia anterior">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            </button>
+                            <div class="carousel-indicators">
+                                @for (var i = 0; i < Model.CarouselImages.Count; i++)
+                                {
+                                    <button type="button" data-bs-target="#storyCarousel" data-bs-slide-to="@i" class="@(i == 0 ? "active" : null)" aria-current="@(i == 0 ? "true" : null)" aria-label="Fotografia @(i + 1)"></button>
+                                }
+                            </div>
+                            <button class="carousel-control-next" type="button" data-bs-target="#storyCarousel" data-bs-slide="next" aria-label="Fotografia seguinte">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            </button>
                         </div>
                     }
                 </div>
-
-                <button class="carousel-control-prev" type="button" data-bs-target="#storyCarousel" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon"></span>
-                </button>
-
-                <button class="carousel-control-next" type="button" data-bs-target="#storyCarousel" data-bs-slide="next">
-                    <span class="carousel-control-next-icon"></span>
-                </button>
             </div>
-        </div>
+        }
     </div>
 </section>
 

@@ -438,8 +438,17 @@ body > footer {
     pointer-events: none;
 }
 
+.story-layout {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(1.5rem, 3vw, 3rem);
+    align-items: stretch;
+}
+
 .story-copy {
     position: relative;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -480,17 +489,26 @@ body > footer {
 }
 
 .story-media {
-    display: flex;
+    position: relative;
+    min-width: 0;
+    height: clamp(300px, 85vw, 560px);
 }
 
 .story-carousel {
-    flex: 1;
-    min-height: 360px;
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+    min-height: 0;
     overflow: hidden;
     border: 1px solid color-mix(in srgb, var(--line) 45%, transparent);
     border-radius: 2rem;
     background: linear-gradient(145deg, var(--surface-soft), var(--secondary));
     box-shadow: 0 24px 58px rgba(94, 51, 42, 0.16);
+}
+
+.story-carousel .carousel-inner {
+    min-height: 0;
 }
 
 .story-carousel .carousel-inner,
@@ -502,18 +520,32 @@ body > footer {
     height: 100%;
     max-height: none;
     border-radius: 0;
+    box-shadow: none;
     background: transparent;
     object-fit: contain;
 }
 
+.story-carousel-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.85rem 1rem;
+    border-top: 1px solid color-mix(in srgb, var(--line) 45%, transparent);
+    background: var(--surface);
+}
+
 .story-carousel .carousel-indicators {
-    margin-bottom: 1rem;
+    position: static;
+    flex: 1;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin: 0;
 }
 
 .story-carousel .carousel-indicators [data-bs-target] {
     width: 0.55rem;
     height: 0.55rem;
-    margin: 0 0.3rem;
+    margin: 0;
     border: 0;
     border-radius: 50%;
     background-color: var(--primary);
@@ -528,21 +560,39 @@ body > footer {
 
 .story-carousel .carousel-control-prev,
 .story-carousel .carousel-control-next {
-    top: auto;
-    bottom: 1.4rem;
-    z-index: 2;
+    position: static;
+    flex-shrink: 0;
     width: 2.6rem;
     height: 2.6rem;
     border-radius: 50%;
-    background: rgba(51, 45, 42, 0.48);
+    background: var(--primary);
+    opacity: 0.85;
 }
 
-.story-carousel .carousel-control-prev {
-    left: 1.2rem;
+.story-carousel .carousel-control-prev:hover,
+.story-carousel .carousel-control-next:hover {
+    opacity: 1;
 }
 
-.story-carousel .carousel-control-next {
-    right: 1.2rem;
+.story-carousel button:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 3px;
+}
+
+@media (min-width: 992px) {
+    .story-layout {
+        grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    }
+
+    .story-media {
+        /* Images stay out of row sizing so the written story defines both card heights. */
+        height: auto;
+        min-height: 0;
+    }
+
+    .story-layout-text-only {
+        grid-template-columns: minmax(0, 1fr);
+    }
 }
 
 .countdown {
