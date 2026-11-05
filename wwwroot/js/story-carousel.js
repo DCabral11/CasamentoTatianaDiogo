@@ -1,8 +1,15 @@
 (() => {
     const album = document.getElementById('storyCarousel');
-    const carousel = bootstrap.Carousel.getOrCreateInstance(album, { interval: 7000, pause: false });
+    const carousel = bootstrap.Carousel.getOrCreateInstance(album, { pause: false });
     const slides = [...album.querySelectorAll('.carousel-item')];
+    const toggle = album.querySelector('[data-rotation]');
+    const position = album.querySelector('[data-position]');
+    const picker = album.querySelector('.carousel-indicators');
+    const thumbnails = [...picker.querySelectorAll('button')];
     const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+    let rotationEnabled = !reducedMotion.matches && !album.matches(':focus-within');
+    let pointerIntent;
+    let timer;
     let visible = false;
     let hovered = false;
     let requestedSlide = null;
@@ -17,18 +24,19 @@
         return image;
     }
 
-    function prepareNext() {
-        const current = slides.indexOf(album.querySelector('.carousel-item.active'));
-        loadPhoto(slides[(current + 1) % slides.length]);
-    }
-
     function updatePlayback() {
-        if (visible && !document.hidden && !reducedMotion.matches && !hovered && !album.matches(':focus-within')) {
-            prepareNext();
-            carousel.cycle();
-        } else {
-            carousel.pause();
-        }
+        clearTimeout(timer);
+        const playing = rotationEnabled && visible && !document.hidden && !hovered;
+        toggle.textContent = rotationEnabled ? 'Pausar apresentação' : 'Iniciar apresentação';
+        position.setAttribute('aria-live', playing ? 'off' : 'polite');
+        if (!playing) return;
+
+        const current = slides.indexOf(album.querySelector('.carousel-item.active'));
+        const next = loadPhoto(slides[(current + 1) % slides.length]);
+        timer = setTimeout(() => {
+            if (next.complete && next.naturalWidth) carousel.next();
+            else updatePlayback();
+        }, 7000);
     }
 
     album.addEventListener('slide.bs.carousel', async event => {
@@ -48,7 +56,43 @@
         if (requestedSlide === target) carousel.to(event.to);
     });
 
-    album.addEventListener('slid.bs.carousel', updatePlayback);
+    album.addEventListener('slid.bs.carousel', event => {
+        position.textContent = `Fotografia ${event.to + 1} de ${slides.length}`;
+        updatePlayback();
+    });
+    album.addEventListener('focusin', () => {
+        rotationEnabled = false;
+        updatePlayback();
+    });
+    // A pointer click focuses the button before the click event. Honour the action shown on press.
+    toggle.addEventListener('pointerdown', () => { pointerIntent = !rotationEnabled; });
+    toggle.addEventListener('click', event => {
+        rotationEnabled = event.detail && pointerIntent !== undefined ? pointerIntent : !rotationEnabled;
+        pointerIntent = undefined;
+        requestedSlide = null;
+        updatePlayback();
+    });
+    toggle.hidden = false;
+    updatePlayback();
+
+    picker.addEventListener('keydown', event => {
+        if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+        const current = thumbnails.indexOf(event.target);
+        if (current < 0) return;
+        let index;
+        switch (event.key) {
+            case 'ArrowLeft': index = (current + slides.length - 1) % slides.length; break;
+            case 'ArrowRight': index = (current + 1) % slides.length; break;
+            case 'Home': index = 0; break;
+            case 'End': index = slides.length - 1; break;
+            default: return;
+        }
+        event.preventDefault();
+        event.stopPropagation();
+        thumbnails[index].focus();
+        requestedSlide = null;
+        carousel.to(index);
+    });
     album.addEventListener('pointerenter', event => {
         hovered = event.pointerType === 'mouse';
         updatePlayback();
@@ -57,10 +101,11 @@
         hovered = false;
         updatePlayback();
     });
-    album.addEventListener('focusin', updatePlayback);
-    album.addEventListener('focusout', () => queueMicrotask(updatePlayback));
     document.addEventListener('visibilitychange', updatePlayback);
-    reducedMotion.addEventListener('change', updatePlayback);
+    reducedMotion.addEventListener('change', () => {
+        if (reducedMotion.matches) rotationEnabled = false;
+        updatePlayback();
+    });
     new IntersectionObserver(([entry]) => {
         visible = entry.isIntersecting;
         updatePlayback();

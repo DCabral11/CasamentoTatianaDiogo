@@ -492,6 +492,20 @@ body > footer {
     object-fit: contain;
 }
 
+.story-album-playback {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.story-album-playback button {
+    min-height: 2.75rem;
+}
+
 .story-album-nav {
     display: flex;
     align-items: center;

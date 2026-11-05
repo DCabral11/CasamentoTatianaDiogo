@@ -68,11 +68,18 @@
             {
                 <div id="storyCarousel" class="carousel slide carousel-fade story-album @(string.IsNullOrWhiteSpace(settings.CoupleStory) ? "story-album-only" : null)"
                      role="region" aria-roledescription="carrossel" aria-label="Fotografias da nossa história">
+                    @if (Model.CarouselImages.Count > 1)
+                    {
+                        <div class="story-album-playback">
+                            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill" data-rotation hidden>Iniciar apresentação</button>
+                            <span data-position aria-live="off" aria-atomic="true">Fotografia 1 de @Model.CarouselImages.Count</span>
+                        </div>
+                    }
                     <div class="carousel-inner">
                         @for (var i = 0; i < Model.CarouselImages.Count; i++)
                         {
                             var photo = Model.CarouselImages[i];
-                            <div class="carousel-item @(i == 0 ? "active" : null)">
+                            <div class="carousel-item @(i == 0 ? "active" : null)" role="group" aria-roledescription="diapositivo" aria-label="@(i + 1) de @Model.CarouselImages.Count">
                                 <img src="@(i == 0 ? photo.Url : null)" srcset="@(i == 0 ? photo.SrcSet : null)"
                                      data-src="@(i > 0 ? photo.Url : null)" data-srcset="@(i > 0 ? photo.SrcSet : null)"
                                      sizes="(max-width: 767px) 90vw, (max-width: 1450px) 40vw, 640px"
@@ -86,7 +93,7 @@
                             <button class="carousel-control-prev" type="button" data-bs-target="#storyCarousel" data-bs-slide="prev" aria-label="Fotografia anterior">
                                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             </button>
-                            <div class="carousel-indicators">
+                            <div class="carousel-indicators" role="group" aria-label="Escolher fotografia">
                                 @for (var i = 0; i < Model.CarouselImages.Count; i++)
                                 {
                                     <button type="button" data-bs-target="#storyCarousel" data-bs-slide-to="@i" class="@(i == 0 ? "active" : null)" aria-current="@(i == 0 ? "true" : null)" aria-label="Ver fotografia @(i + 1)">
