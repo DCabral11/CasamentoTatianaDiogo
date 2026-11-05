@@ -72,10 +72,25 @@ public class RsvpVerificationHttpTests
             ["GuestId"] = other.ToString(), ["Status"] = "Attending", ["__RequestVerificationToken"] = csrf
         }));
         Assert.Equal(HttpStatusCode.Redirect, forged.StatusCode);
+        var familyField = $"FamilyResponses[{selectedRelative}]";
+        var incomplete = await client.PostAsync("/Rsvp/Submit", Form(new()
+        {
+            ["GuestId"] = guest.ToString(), ["Status"] = "Attending", ["Message"] = "Até breve!", ["__RequestVerificationToken"] = csrf,
+            ["FamilyResponses.Index"] = selectedRelative.ToString(), [familyField + ".GuestId"] = selectedRelative.ToString(),
+            [familyField + ".Message"] = "Vamos juntos", [familyField + ".Status"] = ""
+        }));
+        Assert.Equal(HttpStatusCode.OK, incomplete.StatusCode);
+        var redisplayed = WebUtility.HtmlDecode(await incomplete.Content.ReadAsStringAsync());
+        Assert.Contains("Escolhe se este familiar vai estar presente.", redisplayed);
+        Assert.Contains("Até breve!", redisplayed);
+        Assert.Contains("Vamos juntos", redisplayed);
+        Assert.Matches($"id=\"family-guest-toggle-{selectedRelative}\"[^>]*checked", redisplayed);
+        Assert.DoesNotMatch($"id=\"family-guest-toggle-{unselectedRelative}\"[^>]*checked", redisplayed);
         var save = await client.PostAsync("/Rsvp/Submit", Form(new()
         {
             ["GuestId"] = guest.ToString(), ["Status"] = "Attending", ["Message"] = "Até breve!", ["__RequestVerificationToken"] = csrf,
-            ["FamilyResponses.Index"] = "1", ["FamilyResponses[1].GuestId"] = selectedRelative.ToString(), ["FamilyResponses[1].Status"] = "Attending"
+            ["FamilyResponses.Index"] = selectedRelative.ToString(), [familyField + ".GuestId"] = selectedRelative.ToString(),
+            [familyField + ".Message"] = "Vamos juntos", [familyField + ".Status"] = "Attending"
         }));
         Assert.Equal(HttpStatusCode.Redirect, save.StatusCode);
         Assert.Equal("/Rsvp?submitted=True", save.Headers.Location!.OriginalString);
@@ -84,6 +99,7 @@ public class RsvpVerificationHttpTests
             var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             Assert.Equal(2, await db.RsvpResponses.CountAsync());
             Assert.False(await db.RsvpResponses.AnyAsync(x => x.GuestId == unselectedRelative));
+            Assert.Equal("Vamos juntos", (await db.RsvpResponses.SingleAsync(x => x.GuestId == selectedRelative)).Message);
             Assert.Equal("Até breve!", (await db.RsvpResponses.SingleAsync(x => x.GuestId == guest)).Message);
             Assert.Single(db.RsvpInvitationContacts);
         }

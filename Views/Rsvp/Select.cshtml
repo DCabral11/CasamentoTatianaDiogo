@@ -3,6 +3,8 @@
 @using Microsoft.AspNetCore.Mvc.Rendering
 @{
     ViewData["Title"] = "Confirmar Presença";
+    bool IsSelected(FamilyGuestRsvpInput? response) =>
+        response != null && (response.Status.HasValue || !ViewData.ModelState.IsValid);
 }
 
 <section class="page-header rsvp-header">
@@ -19,10 +21,11 @@
         <div class="feedback-card feedback-card-warning mb-3" role="status"><i class="bi bi-info-circle" aria-hidden="true"></i><span>Já existe uma resposta para este convidado. Seleciona a opção no fim do formulário para a atualizar.</span></div>
     }
 
-    <form asp-action="Submit" method="post">
+    <form asp-action="Submit" method="post" data-rsvp-draft="@Model.DraftScope">
         @Html.AntiForgeryToken()
         <input type="hidden" name="GuestId" value="@Model.Guest.Id" />
         <partial name="_FormErrors" />
+        <p id="rsvp-draft-restored" class="text-muted" role="status" hidden>Recuperámos os dados que preencheste. Podes revê-los antes de voltar a enviar.</p>
 
         <article class="rsvp-response-card">
             <div class="rsvp-card-heading">
@@ -66,11 +69,12 @@
                 <h2>Respostas da família</h2>
                 <p class="text-muted mb-0">Seleciona as pessoas para quem queres responder.</p>
                 <div class="rsvp-family-selectors">
-                    @for (var i = 0; i < Model.RelatedGuests.Count; i++)
+                    @foreach (var familyGuest in Model.RelatedGuests)
                     {
-                        var familyGuest = Model.RelatedGuests[i];
+                        var i = familyGuest.Id;
+                        var selected = IsSelected(Model.Input.FamilyResponses.FirstOrDefault(x => x.GuestId == i));
                         <div class="form-check rsvp-family-selector">
-                            <input class="form-check-input" type="checkbox" id="family-guest-toggle-@i" aria-controls="family-guest-card-@i" data-family-card-toggle="family-guest-card-@i" checked="@(Model.Input.FamilyResponses.Any(x => x.GuestId == familyGuest.Id && x.Status.HasValue))" />
+                            <input class="form-check-input" type="checkbox" id="family-guest-toggle-@i" aria-controls="family-guest-card-@i" data-family-card-toggle="family-guest-card-@i" checked="@selected" />
                             <label class="form-check-label" for="family-guest-toggle-@i">
                                 <span class="guest-avatar rsvp-family-avatar" style="--avatar-scale:@familyGuest.AvatarScale.ToString(System.Globalization.CultureInfo.InvariantCulture);--avatar-position-x:@familyGuest.AvatarPositionX%;--avatar-position-y:@familyGuest.AvatarPositionY%;">
                                     @if (!string.IsNullOrWhiteSpace(familyGuest.ProfileImagePath))
@@ -88,12 +92,12 @@
                         </div>
                     }
                 </div>
-                @for (var i = 0; i < Model.RelatedGuests.Count; i++)
+                @foreach (var familyGuest in Model.RelatedGuests)
                 {
-                    var familyGuest = Model.RelatedGuests[i];
+                    var i = familyGuest.Id;
                     var response = Model.Input.FamilyResponses.FirstOrDefault(x => x.GuestId == familyGuest.Id);
-                    <input type="hidden" name="FamilyResponses.Index" value="@i" />
-                    <article id="family-guest-card-@i" class="rsvp-response-card rsvp-family-card" aria-labelledby="family-name-@i" hidden>
+                    <article id="family-guest-card-@i" class="rsvp-response-card rsvp-family-card" aria-labelledby="family-name-@i" hidden="@(!IsSelected(response))">
+                        <input type="hidden" name="FamilyResponses.Index" value="@i" disabled="@(!IsSelected(response))" />
                         <div class="rsvp-card-heading">
                             <span class="guest-avatar rsvp-family-card-avatar" style="--avatar-scale:@familyGuest.AvatarScale.ToString(System.Globalization.CultureInfo.InvariantCulture);--avatar-position-x:@familyGuest.AvatarPositionX%;--avatar-position-y:@familyGuest.AvatarPositionY%;">
                                 @if (!string.IsNullOrWhiteSpace(familyGuest.ProfileImagePath))
@@ -127,7 +131,7 @@
         @if (Model.PlusOnes.Any())
         {
             var plusOne = Model.PlusOnes.First();
-            <article class="rsvp-response-card rsvp-plus-one-card" data-rsvp-attendance-dependent>
+            <article class="rsvp-response-card rsvp-plus-one-card" data-rsvp-attendance-dependent data-plus-one="@plusOne.Id">
                 <div class="rsvp-card-heading">
                     <i class="bi bi-person-plus"></i>
                     <div>
@@ -160,7 +164,7 @@
         }
 
         <div class="form-check rsvp-overwrite">
-            @Html.CheckBox("ConfirmOverwrite", Model.Input.ConfirmOverwrite, new { @class = "form-check-input", id = "overwrite-rsvp" })
+            <input type="checkbox" class="form-check-input" name="ConfirmOverwrite" id="overwrite-rsvp" value="true" checked="@Model.Input.ConfirmOverwrite" />
             <label class="form-check-label" for="overwrite-rsvp">Confirmo que quero substituir uma resposta anterior, caso exista.</label>
         </div>
 

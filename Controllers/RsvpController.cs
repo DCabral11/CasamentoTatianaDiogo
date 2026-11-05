@@ -116,7 +116,7 @@ public class RsvpController(IRsvpService rsvp, IAppMessageService messages,
                 TempData["Success"] = messages.Get(ErrorCode.RsvpSaved);
                 return RedirectToAction(nameof(Index), new { submitted = true });
             }
-            ModelState.AddModelError(string.Empty, result.Message);
+            ModelState.AddModelError(result.Error?.Field ?? string.Empty, result.Message);
         }
         var form = await rsvp.GetSelectionAsync(model.GuestId, AccessToken);
         if (form == null) return RedirectToAction(nameof(Contact), new { id = model.GuestId });

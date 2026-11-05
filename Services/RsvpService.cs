@@ -5,6 +5,8 @@ using CasamentoTatianaDiogo.Common.Extensions;
 using CasamentoTatianaDiogo.Services.Interfaces;
 using CasamentoTatianaDiogo.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
+using System.Text;
 using Enums = CasamentoTatianaDiogo.Models.Enums;
 
 namespace CasamentoTatianaDiogo.Services
@@ -57,6 +59,8 @@ namespace CasamentoTatianaDiogo.Services
                 PlusOnes = guest.PlusOnes.ToList(),
                 HasExistingResponse = hasExisting,
                 VerifiedContact = RsvpContact.Mask(access.Channel, access.Contact),
+                DraftScope = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(
+                    $"rsvp:{access.FamilyId}:{guestId}:{access.Contact}"))),
                 Input = new RsvpSubmitViewModel
                 {
                     GuestId = guestId, Status = current?.Status, DietaryRestrictions = current?.DietaryRestrictions,
@@ -106,23 +110,12 @@ namespace CasamentoTatianaDiogo.Services
             if (access == null)
                 return AppResult.Failure(ErrorCode.AccessDenied, "Verifica o teu contacto antes de confirmar ou alterar a resposta.");
             if (model.Status is not (Enums.RsvpStatus.Attending or Enums.RsvpStatus.NotAttending))
-                return AppResult.Failure(ErrorCode.RsvpStatusRequired, messages.Get(ErrorCode.RsvpStatusRequired));
+                return AppResult.Failure(ErrorCode.RsvpStatusRequired, messages.Get(ErrorCode.RsvpStatusRequired), nameof(model.Status));
 
             var guest = await db.Guests.Include(g => g.Family).Include(g => g.PlusOnes).FirstOrDefaultAsync(g => g.Id == model.GuestId);
 
             if (guest == null)
                 return AppResult.Failure(ErrorCode.RsvpGuestNotFound, messages.Get(ErrorCode.RsvpGuestNotFound));
-
-            if (model.Status == CasamentoTatianaDiogo.Models.Enums.RsvpStatus.NotAttending)
-            {
-                model.DietaryRestrictions = null;
-                model.MusicRequest = null;
-                model.PlusOneAttending = false;
-                model.PlusOneId = null;
-                model.PlusOneDietaryRestrictions = null;
-                model.PlusOneMessage = null;
-                model.PlusOneMusicRequest = null;
-            }
 
             var guestsToRespond = new List<Guest> { guest };
 
@@ -149,13 +142,15 @@ namespace CasamentoTatianaDiogo.Services
             }
 
             if (await db.RsvpResponses.AnyAsync(r => guestsToRespond.Select(g => g.Id).Contains(r.GuestId)) && !model.ConfirmOverwrite)
-                return AppResult.Failure(ErrorCode.RsvpExistingResponse, messages.Get(ErrorCode.RsvpExistingResponse));
+                return AppResult.Failure(ErrorCode.RsvpExistingResponse, messages.Get(ErrorCode.RsvpExistingResponse), nameof(model.ConfirmOverwrite));
 
-            var plusOne = model.PlusOneId.HasValue
+            var attending = model.Status == Enums.RsvpStatus.Attending;
+            var bringingPlusOne = attending && model.PlusOneAttending;
+            var plusOne = bringingPlusOne && model.PlusOneId.HasValue
                 ? guest.PlusOnes.FirstOrDefault(p => p.Id == model.PlusOneId.Value)
                 : null;
 
-            if (model.PlusOneAttending && plusOne == null)
+            if (bringingPlusOne && plusOne == null)
                 return AppResult.Failure(ErrorCode.RsvpInvalidPlusOne, messages.Get(ErrorCode.RsvpInvalidPlusOne));
 
             var emailDetails = new List<RsvpEmailDetail>();
@@ -177,11 +172,11 @@ namespace CasamentoTatianaDiogo.Services
 
                 var familyResponse = responsesByGuestId.GetValueOrDefault(responseGuest.Id);
                 response.Status = responseGuest.Id == guest.Id ? model.Status.Value : familyResponse!.Status!.Value;
-                response.DietaryRestrictions = responseGuest.Id == guest.Id ? model.DietaryRestrictions : familyResponse?.DietaryRestrictions;
+                response.DietaryRestrictions = responseGuest.Id == guest.Id ? (attending ? model.DietaryRestrictions : null) : familyResponse?.DietaryRestrictions;
                 response.Message = responseGuest.Id == guest.Id ? model.Message : familyResponse?.Message;
-                response.MusicRequest = responseGuest.Id == guest.Id ? model.MusicRequest : familyResponse?.MusicRequest;
-                response.PlusOneAttending = responseGuest.Id == guest.Id && model.PlusOneAttending;
-                response.PlusOneId = responseGuest.Id == guest.Id && model.PlusOneAttending ? plusOne?.Id : null;
+                response.MusicRequest = responseGuest.Id == guest.Id ? (attending ? model.MusicRequest : null) : familyResponse?.MusicRequest;
+                response.PlusOneAttending = responseGuest.Id == guest.Id && bringingPlusOne;
+                response.PlusOneId = response.PlusOneAttending ? plusOne?.Id : null;
                 response.PlusOneDietaryRestrictions = response.PlusOneAttending ? model.PlusOneDietaryRestrictions : null;
                 response.PlusOneMessage = response.PlusOneAttending ? model.PlusOneMessage : null;
                 response.PlusOneMusicRequest = response.PlusOneAttending ? model.PlusOneMusicRequest : null;

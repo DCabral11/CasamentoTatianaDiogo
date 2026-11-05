@@ -1,6 +1,12 @@
 (function () {
     "use strict";
 
+    try {
+        sessionStorage.removeItem("casamento.rsvp.pending");
+    } catch {
+        // Browser storage is optional.
+    }
+
     const modalElement = document.getElementById("rsvp-back-navigation-modal");
     if (!modalElement || !window.bootstrap) {
         return;

@@ -30,6 +30,7 @@ namespace CasamentoTatianaDiogo.ViewModels
 
         public bool HasExistingResponse { get; set; }
         public string VerifiedContact { get; set; } = string.Empty;
+        public string DraftScope { get; set; } = string.Empty;
         public RsvpSubmitViewModel Input { get; set; } = new();
     }
 
@@ -74,6 +75,7 @@ namespace CasamentoTatianaDiogo.ViewModels
     {
         public int GuestId { get; set; }
 
+        [Required(ErrorMessage = "Escolhe se este familiar vai estar presente.")]
         public RsvpStatus? Status { get; set; }
 
         [StringLength(1000)]
