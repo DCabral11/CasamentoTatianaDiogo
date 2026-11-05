@@ -71,7 +71,9 @@
                     @if (Model.CarouselImages.Count > 1)
                     {
                         <div class="story-album-playback">
-                            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill" data-rotation hidden>Iniciar apresentação</button>
+                            <button type="button" class="btn btn-outline-primary rounded-circle" data-rotation aria-label="Iniciar apresentação" hidden>
+                                <i class="bi bi-play-fill" aria-hidden="true"></i>
+                            </button>
                             <span data-position aria-live="off" aria-atomic="true">Fotografia 1 de @Model.CarouselImages.Count</span>
                         </div>
                     }

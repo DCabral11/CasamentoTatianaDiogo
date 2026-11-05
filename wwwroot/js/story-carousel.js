@@ -3,6 +3,7 @@
     const carousel = bootstrap.Carousel.getOrCreateInstance(album, { pause: false });
     const slides = [...album.querySelectorAll('.carousel-item')];
     const toggle = album.querySelector('[data-rotation]');
+    const rotationIcon = toggle.querySelector('.bi');
     const position = album.querySelector('[data-position]');
     const picker = album.querySelector('.carousel-indicators');
     const thumbnails = [...picker.querySelectorAll('button')];
@@ -27,7 +28,10 @@
     function updatePlayback() {
         clearTimeout(timer);
         const playing = rotationEnabled && visible && !document.hidden && !hovered;
-        toggle.textContent = rotationEnabled ? 'Pausar apresentação' : 'Iniciar apresentação';
+        const action = rotationEnabled ? 'Pausar apresentação' : 'Iniciar apresentação';
+        toggle.setAttribute('aria-label', action);
+        toggle.title = action;
+        rotationIcon.className = rotationEnabled ? 'bi bi-pause-fill' : 'bi bi-play-fill';
         position.setAttribute('aria-live', playing ? 'off' : 'polite');
         if (!playing) return;
 
