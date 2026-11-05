@@ -473,7 +473,9 @@ body > footer {
     color: var(--muted);
     font-size: clamp(1.05rem, 1.5vw, 1.2rem);
     line-height: 1.8;
-    text-align: justify;
+    text-align: left;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
     hyphens: auto;
 }
 
