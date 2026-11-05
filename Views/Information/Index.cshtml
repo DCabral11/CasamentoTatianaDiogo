@@ -5,8 +5,6 @@
     var settings = Model.Settings;
     var ceremonyQuery = $"{settings.CeremonyLocationName}, {settings.CeremonyAddress}";
     var receptionQuery = $"{settings.ReceptionLocationName}, {settings.ReceptionAddress}";
-    var ceremonyMapUrl = settings.CeremonyGoogleMapsUrl ?? $"https://www.google.com/maps/search/?api=1&query={Uri.EscapeDataString(ceremonyQuery)}";
-    var receptionMapUrl = settings.ReceptionGoogleMapsUrl ?? $"https://www.google.com/maps/search/?api=1&query={Uri.EscapeDataString(receptionQuery)}";
     var ceremonyEmbedUrl = GetEmbedUrl(settings.CeremonyGoogleMapsEmbedUrl, $"https://www.google.com/maps?q={Uri.EscapeDataString(ceremonyQuery)}&output=embed");
     var receptionEmbedUrl = GetEmbedUrl(settings.ReceptionGoogleMapsEmbedUrl, $"https://www.google.com/maps?q={Uri.EscapeDataString(receptionQuery)}&output=embed");
     var arrival = Model.TimelineEvents.FirstOrDefault();
@@ -36,7 +34,7 @@
 
 <section class="container information-essentials">
     <div class="row g-3">
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div class="information-tip h-100">
                 <i class="bi bi-clock-history"></i>
                 <div>
@@ -45,23 +43,13 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div class="information-tip h-100">
                 <i class="bi bi-envelope-check"></i>
                 <div>
                     <h3>Confirmação</h3>
                     <p>Indiquem a vossa presença e eventuais restrições alimentares com antecedência.</p>
                     <a asp-controller="Rsvp" asp-action="Index">Confirmar presença <i class="bi bi-arrow-right"></i></a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="information-tip h-100">
-                <i class="bi bi-signpost-split"></i>
-                <div>
-                    <h3>Como chegar</h3>
-                    <p>Guardem as localizações no telemóvel antes de sair.</p>
-                    <a href="@ceremonyMapUrl" target="_blank" rel="noopener">Abrir rota <i class="bi bi-arrow-up-right"></i></a>
                 </div>
             </div>
         </div>
