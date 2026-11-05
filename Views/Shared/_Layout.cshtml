@@ -3,16 +3,18 @@
 
 @inject SignInManager<ApplicationUser> SignInManager
 @inject CasamentoTatianaDiogo.Services.Interfaces.ISiteContentService SiteContent
+@inject CasamentoTatianaDiogo.Services.SiteThemeService SiteTheme
 
 @{
     var siteText = await SiteContent.GetAsync();
+    var theme = await SiteTheme.GetAsync();
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
     var isAdminScreen = Context.Request.Path.StartsWithSegments("/Admin");
     var isAdminDashboard = Context.Request.Path.StartsWithSegments("/Admin/Dashboard");
 }
 
 <!DOCTYPE html>
-<html lang="pt-PT">
+<html lang="pt-PT" data-bs-theme="@theme.Mode" style="@theme.Variables">
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width = device-width, initial-scale = 1" />
@@ -34,7 +36,7 @@
         <nav class="navbar navbar-expand-lg navbar-light navbar-logo-bg shadow-sm sticky-top" aria-label="Navegação principal">
             <div class="container">
                 <a class="navbar-brand" asp-controller="Home" asp-action="Index" aria-label="@siteText.GetValueOrDefault("NavHome", "Início")" aria-current="@(currentController == "Home" && Equals(ViewContext.RouteData.Values["action"], "Index") ? "page" : null)">
-                    <img src="/images/navbar.png" class="nav-logo" alt="Tatiana & Diogo Logo" />
+                    <img src="@theme.Logo" class="nav-logo" alt="" onerror="this.onerror=null;this.src='/images/navbar.png'" />
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Menu principal">
                     <span class="navbar-toggler-icon"></span>

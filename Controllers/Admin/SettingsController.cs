@@ -15,6 +15,8 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(WeddingSettings m)
         {
+            if (ViewModels.SiteTheme.NormalizeLogo(m.LogoPath) == null)
+                ModelState.AddModelError(nameof(m.LogoPath), "Indica um caminho de imagem ou um endereço HTTP ou HTTPS.");
             if (!ModelState.IsValid)
                 return View("~/Views/Admin/Settings/Index.cshtml", m);
 
@@ -23,7 +25,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             db.Update(m);
             await db.SaveChangesAsync();
 
-            TempData["Success"] = "Settings saved.";
+            TempData["Success"] = "As definições foram guardadas.";
 
             return RedirectToAction(nameof(Index));
         }

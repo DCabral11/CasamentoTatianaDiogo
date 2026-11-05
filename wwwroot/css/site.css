@@ -1,12 +1,28 @@
 :root {
     --primary: #bd4742;
     --secondary: #fce8e4;
-    --ink: #332d2a;
-    --canvas: var(--surface-soft);
-    --surface: #fffaf7;
-    --surface-soft: #f8f0e3;
-    --line: #da9b92;
-    --muted: #625854;
+    --primary-rgb: 189,71,66;
+    --on-primary: white;
+    --accent-ink: #9e3834;
+    --accent-rgb: 158,56,52;
+    --primary-hover: #913632;
+    --paper: white;
+    --ink: var(--bs-emphasis-color);
+    --canvas: var(--secondary);
+    --surface: color-mix(in srgb, var(--secondary) 18%, var(--paper));
+    --surface-soft: color-mix(in srgb, var(--secondary) 65%, var(--paper));
+    --line: color-mix(in srgb, var(--accent-ink) 43%, var(--surface));
+    --muted: color-mix(in srgb, var(--ink) 82%, var(--surface));
+    --bs-primary: var(--primary);
+    --bs-primary-rgb: var(--primary-rgb);
+    --bs-link-color: var(--accent-ink);
+    --bs-link-color-rgb: var(--accent-rgb);
+    --bs-link-hover-color: var(--ink);
+    --bs-link-hover-color-rgb: var(--bs-emphasis-color-rgb);
+}
+
+:root[data-bs-theme="dark"] {
+    --paper: black;
 }
 
 /* Navigation hover states need a solid contrast treatment on the cream background. */
@@ -18,13 +34,8 @@
 
 .navbar .nav-link:hover,
 .navbar .nav-link:focus {
-    color: #fff;
+    color: var(--on-primary);
     background-color: var(--primary);
-}
-
-.navbar .btn-outline-primary:hover,
-.navbar .btn-outline-primary:focus {
-    color: #fff;
 }
 
 html {
@@ -83,7 +94,7 @@ body > footer {
 
 .feedback-card-error {
     color: #842f2b;
-    border-color: rgba(189, 71, 66, 0.3);
+    border-color: rgba(var(--primary-rgb), 0.3);
     background: #fff1ef;
 }
 
@@ -109,7 +120,7 @@ body > footer {
 .error-card {
     max-width: 42rem;
     padding: clamp(2rem, 6vw, 4.5rem);
-    border: 1px solid rgba(189, 71, 66, 0.18);
+    border: 1px solid rgba(var(--primary-rgb), 0.18);
     border-radius: 2rem;
     background: var(--surface);
     box-shadow: 0 22px 55px rgba(91, 49, 42, 0.12);
@@ -122,14 +133,14 @@ body > footer {
     place-items: center;
     margin-bottom: 1.25rem;
     border-radius: 50%;
-    color: var(--primary);
+    color: var(--accent-ink);
     background: var(--secondary);
     font-size: 2rem;
 }
 
 .error-card-label {
     margin-bottom: 0.45rem;
-    color: var(--primary);
+    color: var(--accent-ink);
     font-size: 0.8rem;
     font-weight: 700;
     letter-spacing: 0.12em;
@@ -176,7 +187,7 @@ body > footer {
 .skip-link:focus { transform: none; }
 
 body :is(a, button, input, textarea, select, [tabindex]):focus-visible {
-    outline: 3px solid #68302c;
+    outline: 3px solid var(--accent-ink);
     outline-offset: 2px;
 }
 
@@ -200,7 +211,7 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
 
 .input-validation-error {
     border-color: var(--primary) !important;
-    box-shadow: 0 0 0 0.2rem rgba(189, 71, 66, 0.12) !important;
+    box-shadow: 0 0 0 0.2rem rgba(var(--primary-rgb), 0.12) !important;
 }
 
 /* Admin actions share a clear visual hierarchy across tables, forms and navigation. */
@@ -224,30 +235,13 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
     box-shadow: 0 8px 18px rgba(75, 44, 37, 0.16);
 }
 
-.admin-screen .btn-primary {
-    border-color: var(--primary);
-    background: linear-gradient(135deg, #c9504a, var(--primary));
-}
-
-.admin-screen .btn-outline-primary {
-    border-color: rgba(189, 71, 66, 0.45);
-    background: rgba(255, 250, 247, 0.84);
-}
-
-.admin-screen .btn-outline-primary:hover,
-.admin-screen .btn-outline-primary:focus-visible {
-    color: #fff !important;
-    border-color: var(--primary);
-    background: var(--primary) !important;
-}
-
 .admin-screen .btn-outline-danger,
 .admin-screen .btn-danger {
     border-color: #b63c38;
 }
 
 .admin-screen .btn-link {
-    color: var(--primary);
+    color: var(--accent-ink);
     box-shadow: none;
 }
 
@@ -260,7 +254,7 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
 
 .delete-confirmation-card {
     overflow: hidden;
-    border: 1px solid rgba(189, 71, 66, 0.18);
+    border: 1px solid rgba(var(--primary-rgb), 0.18);
     border-radius: 1.5rem;
     background: var(--surface);
     box-shadow: 0 24px 55px rgba(51, 45, 42, 0.2);
@@ -299,7 +293,7 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
 
 .rsvp-back-navigation-card {
     overflow: hidden;
-    border: 1px solid rgba(189, 71, 66, 0.18);
+    border: 1px solid rgba(var(--primary-rgb), 0.18);
     border-radius: 1.5rem;
     background: var(--surface);
     box-shadow: 0 24px 55px rgba(51, 45, 42, 0.2);
@@ -312,14 +306,14 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
     place-items: center;
     margin-bottom: 1.1rem;
     border-radius: 50%;
-    color: var(--primary);
+    color: var(--accent-ink);
     background: var(--secondary);
     font-size: 1.9rem;
 }
 
 .rsvp-back-navigation-label {
     margin-bottom: 0.35rem;
-    color: var(--primary);
+    color: var(--accent-ink);
     font-size: 0.78rem;
     font-weight: 700;
     letter-spacing: 0.12em;
@@ -348,7 +342,7 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
 
 .excel-import-card hr {
     margin: 2rem 0;
-    border-color: rgba(189, 71, 66, 0.18);
+    border-color: rgba(var(--primary-rgb), 0.18);
     opacity: 1;
 }
 
@@ -358,23 +352,24 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
     height: 3.4rem;
     place-items: center;
     border-radius: 1rem;
-    color: var(--primary);
+    color: var(--accent-ink);
     background: var(--secondary);
     font-size: 1.55rem;
 }
 
 .nav-logo {
     height: 52px;
+    max-width: min(50vw, 14rem);
     object-fit: contain;
 }
 
 .navbar-logo-bg {
     background-color: var(--surface-soft);
-    border-bottom: 1px solid rgba(189, 71, 66, 0.14);
+    border-bottom: 1px solid rgba(var(--primary-rgb), 0.14);
 }
 
 .navbar-nav [aria-current="location"] {
-    text-decoration: underline;
+    text-decoration: underline var(--accent-ink);
     text-underline-offset: 0.25em;
 }
 
@@ -386,7 +381,7 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
 
 .navbar .nav-link:hover,
 .navbar .nav-link:focus {
-    color: #fff;
+    color: var(--on-primary);
 }
 
 .hero-photo {
@@ -451,7 +446,7 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
 
 .hero-img {
     border-radius: 2rem;
-    box-shadow: 0 20px 70px rgba(189, 71, 66, 0.18);
+    box-shadow: 0 20px 70px rgba(var(--primary-rgb), 0.18);
     object-fit: cover;
     width: 100%;
     max-height: 620px;
@@ -473,7 +468,7 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
 
 .story-page h2 {
     margin: 0 0 clamp(1.5rem, 3vw, 2.5rem);
-    color: var(--primary);
+    color: var(--accent-ink);
     font: 400 clamp(2.3rem, 5vw, 3.8rem)/1.1 Georgia, serif;
     text-align: center;
 }
@@ -491,7 +486,7 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
 .story-album {
     padding: 0.5rem;
     margin: 0 0 1.5rem;
-    background: white;
+    background: var(--surface);
     box-shadow: 0 0.4rem 1.5rem rgb(94 51 42 / 12%);
 }
 
@@ -628,10 +623,10 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
 .guest-result,
 .stat {
     background: rgba(255, 255, 255, 0.86);
-    border: 1px solid rgba(189, 71, 66, 0.15);
+    border: 1px solid rgba(var(--primary-rgb), 0.15);
     border-radius: 1.5rem;
-    border-color: rgba(189, 71, 66, 0.15);
-    box-shadow: 0 12px 40px rgba(189, 71, 66, 0.08);
+    border-color: rgba(var(--primary-rgb), 0.15);
+    box-shadow: 0 12px 40px rgba(var(--primary-rgb), 0.08);
 }
 
 .countdown div {
@@ -675,8 +670,8 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
 .event-card {
     padding: clamp(1.5rem, 3vw, 2.4rem);
     border-radius: 2rem;
-    background: rgba(248, 240, 227, 0.94);
-    color: #332d2a;
+    background: var(--surface-soft);
+    color: var(--ink);
     text-align: center;
     box-shadow: 0 18px 50px rgba(0, 0, 0, 0.17);
 }
@@ -684,7 +679,7 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
 .event-icon {
     display: inline-block;
     margin-bottom: 0.7rem;
-    color: var(--primary);
+    color: var(--accent-ink);
     font-size: 1.7rem;
 }
 
@@ -713,11 +708,40 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
     margin-top: 0.25rem;
 }
 
+.btn-primary, .btn-outline-primary {
+    --bs-btn-hover-color: var(--on-primary);
+    --bs-btn-hover-bg: var(--primary-hover);
+    --bs-btn-hover-border-color: var(--primary-hover);
+    --bs-btn-active-color: var(--on-primary);
+    --bs-btn-active-bg: var(--primary-hover);
+    --bs-btn-active-border-color: var(--primary-hover);
+    --bs-btn-focus-shadow-rgb: var(--accent-rgb);
+}
+
 .btn-primary {
+    --bs-btn-color: var(--on-primary);
     --bs-btn-bg: var(--primary);
     --bs-btn-border-color: var(--primary);
-    --bs-btn-hover-bg: #9e3834;
-    --bs-btn-hover-border-color: #9e3834;
+    --bs-btn-disabled-color: var(--on-primary);
+    --bs-btn-disabled-bg: var(--primary);
+    --bs-btn-disabled-border-color: var(--primary);
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--accent-ink);
+    --bs-btn-border-color: var(--accent-ink);
+    --bs-btn-disabled-color: var(--accent-ink);
+    --bs-btn-disabled-border-color: var(--accent-ink);
+}
+
+.form-check-input:checked {
+    background-color: color-mix(in srgb, var(--primary) 55%, black);
+    border-color: var(--accent-ink);
+}
+
+:root[data-bs-theme="dark"] .story-album .carousel-control-prev-icon,
+:root[data-bs-theme="dark"] .story-album .carousel-control-next-icon {
+    filter: none;
 }
 
 .page-header {
@@ -727,7 +751,7 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
 
 .page-header h1 {
     font-family: Georgia, serif;
-    color: var(--primary);
+    color: var(--accent-ink);
     font-size: clamp(2.5rem, 6vw, 4.5rem);
 }
 
@@ -750,13 +774,13 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
 
 .information-page h2 {
     margin-bottom: 2rem;
-    color: var(--primary);
+    color: var(--accent-ink);
     font-family: Georgia, serif;
     text-align: center;
 }
 
 .information-page .elegant-card {
-    background: rgba(255, 250, 247, 0.76);
+    background: var(--surface);
 }
 
 .information-page .py-5 {
@@ -772,13 +796,13 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
     display: flex;
     gap: 1rem;
     padding: 1.35rem;
-    border: 1px solid rgba(189, 71, 66, 0.18);
+    border: 1px solid rgba(var(--primary-rgb), 0.18);
     border-radius: 1.25rem;
-    background: rgba(255, 250, 247, 0.58);
+    background: var(--surface);
 }
 
 .information-tip > i {
-    color: var(--primary);
+    color: var(--accent-ink);
     font-size: 1.65rem;
 }
 
@@ -794,7 +818,7 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
 }
 
 .information-tip a {
-    color: var(--primary);
+    color: var(--accent-ink);
     font-weight: 700;
     text-decoration: none;
 }
@@ -845,7 +869,7 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
 .timeline-time {
     display: block;
     margin-bottom: 0.28rem;
-    color: var(--primary);
+    color: var(--accent-ink);
     font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
     font-size: clamp(1.1rem, 2.5vw, 1.35rem);
     font-weight: 400;
@@ -872,7 +896,7 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
 
 .timeline-icon {
     background: var(--primary);
-    color: white;
+    color: var(--on-primary);
     width: 5rem;
     height: 5rem;
     border-radius: 50%;
@@ -896,7 +920,7 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
 }
 
 .location-card h3 i {
-    color: var(--primary);
+    color: var(--accent-ink);
 }
 
 .location-card {
@@ -925,13 +949,13 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
     place-items: center;
     border-radius: 50%;
     background: var(--secondary);
-    color: var(--primary);
+    color: var(--accent-ink);
     font-size: 1.15rem;
 }
 
 .location-card h3 {
     margin: 0;
-    color: var(--primary);
+    color: var(--accent-ink);
     font-family: Georgia, serif;
     font-size: 1.55rem;
 }
@@ -996,7 +1020,7 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
 
 .contact-details a:hover,
 .contact-details a:focus {
-    color: var(--primary);
+    color: var(--accent-ink);
     transform: translateX(2px);
 }
 
@@ -1007,7 +1031,7 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
     place-items: center;
     border-radius: 50%;
     background: var(--surface-soft);
-    color: var(--primary);
+    color: var(--accent-ink);
 }
 
 .narrow {
@@ -1036,7 +1060,7 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
 
 .btn:hover {
     transform: translateY(-1px);
-    box-shadow: 0 5px 14px rgba(189, 71, 66, 0.16);
+    box-shadow: 0 5px 14px rgba(var(--primary-rgb), 0.16);
 }
 
 .elegant-card {
@@ -1045,7 +1069,7 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
 
 .elegant-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 16px 42px rgba(189, 71, 66, 0.12);
+    box-shadow: 0 16px 42px rgba(var(--primary-rgb), 0.12);
 }
 
 .rsvp-header {
@@ -1059,10 +1083,10 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
 
 .rsvp-response-card {
     padding: 1.5rem;
-    border: 1px solid rgba(189, 71, 66, 0.2);
+    border: 1px solid rgba(var(--primary-rgb), 0.2);
     border-radius: 1.5rem;
-    background: rgba(255, 255, 255, 0.88);
-    box-shadow: 0 12px 34px rgba(189, 71, 66, 0.08);
+    background: var(--surface);
+    box-shadow: 0 12px 34px rgba(var(--primary-rgb), 0.08);
 }
 
 .rsvp-card-heading {
@@ -1079,7 +1103,7 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
     place-items: center;
     border-radius: 50%;
     background: var(--primary);
-    color: #fff;
+    color: var(--on-primary);
     font-size: 1.25rem;
 }
 
@@ -1091,7 +1115,7 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
 
 .rsvp-card-label {
     margin: 0 0 0.15rem;
-    color: var(--primary);
+    color: var(--accent-ink);
     font-size: 0.76rem;
     font-weight: 700;
     letter-spacing: 0.08em;
@@ -1102,7 +1126,7 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
 .rsvp-overwrite {
     padding: 1rem 1.25rem;
     border-radius: 1rem;
-    background: rgba(248, 240, 227, 0.86);
+    background: var(--surface-soft);
 }
 
 .rsvp-family-cards {
@@ -1122,7 +1146,7 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
     gap: 0.6rem;
     padding: 1rem;
     border-radius: 1rem;
-    background: rgba(248, 240, 227, 0.86);
+    background: var(--surface-soft);
 }
 
 .rsvp-family-card,
@@ -1137,7 +1161,7 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
 }
 
 .rsvp-search-card .form-label {
-    color: var(--primary);
+    color: var(--accent-ink);
     font-family: Georgia, serif;
     font-size: 1.35rem;
 }
@@ -1148,7 +1172,7 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
 
 .rsvp-results-title {
     margin-bottom: 1.1rem;
-    color: var(--primary);
+    color: var(--accent-ink);
     font-family: Georgia, serif;
     font-size: 1.7rem;
 }
@@ -1170,7 +1194,7 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
     place-items: center;
     border-radius: 50%;
     background: var(--secondary);
-    color: var(--primary);
+    color: var(--accent-ink);
     border: 2px solid rgba(255, 255, 255, 0.86);
     box-shadow: 0 5px 14px rgba(94, 51, 42, 0.13);
 }
@@ -1213,7 +1237,7 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
 
 .guest-result-arrow {
     margin-left: auto;
-    color: var(--primary);
+    color: var(--accent-ink);
     font-size: 1.8rem;
 }
 
@@ -1258,7 +1282,7 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
 .rsvp-family-selector .form-check-input:checked + .form-check-label {
     border-color: var(--primary);
     background: color-mix(in srgb, var(--secondary) 56%, var(--surface));
-    box-shadow: 0 4px 14px rgba(189, 71, 66, 0.12);
+    box-shadow: 0 4px 14px rgba(var(--primary-rgb), 0.12);
 }
 
 .rsvp-family-selector .form-check-input:focus-visible + .form-check-label {
@@ -1281,7 +1305,7 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
 .rsvp-family-selector .form-check-input:checked + .form-check-label .rsvp-family-selector-state {
     border-color: var(--primary);
     background: var(--primary);
-    color: #fff;
+    color: var(--on-primary);
 }
 
 .rsvp-family-selector .form-check-input:disabled + .form-check-label {
@@ -1321,7 +1345,7 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
 }
 
 .avatar-crop-controls output {
-    color: var(--primary);
+    color: var(--accent-ink);
     font-weight: 700;
 }
 
@@ -1335,13 +1359,13 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
     border-radius: 1.5rem;
     padding: 2rem;
     text-align: center;
-    background: #fff;
+    background: var(--surface);
     border-color: var(--line);
 }
 
 .dropzone i {
     font-size: 3rem;
-    color: var(--primary);
+    color: var(--accent-ink);
 }
 
 .admin-grid {
@@ -1354,18 +1378,18 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
     padding: 1.5rem;
     text-align: center;
     font-size: 2rem;
-    color: var(--primary);
+    color: var(--accent-ink);
     font-weight: 800;
 }
 
 .stat small {
     display: block;
     font-size: 0.85rem;
-    color: #666;
+    color: var(--muted);
 }
 
 .admin-form {
-    background: white;
+    background: var(--surface);
     padding: 1.5rem;
     border-radius: 1rem;
 }
@@ -1373,7 +1397,7 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
 .admin-fieldset {
     margin: 0 0 1.75rem;
     padding: 1.5rem;
-    border: 1px solid rgba(189, 71, 66, 0.18);
+    border: 1px solid rgba(var(--primary-rgb), 0.18);
     border-radius: 1rem;
 }
 
@@ -1382,7 +1406,7 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
     width: auto;
     margin: 0;
     padding: 0 0.4rem;
-    color: var(--primary);
+    color: var(--accent-ink);
     font-family: Georgia, serif;
     font-size: 1.3rem;
 }
@@ -1426,7 +1450,7 @@ footer,
 .form-control:focus,
 .form-select:focus {
     border-color: var(--primary);
-    box-shadow: 0 0 0 0.2rem rgba(189, 71, 66, 0.16);
+    box-shadow: 0 0 0 0.2rem rgba(var(--primary-rgb), 0.16);
 }
 
 .table {
@@ -1446,7 +1470,7 @@ footer,
 .list-group-item:hover,
 .list-group-item:focus {
     background: var(--secondary);
-    color: var(--primary);
+    color: var(--accent-ink);
 }
 
 /* Home hero: stronger hierarchy while preserving the existing wedding palette. */
@@ -1463,7 +1487,7 @@ footer,
     display: block;
     width: fit-content;
     margin: 0 0 1.25rem;
-    color: var(--primary);
+    color: var(--accent-ink);
     font-family: Georgia, serif;
     font-size: 2rem;
     line-height: 1;

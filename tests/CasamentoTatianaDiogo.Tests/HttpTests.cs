@@ -22,6 +22,34 @@ namespace CasamentoTatianaDiogo.Tests;
 public class HttpTests
 {
     [Fact]
+    public async Task SavedThemeReachesGuestAdminAndRecoveryPages()
+    {
+        using var app = new TestApplication();
+        using var client = app.Client();
+        await client.GetStringAsync("/"); // Warm the layout with the original settings.
+        using (var scope = app.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            var settings = await db.WeddingSettings.SingleAsync();
+            settings.LogoPath = "/images/custom-logo.svg";
+            settings.PrimaryColor = "#fcf7e8";
+            settings.SecondaryColor = "#183929";
+            await db.SaveChangesAsync();
+        }
+
+        foreach (var path in new[] { "/", "/Information", "/Rsvp", "/Photos", "/Admin/Login", "/pagina-inexistente" })
+        {
+            var response = await client.GetAsync(path);
+            var html = await response.Content.ReadAsStringAsync();
+            Assert.Contains("src=\"/images/custom-logo.svg\"", html);
+            Assert.Contains("--primary:#FCF7E8;", html);
+            Assert.Contains("--secondary:#183929;", html);
+            Assert.Contains("--on-primary:#000000;", html);
+            Assert.Contains("data-bs-theme=\"dark\"", html);
+        }
+    }
+
+    [Fact]
     public async Task ProductionPagesAndHealthChecksWorkWithoutStartupSchemaChanges()
     {
         using var app = new TestApplication();

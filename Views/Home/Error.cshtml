@@ -1,3 +1,4 @@
+@inject CasamentoTatianaDiogo.Services.SiteThemeService SiteTheme
 @{
     Layout = "_ErrorLayout";
     ViewData["Title"] = ViewData["ErrorLabel"] ?? "Ocorreu um imprevisto";
@@ -6,6 +7,7 @@
 <section class="error-page">
     <div class="container py-5">
         <div class="error-card mx-auto text-center">
+            <a asp-controller="Home" asp-action="Index" class="d-block mb-3" aria-label="Início"><img class="nav-logo" src="@SiteTheme.LastKnown.Logo" alt="" onerror="this.onerror=null;this.src='/images/navbar.png'" /></a>
             <span class="error-card-icon" aria-hidden="true"><i class="bi @(ViewData["ErrorIcon"] ?? "bi-exclamation-circle")"></i></span>
             <p class="error-card-label">@ViewData["ErrorLabel"]</p>
             <h1>@ViewData["ErrorTitle"]</h1>

@@ -1,5 +1,7 @@
+@inject CasamentoTatianaDiogo.Services.SiteThemeService SiteTheme
+@{ var theme = SiteTheme.LastKnown; }
 <!DOCTYPE html>
-<html lang="pt-PT">
+<html lang="pt-PT" data-bs-theme="@theme.Mode" style="@theme.Variables">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

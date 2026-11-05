@@ -74,6 +74,8 @@ builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddSingleton<WeddingClock>();
 
 builder.Services.AddScoped<IWeddingSettingsService, WeddingSettingsService>();
+builder.Services.AddMemoryCache();
+builder.Services.AddScoped<SiteThemeService>();
 builder.Services.AddScoped<IRsvpService, RsvpService>();
 builder.Services.AddScoped<IRsvpEmailNotificationService, RsvpEmailNotificationService>();
 builder.Services.AddScoped<RsvpVerificationService>();

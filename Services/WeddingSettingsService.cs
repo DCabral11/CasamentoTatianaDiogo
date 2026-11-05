@@ -7,7 +7,11 @@ namespace CasamentoTatianaDiogo.Services
 {
     public class WeddingSettingsService(ApplicationDbContext db) : IWeddingSettingsService
     {
-        public async Task<WeddingSettings> GetAsync() => await db.WeddingSettings.FirstOrDefaultAsync() ?? new WeddingSettings();
+        private Task<WeddingSettings>? currentSettings;
+
+        public Task<WeddingSettings> GetAsync() => currentSettings ??= LoadSettingsAsync();
+
+        private async Task<WeddingSettings> LoadSettingsAsync() => await db.WeddingSettings.FirstOrDefaultAsync() ?? new WeddingSettings();
 
         public async Task<PhotoUploadSettings> GetPhotoSettingsAsync() => await db.PhotoUploadSettings.FirstOrDefaultAsync() ?? new PhotoUploadSettings();
     }

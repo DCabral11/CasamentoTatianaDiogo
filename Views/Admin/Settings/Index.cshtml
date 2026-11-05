@@ -22,7 +22,6 @@
                 <div class="col-12"><label asp-for="HomeHeroTitle" class="form-label">Mensagem principal</label><input asp-for="HomeHeroTitle" class="form-control" placeholder="Ex.: Estamos a casar!" /></div>
                 <div class="col-12"><label asp-for="HomeHeroSubtitle" class="form-label">Mensagem de apoio</label><textarea asp-for="HomeHeroSubtitle" class="form-control" rows="2"></textarea></div>
                 <div class="col-12"><label asp-for="CoupleStory" class="form-label">A nossa história</label><textarea asp-for="CoupleStory" class="form-control" rows="5" placeholder="Conta aos convidados um pouco da vossa história."></textarea></div>
-                <div class="col-12"><label asp-for="LogoPath" class="form-label">Caminho do logótipo</label><input asp-for="LogoPath" class="form-control" placeholder="/images/navbar.png" /></div>
             </div>
         </fieldset>
 
@@ -42,12 +41,19 @@
         </fieldset>
 
         <fieldset class="admin-fieldset">
-            <legend>Contactos e cores</legend>
+            <legend>Contactos</legend>
             <div class="row g-3">
                 <div class="col-md-6"><label asp-for="BridePhone" class="form-label">Telefone da noiva</label><input asp-for="BridePhone" type="tel" class="form-control" /></div>
                 <div class="col-md-6"><label asp-for="GroomPhone" class="form-label">Telefone do noivo</label><input asp-for="GroomPhone" type="tel" class="form-control" /></div>
                 <div class="col-md-6"><label asp-for="BrideEmail" class="form-label">E-mail da noiva</label><input asp-for="BrideEmail" type="email" class="form-control" /></div>
                 <div class="col-md-6"><label asp-for="GroomEmail" class="form-label">E-mail do noivo</label><input asp-for="GroomEmail" type="email" class="form-control" /></div>
+            </div>
+        </fieldset>
+
+        <fieldset class="admin-fieldset">
+            <legend>Aspeto do site</legend>
+            <div class="row g-3">
+                <div class="col-12"><label asp-for="LogoPath" class="form-label">Logótipo</label><input asp-for="LogoPath" class="form-control" aria-describedby="logo-help" /><div id="logo-help" class="form-text">Indica o caminho da imagem no site (por exemplo, /images/navbar.png) ou o endereço completo da imagem.</div></div>
                 <div class="col-md-6"><label asp-for="PrimaryColor" class="form-label">Cor principal</label><input asp-for="PrimaryColor" type="color" class="form-control form-control-color" /></div>
                 <div class="col-md-6"><label asp-for="SecondaryColor" class="form-label">Cor de fundo</label><input asp-for="SecondaryColor" type="color" class="form-control form-control-color" /></div>
             </div>

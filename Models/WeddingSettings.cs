@@ -62,9 +62,11 @@ namespace CasamentoTatianaDiogo.Models
         public string LogoPath { get; set; } = "/images/navbar.png";
         
         [StringLength(20)] 
+        [RegularExpression("^#[a-fA-F0-9]{6}$", ErrorMessage = "Escolhe uma cor principal válida.")]
         public string PrimaryColor { get; set; } = "#bd4742";
         
         [StringLength(20)] 
+        [RegularExpression("^#[a-fA-F0-9]{6}$", ErrorMessage = "Escolhe uma cor de fundo válida.")]
         public string SecondaryColor { get; set; } = "#fce8e4";
         
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
