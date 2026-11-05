@@ -1,0 +1,25 @@
+@model MusicSection
+@{
+    ViewData["Title"] = Model.Id == 0 ? "Adicionar secção" : "Editar secção";
+}
+<div class="container py-5 narrow">
+    <a asp-action="Index">Voltar ao programa musical</a>
+    <h1 class="mt-3">@ViewData["Title"]</h1>
+    <form asp-action="SaveSection" method="post" class="admin-form">
+        <input asp-for="Id" type="hidden" /><partial name="_FormErrors" />
+        <div class="mb-3"><label asp-for="Name" class="form-label"></label>
+            <input asp-for="Name" class="form-control" maxlength="100" required /></div>
+        <div class="mb-3"><label asp-for="DisplayOrder" class="form-label">Ordem no programa</label>
+            <input asp-for="DisplayOrder" class="form-control" min="1" max="9999" required aria-describedby="order-help" />
+            <small id="order-help">Os números mais baixos aparecem primeiro.</small></div>
+        <button class="btn btn-primary">Guardar secção</button> <a class="btn btn-link" asp-action="Index">Cancelar</a>
+    </form>
+    @if (Model.Id != 0)
+    {
+        <form method="post" asp-action="DeleteSection" asp-route-id="@Model.Id" class="mt-4"
+              data-delete-confirmation data-delete-message="Eliminar a secção «@Model.Name»?">
+            <button class="btn btn-outline-danger">Eliminar secção</button>
+            <small class="d-block mt-1">Apenas podes eliminar secções vazias.</small>
+        </form>
+    }
+</div>

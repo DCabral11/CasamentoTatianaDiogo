@@ -28,10 +28,13 @@ namespace CasamentoTatianaDiogo.Data
         public DbSet<PlanningCategory> PlanningCategories => Set<PlanningCategory>();
         public DbSet<Supplier> Suppliers => Set<Supplier>();
         public DbSet<BudgetLine> BudgetLines => Set<BudgetLine>();
+        public DbSet<MusicSection> MusicSections => Set<MusicSection>();
+        public DbSet<MusicMoment> MusicMoments => Set<MusicMoment>();
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            MusicProgramSchema.Configure(builder);
 
             builder.Entity<PlanningCategory>().HasIndex(x => x.NormalizedName).IsUnique();
             builder.Entity<Supplier>().HasOne(x => x.Category).WithMany().HasForeignKey(x => x.CategoryId).OnDelete(DeleteBehavior.Restrict);

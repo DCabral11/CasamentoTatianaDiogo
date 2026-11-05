@@ -232,6 +232,184 @@ namespace CasamentoTatianaDiogo.Migrations.PostgreSql
                     b.ToTable("Guests");
                 });
 
+            modelBuilder.Entity("CasamentoTatianaDiogo.Models.MusicMoment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
+
+                    b.Property<int>("SectionId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Song")
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SectionId");
+
+                    b.ToTable("MusicMoments");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            DisplayOrder = 10,
+                            Name = "Entrada Noivo",
+                            SectionId = 1,
+                            Song = "Ruínas"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            DisplayOrder = 20,
+                            Name = "Entrada Noiva",
+                            SectionId = 1,
+                            Song = "Ninguém te Ama"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            DisplayOrder = 30,
+                            Name = "Ato Penitencial",
+                            SectionId = 1,
+                            Song = "Perdoa-me Senhor"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            DisplayOrder = 40,
+                            Name = "Aleluia",
+                            SectionId = 1,
+                            Song = "Quero Louvar-te"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            DisplayOrder = 50,
+                            Name = "Salmo",
+                            SectionId = 1
+                        },
+                        new
+                        {
+                            Id = 6,
+                            DisplayOrder = 60,
+                            Name = "Alianças",
+                            SectionId = 1,
+                            Song = "Deus de Amor (Amor tão Grande)"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            DisplayOrder = 70,
+                            Name = "Ofertório",
+                            SectionId = 1,
+                            Song = "Corça"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            DisplayOrder = 80,
+                            Name = "Santo",
+                            SectionId = 1,
+                            Song = "Africano"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            DisplayOrder = 90,
+                            Name = "Pai Nosso",
+                            SectionId = 1,
+                            Song = "Pai tu és meu Deus"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            DisplayOrder = 100,
+                            Name = "Cordeiro",
+                            SectionId = 1,
+                            Song = "Ama Vivendo + Cordeiro"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            DisplayOrder = 110,
+                            Name = "Comunhão",
+                            SectionId = 1,
+                            Song = "Pedacinho de Deus"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            DisplayOrder = 120,
+                            Name = "Ação de Graças",
+                            SectionId = 1,
+                            Song = "Cristo em Mim"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            DisplayOrder = 130,
+                            Name = "Consagração a Nossa Senhora",
+                            SectionId = 1,
+                            Song = "Consagração a Nossa Senhora"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            DisplayOrder = 140,
+                            Name = "Final",
+                            SectionId = 1,
+                            Song = "Sabes Bem"
+                        });
+                });
+
+            modelBuilder.Entity("CasamentoTatianaDiogo.Models.MusicSection", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MusicSections");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            DisplayOrder = 10,
+                            Name = "Cancioneiro Missa"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            DisplayOrder = 20,
+                            Name = "Músicas Quinta"
+                        });
+                });
+
             modelBuilder.Entity("CasamentoTatianaDiogo.Models.PendingPhotoUpload", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1010,6 +1188,15 @@ namespace CasamentoTatianaDiogo.Migrations.PostgreSql
                     b.Navigation("Family");
                 });
 
+            modelBuilder.Entity("CasamentoTatianaDiogo.Models.MusicMoment", b =>
+                {
+                    b.HasOne("CasamentoTatianaDiogo.Models.MusicSection", null)
+                        .WithMany("Moments")
+                        .HasForeignKey("SectionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("CasamentoTatianaDiogo.Models.PendingPhotoUpload", b =>
                 {
                     b.HasOne("CasamentoTatianaDiogo.Models.PhotoUpload", "PhotoUpload")
@@ -1139,6 +1326,11 @@ namespace CasamentoTatianaDiogo.Migrations.PostgreSql
                     b.Navigation("PlusOnes");
 
                     b.Navigation("RsvpResponses");
+                });
+
+            modelBuilder.Entity("CasamentoTatianaDiogo.Models.MusicSection", b =>
+                {
+                    b.Navigation("Moments");
                 });
 
             modelBuilder.Entity("CasamentoTatianaDiogo.Models.Supplier", b =>
