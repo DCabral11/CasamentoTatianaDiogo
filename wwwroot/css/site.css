@@ -364,7 +364,7 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
 }
 
 .navbar-logo-bg {
-    background-color: var(--surface-soft);
+    background-color: var(--canvas);
     border-bottom: 1px solid rgba(var(--primary-rgb), 0.14);
 }
 
