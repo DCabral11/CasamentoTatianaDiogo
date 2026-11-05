@@ -410,8 +410,7 @@ body > footer {
     font-size: 0.8em;
 }
 
-.hero-img,
-.story-img {
+.hero-img {
     border-radius: 2rem;
     box-shadow: 0 20px 70px rgba(189, 71, 66, 0.18);
     object-fit: cover;
@@ -420,178 +419,130 @@ body > footer {
 }
 
 .home-story-section {
-    position: relative;
-    padding-top: 5rem !important;
-    padding-bottom: 5rem !important;
+    padding-block: clamp(2.5rem, 6vw, 6rem);
 }
 
-.home-story-section::before {
-    content: "";
-    position: absolute;
-    top: 12%;
-    left: 3%;
-    width: min(30vw, 300px);
-    aspect-ratio: 1;
-    border-radius: 50%;
-    background: color-mix(in srgb, var(--secondary) 70%, transparent);
-    filter: blur(4px);
-    pointer-events: none;
+.story-page {
+    display: flow-root;
+    max-width: 58rem;
+    margin-inline: auto;
+    padding: clamp(1.25rem, 4vw, 3.5rem);
+    background: var(--surface);
+    border-block: 1px solid var(--line);
 }
 
-.story-layout {
-    position: relative;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: clamp(1.5rem, 3vw, 3rem);
-    align-items: stretch;
-}
-
-.story-copy {
-    position: relative;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: clamp(2rem, 4vw, 3.6rem);
-    border: 1px solid color-mix(in srgb, var(--line) 42%, transparent);
-    border-radius: 2rem;
-    background: rgba(255, 250, 247, 0.72);
-    box-shadow: 0 20px 50px rgba(94, 51, 42, 0.08);
-}
-
-.story-copy h2 {
-    position: relative;
-    margin-bottom: 1.4rem;
+.story-page h2 {
+    margin: 0 0 clamp(1.5rem, 3vw, 2.5rem);
     color: var(--primary);
-    font-family: Georgia, serif;
-    font-size: clamp(2.25rem, 4vw, 3.4rem);
-}
-
-.story-copy h2::after {
-    content: "";
-    display: block;
-    width: 3.8rem;
-    height: 2px;
-    margin-top: 1rem;
-    background: var(--primary);
+    font: 400 clamp(2.3rem, 5vw, 3.8rem)/1.1 Georgia, serif;
+    text-align: center;
 }
 
 .story {
-    max-width: 60ch;
     margin: 0;
-    color: var(--muted);
+    color: var(--ink);
     font-size: clamp(1.05rem, 1.5vw, 1.2rem);
     line-height: 1.8;
-    text-align: left;
+    text-align: start;
     white-space: pre-wrap;
-    overflow-wrap: break-word;
-    hyphens: auto;
+    overflow-wrap: anywhere;
 }
 
-.story-media {
-    position: relative;
-    min-width: 0;
-    height: clamp(300px, 85vw, 560px);
+.story-album {
+    padding: 0.5rem;
+    margin: 0 0 1.5rem;
+    background: white;
+    box-shadow: 0 0.4rem 1.5rem rgb(94 51 42 / 12%);
 }
 
-.story-carousel {
-    position: absolute;
-    inset: 0;
-    display: grid;
-    grid-template-rows: minmax(0, 1fr) auto;
-    min-height: 0;
-    overflow: hidden;
-    border: 1px solid color-mix(in srgb, var(--line) 45%, transparent);
-    border-radius: 2rem;
-    background: linear-gradient(145deg, var(--surface-soft), var(--secondary));
-    box-shadow: 0 24px 58px rgba(94, 51, 42, 0.16);
+.story-album .carousel-inner {
+    aspect-ratio: 4 / 3;
+    background: var(--surface-soft);
 }
 
-.story-carousel .carousel-inner {
-    min-height: 0;
-}
-
-.story-carousel .carousel-inner,
-.story-carousel .carousel-item {
+.story-album .carousel-item,
+.story-album .carousel-item img {
     height: 100%;
 }
 
-.story-carousel .story-img {
-    height: 100%;
-    max-height: none;
-    border-radius: 0;
-    box-shadow: none;
-    background: transparent;
+.story-album .carousel-item img {
+    display: block;
+    width: 100%;
     object-fit: contain;
 }
 
-.story-carousel-toolbar {
+.story-album-nav {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    padding: 0.85rem 1rem;
-    border-top: 1px solid color-mix(in srgb, var(--line) 45%, transparent);
-    background: var(--surface);
+    gap: 0.35rem;
+    padding-top: 0.5rem;
 }
 
-.story-carousel .carousel-indicators {
+.story-album .carousel-indicators {
     position: static;
     flex: 1;
-    flex-wrap: wrap;
-    gap: 0.6rem;
+    min-width: 0;
+    justify-content: safe center;
+    gap: 0.25rem;
     margin: 0;
+    padding: 0.2rem;
+    overflow-x: auto;
 }
 
-.story-carousel .carousel-indicators [data-bs-target] {
-    width: 0.55rem;
-    height: 0.55rem;
+.story-album .carousel-indicators [data-bs-target] {
+    box-sizing: border-box;
+    flex: 0 0 1.9rem;
+    width: 1.9rem;
+    height: 1.9rem;
     margin: 0;
-    border: 0;
-    border-radius: 50%;
-    background-color: var(--primary);
-    opacity: 0.45;
+    padding: 2px;
+    border: 2px solid transparent;
+    text-indent: 0;
+    opacity: 0.65;
 }
 
-.story-carousel .carousel-indicators .active {
-    width: 1.8rem;
-    border-radius: 999px;
+.story-album .carousel-indicators img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.story-album .carousel-indicators .active {
+    border-color: var(--primary);
     opacity: 1;
 }
 
-.story-carousel .carousel-control-prev,
-.story-carousel .carousel-control-next {
+.story-album .carousel-control-prev,
+.story-album .carousel-control-next {
     position: static;
-    flex-shrink: 0;
-    width: 2.6rem;
-    height: 2.6rem;
-    border-radius: 50%;
-    background: var(--primary);
-    opacity: 0.85;
-}
-
-.story-carousel .carousel-control-prev:hover,
-.story-carousel .carousel-control-next:hover {
+    flex: 0 0 2rem;
+    height: 2.5rem;
     opacity: 1;
 }
 
-.story-carousel button:focus-visible {
-    outline: 2px solid var(--primary);
-    outline-offset: 3px;
+.story-album .carousel-control-prev-icon,
+.story-album .carousel-control-next-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    filter: brightness(0);
 }
 
-@media (min-width: 992px) {
-    .story-layout {
-        grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-    }
+.story-album button:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: -2px;
+}
 
-    .story-media {
-        /* Images stay out of row sizing so the written story defines both card heights. */
-        height: auto;
-        min-height: 0;
-    }
+.story-album-only {
+    max-width: 42rem;
+    margin: 0 auto;
+}
 
-    .story-layout-text-only {
-        grid-template-columns: minmax(0, 1fr);
+@media (min-width: 768px) {
+    .story-album:not(.story-album-only) {
+        float: inline-start;
+        width: 46%;
+        margin: 0.35rem clamp(1.5rem, 3vw, 2.5rem) 1rem 0;
     }
 }
 

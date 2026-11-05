@@ -1,4 +1,4 @@
-﻿@using System.Globalization
+@using System.Globalization
 @model HomeViewModel
 @inject CasamentoTatianaDiogo.Services.Interfaces.ISiteContentService SiteContent
 @{
@@ -54,36 +54,36 @@
     </div>
 </section>
 
-<section class="container py-5 home-story-section" aria-labelledby="story-title">
-    <div class="story-layout @(Model.CarouselImages.Count == 0 ? "story-layout-text-only" : null)">
-        <div class="story-copy">
+@if (Model.CarouselImages.Count > 0 || !string.IsNullOrWhiteSpace(settings.CoupleStory))
+{
+    <section class="container home-story-section" aria-labelledby="story-title">
+        <div class="story-page">
             <h2 id="story-title">@siteText.GetValueOrDefault("HomeStoryTitle", "A nossa história")</h2>
-            <p class="story">@settings.CoupleStory</p>
-        </div>
 
-        @if (Model.CarouselImages.Count > 0)
-        {
-            <div class="story-media">
-                <div id="storyCarousel" class="carousel slide carousel-fade story-carousel" data-bs-ride="carousel" role="region" aria-label="Fotografias da nossa história" aria-roledescription="carrossel">
+            @if (Model.CarouselImages.Count > 0)
+            {
+                <div id="storyCarousel" class="carousel slide carousel-fade story-album @(string.IsNullOrWhiteSpace(settings.CoupleStory) ? "story-album-only" : null)"
+                     data-bs-ride="carousel" role="region" aria-roledescription="carrossel" aria-label="Fotografias da nossa história">
                     <div class="carousel-inner">
                         @for (var i = 0; i < Model.CarouselImages.Count; i++)
                         {
                             <div class="carousel-item @(i == 0 ? "active" : null)">
-                                <img src="@Model.CarouselImages[i]" class="d-block w-100 story-img" alt="Fotografia @(i + 1) da nossa história" loading="@(i == 0 ? "eager" : "lazy")" decoding="async" />
+                                <img src="@Model.CarouselImages[i]" alt="Fotografia @(i + 1) da nossa história" decoding="async" />
                             </div>
                         }
                     </div>
-
                     @if (Model.CarouselImages.Count > 1)
                     {
-                        <div class="story-carousel-toolbar">
+                        <div class="story-album-nav">
                             <button class="carousel-control-prev" type="button" data-bs-target="#storyCarousel" data-bs-slide="prev" aria-label="Fotografia anterior">
                                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             </button>
                             <div class="carousel-indicators">
                                 @for (var i = 0; i < Model.CarouselImages.Count; i++)
                                 {
-                                    <button type="button" data-bs-target="#storyCarousel" data-bs-slide-to="@i" class="@(i == 0 ? "active" : null)" aria-current="@(i == 0 ? "true" : null)" aria-label="Fotografia @(i + 1)"></button>
+                                    <button type="button" data-bs-target="#storyCarousel" data-bs-slide-to="@i" class="@(i == 0 ? "active" : null)" aria-current="@(i == 0 ? "true" : null)" aria-label="Ver fotografia @(i + 1)">
+                                        <img src="@Model.CarouselImages[i]" alt="" />
+                                    </button>
                                 }
                             </div>
                             <button class="carousel-control-next" type="button" data-bs-target="#storyCarousel" data-bs-slide="next" aria-label="Fotografia seguinte">
@@ -92,10 +92,14 @@
                         </div>
                     }
                 </div>
-            </div>
-        }
-    </div>
-</section>
+            }
+            @if (!string.IsNullOrWhiteSpace(settings.CoupleStory))
+            {
+                <p class="story">@settings.CoupleStory</p>
+            }
+        </div>
+    </section>
+}
 
 @section Scripts {
     <script src="~/js/countdown.js" asp-append-version="true"></script>
