@@ -86,6 +86,49 @@ namespace CasamentoTatianaDiogo.Migrations.PostgreSql
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("CasamentoTatianaDiogo.Models.BudgetLine", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateOnly?>("NextPayment")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
+
+                    b.Property<decimal>("Paid")
+                        .HasPrecision(14, 2)
+                        .HasColumnType("numeric(14,2)");
+
+                    b.Property<decimal?>("RealCost")
+                        .HasPrecision(14, 2)
+                        .HasColumnType("numeric(14,2)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)");
+
+                    b.Property<int?>("SupplierId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("SupplierId", "CategoryId");
+
+                    b.ToTable("BudgetLines");
+                });
+
             modelBuilder.Entity("CasamentoTatianaDiogo.Models.Family", b =>
                 {
                     b.Property<int>("Id")
@@ -335,6 +378,32 @@ namespace CasamentoTatianaDiogo.Migrations.PostgreSql
                     b.ToTable("PhotoUploadSettings");
                 });
 
+            modelBuilder.Entity("CasamentoTatianaDiogo.Models.PlanningCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("NormalizedName")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique();
+
+                    b.ToTable("PlanningCategories");
+                });
+
             modelBuilder.Entity("CasamentoTatianaDiogo.Models.PlusOne", b =>
                 {
                     b.Property<int>("Id")
@@ -563,6 +632,54 @@ namespace CasamentoTatianaDiogo.Migrations.PostgreSql
                         .IsUnique();
 
                     b.ToTable("SiteContents");
+                });
+
+            modelBuilder.Entity("CasamentoTatianaDiogo.Models.Supplier", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Contact")
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(254)
+                        .HasColumnType("character varying(254)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
+
+                    b.Property<decimal?>("Price")
+                        .HasPrecision(14, 2)
+                        .HasColumnType("numeric(14,2)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)");
+
+                    b.Property<string>("Website")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("Suppliers");
                 });
 
             modelBuilder.Entity("CasamentoTatianaDiogo.Models.TimelineEvent", b =>
@@ -863,6 +980,25 @@ namespace CasamentoTatianaDiogo.Migrations.PostgreSql
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("CasamentoTatianaDiogo.Models.BudgetLine", b =>
+                {
+                    b.HasOne("CasamentoTatianaDiogo.Models.PlanningCategory", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CasamentoTatianaDiogo.Models.Supplier", "Supplier")
+                        .WithMany("Lines")
+                        .HasForeignKey("SupplierId", "CategoryId")
+                        .HasPrincipalKey("Id", "CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Supplier");
+                });
+
             modelBuilder.Entity("CasamentoTatianaDiogo.Models.Guest", b =>
                 {
                     b.HasOne("CasamentoTatianaDiogo.Models.Family", "Family")
@@ -931,6 +1067,17 @@ namespace CasamentoTatianaDiogo.Migrations.PostgreSql
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("CasamentoTatianaDiogo.Models.Supplier", b =>
+                {
+                    b.HasOne("CasamentoTatianaDiogo.Models.PlanningCategory", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -992,6 +1139,11 @@ namespace CasamentoTatianaDiogo.Migrations.PostgreSql
                     b.Navigation("PlusOnes");
 
                     b.Navigation("RsvpResponses");
+                });
+
+            modelBuilder.Entity("CasamentoTatianaDiogo.Models.Supplier", b =>
+                {
+                    b.Navigation("Lines");
                 });
 #pragma warning restore 612, 618
         }

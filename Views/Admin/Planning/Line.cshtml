@@ -1,0 +1,41 @@
+@model BudgetLine
+@{
+    ViewData["Title"] = Model.Id == 0 ? "Adicionar linha de orçamento" : "Editar linha de orçamento";
+    var categories = new SelectList((List<PlanningCategory>)ViewBag.Categories, "Id", "Name");
+    var suppliers = (List<Supplier>)ViewBag.Suppliers;
+}
+<div class="container py-5 narrow">
+    <h1>@ViewData["Title"]</h1>
+    <partial name="~/Views/Admin/Planning/_PlanningNav.cshtml" />
+    <form asp-action="SaveLine" method="post" class="admin-form">
+        <input asp-for="Id" type="hidden" /><partial name="_FormErrors" />
+        <div class="row g-3">
+            <div class="col-md-6"><label asp-for="CategoryId" class="form-label">Categoria</label>
+                <select asp-for="CategoryId" asp-items="categories" class="form-select" required><option value="">Escolhe uma categoria</option></select></div>
+            <div class="col-md-6"><label asp-for="SupplierId" class="form-label">Fornecedor (opcional)</label>
+                <select asp-for="SupplierId" class="form-select"><option value="">Sem fornecedor</option>
+                @foreach (var s in suppliers)
+                {
+                    <option value="@s.Id" data-category="@s.CategoryId">@s.Name · @s.Category!.Name</option>
+                }
+                </select></div>
+            <div class="col-md-6"><label asp-for="RealCost" class="form-label">Custo real (€)</label>
+                <input asp-for="RealCost" type="number" min="0" step="0.01" class="form-control" aria-describedby="cost-help" />
+                <small id="cost-help">Deixa em branco para usar o preço atual do fornecedor. Sem preço, o custo fica por definir.</small></div>
+            <div class="col-md-6"><label asp-for="Paid" class="form-label">Valor pago (€)</label><input asp-for="Paid" type="number" min="0" step="0.01" class="form-control" required /></div>
+            <div class="col-md-6"><label asp-for="Status" class="form-label">Estado</label><select asp-for="Status" asp-items="new SelectList(BudgetLine.States)" class="form-select"></select></div>
+            <div class="col-md-6"><label asp-for="NextPayment" class="form-label">Prazo / próximo pagamento</label><input asp-for="NextPayment" type="date" class="form-control" /></div>
+            <div class="col-12"><label asp-for="Notes" class="form-label">Notas</label><textarea asp-for="Notes" rows="3" class="form-control"></textarea></div>
+        </div>
+        <button class="btn btn-primary mt-3">Guardar linha</button> <a class="btn btn-link mt-3" asp-action="Budget">Cancelar</a>
+    </form>
+    @if (Model.Id != 0)
+    {
+        <form class="mt-3" method="post" asp-action="DeleteLine" asp-route-id="@Model.Id" data-delete-confirmation data-delete-message="Eliminar esta linha do orçamento?">
+            <button class="btn btn-outline-danger">Eliminar linha</button>
+        </form>
+    }
+</div>
+@section Scripts {
+    <script src="~/js/budget-line.js" asp-append-version="true"></script>
+}

@@ -25,10 +25,20 @@ namespace CasamentoTatianaDiogo.Data
         public DbSet<PhotoUploadSettings> PhotoUploadSettings => Set<PhotoUploadSettings>();
         public DbSet<PhotoUpload> PhotoUploads => Set<PhotoUpload>();
         public DbSet<SiteContent> SiteContents => Set<SiteContent>();
+        public DbSet<PlanningCategory> PlanningCategories => Set<PlanningCategory>();
+        public DbSet<Supplier> Suppliers => Set<Supplier>();
+        public DbSet<BudgetLine> BudgetLines => Set<BudgetLine>();
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.Entity<PlanningCategory>().HasIndex(x => x.NormalizedName).IsUnique();
+            builder.Entity<Supplier>().HasOne(x => x.Category).WithMany().HasForeignKey(x => x.CategoryId).OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<BudgetLine>().HasOne(x => x.Category).WithMany().HasForeignKey(x => x.CategoryId).OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<BudgetLine>().HasOne(x => x.Supplier).WithMany(x => x.Lines)
+                .HasForeignKey(x => new { x.SupplierId, x.CategoryId }).HasPrincipalKey(x => new { x.Id, x.CategoryId })
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<WeddingSettings>().HasIndex(x => x.Id).IsUnique();
             builder.Entity<SiteContent>().HasIndex(x => x.Key).IsUnique();

@@ -1,5 +1,6 @@
 using CasamentoTatianaDiogo.Models;
 using CasamentoTatianaDiogo.Models.Enums;
+using CasamentoTatianaDiogo.Common.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -77,7 +78,24 @@ namespace CasamentoTatianaDiogo.Data
             }
 
             if (db.Database.IsSqlServer())
+            {
                 await RsvpVerificationSchema.UpgradeSqlServerAsync(db);
+                await PlanningSchema.UpgradeSqlServerAsync(db);
+            }
+
+            if (!await db.PlanningCategories.AnyAsync())
+            {
+                string[] categories = [
+                    "Igreja", "Missal", "Donativo ao padre", "Registo civil", "Pétalas à saída da igreja",
+                    "Quinta", "Música do cocktail", "Coro", "Save the date", "Convites", "Convites dos padrinhos",
+                    "Lembranças", "Bouquet", "Decoração da igreja", "Mesas do copo de água", "Identificação de mesas",
+                    "Estacionário", "Seating planner", "Raspadinha do bouquet", "Espelho de entrada", "Bolas de sabão",
+                    "Fotografia e vídeo", "Alianças", "Vestido", "Sapatos", "Fato", "Camisa", "Gravata",
+                    "Botões de punho", "Cinto", "Cabeleireiro da noiva", "Cabeleireiro do noivo", "Estética da noiva",
+                    "Maquilhagem da noiva", "Jogos", "Photobooth", "Matraquilhos", "Audio guest book"
+                ];
+                db.PlanningCategories.AddRange(categories.Select(name => new PlanningCategory { Name = name, NormalizedName = name.NormalizeForSearch() }));
+            }
 
             var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
             var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();

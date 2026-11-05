@@ -1,0 +1,25 @@
+@{
+    var categories = (List<PlanningCategory>)ViewBag.Categories;
+    int? selected = ViewBag.CategoryFilter;
+}
+<form method="get" class="d-flex flex-wrap align-items-end gap-2 mb-3">
+    <div>
+        <label for="category-filter" class="form-label">Pesquisar por categoria</label>
+        <select id="category-filter" name="categoryId" class="form-select">
+            <option value="">Todas as categorias</option>
+            @foreach (var category in categories)
+            {
+                <option value="@category.Id" selected="@(selected == category.Id)">@category.Name</option>
+            }
+        </select>
+    </div>
+    @if (ViewBag.SupplierFilter is int supplierId)
+    {
+        <input type="hidden" name="supplierId" value="@supplierId" />
+    }
+    <button class="btn btn-outline-primary">Filtrar</button>
+    @if (selected.HasValue || ViewBag.SupplierFilter != null)
+    {
+        <a class="btn btn-link" href="@Context.Request.Path">Limpar filtros</a>
+    }
+</form>
