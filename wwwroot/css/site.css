@@ -160,6 +160,31 @@ body > footer {
     font-weight: 400;
 }
 
+.validation-summary-valid { display: none; }
+.form-feedback-card a { color: inherit; }
+
+.skip-link {
+    position: fixed;
+    inset: 0.5rem auto auto 0.5rem;
+    z-index: 1100;
+    padding: 0.75rem 1rem;
+    color: var(--ink);
+    background: var(--surface);
+    transform: translateY(-150%);
+}
+
+.skip-link:focus { transform: none; }
+
+body :is(a, button, input, textarea, select, [tabindex]):focus-visible {
+    outline: 3px solid #68302c;
+    outline-offset: 2px;
+}
+
+main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6rem; }
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+}
+
 .form-feedback-heading {
     margin: 0 0 0.45rem;
     font-weight: 700;

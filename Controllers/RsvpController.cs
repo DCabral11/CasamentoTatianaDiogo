@@ -87,7 +87,7 @@ public class RsvpController(IRsvpService rsvp, IAppMessageService messages,
         catch (RsvpVerificationException exception)
         {
             ModelState.Clear();
-            ModelState.AddModelError(string.Empty, exception.Message);
+            ModelState.AddModelError(nameof(model.Code), exception.Message);
             return View(form);
         }
     }

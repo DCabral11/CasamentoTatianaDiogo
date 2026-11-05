@@ -9,9 +9,9 @@
     <form asp-action="Verify" method="post" class="elegant-card p-4">
         @Html.AntiForgeryToken()
         <p>Enviámos um código por email para <strong>@Model.MaskedContact</strong>.</p>
-        <div asp-validation-summary="All" class="text-danger" role="alert"></div>
+        <partial name="_FormErrors" />
         <label asp-for="Code" class="form-label">Código de verificação</label>
-        <input asp-for="Code" class="form-control mb-2" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" minlength="6" maxlength="6" required aria-describedby="code-help" autofocus />
+        <input asp-for="Code" class="form-control mb-2" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" minlength="6" maxlength="6" required aria-describedby="code-help" />
         <p id="code-help" class="form-text">O código tem 6 algarismos e é válido durante 10 minutos. Se pedires outro, usa o mais recente.</p>
         <button class="btn btn-primary rounded-pill">Verificar e continuar</button>
         <a asp-action="Contact" asp-route-id="@Model.GuestId" class="btn btn-link">Pedir novo código ou corrigir contacto</a>

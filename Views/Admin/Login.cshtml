@@ -8,9 +8,11 @@
         @Html.AntiForgeryToken()
         <h1>Área de administração</h1>
         <p class="text-muted">Inicia sessão para gerir o site do casamento.</p>
-        <input name="email" type="email" class="form-control mb-3" placeholder="E-mail" aria-label="E-mail" />
-        <input name="password" type="password" class="form-control mb-3" placeholder="Palavra-passe" aria-label="Palavra-passe" />
+        <partial name="_FormErrors" />
+        <label for="login-email" class="form-label">Email</label>
+        <input id="login-email" required autocomplete="username" name="email" type="email" class="form-control mb-3" />
+        <label for="login-password" class="form-label">Palavra-passe</label>
+        <input id="login-password" required autocomplete="current-password" name="password" type="password" class="form-control mb-3" />
         <button class="btn btn-primary">Entrar</button>
-        <div asp-validation-summary="All" class="text-danger mt-3"></div>
     </form>
 </div>

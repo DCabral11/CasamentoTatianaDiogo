@@ -40,7 +40,7 @@ namespace CasamentoTatianaDiogo.ViewModels
 
         public bool ApplyToGroup { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Escolhe se vais estar presente.")]
         public RsvpStatus? Status { get; set; }
 
         [StringLength(1000)]

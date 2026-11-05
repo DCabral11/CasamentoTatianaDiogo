@@ -1,0 +1,16 @@
+@{
+    var errors = ViewData.ModelState.Where(entry => entry.Value?.Errors.Count > 0);
+}
+<div class="feedback-card feedback-card-error form-feedback-card @(errors.Any() ? "validation-summary-errors" : "validation-summary-valid")"
+     data-valmsg-summary="true" tabindex="-1" role="region" aria-label="Erros no formulário">
+    <p class="form-feedback-heading">Revê os seguintes dados</p>
+    <ul>
+        @foreach (var entry in errors)
+        {
+            foreach (var error in entry.Value!.Errors)
+            {
+                <li data-field="@entry.Key">@(string.IsNullOrWhiteSpace(error.ErrorMessage) ? "Verifica o valor introduzido." : error.ErrorMessage)</li>
+            }
+        }
+    </ul>
+</div>

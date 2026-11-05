@@ -22,7 +22,7 @@
     <form asp-action="Submit" method="post">
         @Html.AntiForgeryToken()
         <input type="hidden" name="GuestId" value="@Model.Guest.Id" />
-        <div asp-validation-summary="All" class="text-danger" role="alert"></div>
+        <partial name="_FormErrors" />
 
         <article class="rsvp-response-card">
             <div class="rsvp-card-heading">
@@ -44,13 +44,20 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label" for="guest-status">Vais estar presente?</label>
+                <label class="form-label" for="guest-status">Vais estar presente? (obrigatório)</label>
                 @Html.DropDownList("Status", new[] { new SelectListItem("Sim, estarei presente", "Attending", Model.Input.Status == RsvpStatus.Attending), new SelectListItem("Não poderei estar presente", "NotAttending", Model.Input.Status == RsvpStatus.NotAttending) }, "Escolhe...", new { id = "guest-status", @class = "form-select", required = "required" })
             </div>
 
-            @Html.TextArea("DietaryRestrictions", Model.Input.DietaryRestrictions, new { @class = "form-control mb-3", placeholder = "Restrições alimentares (opcional)", data_rsvp_attendance_dependent = "" })
-            @Html.TextArea("Message", Model.Input.Message, new { @class = "form-control mb-3", placeholder = "Mensagem para os noivos (opcional)" })
-            @Html.TextBox("MusicRequest", Model.Input.MusicRequest, new { @class = "form-control", placeholder = "Uma música que gostasses de ouvir (opcional)", data_rsvp_attendance_dependent = "" })
+            <div data-rsvp-attendance-dependent>
+                <label for="DietaryRestrictions" class="form-label">Restrições alimentares (opcional)</label>
+                @Html.TextArea("DietaryRestrictions", Model.Input.DietaryRestrictions, new { @class = "form-control mb-3" })
+            </div>
+            <label for="Message" class="form-label">Mensagem para os noivos (opcional)</label>
+            @Html.TextArea("Message", Model.Input.Message, new { @class = "form-control mb-3" })
+            <div data-rsvp-attendance-dependent>
+                <label for="MusicRequest" class="form-label">Uma música que gostasses de ouvir (opcional)</label>
+                @Html.TextBox("MusicRequest", Model.Input.MusicRequest, new { @class = "form-control" })
+            </div>
         </article>
 
         @if (Model.Guest.Family?.AllowGroupRsvp == true && Model.RelatedGuests.Any())
@@ -63,7 +70,7 @@
                     {
                         var familyGuest = Model.RelatedGuests[i];
                         <div class="form-check rsvp-family-selector">
-                            <input class="form-check-input" type="checkbox" id="family-guest-toggle-@i" data-family-card-toggle="family-guest-card-@i" checked="@(Model.Input.FamilyResponses.Any(x => x.GuestId == familyGuest.Id && x.Status.HasValue))" />
+                            <input class="form-check-input" type="checkbox" id="family-guest-toggle-@i" aria-controls="family-guest-card-@i" data-family-card-toggle="family-guest-card-@i" checked="@(Model.Input.FamilyResponses.Any(x => x.GuestId == familyGuest.Id && x.Status.HasValue))" />
                             <label class="form-check-label" for="family-guest-toggle-@i">
                                 <span class="guest-avatar rsvp-family-avatar" style="--avatar-scale:@familyGuest.AvatarScale.ToString(System.Globalization.CultureInfo.InvariantCulture);--avatar-position-x:@familyGuest.AvatarPositionX%;--avatar-position-y:@familyGuest.AvatarPositionY%;">
                                     @if (!string.IsNullOrWhiteSpace(familyGuest.ProfileImagePath))
@@ -86,7 +93,7 @@
                     var familyGuest = Model.RelatedGuests[i];
                     var response = Model.Input.FamilyResponses.FirstOrDefault(x => x.GuestId == familyGuest.Id);
                     <input type="hidden" name="FamilyResponses.Index" value="@i" />
-                    <article id="family-guest-card-@i" class="rsvp-response-card rsvp-family-card" hidden>
+                    <article id="family-guest-card-@i" class="rsvp-response-card rsvp-family-card" aria-labelledby="family-name-@i" hidden>
                         <div class="rsvp-card-heading">
                             <span class="guest-avatar rsvp-family-card-avatar" style="--avatar-scale:@familyGuest.AvatarScale.ToString(System.Globalization.CultureInfo.InvariantCulture);--avatar-position-x:@familyGuest.AvatarPositionX%;--avatar-position-y:@familyGuest.AvatarPositionY%;">
                                 @if (!string.IsNullOrWhiteSpace(familyGuest.ProfileImagePath))
@@ -100,15 +107,18 @@
                             </span>
                             <div>
                                 <p class="rsvp-card-label">Convidado da família</p>
-                                <h3>@familyGuest.DisplayName</h3>
+                                <h3 id="family-name-@i">@familyGuest.DisplayName</h3>
                             </div>
                         </div>
                         <input type="hidden" name="FamilyResponses[@i].GuestId" value="@familyGuest.Id" />
-                        <label class="form-label" for="family-status-@i">Vai estar presente? <span class="text-muted">(opcional)</span></label>
+                        <label class="form-label" for="family-status-@i">Vai estar presente? (obrigatório)</label>
                         @Html.DropDownList($"FamilyResponses[{i}].Status", new[] { new SelectListItem("Sim, estará presente", "Attending", response?.Status == RsvpStatus.Attending), new SelectListItem("Não poderá estar presente", "NotAttending", response?.Status == RsvpStatus.NotAttending) }, "Escolhe...", new { id = $"family-status-{i}", @class = "form-select", data_family_status = "" })
-                        @Html.TextArea($"FamilyResponses[{i}].DietaryRestrictions", response?.DietaryRestrictions, new { @class = "form-control mt-3", placeholder = "Restrições alimentares (opcional)" })
-                        @Html.TextArea($"FamilyResponses[{i}].Message", response?.Message, new { @class = "form-control mt-3", placeholder = "Mensagem para os noivos (opcional)" })
-                        @Html.TextBox($"FamilyResponses[{i}].MusicRequest", response?.MusicRequest, new { @class = "form-control mt-3", placeholder = "Uma música que gostasses de ouvir (opcional)" })
+                        <label for="family-DietaryRestrictions-@i" class="form-label mt-3">Restrições alimentares (opcional)</label>
+                        @Html.TextArea($"FamilyResponses[{i}].DietaryRestrictions", response?.DietaryRestrictions, new { id = $"family-DietaryRestrictions-{i}", @class = "form-control" })
+                        <label for="family-Message-@i" class="form-label mt-3">Mensagem para os noivos (opcional)</label>
+                        @Html.TextArea($"FamilyResponses[{i}].Message", response?.Message, new { id = $"family-Message-{i}", @class = "form-control" })
+                        <label for="family-MusicRequest-@i" class="form-label mt-3">Uma música que gostasses de ouvir (opcional)</label>
+                        @Html.TextBox($"FamilyResponses[{i}].MusicRequest", response?.MusicRequest, new { id = $"family-MusicRequest-{i}", @class = "form-control" })
                     </article>
                 }
             </section>
@@ -126,7 +136,7 @@
                     </div>
                 </div>
                 <input type="hidden" name="PlusOneId" value="@plusOne.Id" />
-                <p>O/a @plusOne.PlusOneFirstName também vai estar presente?</p>
+                <fieldset><legend class="h6">O/a @plusOne.PlusOneFirstName também vai estar presente?</legend>
                 <div class="d-flex gap-3">
                     <div class="form-check">
                         @Html.RadioButton("PlusOneAttending", "true", Model.Input.PlusOneAttending, new { @class = "form-check-input", id = "plus-one-yes" })
@@ -137,10 +147,14 @@
                         <label class="form-check-label" for="plus-one-no">Não</label>
                     </div>
                 </div>
+                </fieldset>
                 <div class="mt-3">
-                    @Html.TextArea("PlusOneDietaryRestrictions", Model.Input.PlusOneDietaryRestrictions, new { @class = "form-control mb-3", rows = "3", placeholder = "Restrições alimentares do/a acompanhante (opcional)" })
-                    @Html.TextArea("PlusOneMessage", Model.Input.PlusOneMessage, new { @class = "form-control mb-3", rows = "3", placeholder = "Mensagem do/a acompanhante para os noivos (opcional)" })
-                    @Html.TextBox("PlusOneMusicRequest", Model.Input.PlusOneMusicRequest, new { @class = "form-control", placeholder = "Uma música que o/a acompanhante gostasse de ouvir (opcional)" })
+                    <label for="PlusOneDietaryRestrictions" class="form-label">Restrições alimentares do/a acompanhante (opcional)</label>
+                    @Html.TextArea("PlusOneDietaryRestrictions", Model.Input.PlusOneDietaryRestrictions, new { @class = "form-control mb-3", rows = "3" })
+                    <label for="PlusOneMessage" class="form-label">Mensagem do/a acompanhante para os noivos (opcional)</label>
+                    @Html.TextArea("PlusOneMessage", Model.Input.PlusOneMessage, new { @class = "form-control mb-3", rows = "3" })
+                    <label for="PlusOneMusicRequest" class="form-label">Uma música que o/a acompanhante gostasse de ouvir (opcional)</label>
+                    @Html.TextBox("PlusOneMusicRequest", Model.Input.PlusOneMusicRequest, new { @class = "form-control" })
                 </div>
             </article>
         }

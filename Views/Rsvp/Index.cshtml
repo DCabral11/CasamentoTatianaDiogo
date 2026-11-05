@@ -15,12 +15,12 @@
 <div class="container py-5 narrow">
     <form asp-action="Search" method="post" class="elegant-card p-4 rsvp-search-card" autocomplete="off">
         @Html.AntiForgeryToken()
-        <div asp-validation-summary="All" class="text-danger"></div>
+        <partial name="_FormErrors" />
 
-        <label class="form-label" for="guest-search">Nome do Convidado</label>
+        <label class="form-label" for="guest-search">Nome do convidado (obrigatório)</label>
 
         <div class="input-group">
-            <input asp-for="Query" id="guest-search" class="form-control" placeholder="Primeiro ou Último Nome" autocomplete="off" spellcheck="false" />
+            <input asp-for="Query" id="guest-search" required class="form-control" placeholder="Primeiro ou Último Nome" autocomplete="off" spellcheck="false" />
             <button class="btn btn-primary">
                 <i class="bi bi-search"></i> Pesquisar
             </button>

@@ -11,7 +11,13 @@
     const types = { ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png", ".heic": "image/heic", ".heif": "image/heif" };
     let queue = [];
     let sending = false;
-    input.addEventListener("change", () => { queue = []; });
+    input.addEventListener("change", () => {
+        queue = [];
+        error.hidden = true;
+        error.textContent = "";
+        input.removeAttribute("aria-invalid");
+        input.setAttribute("aria-describedby", "photo-help");
+    });
 
     async function request(url, options, retry = false) {
         for (let attempt = 0; ; attempt++) {
@@ -45,6 +51,9 @@
         if (invalid) {
             error.textContent = `Revê a fotografia «${invalid.name}»: usa um formato permitido e um tamanho até ${form.dataset.maxFileMb} MB.`;
             error.hidden = false;
+            input.setAttribute("aria-invalid", "true");
+            input.setAttribute("aria-describedby", "photo-help photo-error");
+            input.focus();
             return;
         }
         if (!queue.length) queue = files.map(file => ({ file, uploaded: 0, completed: false, ticket: null }));

@@ -21,13 +21,16 @@
               data-photo-upload data-begin-url="@Url.Action("BeginUpload")" data-chunk-url="@Url.Action("UploadChunk")"
               data-max-file-mb="@Model.Settings.MaxFilesSizeMb" data-extensions="@Model.Settings.AllowedExtensionsCsv">
             @Html.AntiForgeryToken()
-            <input asp-for="GuestName" class="form-control mb-3" placeholder="@siteText.GetValueOrDefault("PhotosNamePlaceholder", "O teu nome (opcional)")" />
-            <textarea asp-for="Notes" class="form-control mb-3" placeholder="@siteText.GetValueOrDefault("PhotosMessagePlaceholder", "Mensagem (opcional)")"></textarea>
-            <div class="dropzone"><i class="bi bi-cloud-arrow-up"></i><input asp-for="Files" type="file" multiple required accept=".jpg,.jpeg,.png,.heic,.heif,image/jpeg,image/png,image/heic,image/heif" class="form-control" /></div>
-            <small>Tamanho máximo: @Model.Settings.MaxFilesSizeMb MB. Formatos permitidos: @Model.Settings.AllowedExtensionsCsv</small>
+            <label asp-for="GuestName" class="form-label">@siteText.GetValueOrDefault("PhotosNamePlaceholder", "O teu nome (opcional)")</label>
+            <input asp-for="GuestName" class="form-control mb-3" autocomplete="name" />
+            <label asp-for="Notes" class="form-label">@siteText.GetValueOrDefault("PhotosMessagePlaceholder", "Mensagem (opcional)")</label>
+            <textarea asp-for="Notes" class="form-control mb-3"></textarea>
+            <label asp-for="Files" class="form-label">Fotografias (obrigatório)</label>
+            <div class="dropzone"><i class="bi bi-cloud-arrow-up" aria-hidden="true"></i><input asp-for="Files" type="file" multiple required accept=".jpg,.jpeg,.png,.heic,.heif,image/jpeg,image/png,image/heic,image/heif" aria-describedby="photo-help" class="form-control" /></div>
+            <small id="photo-help">Tamanho máximo por fotografia: @Model.Settings.MaxFilesSizeMb MB. Formatos permitidos: @Model.Settings.AllowedExtensionsCsv</small>
             <button class="btn btn-primary rounded-pill mt-3">Enviar fotografias</button>
             <p class="mt-3 mb-0" data-upload-status role="status" aria-live="polite" hidden></p>
-            <p class="text-danger mt-3 mb-0" data-upload-error role="alert" hidden></p>
+            <p class="text-danger mt-3 mb-0" id="photo-error" data-upload-error role="alert" hidden></p>
             <noscript><p class="mt-3">Ativa o JavaScript para enviar fotografias grandes. Sem JavaScript, o envio completo deve ter menos de 4 MB.</p></noscript>
         </form>
     }

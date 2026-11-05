@@ -30,9 +30,10 @@
     </head>
 
     <body class="@(isAdminScreen ? "admin-screen" : "")">
+        <a class="skip-link" href="#main-content">Saltar para o conteúdo</a>
         <nav class="navbar navbar-expand-lg navbar-light navbar-logo-bg shadow-sm sticky-top" aria-label="Navegação principal">
             <div class="container">
-                <a class="navbar-brand" asp-controller="Home" asp-action="Index" aria-label="@siteText.GetValueOrDefault("NavHome", "Início")">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index" aria-label="@siteText.GetValueOrDefault("NavHome", "Início")" aria-current="@(currentController == "Home" && Equals(ViewContext.RouteData.Values["action"], "Index") ? "page" : null)">
                     <img src="/images/navbar.png" class="nav-logo" alt="Tatiana & Diogo Logo" />
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Menu principal">
@@ -64,7 +65,7 @@
             </div>
         </nav>
 
-        <main>
+        <main id="main-content" tabindex="-1">
             @if (TempData["Success"] != null)
             {
                 <div class="container mt-3">
@@ -115,12 +116,12 @@
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
-        <script src="~/js/form-feedback.js" asp-append-version="true"></script>
         @if (isAdminScreen)
         {
             <script src="~/js/admin-delete-confirmation.js" asp-append-version="true"></script>
         }
 
         @await RenderSectionAsync("Scripts", required: false)
+        <script src="~/js/form-feedback.js" asp-append-version="true"></script>
     </body>
 </html>
