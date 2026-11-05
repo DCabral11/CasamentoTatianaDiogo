@@ -10,6 +10,10 @@
 }
 
 <section class="hero hero-photo" style="--primary: @settings.PrimaryColor; --secondary: @settings.SecondaryColor">
+    <picture>
+        <source type="image/webp" srcset="/images/home/homepage-couple.jpeg-640.webp 640w, /images/home/homepage-couple.jpeg-1086.webp 1086w" sizes="100vw" />
+        <img class="hero-cover" src="/images/homepage-couple.jpeg" width="1086" height="1448" alt="" fetchpriority="high" />
+    </picture>
     <div class="container hero-content">
         <div class="hero-intro">
             <h1 class="couple-names">
@@ -63,12 +67,16 @@
             @if (Model.CarouselImages.Count > 0)
             {
                 <div id="storyCarousel" class="carousel slide carousel-fade story-album @(string.IsNullOrWhiteSpace(settings.CoupleStory) ? "story-album-only" : null)"
-                     data-bs-ride="carousel" role="region" aria-roledescription="carrossel" aria-label="Fotografias da nossa história">
+                     role="region" aria-roledescription="carrossel" aria-label="Fotografias da nossa história">
                     <div class="carousel-inner">
                         @for (var i = 0; i < Model.CarouselImages.Count; i++)
                         {
+                            var photo = Model.CarouselImages[i];
                             <div class="carousel-item @(i == 0 ? "active" : null)">
-                                <img src="@Model.CarouselImages[i]" alt="Fotografia @(i + 1) da nossa história" decoding="async" />
+                                <img src="@(i == 0 ? photo.Url : null)" srcset="@(i == 0 ? photo.SrcSet : null)"
+                                     data-src="@(i > 0 ? photo.Url : null)" data-srcset="@(i > 0 ? photo.SrcSet : null)"
+                                     sizes="(max-width: 767px) 90vw, (max-width: 1450px) 40vw, 640px"
+                                     loading="@(i == 0 ? "lazy" : "eager")" decoding="async" alt="Fotografia @(i + 1) da nossa história" />
                             </div>
                         }
                     </div>
@@ -82,7 +90,7 @@
                                 @for (var i = 0; i < Model.CarouselImages.Count; i++)
                                 {
                                     <button type="button" data-bs-target="#storyCarousel" data-bs-slide-to="@i" class="@(i == 0 ? "active" : null)" aria-current="@(i == 0 ? "true" : null)" aria-label="Ver fotografia @(i + 1)">
-                                        <img src="@Model.CarouselImages[i]" alt="" />
+                                        <img src="@Model.CarouselImages[i].ThumbnailUrl" width="80" height="80" loading="lazy" decoding="async" alt="" />
                                     </button>
                                 }
                             </div>
@@ -103,4 +111,8 @@
 
 @section Scripts {
     <script src="~/js/countdown.js" asp-append-version="true"></script>
+    @if (Model.CarouselImages.Count > 1)
+    {
+        <script src="~/js/story-carousel.js" asp-append-version="true"></script>
+    }
 }

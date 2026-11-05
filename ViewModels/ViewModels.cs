@@ -4,7 +4,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CasamentoTatianaDiogo.ViewModels
 {
-    public record HomeViewModel(WeddingSettings Settings, IReadOnlyList<string> CarouselImages);
+    public record HomeViewModel(WeddingSettings Settings, IReadOnlyList<CarouselPhoto> CarouselImages);
+
+    public record CarouselPhoto(string Url, string? SrcSet, string ThumbnailUrl);
 
     public record InformationViewModel(WeddingSettings Settings, IReadOnlyList<TimelineEvent> TimelineEvents);
 

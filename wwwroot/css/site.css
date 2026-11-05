@@ -365,7 +365,16 @@ body > footer {
     min-height: min(760px, calc(100vh - 76px));
     padding: 4rem 0;
     overflow: hidden;
-    background: url("/images/homepage-couple.jpeg") center 43% / cover no-repeat;
+}
+
+.hero-cover {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 43%;
 }
 
 .hero-photo::before {
@@ -459,6 +468,17 @@ body > footer {
 .story-album .carousel-inner {
     aspect-ratio: 4 / 3;
     background: var(--surface-soft);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .story-album.carousel-fade .carousel-item {
+        transition: opacity 1s ease-in-out;
+    }
+
+    .story-album.carousel-fade .active.carousel-item-start,
+    .story-album.carousel-fade .active.carousel-item-end {
+        transition: opacity 0s 1s;
+    }
 }
 
 .story-album .carousel-item,
@@ -1511,7 +1531,10 @@ footer,
     .hero-photo {
         min-height: 900px;
         padding: 3rem 0;
-        background-position: 54% center;
+    }
+
+    .hero-cover {
+        object-position: 54% center;
     }
 
     .couple-names {

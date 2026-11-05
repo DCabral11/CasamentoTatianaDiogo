@@ -39,7 +39,7 @@ namespace CasamentoTatianaDiogo.Controllers
             return View("Error");
         }
 
-        private IReadOnlyList<string> GetCarouselImages()
+        private IReadOnlyList<CarouselPhoto> GetCarouselImages()
         {
             var imagesDirectory = Path.Combine(environment.WebRootPath, "images");
 
@@ -51,7 +51,18 @@ namespace CasamentoTatianaDiogo.Controllers
             return Directory.EnumerateFiles(imagesDirectory, "carousel-*")
                 .Where(path => validExtensions.Contains(Path.GetExtension(path)))
                 .OrderBy(Path.GetFileName, StringComparer.OrdinalIgnoreCase)
-                .Select(path => $"/images/{Uri.EscapeDataString(Path.GetFileName(path))}")
+                .Select(path =>
+                {
+                    var filename = Path.GetFileName(path);
+                    var url = $"/images/{Uri.EscapeDataString(filename)}";
+                    var variant = $"/images/home/{Uri.EscapeDataString(filename)}";
+                    var prefix = Path.Combine(imagesDirectory, "home", filename);
+                    var srcSet = System.IO.File.Exists(prefix + "-480.webp") && System.IO.File.Exists(prefix + "-768.webp")
+                        ? $"{variant}-480.webp 480w, {variant}-768.webp 768w"
+                        : null;
+                    var thumbnail = System.IO.File.Exists(prefix + "-thumb.webp") ? variant + "-thumb.webp" : url;
+                    return new CarouselPhoto(url, srcSet, thumbnail);
+                })
                 .ToList();
         }
     }
