@@ -1,46 +1,77 @@
-﻿@model CasamentoTatianaDiogo.ViewModels.Admin.DashboardViewModel
+@model CasamentoTatianaDiogo.ViewModels.Admin.DashboardViewModel
+@using System.Globalization
 @{
     ViewData["Title"] = "Painel de administração";
+    var pt = CultureInfo.GetCultureInfo("pt-PT");
+    var answered = Model.Attending + Model.NotAttending;
+    var responseRate = Model.GuestCount == 0 ? 0m : 100m * answered / Model.GuestCount;
+    var modules = new (string Title, string Icon, (string Name, string Controller, string Action)[] Links)[]
+    {
+        ("Convidados e convites", "people", [
+            ("Respostas de presença", "RsvpAdmin", "Index"), ("Convidados", "Guests", "Index"),
+            ("Famílias", "InvitationGroups", "Index"), ("Acompanhantes", "PlusOnes", "Index")]),
+        ("Orçamento e fornecedores", "wallet2", [
+            ("Orçamento", "Planning", "Budget"), ("Fornecedores", "Planning", "Suppliers"),
+            ("Categorias", "Planning", "Categories")]),
+        ("Programa do dia", "calendar-event", [
+            ("Horário do dia", "Timeline", "Index"), ("Programa musical", "Music", "Index")]),
+        ("Site e fotografias", "images", [
+            ("Dados e conteúdos do casamento", "Settings", "Index"), ("Textos do site", "Content", "Index"),
+            ("Fotografias recebidas", "PhotoAdmin", "Index"), ("Definições da galeria", "PhotoAdmin", "Settings")])
+    };
 }
-
-<div class="container py-5">
+<div class="container dashboard">
     <h1>Painel de administração</h1>
-    <p class="text-muted">Acompanhe as confirmações e atualize todos os conteúdos do site.</p>
-    <div class="admin-grid">
-        <div class="stat">
-            @Model.GuestCount
-            <small>Convidados</small>
-        </div>
-        <div class="stat">
-            @Model.Attending
-            <small>Confirmados</small>
-        </div>
-        <div class="stat">
-            @Model.NotAttending
-            <small>Não vão estar presentes</small>
-        </div>
-        <div class="stat">
-            @Model.Pending
-            <small>Por responder</small>
-        </div>
-        <div class="stat">
-            @Model.UploadedPhotos
-            <small>Fotografias</small>
+    <div class="dashboard-overview">
+        <section class="dashboard-rsvp" aria-labelledby="rsvp-summary">
+            <h2 id="rsvp-summary">Respostas de presença</h2>
+            <p class="dashboard-rate"><strong>@responseRate.ToString("0", pt)%</strong> de respostas</p>
+            <progress max="100" value="@responseRate.ToString(CultureInfo.InvariantCulture)" aria-label="Percentagem de convidados que responderam"></progress>
+            <p>@answered de @Model.GuestCount convidados responderam</p>
+            <dl class="dashboard-counts">
+                <div><dt>Confirmados</dt><dd>@Model.Attending</dd></div>
+                <div><dt>Não vão</dt><dd>@Model.NotAttending</dd></div>
+                <div><dt>Por responder</dt><dd>@Model.Pending</dd></div>
+            </dl>
+            <a asp-controller="RsvpAdmin" asp-action="Index">Consultar respostas <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+        </section>
+        <div class="dashboard-metrics">
+            <a class="dashboard-metric" asp-controller="Planning" asp-action="Budget">
+                <span><i class="bi bi-wallet2" aria-hidden="true"></i> Valor por pagar</span>
+                <strong>@Model.BudgetBalance.ToString("C2", pt)</strong>
+                <small>@(Model.UnpricedLines > 0 ? $"Linhas com custo por definir: {Model.UnpricedLines}" : "Custo total menos o valor pago")</small>
+            </a>
+            <a class="dashboard-metric" asp-controller="Planning" asp-action="@(Model.PaymentLineId.HasValue ? "Line" : "Budget")" asp-route-id="@Model.PaymentLineId">
+                <span><i class="bi bi-calendar3" aria-hidden="true"></i> @(Model.IsPaymentOverdue ? "Prazo em atraso" : "Próximo prazo")</span>
+                <strong>@(Model.PaymentDate?.ToString("dd/MM/yyyy", pt) ?? "Sem prazo")</strong>
+                <small>@(Model.PaymentCategory ?? "Consultar orçamento")</small>
+            </a>
+            <a class="dashboard-metric" asp-controller="Music" asp-action="Index">
+                <span><i class="bi bi-music-note-list" aria-hidden="true"></i> Músicas por escolher</span>
+                <strong>@Model.MissingSongs</strong><small>Momentos sem música atribuída</small>
+            </a>
+            <a class="dashboard-metric" asp-controller="PhotoAdmin" asp-action="Index">
+                <span><i class="bi bi-camera" aria-hidden="true"></i> Fotografias recebidas</span>
+                <strong>@Model.UploadedPhotos</strong><small>Abrir galeria</small>
+            </a>
         </div>
     </div>
 
-    <div class="list-group mt-4">
-        <a class="list-group-item" asp-controller="Music" asp-action="Index"><i class="bi bi-music-note-list" aria-hidden="true"></i> Programa musical</a>
-        <a class="list-group-item" asp-controller="Planning" asp-action="Budget"><i class="bi bi-wallet2" aria-hidden="true"></i> Orçamento</a>
-        <a class="list-group-item" asp-controller="Planning" asp-action="Suppliers"><i class="bi bi-shop" aria-hidden="true"></i> Fornecedores</a>
-        <a class="list-group-item" href="/Admin/Settings/Index"><i class="bi bi-sliders"></i> Dados e conteúdos do casamento</a>
-        <a class="list-group-item" href="/Admin/Content/Index"><i class="bi bi-fonts"></i> Textos do site</a>
-        <a class="list-group-item" href="/Admin/Timeline/Index"><i class="bi bi-clock-history"></i> Horário do dia</a>
-        <a class="list-group-item" href="/Admin/Guests/Index"><i class="bi bi-people"></i> Convidados</a>
-        <a class="list-group-item" href="/Admin/InvitationGroups/Index"><i class="bi bi-collection"></i> Famílias</a>
-        <a class="list-group-item" href="/Admin/PlusOnes/Index"><i class="bi bi-person-plus"></i> Acompanhantes</a>
-        <a class="list-group-item" href="/Admin/Rsvp/Index"><i class="bi bi-envelope-check"></i> Respostas de presença</a>
-        <a class="list-group-item" href="/Admin/Photos/Settings"><i class="bi bi-camera"></i> Definições da galeria</a>
-        <a class="list-group-item" href="/Admin/Photos/Index"><i class="bi bi-images"></i> Fotografias recebidas</a>
-    </div>
+    <nav class="dashboard-modules" aria-labelledby="modules-title">
+        <h2 id="modules-title">Módulos de administração</h2>
+        <div class="dashboard-groups">
+            @foreach (var group in modules)
+            {
+                <div class="dashboard-group">
+                    <h3><i class="bi bi-@group.Icon" aria-hidden="true"></i> @group.Title</h3>
+                    <ul>
+                        @foreach (var link in group.Links)
+                        {
+                            <li><a asp-controller="@link.Controller" asp-action="@link.Action">@link.Name<i class="bi bi-chevron-right" aria-hidden="true"></i></a></li>
+                        }
+                    </ul>
+                </div>
+            }
+        </div>
+    </nav>
 </div>

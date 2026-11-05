@@ -2,6 +2,7 @@
 using CasamentoTatianaDiogo.Models;
 using CasamentoTatianaDiogo.Models.Enums;
 using CasamentoTatianaDiogo.Common.Errors;
+using CasamentoTatianaDiogo.Services;
 using CasamentoTatianaDiogo.ViewModels.Admin;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -12,16 +13,40 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
 {
     [Authorize(Roles = "Admin")]
     [Route("Admin/[controller]/[action]/{id?}")]
-    public class DashboardController(ApplicationDbContext db) : Controller
+    public class DashboardController(ApplicationDbContext db, WeddingClock clock) : Controller
     {
-        public async Task<IActionResult> Index() => View("~/Views/Admin/Dashboard/Index.cshtml", new DashboardViewModel
+        public async Task<IActionResult> Index()
         {
-            Attending = await db.Guests.CountAsync(g => g.CurrentStatus == RsvpStatus.Attending),
-            NotAttending = await db.Guests.CountAsync(g => g.CurrentStatus == RsvpStatus.NotAttending),
-            Pending = await db.Guests.CountAsync(g => g.CurrentStatus == RsvpStatus.Pending),
-            UploadedPhotos = await db.PhotoUploads.CountAsync(),
-            GuestCount = await db.Guests.CountAsync()
-        });
+            var guests = await db.Guests.GroupBy(g => g.CurrentStatus)
+                .Select(group => new { Status = group.Key, Count = group.Count() })
+                .ToDictionaryAsync(row => row.Status, row => row.Count);
+            var budget = await db.BudgetLines.GroupBy(_ => 1).Select(lines => new
+            {
+                Balance = lines.Sum(line => (line.RealCost ?? 0m) - line.Paid),
+                Unpriced = lines.Count(line => line.RealCost == null)
+            }).SingleOrDefaultAsync();
+            var next = await db.BudgetLines.Where(line => line.NextPayment.HasValue &&
+                    (line.RealCost == null || line.Paid < line.RealCost))
+                .OrderBy(line => line.NextPayment).ThenBy(line => line.Id)
+                .Select(line => new { line.Id, Date = line.NextPayment!.Value, Category = line.Category!.Name })
+                .FirstOrDefaultAsync();
+
+            return View("~/Views/Admin/Dashboard/Index.cshtml", new DashboardViewModel
+            {
+                GuestCount = guests.Values.Sum(),
+                Attending = guests.GetValueOrDefault(RsvpStatus.Attending),
+                NotAttending = guests.GetValueOrDefault(RsvpStatus.NotAttending),
+                Pending = guests.GetValueOrDefault(RsvpStatus.Pending),
+                BudgetBalance = budget?.Balance ?? 0m,
+                UnpricedLines = budget?.Unpriced ?? 0,
+                PaymentLineId = next?.Id,
+                PaymentDate = next?.Date,
+                PaymentCategory = next?.Category,
+                IsPaymentOverdue = next?.Date < DateOnly.FromDateTime(clock.Now),
+                MissingSongs = await db.MusicMoments.CountAsync(moment => moment.Song == null || moment.Song == ""),
+                UploadedPhotos = await db.PhotoUploads.CountAsync()
+            });
+        }
     }
 
     [Route("Admin/[action]")]

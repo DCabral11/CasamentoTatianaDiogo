@@ -119,5 +119,12 @@ namespace CasamentoTatianaDiogo.ViewModels.Admin
         public int UploadedPhotos { get; set; }
 
         public int GuestCount { get; set; }
+        public decimal BudgetBalance { get; set; }
+        public int UnpricedLines { get; set; }
+        public int? PaymentLineId { get; set; }
+        public DateOnly? PaymentDate { get; set; }
+        public string? PaymentCategory { get; set; }
+        public bool IsPaymentOverdue { get; set; }
+        public int MissingSongs { get; set; }
     }
 }

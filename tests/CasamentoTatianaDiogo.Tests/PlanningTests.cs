@@ -81,6 +81,10 @@ public class PlanningTests
         Assert.Equal(1, await db.BudgetLines.CountAsync());
         await Save("Orcamento/Guardar", new() { ["CategoryId"] = venue, ["RealCost"] = "1500", ["Paid"] = "500", ["Notes"] = "Reserva do espaço" });
         var filtered = WebUtility.HtmlDecode(await client.GetStringAsync(root + "Orcamento?categoryId=" + music));
+        var dashboard = WebUtility.HtmlDecode(await client.GetStringAsync("/Admin/Dashboard/Index"));
+        Assert.Contains(1180.38m.ToString("C2", System.Globalization.CultureInfo.GetCultureInfo("pt-PT")), dashboard);
+        Assert.Contains("05/06/2027", dashboard);
+        Assert.Contains($"href=\"{root}Orcamento/Linha/{line.Id}\"", dashboard);
         Assert.Contains("180,38", filtered);
         Assert.Contains("25,00", filtered);
         Assert.DoesNotContain("Reserva do espaço", filtered);
