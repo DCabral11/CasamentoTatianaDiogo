@@ -59,6 +59,13 @@
             </div>
         </fieldset>
 
+        <fieldset class="admin-fieldset">
+            <legend>Música do site</legend>
+            <label asp-for="SpotifyTrackUrl" class="form-label">Ligação da música no Spotify</label>
+            <input asp-for="SpotifyTrackUrl" type="url" class="form-control" aria-describedby="spotify-help" />
+            <div id="spotify-help" class="form-text">No Spotify, abre a faixa e escolhe Partilhar → Copiar ligação. Para desativar a música, deixa o campo vazio.</div>
+        </fieldset>
+
         <div class="d-flex flex-wrap gap-2 mt-2"><button class="btn btn-primary btn-lg"><i class="bi bi-check2-circle"></i> Guardar alterações</button><a class="btn btn-outline-primary btn-lg" href="/Admin/Dashboard/Index"><i class="bi bi-arrow-left"></i> Voltar ao painel</a></div>
     </form>
 </div>

@@ -60,6 +60,9 @@ namespace CasamentoTatianaDiogo.Models
         
         [StringLength(300)] 
         public string LogoPath { get; set; } = "/images/navbar.png";
+
+        [StringLength(500)]
+        public string? SpotifyTrackUrl { get; set; }
         
         [StringLength(20)] 
         [RegularExpression("^#[a-fA-F0-9]{6}$", ErrorMessage = "Escolhe uma cor principal válida.")]

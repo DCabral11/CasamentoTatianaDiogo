@@ -22,6 +22,8 @@ namespace CasamentoTatianaDiogo.Data
                 // Keep this upgrade idempotent so the RSVP form can save the additional
                 // accompaniment details without requiring a manual database intervention.
                 await db.Database.ExecuteSqlRawAsync("""
+                    IF COL_LENGTH(N'[WeddingSettings]', N'SpotifyTrackUrl') IS NULL
+                        ALTER TABLE [WeddingSettings] ADD [SpotifyTrackUrl] nvarchar(500) NULL;
                     IF COL_LENGTH(N'[RsvpResponses]', N'PlusOneDietaryRestrictions') IS NULL
                         ALTER TABLE [RsvpResponses] ADD [PlusOneDietaryRestrictions] nvarchar(1000) NULL;
                     IF COL_LENGTH(N'[RsvpResponses]', N'PlusOneMessage') IS NULL

@@ -39,7 +39,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.SlidingExpiration = true;
 });
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options => options.Filters.Add<SiteMusicFilter>());
 builder.Services.AddRazorPages();
 builder.Services.AddAntiforgery(options => options.HeaderName = "X-CSRF-TOKEN");
 builder.Services.AddHealthChecks().AddCheck<ApplicationReadinessHealthCheck>("database", timeout: TimeSpan.FromSeconds(15));

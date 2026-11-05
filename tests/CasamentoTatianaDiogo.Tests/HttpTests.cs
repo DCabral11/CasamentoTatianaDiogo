@@ -22,6 +22,34 @@ namespace CasamentoTatianaDiogo.Tests;
 public class HttpTests
 {
     [Fact]
+    public async Task SpotifySettingAcceptsOneTrackAndOnlyWrapsPublicNavigations()
+    {
+        using var app = new TestApplication();
+        using var client = app.Client();
+        client.DefaultRequestHeaders.Add("Sec-Fetch-Dest", "document");
+        Assert.DoesNotContain("id=\"guest-page\"", await client.GetStringAsync("/"));
+        const string track = "https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT";
+        using (var scope = app.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            var settings = await db.WeddingSettings.SingleAsync();
+            settings.SpotifyTrackUrl = track;
+            await db.SaveChangesAsync();
+        }
+        var shell = await client.GetStringAsync("/Rsvp?submitted=True");
+        Assert.Contains("data-track=\"" + track + "\"", shell);
+        Assert.Contains("?submitted=True&amp;sitePage=1", shell);
+        Assert.DoesNotContain("id=\"guest-page\"", await client.GetStringAsync("/Admin/Login"));
+        Assert.DoesNotContain("id=\"guest-page\"", await client.GetStringAsync("/Rsvp?sitePage=1"));
+        client.DefaultRequestHeaders.Remove("Sec-Fetch-Dest");
+        client.DefaultRequestHeaders.Add("Sec-Fetch-Dest", "iframe");
+        Assert.Contains("guest-search", await client.GetStringAsync("/Rsvp"));
+        Assert.Equal(track, Services.SpotifyTrack.Normalize(track.Replace("/track/", "/intl-pt/track/") + "?si=123"));
+        Assert.Null(Services.SpotifyTrack.Normalize(track.Replace("/track/", "/playlist/")));
+        Assert.Null(Services.SpotifyTrack.Normalize(track.Replace("open.spotify.com", "open.spotify.com.example.org")));
+    }
+
+    [Fact]
     public async Task SavedThemeReachesGuestAdminAndRecoveryPages()
     {
         using var app = new TestApplication();

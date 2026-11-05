@@ -17,10 +17,13 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
         {
             if (ViewModels.SiteTheme.NormalizeLogo(m.LogoPath) == null)
                 ModelState.AddModelError(nameof(m.LogoPath), "Indica um caminho de imagem ou um endereço HTTP ou HTTPS.");
+            if (!string.IsNullOrWhiteSpace(m.SpotifyTrackUrl) && Services.SpotifyTrack.Normalize(m.SpotifyTrackUrl) == null)
+                ModelState.AddModelError(nameof(m.SpotifyTrackUrl), "Cola a ligação de uma faixa do Spotify (open.spotify.com/track/…).");
             if (!ModelState.IsValid)
                 return View("~/Views/Admin/Settings/Index.cshtml", m);
 
             m.UpdatedAt = DateTime.UtcNow;
+            m.SpotifyTrackUrl = Services.SpotifyTrack.Normalize(m.SpotifyTrackUrl);
 
             db.Update(m);
             await db.SaveChangesAsync();
