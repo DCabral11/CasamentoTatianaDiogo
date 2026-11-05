@@ -133,15 +133,15 @@ namespace CasamentoTatianaDiogo.Data
             if (!await db.SiteContents.AnyAsync())
             {
                 db.SiteContents.AddRange(
-                    new SiteContent { Key = "NavHome", Value = "Início", Description = "Navegação: página inicial" },
-                    new SiteContent { Key = "NavInformation", Value = "Informações", Description = "Navegação: informações" },
-                    new SiteContent { Key = "NavRsvp", Value = "Confirmar presença", Description = "Navegação: confirmação de presença" },
-                    new SiteContent { Key = "NavPhotos", Value = "Galeria", Description = "Navegação: galeria" },
-                    new SiteContent { Key = "HomeStoryTitle", Value = "A nossa história", Description = "Página inicial: título da história" },
-                    new SiteContent { Key = "HomeRsvpCta", Value = "Confirmar presença", Description = "Página inicial: botão de confirmação" },
-                    new SiteContent { Key = "FooterText", Value = "Feito com amor por Diogo", Description = "Rodapé do site" },
-                    new SiteContent { Key = "PhotosNamePlaceholder", Value = "O teu nome (opcional)", Description = "Galeria: campo de nome" },
-                    new SiteContent { Key = "PhotosMessagePlaceholder", Value = "Mensagem (opcional)", Description = "Galeria: campo de mensagem" });
+                    new SiteContent { Key = "NavHome", Value = "Início", Description = "Navegação: Página Inicial" },
+                    new SiteContent { Key = "NavInformation", Value = "Informações", Description = "Navegação: Informações" },
+                    new SiteContent { Key = "NavRsvp", Value = "Confirmar Presença", Description = "Navegação: Confirmação de Presença" },
+                    new SiteContent { Key = "NavPhotos", Value = "Galeria", Description = "Navegação: Galeria" },
+                    new SiteContent { Key = "HomeStoryTitle", Value = "A Nossa História", Description = "Página Inicial: Título da História" },
+                    new SiteContent { Key = "HomeRsvpCta", Value = "Confirmar Presença", Description = "Página Inicial: Botão de Confirmação" },
+                    new SiteContent { Key = "FooterText", Value = "Feito com Amor por Diogo", Description = "Rodapé do site" },
+                    new SiteContent { Key = "PhotosNamePlaceholder", Value = "O teu Nome (Opcional)", Description = "Galeria: campo de nome" },
+                    new SiteContent { Key = "PhotosMessagePlaceholder", Value = "Mensagem (Opcional)", Description = "Galeria: campo de mensagem" });
             }
 
             if (!await db.TimelineEvents.AnyAsync())
