@@ -1,0 +1,19 @@
+@model DateOnly
+@{
+    ViewData["Title"] = "Confirmações de presença encerradas";
+}
+<section class="page-header rsvp-header">
+    <div class="container narrow">
+        <h1>Confirmações de presença encerradas</h1>
+    </div>
+</section>
+<div class="container py-5 narrow">
+    <div class="elegant-card p-4 p-md-5">
+        <p>O prazo para confirmar ou alterar a presença terminou em <strong>@Model.ToString("dd/MM/yyyy")</strong>.</p>
+        <p>Se precisas de falar connosco sobre a tua resposta, contacta os noivos. Obrigado pela compreensão!</p>
+        <div class="d-flex flex-wrap gap-2">
+            <a class="btn btn-primary" asp-controller="Information" asp-action="Index">Contactar os noivos</a>
+            <a class="btn btn-outline-primary" asp-controller="Home" asp-action="Index">Voltar ao início</a>
+        </div>
+    </div>
+</div>

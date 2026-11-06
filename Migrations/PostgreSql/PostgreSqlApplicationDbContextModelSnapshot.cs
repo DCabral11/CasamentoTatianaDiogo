@@ -988,6 +988,9 @@ namespace CasamentoTatianaDiogo.Migrations.PostgreSql
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
+                    b.Property<DateOnly?>("RsvpDeadline")
+                        .HasColumnType("date");
+
                     b.Property<string>("SecondaryColor")
                         .IsRequired()
                         .HasMaxLength(20)

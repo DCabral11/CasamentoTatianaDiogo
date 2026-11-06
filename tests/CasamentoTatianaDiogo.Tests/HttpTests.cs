@@ -200,11 +200,13 @@ public class HttpTests
         private readonly SqliteConnection connection = new("Data Source=:memory:");
         private readonly bool schemaReady;
         private readonly IRsvpVerificationSender? verificationSender;
-        public TestApplication(bool initializeSchema = true, IRsvpVerificationSender? verificationSender = null)
+        private readonly TimeProvider? time;
+        public TestApplication(bool initializeSchema = true, IRsvpVerificationSender? verificationSender = null, TimeProvider? time = null)
         {
             connection.Open();
             schemaReady = initializeSchema;
             this.verificationSender = verificationSender;
+            this.time = time;
         }
         public HttpClient Client() => CreateClient(new WebApplicationFactoryClientOptions { BaseAddress = new Uri("https://localhost"), AllowAutoRedirect = false });
 
@@ -228,6 +230,11 @@ public class HttpTests
             }));
             builder.ConfigureServices(services =>
             {
+                if (time != null)
+                {
+                    services.RemoveAll<TimeProvider>();
+                    services.AddSingleton(time);
+                }
                 services.RemoveAll<ApplicationDbContext>();
                 services.RemoveAll<DbContextOptions<ApplicationDbContext>>();
                 services.RemoveAll<IDbContextOptionsConfiguration<ApplicationDbContext>>();

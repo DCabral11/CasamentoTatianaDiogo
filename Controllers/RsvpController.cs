@@ -3,17 +3,33 @@ using CasamentoTatianaDiogo.Services.Interfaces;
 using CasamentoTatianaDiogo.ViewModels;
 using CasamentoTatianaDiogo.Common.Errors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using CasamentoTatianaDiogo.Models;
 
 namespace CasamentoTatianaDiogo.Controllers;
 
 [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
 public class RsvpController(IRsvpService rsvp, IAppMessageService messages,
-    RsvpVerificationService verification, IWebHostEnvironment environment) : Controller
+    RsvpVerificationService verification, IWebHostEnvironment environment,
+    IWeddingSettingsService settings, WeddingClock clock) : Controller
 {
     private const string ChallengeCookie = "Casamento.RsvpChallenge";
     private const string AccessCookie = "Casamento.RsvpAccess";
     private string? AccessToken => Request.Cookies[AccessCookie];
+
+    public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+    {
+        var deadline = (await settings.GetAsync()).RsvpDeadline;
+        if (deadline.HasValue && DateOnly.FromDateTime(clock.Now) > deadline.Value)
+        {
+            Response.Headers.CacheControl = "no-store";
+            // Apply the same cutoff to searches, code requests, verification and submission,
+            // including forms that were already open when the deadline passed.
+            context.Result = View("Closed", deadline.Value);
+            return;
+        }
+        await next();
+    }
 
     public IActionResult Index(bool submitted = false)
     {
