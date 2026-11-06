@@ -6,19 +6,42 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using System.Text;
+using CasamentoTatianaDiogo.Services;
 
 namespace CasamentoTatianaDiogo.Controllers.Admin
 {
     [Authorize(Roles = "Admin")]
     [Route("Admin/Rsvp/[action]/{id?}")]
-    public class RsvpAdminController(ApplicationDbContext db) : Controller
+    public class RsvpAdminController(ApplicationDbContext db, WeddingClock clock) : Controller
     {
-        public async Task<IActionResult> Index(int? familyId) => View("~/Views/Admin/Rsvp/Index.cshtml", await db.Guests
+        public async Task<IActionResult> Index(int? familyId)
+        {
+            ViewData["FamilyId"] = familyId;
+            return View("~/Views/Admin/Rsvp/Index.cshtml", await db.Guests
             .Include(g => g.Family)
             .Include(g => g.RsvpResponses)
             .Where(g => g.RsvpResponses.Any() && (!familyId.HasValue || g.FamilyId == familyId))
             .OrderBy(g => g.DisplayName)
             .ToListAsync());
+        }
+
+        [HttpGet, ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
+        public async Task<FileResult> ExportExcel(int? familyId)
+        {
+            var guests = await db.Guests.AsNoTracking().AsSplitQuery()
+                .Include(guest => guest.Family)
+                .Include(guest => guest.PlusOnes)
+                .Include(guest => guest.RsvpResponses).ThenInclude(response => response.PlusOne)
+                .Where(guest => !familyId.HasValue || guest.FamilyId == familyId)
+                .OrderBy(guest => guest.Family!.Name).ThenBy(guest => guest.DisplayName).ThenBy(guest => guest.Id)
+                .ToListAsync();
+            var contacts = await db.RsvpInvitationContacts.AsNoTracking()
+                .Where(contact => !familyId.HasValue || contact.FamilyId == familyId)
+                .ToDictionaryAsync(contact => contact.FamilyId);
+            var bytes = RsvpExcelExport.Create(guests, contacts, clock, familyId);
+            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                $"historico-rsvp-{clock.Now:yyyyMMdd-HHmm}.xlsx");
+        }
 
         public async Task<IActionResult> Details(int id)
         {

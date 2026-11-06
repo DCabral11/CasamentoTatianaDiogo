@@ -14,8 +14,8 @@
     {
         <div class="feedback-card feedback-card-error" role="alert"><i class="bi bi-exclamation-circle" aria-hidden="true"></i><span>@error</span></div>
     }
-    <a class="btn btn-outline-primary" href="/Admin/Rsvp/ExportCsv">
-        <i class="bi bi-download"></i> Exportar CSV
+    <a class="btn btn-outline-primary" asp-action="ExportExcel" asp-route-familyId="@ViewData["FamilyId"]">
+        <i class="bi bi-file-earmark-excel" aria-hidden="true"></i> Exportar histórico completo em Excel
     </a>
     @if (!Model.Any())
     {
