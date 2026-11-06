@@ -1,4 +1,7 @@
-﻿#region References
+using static CasamentoTatianaDiogo.Services.AdminFilterOptions;
+using CasamentoTatianaDiogo.ViewModels.Admin;
+using CasamentoTatianaDiogo.Services;
+#region References
 
 using CasamentoTatianaDiogo.Data;
 using CasamentoTatianaDiogo.Models;
@@ -17,7 +20,16 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
         /// <summary>
         /// Handles the index page for invitation groups, retrieving a list of families and their associated guests from the database and passing it to the view for display.
         /// </summary>
-        public async Task<IActionResult> Index() => View("~/Views/Admin/InvitationGroups/Index.cshtml", await db.Families.Include(f => f.Guests).ToListAsync());
+        public async Task<IActionResult> Index()
+        {
+            var rows = await db.Families.AsNoTracking().Include(f => f.Guests).OrderBy(f => f.Name).ThenBy(f => f.Id).ToListAsync();
+            var filtered = new AdminListFilters<Family>(this, rows, "Família, referência ou nome de convidado", f =>
+                    $"{f.Name} {f.GroupCode} {string.Join(' ', f.Guests.Select(g => g.DisplayName))}")
+                .Select("groupRsvp", "Permite resposta familiar", YesNo, f => Flag(f.AllowGroupRsvp))
+                .Select("status", "Situação das respostas", Options(("empty", "Sem convidados"), ("pending", "Com respostas em falta"), ("complete", "Todos responderam")),
+                    f => f.Guests.Count == 0 ? "empty" : f.Guests.Any(g => g.CurrentStatus == Models.Enums.RsvpStatus.Pending) ? "pending" : "complete").Results();
+            return View("~/Views/Admin/InvitationGroups/Index.cshtml", filtered);
+        }
 
         /// <summary>
         /// Handles the creation of a new invitation group by returning the edit view with a new Family model instance, allowing the user to input details for the new group.

@@ -6,8 +6,8 @@
         <a class="btn btn-outline-primary align-self-start" asp-controller="Dashboard" asp-action="Index">Voltar ao painel</a>
     </div>
     <div class="row g-3 mb-4">
-        <div class="col-12 col-md-4"><div class="elegant-card p-3"><strong class="d-block fs-3">@Model.Items.Count(x => x.IsPublished)</strong>Perguntas publicadas</div></div>
-        <div class="col-12 col-md-4"><div class="elegant-card p-3"><strong class="d-block fs-3">@Model.Items.Count(x => !x.IsPublished)</strong>Rascunhos</div></div>
+        <div class="col-12 col-md-4"><div class="elegant-card p-3"><strong class="d-block fs-3">@(ViewData["PublishedCount"] ?? Model.Items.Count(x => x.IsPublished))</strong>Perguntas publicadas</div></div>
+        <div class="col-12 col-md-4"><div class="elegant-card p-3"><strong class="d-block fs-3">@(ViewData["DraftCount"] ?? Model.Items.Count(x => !x.IsPublished))</strong>Rascunhos</div></div>
         <div class="col-12 col-md-4"><div class="elegant-card p-3"><strong class="d-block fs-3">@(Model.Settings.IsEnabled ? "Ativo" : "Desativado")</strong>Estado do módulo</div></div>
     </div>
     <div class="d-flex flex-wrap gap-2 mb-4">
@@ -16,9 +16,10 @@
         @if (Model.Settings.IsEnabled) { <a class="btn btn-outline-primary" asp-controller="Faq" asp-action="Index" target="_top">Ver página pública</a> }
         <a class="btn btn-outline-primary" href="#faq-settings">Definições da página</a>
     </div>
+    <partial name="_AdminFilters" />
     @if (Model.Items.Count == 0)
     {
-        <p class="elegant-card p-4">Ainda não existem perguntas. Adiciona a primeira e ativa o módulo nas definições quando o conteúdo estiver pronto.</p>
+        <p class="elegant-card p-4">Não há perguntas nesta seleção. Podes limpar os filtros ou adicionar uma pergunta.</p>
     }
     else
     {

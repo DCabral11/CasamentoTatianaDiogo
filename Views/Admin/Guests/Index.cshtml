@@ -1,11 +1,13 @@
-﻿@model IEnumerable<Guest>
+@model IEnumerable<Guest>
 
 <div class="container py-5">
     <h1>Convidados</h1>
+    <partial name="_AdminFilters" />
     @if (TempData["Error"] is string error) { <div class="alert alert-danger" role="alert">@error</div> }
     <p>
         <a class="btn btn-primary" href="/Admin/Guests/Create"><i class="bi bi-person-plus"></i> Adicionar convidado</a>
         <a class="btn btn-outline-primary" asp-controller="ExcelImport" asp-action="Guests"><i class="bi bi-file-earmark-arrow-up"></i> Importar Excel</a>
+        <a class="btn btn-outline-primary" href="@(Url.Action("ExportCsv") + Context.Request.QueryString)">Exportar CSV (filtros atuais)</a>
     </p>
     <div class="table-responsive">
     <table class="table table-striped">

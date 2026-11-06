@@ -14,7 +14,8 @@
         <button class="btn btn-primary">Guardar categoria</button>
         @if (Model.Id != 0) { <a class="btn btn-link" asp-action="Categories" asp-route-id="">Cancelar</a> }
     </form>
-    @if (categories.Count == 0) { <p>Cria a primeira categoria para registar fornecedores e linhas de orçamento.</p> }
+    <partial name="_AdminFilters" />
+    @if (categories.Count == 0) { <p>Não há categorias nesta seleção.</p> }
     else
     {
         <ul class="list-group">

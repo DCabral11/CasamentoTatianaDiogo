@@ -1,7 +1,8 @@
-﻿@model IEnumerable<TimelineEvent>
+@model IEnumerable<TimelineEvent>
 
 <div class="container py-5">
     <h1>Horário do dia</h1>
+    <partial name="_AdminFilters" />
     <p>
         <a class="btn btn-primary" href="/Admin/Timeline/Create">Adicionar momento</a>
     </p>

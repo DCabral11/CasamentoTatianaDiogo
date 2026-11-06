@@ -1,4 +1,7 @@
-﻿using CasamentoTatianaDiogo.Data;
+using static CasamentoTatianaDiogo.Services.AdminFilterOptions;
+using CasamentoTatianaDiogo.ViewModels.Admin;
+using CasamentoTatianaDiogo.Services;
+using CasamentoTatianaDiogo.Data;
 using CasamentoTatianaDiogo.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +13,13 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
     [Route("Admin/[controller]/[action]/{id?}")]
     public class TimelineController(ApplicationDbContext db, CasamentoTatianaDiogo.Services.WeddingClock clock) : Controller
     {
-        public async Task<IActionResult> Index() => View("~/Views/Admin/Timeline/Index.cshtml", await db.TimelineEvents.OrderBy(x => x.DisplayOrder).ToListAsync());
+        public async Task<IActionResult> Index()
+        {
+            var rows = await db.TimelineEvents.AsNoTracking().OrderBy(x => x.DisplayOrder).ThenBy(x => x.Id).ToListAsync();
+            return View("~/Views/Admin/Timeline/Index.cshtml", new AdminListFilters<TimelineEvent>(this, rows, "Título ou descrição", x => $"{x.Title} {x.Description}")
+                .Select("active", "Visível no site", YesNo, x => Flag(x.IsActive))
+                .Dates("Data do evento", x => DateOnly.FromDateTime(x.EventDateTime)).Results());
+        }
 
         public IActionResult Create() => View("~/Views/Admin/Timeline/Edit.cshtml", new TimelineEvent
         {

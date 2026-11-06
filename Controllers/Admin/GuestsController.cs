@@ -1,4 +1,6 @@
-﻿#region References
+using static CasamentoTatianaDiogo.Services.AdminFilterOptions;
+using CasamentoTatianaDiogo.ViewModels.Admin;
+#region References
 
 using CasamentoTatianaDiogo.Common.Errors;
 using CasamentoTatianaDiogo.Data;
@@ -24,7 +26,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
         /// <summary>
         /// Loads the list of guests.
         /// </summary>
-        public async Task<IActionResult> Index() => View("~/Views/Admin/Guests/Index.cshtml", await db.Guests.Include(g => g.Family).Include(g => g.MainGuest).OrderBy(g => g.DisplayName).ToListAsync());
+        public async Task<IActionResult> Index() => View("~/Views/Admin/Guests/Index.cshtml", await GuestsAsync(this, db, await db.Guests.AsNoTracking().Include(g => g.Family).Include(g => g.MainGuest).OrderBy(g => g.DisplayName).ToListAsync()));
 
         /// <summary>
         /// Handles the creation of a new guest.
@@ -146,7 +148,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
         /// </summary>
         public async Task<FileResult> ExportCsv()
         {
-            var rows = await db.Guests.Include(g => g.Family).Include(g => g.MainGuest).ToListAsync();
+            var rows = await GuestsAsync(this, db, await db.Guests.AsNoTracking().Include(g => g.Family).Include(g => g.MainGuest).OrderBy(g => g.DisplayName).ToListAsync());
 
             using var ms = new MemoryStream();
             using var sw = new StreamWriter(ms, Encoding.UTF8);

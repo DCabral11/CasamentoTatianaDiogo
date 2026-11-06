@@ -5,13 +5,13 @@
     var total = Model.Sum(line => line.RealCost ?? 0m);
     var paid = Model.Sum(line => line.Paid);
     var unpriced = Model.Count(line => !line.RealCost.HasValue);
-    var filtered = ViewBag.CategoryFilter != null || ViewBag.SupplierFilter != null;
+    var filtered = (ViewData["AdminFilters"] as CasamentoTatianaDiogo.ViewModels.Admin.AdminFilterPanel)?.Active == true;
 }
 <div class="container py-5">
     <h1>Orçamento</h1>
     <partial name="~/Views/Admin/Planning/_PlanningNav.cshtml" />
     <div class="mb-4"><a class="btn btn-primary" asp-action="Line" asp-route-categoryId="@ViewBag.CategoryFilter" asp-route-supplierId="@ViewBag.SupplierFilter">Adicionar linha</a></div>
-    <partial name="~/Views/Admin/Planning/_CategoryFilter.cshtml" />
+    <partial name="_AdminFilters" />
     <h2 class="h5">@(filtered ? "Resumo das linhas filtradas" : "Resumo do orçamento")</h2>
     <div class="row row-cols-2 row-cols-lg-4 g-2 mb-4">
         <div class="col"><div class="stat h-100">@total.ToString("C2", pt)<small>Custo total</small></div></div>

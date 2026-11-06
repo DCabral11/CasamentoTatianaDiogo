@@ -1,3 +1,6 @@
+using static CasamentoTatianaDiogo.Services.AdminFilterOptions;
+using CasamentoTatianaDiogo.ViewModels.Admin;
+using CasamentoTatianaDiogo.Services;
 #region References
 
 using CasamentoTatianaDiogo.Data;
@@ -17,7 +20,12 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
         /// <summary>
         /// Loads the content management page.
         /// </summary>
-        public async Task<IActionResult> Index() => View("~/Views/Admin/Content/Index.cshtml", await db.SiteContents.OrderBy(content => content.Description).ToListAsync());
+        public async Task<IActionResult> Index()
+        {
+            var rows = await db.SiteContents.AsNoTracking().OrderBy(x => x.Description).ThenBy(x => x.Id).ToListAsync();
+            return View("~/Views/Admin/Content/Index.cshtml", new AdminListFilters<SiteContent>(this, rows, "Descrição, chave ou texto", x => $"{x.Description} {x.Key} {x.Value}")
+                .Select("html", "Conteúdo HTML", YesNo, x => Flag(x.IsHtml)).Results());
+        }
 
         /// <summary>
         /// Loads the content edit page.

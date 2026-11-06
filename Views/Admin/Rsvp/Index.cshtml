@@ -1,7 +1,8 @@
-﻿@model IEnumerable<Guest>
+@model IEnumerable<Guest>
 
 <div class="container py-5">
     <h1>Respostas de presença</h1>
+    <partial name="_AdminFilters" />
     @if (TempData["Success"] is string success)
     {
         <div class="feedback-card feedback-card-success" role="status"><i class="bi bi-check2-circle" aria-hidden="true"></i><span>@success</span></div>
@@ -14,12 +15,12 @@
     {
         <div class="feedback-card feedback-card-error" role="alert"><i class="bi bi-exclamation-circle" aria-hidden="true"></i><span>@error</span></div>
     }
-    <a class="btn btn-outline-primary" asp-action="ExportExcel" asp-route-familyId="@ViewData["FamilyId"]">
-        <i class="bi bi-file-earmark-excel" aria-hidden="true"></i> Exportar histórico completo em Excel
+    <a class="btn btn-outline-primary" href="@(Url.Action("ExportExcel") + Context.Request.QueryString)">
+        <i class="bi bi-file-earmark-excel" aria-hidden="true"></i> Exportar histórico em Excel (filtros atuais)
     </a>
     @if (!Model.Any())
     {
-        <div class="feedback-card feedback-card-info mt-4 mb-0" role="status"><i class="bi bi-envelope-open-heart" aria-hidden="true"></i><span>Ainda não foi submetida nenhuma resposta de presença.</span></div>
+        <div class="feedback-card feedback-card-info mt-4 mb-0" role="status"><i class="bi bi-envelope-open-heart" aria-hidden="true"></i><span>Não há convidados nesta seleção.</span></div>
     }
     <div class="table-responsive">
     <table class="table">
@@ -39,6 +40,10 @@
                     <td>@g.Family?.Name</td>
                     <td>@(g.CurrentStatus switch { CasamentoTatianaDiogo.Models.Enums.RsvpStatus.Attending => "Vai estar presente", CasamentoTatianaDiogo.Models.Enums.RsvpStatus.NotAttending => "Não vai estar presente", _ => "Por responder" })</td>
                     <td class="text-end">
+                        @if (g.IsPlusOne && g.CurrentStatus != CasamentoTatianaDiogo.Models.Enums.RsvpStatus.Pending)
+                        {
+                            <a class="btn btn-sm btn-outline-primary" href="/Admin/Rsvp/Details/@g.MainGuestId">Ver resposta principal</a>
+                        }
                         @if (g.RsvpResponses.Any())
                         {
                             <a class="btn btn-sm btn-outline-primary" href="/Admin/Rsvp/Details/@g.Id"><i class="bi bi-receipt"></i> Consultar</a>

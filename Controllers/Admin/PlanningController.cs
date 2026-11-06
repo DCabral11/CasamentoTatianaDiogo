@@ -1,3 +1,6 @@
+using static CasamentoTatianaDiogo.Services.AdminFilterOptions;
+using CasamentoTatianaDiogo.ViewModels.Admin;
+using CasamentoTatianaDiogo.Services;
 #region References
 
 using CasamentoTatianaDiogo.Common.Extensions;
@@ -19,17 +22,19 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
         [HttpGet("Orcamento")]
         public async Task<IActionResult> Budget(int? categoryId, int? supplierId)
         {
-            var query = db.BudgetLines.AsNoTracking().Include(x => x.Category).Include(x => x.Supplier).AsQueryable();
-
-            if (categoryId.HasValue)
-                query = query.Where(x => x.CategoryId == categoryId);
-
-            if (supplierId.HasValue)
-                query = query.Where(x => x.SupplierId == supplierId);
-
+            var rows = await db.BudgetLines.AsNoTracking().Include(x => x.Category).Include(x => x.Supplier)
+                .OrderBy(x => x.Category!.Name).ThenBy(x => x.Id).ToListAsync();
+            var categories = await db.PlanningCategories.AsNoTracking().OrderBy(x => x.Name).ToListAsync();
+            var suppliers = await db.Suppliers.AsNoTracking().OrderBy(x => x.Name).ToListAsync();
+            var filtered = new AdminListFilters<BudgetLine>(this, rows, "Categoria, fornecedor ou notas", x => $"{x.Category!.Name} {x.Supplier?.Name} {x.Notes}")
+                .Select("categoryId", "Categoria", categories.Select(x => new AdminFilterOption(x.Id.ToString(), x.Name)), x => x.CategoryId.ToString())
+                .Select("supplierId", "Fornecedor", suppliers.Select(x => new AdminFilterOption(x.Id.ToString(), x.Name)), x => x.SupplierId?.ToString() ?? "")
+                .Select("status", "Estado", States(BudgetLine.States), x => x.Status)
+                .Select("payment", "Pagamento", Options(("unpriced", "Custo por definir"), ("unpaid", "Por pagar"), ("partial", "Pago parcialmente"), ("paid", "Pago na totalidade")),
+                    x => !x.RealCost.HasValue ? "unpriced" : x.Paid >= x.RealCost ? "paid" : x.Paid == 0 ? "unpaid" : "partial")
+                .Dates("Próximo pagamento", x => x.NextPayment).Results();
             ViewBag.SupplierFilter = supplierId;
-
-            return await Page("Budget", await query.OrderBy(x => x.Category!.Name).ThenBy(x => x.Id).ToListAsync(), categoryId);
+            return await Page("Budget", filtered, categoryId);
         }
 
         [HttpGet("Orcamento/Linha/{id:int?}")]
@@ -102,12 +107,13 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
         [HttpGet("Fornecedores")]
         public async Task<IActionResult> Suppliers(int? categoryId)
         {
-            var query = db.Suppliers.AsNoTracking().Include(x => x.Category).Include(x => x.Lines).AsQueryable();
-
-            if (categoryId.HasValue)
-                query = query.Where(x => x.CategoryId == categoryId);
-
-            return await Page("Suppliers", await query.OrderBy(x => x.Name).ToListAsync(), categoryId);
+            var rows = await db.Suppliers.AsNoTracking().Include(x => x.Category).Include(x => x.Lines).OrderBy(x => x.Name).ThenBy(x => x.Id).ToListAsync();
+            var categories = await db.PlanningCategories.AsNoTracking().OrderBy(x => x.Name).ToListAsync();
+            var filtered = new AdminListFilters<Supplier>(this, rows, "Nome, contacto, email ou notas", x => $"{x.Name} {x.Contact} {x.Email} {x.Website} {x.Notes}")
+                .Select("categoryId", "Categoria", categories.Select(x => new AdminFilterOption(x.Id.ToString(), x.Name)), x => x.CategoryId.ToString())
+                .Select("status", "Estado", States(Supplier.States), x => x.Status)
+                .Select("linked", "Com linhas de orçamento", YesNo, x => Flag(x.Lines.Any())).Results();
+            return await Page("Suppliers", filtered, categoryId);
         }
 
         [HttpGet("Fornecedores/Ficha/{id:int?}")]
@@ -273,6 +279,14 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
         {
             ViewBag.Categories = await db.PlanningCategories.AsNoTracking().OrderBy(x => x.Name).ToListAsync();
             ViewBag.CategoryFilter = categoryId;
+            if (name == "Categories")
+            {
+                var categories = (List<PlanningCategory>)ViewBag.Categories;
+                var used = (await db.Suppliers.Select(x => x.CategoryId).Distinct().ToListAsync())
+                    .Concat(await db.BudgetLines.Select(x => x.CategoryId).Distinct().ToListAsync()).ToHashSet();
+                ViewBag.Categories = new AdminListFilters<PlanningCategory>(this, categories, "Nome da categoria", x => x.Name)
+                    .Select("used", "Em utilização", YesNo, x => Flag(used.Contains(x.Id))).Results();
+            }
             
             return View($"~/Views/Admin/Planning/{name}.cshtml", model);
         }

@@ -1,4 +1,6 @@
-﻿using CasamentoTatianaDiogo.Data;
+using static CasamentoTatianaDiogo.Services.AdminFilterOptions;
+using CasamentoTatianaDiogo.ViewModels.Admin;
+using CasamentoTatianaDiogo.Data;
 using CasamentoTatianaDiogo.Models.Enums;
 using CsvHelper;
 using Microsoft.AspNetCore.Authorization;
@@ -17,12 +19,11 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
         public async Task<IActionResult> Index(int? familyId)
         {
             ViewData["FamilyId"] = familyId;
-            return View("~/Views/Admin/Rsvp/Index.cshtml", await db.Guests
+            return View("~/Views/Admin/Rsvp/Index.cshtml", await GuestsAsync(this, db, await db.Guests.AsNoTracking()
             .Include(g => g.Family)
             .Include(g => g.RsvpResponses)
-            .Where(g => g.RsvpResponses.Any() && (!familyId.HasValue || g.FamilyId == familyId))
-            .OrderBy(g => g.DisplayName)
-            .ToListAsync());
+                        .OrderBy(g => g.DisplayName)
+            .ToListAsync()));
         }
 
         [HttpGet, ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
@@ -35,6 +36,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
                 .Where(guest => !familyId.HasValue || guest.FamilyId == familyId)
                 .OrderBy(guest => guest.Family!.Name).ThenBy(guest => guest.DisplayName).ThenBy(guest => guest.Id)
                 .ToListAsync();
+            guests = await GuestsAsync(this, db, guests);
             var contacts = await db.RsvpInvitationContacts.AsNoTracking()
                 .Where(contact => !familyId.HasValue || contact.FamilyId == familyId)
                 .ToDictionaryAsync(contact => contact.FamilyId);
@@ -100,7 +102,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
 
         public async Task<FileResult> ExportCsv()
         {
-            var rows = await db.Guests.Include(g => g.Family).ToListAsync();
+            var rows = await GuestsAsync(this, db, await db.Guests.AsNoTracking().Include(g => g.Family).OrderBy(g => g.DisplayName).ToListAsync());
 
             using var ms = new MemoryStream();
             using var sw = new StreamWriter(ms, Encoding.UTF8);

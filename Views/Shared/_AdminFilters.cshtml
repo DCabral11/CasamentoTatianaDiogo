@@ -1,0 +1,51 @@
+@using CasamentoTatianaDiogo.ViewModels.Admin
+@if (ViewData["AdminFilters"] is AdminFilterPanel filters)
+{
+    <section class="elegant-card p-3 my-4" aria-labelledby="admin-filters-title">
+        <h2 id="admin-filters-title" class="h5">Pesquisa e filtros</h2>
+        <form method="get" action="@filters.Action" class="row g-3 align-items-end" role="search" aria-label="Pesquisar nesta listagem">
+            <div class="col-12 col-lg-6">
+                <label for="filter-q" class="form-label">@filters.SearchLabel</label>
+                <input id="filter-q" name="q" type="search" maxlength="200" value="@filters.Search" class="form-control" aria-describedby="filter-help" />
+            </div>
+            @foreach (var field in filters.Fields)
+            {
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <label for="filter-@field.Name" class="form-label">@field.Label</label>
+                    @if (field.Type == "date")
+                    {
+                        <input type="date" id="filter-@field.Name" name="@field.Name" value="@field.Value" class="form-control" />
+                    }
+                    else
+                    {
+                        <select id="filter-@field.Name" name="@field.Name" class="form-select">
+                            <option value="">Todos</option>
+                            @if (field.Value.Length > 0 && !field.Options.Any(x => x.Value == field.Value))
+                            {
+                                <option value="@field.Value" selected>Opção inválida — revê a seleção</option>
+                            }
+                            @foreach (var option in field.Options)
+                            {
+                                <option value="@option.Value" selected="@(field.Value == option.Value)">@option.Label</option>
+                            }
+                        </select>
+                    }
+                </div>
+            }
+            <div class="col-12 d-flex flex-wrap gap-2">
+                <button type="submit" class="btn btn-primary">Pesquisar e filtrar</button>
+                <a href="@filters.Action" class="btn btn-outline-primary">Limpar filtros</a>
+            </div>
+            <p id="filter-help" class="form-text mb-0">Os filtros são combinados. A pesquisa ignora maiúsculas e acentos.</p>
+        </form>
+        @if (filters.Errors.Count > 0)
+        {
+            <div class="alert alert-danger mt-3 mb-0" role="alert"><ul class="mb-0">@foreach (var error in filters.Errors) { <li>@error</li> }</ul></div>
+        }
+        <p class="mt-3 mb-0" role="status">@filters.Count de @filters.Total registos@(filters.Active ? " correspondem aos filtros." : ".")</p>
+        @if (filters.Count == 0 && filters.Active && filters.Errors.Count == 0)
+        {
+            <p class="mt-2 mb-0">Nenhum resultado encontrado. Altera a pesquisa ou limpa os filtros.</p>
+        }
+    </section>
+}

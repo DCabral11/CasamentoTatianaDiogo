@@ -1,3 +1,5 @@
+using static CasamentoTatianaDiogo.Services.AdminFilterOptions;
+using CasamentoTatianaDiogo.ViewModels.Admin;
 using CasamentoTatianaDiogo.Data;
 using CasamentoTatianaDiogo.Models;
 using CasamentoTatianaDiogo.Services;
@@ -14,7 +16,15 @@ namespace CasamentoTatianaDiogo.Controllers.Admin;
 public class FaqAdminController(ApplicationDbContext db, FaqService faqs) : Controller
 {
     private const string Folder = "~/Views/Admin/Faq/";
-    [HttpGet] public async Task<IActionResult> Index() => View(Folder + "Index.cshtml", await faqs.GetPageAsync(preview: true));
+    [HttpGet] public async Task<IActionResult> Index()
+    {
+        var page = await faqs.GetPageAsync(preview: true);
+        ViewData["PublishedCount"] = page.Items.Count(x => x.IsPublished);
+        ViewData["DraftCount"] = page.Items.Count(x => !x.IsPublished);
+        var rows = new AdminListFilters<FaqItem>(this, page.Items, "Pergunta ou resposta", x => $"{x.Question} {x.Answer}")
+            .Select("published", "Publicada", YesNo, x => Flag(x.IsPublished)).Results();
+        return View(Folder + "Index.cshtml", page with { Items = rows });
+    }
     [HttpGet] public IActionResult Create() => View(Folder + "Edit.cshtml", new FaqItem());
     [HttpGet] public async Task<IActionResult> Edit(int id)
     {
