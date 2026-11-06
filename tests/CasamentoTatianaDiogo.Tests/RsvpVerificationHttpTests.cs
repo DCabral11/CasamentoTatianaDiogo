@@ -14,7 +14,8 @@ public class RsvpVerificationHttpTests
     public async Task BrowserFlowRequiresEmailCodeBeforeReadingAndSavingAndLocksTheChosenContact()
     {
         var sender = new RecordingVerificationSender();
-        using var app = new HttpTests.TestApplication(verificationSender: sender);
+        var time = new MutableTime();
+        using var app = new HttpTests.TestApplication(verificationSender: sender, time: time);
         using var client = app.Client();
         var (guest, other) = await Seed(app);
         int selectedRelative;
@@ -93,7 +94,26 @@ public class RsvpVerificationHttpTests
             [familyField + ".Message"] = "Vamos juntos", [familyField + ".Status"] = "Attending"
         }));
         Assert.Equal(HttpStatusCode.Redirect, save.StatusCode);
-        Assert.Equal("/Rsvp?submitted=True", save.Headers.Location!.OriginalString);
+        Assert.Equal("/Rsvp/Receipt", save.Headers.Location!.OriginalString);
+        Assert.Contains(save.Headers.GetValues("Set-Cookie"), x => x.StartsWith("Casamento.RsvpReceipt=") &&
+            x.Contains("secure", StringComparison.OrdinalIgnoreCase) && x.Contains("httponly", StringComparison.OrdinalIgnoreCase));
+        var receiptResponse = await client.GetAsync("/Rsvp/Receipt");
+        Assert.Contains("no-store", receiptResponse.Headers.CacheControl!.ToString());
+        var receipt = WebUtility.HtmlDecode(await receiptResponse.Content.ReadAsStringAsync());
+        Assert.Contains("O teu recibo RSVP", receipt);
+        Assert.Contains("Até breve!", receipt);
+        Assert.Contains("Vamos juntos", receipt);
+        Assert.Contains("Carlos Silva", receipt);
+        Assert.DoesNotContain("Bruno Silva", receipt);
+        Assert.DoesNotContain("Eva Costa", receipt);
+        Assert.DoesNotContain("ana@example.test", receipt);
+        Assert.Contains("data-print-receipt", receipt);
+        using (var anonymous = app.Client())
+        {
+            var deniedReceipt = await anonymous.GetAsync($"/Rsvp/Receipt?id={guest}");
+            Assert.Equal(HttpStatusCode.Gone, deniedReceipt.StatusCode);
+            Assert.DoesNotContain("Até breve!", await deniedReceipt.Content.ReadAsStringAsync());
+        }
         using (var scope = app.Services.CreateScope())
         {
             var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
@@ -112,6 +132,20 @@ public class RsvpVerificationHttpTests
         Assert.Equal(HttpStatusCode.OK, change.StatusCode);
         Assert.Contains("Não é possível usar este contacto", WebUtility.HtmlDecode(await change.Content.ReadAsStringAsync()));
         Assert.Single(sender.Messages);
+
+        using (var scope = app.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            (await db.RsvpResponses.SingleAsync(x => x.GuestId == guest)).Message = "Alteração posterior";
+            (await db.WeddingSettings.SingleAsync()).RsvpDeadline = new DateOnly(2020, 1, 1);
+            await db.SaveChangesAsync();
+        }
+        var afterDeadline = WebUtility.HtmlDecode(await client.GetStringAsync("/Rsvp/Receipt"));
+        Assert.Contains("Até breve!", afterDeadline);
+        Assert.DoesNotContain("Alteração posterior", afterDeadline);
+        Assert.Contains("Confirmações de presença encerradas", WebUtility.HtmlDecode(await client.GetStringAsync($"/Rsvp/Contact/{guest}")));
+        time.Advance(TimeSpan.FromHours(24));
+        Assert.Equal(HttpStatusCode.Gone, (await client.GetAsync("/Rsvp/Receipt")).StatusCode);
     }
 
     [Fact]

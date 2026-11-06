@@ -26,6 +26,8 @@ public class RsvpVerificationChallenge
     public int Attempts { get; set; }
     public DateTime? VerifiedAt { get; set; }
     public DateTime? SessionExpiresAt { get; set; }
+    public string? ReceiptJson { get; set; }
+    public DateTime? ReceiptExpiresAt { get; set; }
 }
 
 // Persisted counters work across Vercel instances; they contain hashed keys, not contacts/IPs.

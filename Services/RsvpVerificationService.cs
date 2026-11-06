@@ -2,6 +2,7 @@ using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Text.Json;
 using CasamentoTatianaDiogo.Data;
 using CasamentoTatianaDiogo.Models;
 using CasamentoTatianaDiogo.Services.Interfaces;
@@ -23,6 +24,7 @@ public class RsvpVerificationService(ApplicationDbContext db, IRsvpVerificationS
     public const string InvalidCode = "O código é inválido, expirou ou atingiu o limite de tentativas. Pede um novo código se necessário.";
     private readonly IDataProtector challengeProtector = protection.CreateProtector("Rsvp.Challenge.v1");
     private readonly IDataProtector accessProtector = protection.CreateProtector("Rsvp.Access.v1");
+    private readonly IDataProtector receiptProtector = protection.CreateProtector("Rsvp.Receipt.v1");
     private readonly PasswordHasher<RsvpVerificationChallenge> hasher = new();
     private DateTime Now => time.GetUtcNow().UtcDateTime;
 
@@ -137,6 +139,24 @@ public class RsvpVerificationService(ApplicationDbContext db, IRsvpVerificationS
         if (challenge == null || !await db.Guests.AnyAsync(x => x.Id == guestId && x.FamilyId == challenge.FamilyId) ||
             !await ContactAllowedAsync(challenge.FamilyId, challenge.Channel, challenge.NormalizedContact)) return null;
         return new(challenge.Id, challenge.FamilyId, challenge.Channel, challenge.NormalizedContact);
+    }
+
+    public async Task<string?> CreateReceiptTokenAsync(string? accessToken)
+    {
+        var id = Decode(accessProtector, accessToken);
+        if (!id.HasValue || !await db.RsvpVerificationChallenges.AnyAsync(x => x.Id == id.Value &&
+            x.VerifiedAt != null && x.ReceiptJson != null && x.ReceiptExpiresAt > Now)) return null;
+        return receiptProtector.Protect(id.Value.ToString("N"));
+    }
+
+    public async Task<RsvpReceiptViewModel?> GetReceiptAsync(string? token)
+    {
+        var id = Decode(receiptProtector, token);
+        if (!id.HasValue) return null;
+        var json = await db.RsvpVerificationChallenges.AsNoTracking()
+            .Where(x => x.Id == id.Value && x.VerifiedAt != null && x.ReceiptExpiresAt > Now)
+            .Select(x => x.ReceiptJson).SingleOrDefaultAsync();
+        return json == null ? null : JsonSerializer.Deserialize<RsvpReceiptViewModel>(json);
     }
 
     private async Task<bool> ContactAllowedAsync(int familyId, RsvpVerificationChannel channel, string contact, CancellationToken ct = default) =>

@@ -1,0 +1,21 @@
+.receipt-details { display: grid; grid-template-columns: minmax(9rem, 1fr) minmax(0, 2fr); gap: .5rem 1rem; }
+.receipt-details dd { margin: 0; overflow-wrap: anywhere; }
+.receipt-text { white-space: pre-wrap; }
+.receipt-reference { font-size: .85rem; }
+.receipt-total { display: flex; align-items: center; gap: .75rem; height: 100%; padding: 1rem; border: 1px solid currentColor; border-radius: .75rem; }
+.receipt-total strong { font-size: 2rem; }
+.receipt-companion { border-top: 1px solid currentColor; padding-top: 1rem; }
+@media (max-width: 575px) {
+    .receipt-details { grid-template-columns: 1fr; gap: .2rem; }
+    .receipt-details dd { margin-bottom: .75rem; }
+    .receipt-total { flex-direction: column; align-items: flex-start; gap: .25rem; }
+}
+@media print {
+    header, footer, nav, .receipt-actions, .skip-link { display: none !important; }
+    body, main, .page-header, .elegant-card { background: white !important; color: black !important; box-shadow: none !important; }
+    .page-header { padding: 1rem 0 !important; }
+    .rsvp-receipt { padding: 0 !important; max-width: none !important; }
+    .receipt-person { break-inside: avoid; border: 1px solid #666; }
+    .receipt-details { grid-template-columns: 1fr 2fr; }
+    a { color: black !important; text-decoration: none !important; }
+}

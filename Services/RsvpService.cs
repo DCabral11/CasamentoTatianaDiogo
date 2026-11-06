@@ -7,6 +7,7 @@ using CasamentoTatianaDiogo.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 using Enums = CasamentoTatianaDiogo.Models.Enums;
 
 namespace CasamentoTatianaDiogo.Services
@@ -154,6 +155,8 @@ namespace CasamentoTatianaDiogo.Services
                 return AppResult.Failure(ErrorCode.RsvpInvalidPlusOne, messages.Get(ErrorCode.RsvpInvalidPlusOne));
 
             var emailDetails = new List<RsvpEmailDetail>();
+            var receiptPeople = new List<RsvpReceiptPerson>();
+            var savedAt = time.GetUtcNow().UtcDateTime;
 
             foreach (var responseGuest in guestsToRespond)
             {
@@ -164,7 +167,7 @@ namespace CasamentoTatianaDiogo.Services
                     response = new RsvpResponse
                     {
                         GuestId = responseGuest.Id,
-                        SubmittedAt = DateTime.UtcNow
+                        SubmittedAt = savedAt
                     };
 
                     db.RsvpResponses.Add(response);
@@ -180,11 +183,17 @@ namespace CasamentoTatianaDiogo.Services
                 response.PlusOneDietaryRestrictions = response.PlusOneAttending ? model.PlusOneDietaryRestrictions : null;
                 response.PlusOneMessage = response.PlusOneAttending ? model.PlusOneMessage : null;
                 response.PlusOneMusicRequest = response.PlusOneAttending ? model.PlusOneMusicRequest : null;
-                response.UpdatedAt = DateTime.UtcNow;
+                response.UpdatedAt = savedAt;
                 response.SubmittedFromIp = ip;
                 response.UserAgent = userAgent;
 
                 responseGuest.CurrentStatus = response.Status;
+
+                receiptPeople.Add(new(responseGuest.DisplayName, response.Status, response.DietaryRestrictions,
+                    response.Message, response.MusicRequest,
+                    response.PlusOneAttending ? new RsvpReceiptPerson(plusOne!.PlusOneDisplayName,
+                        Enums.RsvpStatus.Attending, response.PlusOneDietaryRestrictions,
+                        response.PlusOneMessage, response.PlusOneMusicRequest) : null));
 
                 emailDetails.Add(new RsvpEmailDetail(
                     responseGuest.DisplayName,
@@ -209,7 +218,12 @@ namespace CasamentoTatianaDiogo.Services
                     NormalizedContact = access.Contact, ConfirmedAt = time.GetUtcNow().UtcDateTime
                 });
             var challenge = await db.RsvpVerificationChallenges.FindAsync(access.ChallengeId);
-            challenge!.SessionExpiresAt = time.GetUtcNow().UtcDateTime;
+            challenge!.SessionExpiresAt = savedAt;
+            // Commit an immutable snapshot with the response, never reconstruct it from later edits.
+            challenge.ReceiptJson = JsonSerializer.Serialize(new RsvpReceiptViewModel(
+                $"RSVP-{challenge.Id:N}", model.GuestId, savedAt,
+                RsvpContact.Mask(access.Channel, access.Contact), receiptPeople));
+            challenge.ReceiptExpiresAt = savedAt.AddHours(24);
             try
             {
                 // The contact claim and all responses are committed in one SaveChanges transaction.

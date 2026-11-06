@@ -37,6 +37,10 @@ internal static class RsvpVerificationSchema
             CREATE INDEX [IX_RsvpVerificationChallenges_CreatedAt] ON [RsvpVerificationChallenges] ([CreatedAt]);
             CREATE INDEX [IX_RsvpVerificationChallenges_FamilyId_Channel_NormalizedContact] ON [RsvpVerificationChallenges] ([FamilyId], [Channel], [NormalizedContact]);
         END
+        IF COL_LENGTH(N'[RsvpVerificationChallenges]', N'ReceiptJson') IS NULL
+            ALTER TABLE [RsvpVerificationChallenges] ADD [ReceiptJson] nvarchar(max) NULL;
+        IF COL_LENGTH(N'[RsvpVerificationChallenges]', N'ReceiptExpiresAt') IS NULL
+            ALTER TABLE [RsvpVerificationChallenges] ADD [ReceiptExpiresAt] datetime2 NULL;
         IF OBJECT_ID(N'[RsvpVerificationLimits]', N'U') IS NULL
         BEGIN
             CREATE TABLE [RsvpVerificationLimits] (

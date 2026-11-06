@@ -1,0 +1,62 @@
+@model RsvpReceiptViewModel
+@inject CasamentoTatianaDiogo.Services.WeddingClock Clock
+@{
+    ViewData["Title"] = "Recibo da resposta RSVP";
+}
+<section class="page-header rsvp-header">
+    <div class="container narrow">
+        <p class="mb-2"><i class="bi bi-check-circle" aria-hidden="true"></i> Resposta guardada com sucesso</p>
+        <h1>O teu recibo RSVP</h1>
+        <p>Obrigado pela resposta! Revê abaixo os dados que ficaram registados neste envio.</p>
+    </div>
+</section>
+<div class="container py-4 py-md-5 narrow rsvp-receipt">
+    <section class="elegant-card p-4 mb-4" aria-labelledby="receipt-summary-title">
+        <h2 id="receipt-summary-title" class="h4">Resumo da confirmação</h2>
+        <dl class="receipt-details">
+            <dt>Referência do recibo</dt><dd class="receipt-reference">@Model.Reference</dd>
+            <dt>Data e hora do envio</dt><dd><time datetime="@Model.SavedAtUtc.ToString("O")">@Clock.ToLocal(Model.SavedAtUtc).ToString("dd/MM/yyyy 'às' HH:mm")</time> (@Clock.TimeZoneId)</dd>
+            <dt>Email verificado</dt><dd>@Model.VerifiedContact</dd>
+        </dl>
+        <div class="row g-3 mt-1">
+            <div class="col-6"><div class="receipt-total"><strong>@Model.Attending</strong><span>Presenças confirmadas<br /><small>Inclui acompanhantes</small></span></div></div>
+            <div class="col-6"><div class="receipt-total"><strong>@Model.NotAttending</strong><span>Não vão comparecer</span></div></div>
+        </div>
+        <p class="small mt-3 mb-0">Este recibo inclui apenas as pessoas selecionadas neste envio. As respostas dos restantes convidados não foram alteradas.</p>
+    </section>
+    <section aria-labelledby="receipt-people-title">
+        <h2 id="receipt-people-title" class="h4 mb-3">Dados enviados</h2>
+        @foreach (var person in Model.People)
+        {
+            <article class="elegant-card p-4 mb-3 receipt-person">
+                <h3 class="h5">@person.Name</h3>
+                <partial name="_ReceiptPerson" model="person" />
+                <p><strong>Acompanhante:</strong> @(person.Companion == null ? "Sem acompanhante confirmado neste envio" : person.Companion.Name)</p>
+                @if (person.Companion != null)
+                {
+                    <section class="receipt-companion" aria-label="Dados do acompanhante de @person.Name">
+                        <h4 class="h6">Acompanhante: @person.Companion.Name</h4>
+                        <partial name="_ReceiptPerson" model="person.Companion" />
+                    </section>
+                }
+            </article>
+        }
+    </section>
+    <div class="elegant-card p-4 mt-4 receipt-actions">
+        <h2 class="h5">Guarda a tua confirmação</h2>
+        <p>O recibo fica disponível neste navegador durante 24 horas. Podes imprimi-lo ou escolher «Guardar como PDF» na janela de impressão.</p>
+        <p>Para corrigir uma resposta, volta a verificar o mesmo email. As alterações estão disponíveis até ao fim do prazo de RSVP.</p>
+        <div class="d-flex flex-wrap gap-2">
+            <button type="button" class="btn btn-primary" data-print-receipt><i class="bi bi-printer me-1" aria-hidden="true"></i> Imprimir / guardar PDF</button>
+            <a class="btn btn-outline-primary" asp-action="Contact" asp-route-id="@Model.GuestId">Alterar resposta</a>
+            <a class="btn btn-outline-primary" asp-controller="Home" asp-action="Index">Voltar ao início</a>
+        </div>
+    </div>
+</div>
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/rsvp.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/rsvp-receipt.css" asp-append-version="true" />
+}
+@section Scripts {
+    <script src="~/js/rsvp-receipt.js" asp-append-version="true"></script>
+}

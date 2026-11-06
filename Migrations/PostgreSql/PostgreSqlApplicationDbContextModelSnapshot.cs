@@ -740,6 +740,12 @@ namespace CasamentoTatianaDiogo.Migrations.PostgreSql
                         .HasMaxLength(254)
                         .HasColumnType("character varying(254)");
 
+                    b.Property<DateTime?>("ReceiptExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ReceiptJson")
+                        .HasColumnType("text");
+
                     b.Property<DateTime?>("SessionExpiresAt")
                         .HasColumnType("timestamp with time zone");
 

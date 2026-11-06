@@ -1,0 +1,14 @@
+@{
+    ViewData["Title"] = "Recibo indisponível";
+}
+<section class="page-header"><div class="container narrow"><h1>Recibo indisponível neste navegador</h1></div></section>
+<div class="container py-5 narrow">
+    <div class="elegant-card p-4">
+        <p>O acesso ao recibo expirou ou não existe uma confirmação recente neste navegador. Isto não elimina uma resposta já guardada.</p>
+        <p>Podes consultar a tua resposta através da pesquisa de convidados e da verificação do mesmo email, enquanto o prazo de RSVP estiver aberto. Depois do prazo, contacta os noivos.</p>
+        <div class="d-flex flex-wrap gap-2">
+            <a class="btn btn-primary" asp-action="Index">Consultar resposta</a>
+            <a class="btn btn-outline-primary" asp-controller="Information" asp-action="Index">Contactar os noivos</a>
+        </div>
+    </div>
+</div>

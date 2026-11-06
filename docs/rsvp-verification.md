@@ -2,6 +2,16 @@
 
 O QR e o endereço geral dos convites mantêm-se. O convidado pesquisa o nome, indica o email e introduz o código recebido antes de consultar ou guardar a resposta. A aplicação envia códigos apenas por email.
 
+## Recibo após a confirmação
+
+Após guardar uma resposta, o convidado é encaminhado para `/Rsvp/Receipt`. O recibo apresenta referência, data/hora no fuso do casamento, email verificado parcialmente oculto, totais de presenças/ausências e os dados de cada pessoa incluída nesse envio, incluindo acompanhantes. Pode ser impresso ou guardado como PDF através do navegador.
+
+O recibo é uma cópia dos dados guardados nesse momento: alterações posteriores não modificam essa cópia. Fica acessível durante 24 horas no navegador que submeteu a resposta, através de um cookie protegido, HttpOnly e Secure em produção. O URL, por si só, não permite consultar dados de convidados. Não são incluídos IPs, informação técnica ou respostas de pessoas não selecionadas. Cada novo envio nesse navegador substitui o recibo acessível.
+
+A consulta do recibo continua disponível depois da data limite de RSVP, até expirar. Para alterar uma resposta é necessário voltar a verificar o email original e respeitar a data limite. O recibo não é enviado por email; as notificações aos noivos continuam independentes. As cópias temporárias são eliminadas com os desafios de verificação antigos, na limpeza executada ao pedir novos códigos.
+
+Antes de publicar esta funcionalidade, aplica a migração PostgreSQL `AddRsvpReceipt` pelo procedimento de inicialização descrito em [Deploy na Vercel](vercel-deployment.md). Não são necessárias novas variáveis de ambiente.
+
 ## Onde obter os valores: exemplo com Gmail
 
 Usa uma conta Gmail à qual tenhas acesso, por exemplo a conta do casamento. O email remetente pertence aos noivos/à aplicação; o email de cada convidado é introduzido no formulário e não é uma variável da Vercel.

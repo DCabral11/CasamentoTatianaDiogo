@@ -15,10 +15,17 @@ public class RsvpController(IRsvpService rsvp, IAppMessageService messages,
 {
     private const string ChallengeCookie = "Casamento.RsvpChallenge";
     private const string AccessCookie = "Casamento.RsvpAccess";
+    private const string ReceiptCookie = "Casamento.RsvpReceipt";
     private string? AccessToken => Request.Cookies[AccessCookie];
 
     public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
+        // Reading an already saved receipt remains possible after the RSVP deadline.
+        if (string.Equals(context.ActionDescriptor.RouteValues["action"], nameof(Receipt), StringComparison.Ordinal))
+        {
+            await next();
+            return;
+        }
         var deadline = (await settings.GetAsync()).RsvpDeadline;
         if (deadline.HasValue && DateOnly.FromDateTime(clock.Now) > deadline.Value)
         {
@@ -128,9 +135,13 @@ public class RsvpController(IRsvpService rsvp, IAppMessageService messages,
             var result = await rsvp.SubmitAsync(model, AccessToken, HttpContext.Connection.RemoteIpAddress?.ToString(), Request.Headers.UserAgent.ToString());
             if (result.Succeeded)
             {
+                var receiptToken = await verification.CreateReceiptTokenAsync(AccessToken);
+                if (receiptToken != null)
+                    Response.Cookies.Append(ReceiptCookie, receiptToken, CookieOptions(TimeSpan.FromHours(24)));
+                else
+                    Response.Cookies.Delete(ReceiptCookie, CookieOptions(null));
                 Response.Cookies.Delete(AccessCookie, CookieOptions(null));
-                TempData["Success"] = messages.Get(ErrorCode.RsvpSaved);
-                return RedirectToAction(nameof(Index), new { submitted = true });
+                return RedirectToAction(nameof(Receipt));
             }
             ModelState.AddModelError(result.Error?.Field ?? string.Empty, result.Message);
         }
@@ -138,6 +149,16 @@ public class RsvpController(IRsvpService rsvp, IAppMessageService messages,
         if (form == null) return RedirectToAction(nameof(Contact), new { id = model.GuestId });
         form.Input = model;
         return View("Select", form);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Receipt()
+    {
+        Response.Headers.CacheControl = "no-store";
+        var receipt = await verification.GetReceiptAsync(Request.Cookies[ReceiptCookie]);
+        if (receipt != null) return View(receipt);
+        Response.StatusCode = StatusCodes.Status410Gone;
+        return View("ReceiptUnavailable");
     }
 
     private CookieOptions CookieOptions(TimeSpan? lifetime) => new()

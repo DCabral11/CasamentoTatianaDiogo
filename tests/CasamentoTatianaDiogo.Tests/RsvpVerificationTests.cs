@@ -315,6 +315,49 @@ public class RsvpVerificationTests : IDisposable
 
     public void Dispose() => connection.Dispose();
 
+    [Fact]
+    public async Task ReceiptCapturesOnlySavedPeopleAndCompanionAndCannotAuthorizeAnEdit()
+    {
+        var token = await Verified(guestId, RsvpVerificationChannel.Email, "ana@example.test");
+        using var db = Db();
+        var verification = Verification(db);
+        Assert.Null(await verification.CreateReceiptTokenAsync(token));
+        var plusOne = new PlusOne { MainGuestId = guestId, PlusOneFirstName = "Pedro", PlusOneDisplayName = "Pedro Santos" };
+        db.PlusOnes.Add(plusOne);
+        await db.SaveChangesAsync();
+        var result = await Rsvp(db).SubmitAsync(new()
+        {
+            GuestId = guestId, Status = RsvpStatus.Attending, Message = "Obrigado!\nAté breve.",
+            DietaryRestrictions = "Sem glúten", MusicRequest = "A nossa música",
+            PlusOneAttending = true, PlusOneId = plusOne.Id, PlusOneDietaryRestrictions = "Vegetariano",
+            PlusOneMessage = "Olá", PlusOneMusicRequest = "Outra música",
+            FamilyResponses = [new() { GuestId = relativeId, Status = RsvpStatus.NotAttending, Message = "Não consigo ir" }]
+        }, token, "127.0.0.1", "Private user agent");
+        Assert.True(result.Succeeded, result.Message);
+        var receiptToken = await verification.CreateReceiptTokenAsync(token);
+        Assert.NotNull(receiptToken);
+        Assert.Null(await verification.GetReceiptAsync(token));
+        Assert.Null(await verification.GetReceiptAsync(receiptToken + "tampered"));
+        Assert.Null(await verification.GetAccessAsync(receiptToken, guestId));
+        Assert.Null(await verification.GetAccessAsync(token, guestId));
+        var receipt = (await verification.GetReceiptAsync(receiptToken))!;
+        Assert.Equal(2, receipt.People.Count);
+        Assert.Equal(2, receipt.Attending);
+        Assert.Equal(1, receipt.NotAttending);
+        Assert.Equal(time.GetUtcNow().UtcDateTime, receipt.SavedAtUtc);
+        var person = receipt.People.Single(x => x.Name == "Ana Silva");
+        Assert.Equal("Obrigado!\nAté breve.", person.Message);
+        Assert.Equal("Sem glúten", person.DietaryRestrictions);
+        Assert.Equal("A nossa música", person.MusicRequest);
+        Assert.Equal("Pedro Santos", person.Companion!.Name);
+        Assert.Equal("Vegetariano", person.Companion.DietaryRestrictions);
+        Assert.Equal("Olá", person.Companion.Message);
+        Assert.Equal("Outra música", person.Companion.MusicRequest);
+        Assert.DoesNotContain("Private user agent", (await db.RsvpVerificationChallenges.SingleAsync()).ReceiptJson!);
+        time.Advance(TimeSpan.FromHours(24));
+        Assert.Null(await verification.GetReceiptAsync(receiptToken));
+    }
+
     private class QuietNotifications : IRsvpEmailNotificationService
     {
         public Task SendAsync(IReadOnlyCollection<RsvpEmailDetail> responses) => Task.CompletedTask;
