@@ -207,6 +207,92 @@ namespace CasamentoTatianaDiogo.Migrations.PostgreSql
                     b.ToTable("Families");
                 });
 
+            modelBuilder.Entity("CasamentoTatianaDiogo.Models.FaqItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Answer")
+                        .IsRequired()
+                        .HasMaxLength(6000)
+                        .HasColumnType("character varying(6000)");
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsPublished")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Question")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
+
+                    b.Property<Guid>("Version")
+                        .IsConcurrencyToken()
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsPublished", "DisplayOrder");
+
+                    b.ToTable("FaqItems");
+                });
+
+            modelBuilder.Entity("CasamentoTatianaDiogo.Models.FaqPageSettings", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("EmptyMessage")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("Introduction")
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("NavigationLabel")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
+
+                    b.Property<Guid>("Version")
+                        .IsConcurrencyToken()
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FaqPageSettings");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            EmptyMessage = "Estamos a preparar as respostas às perguntas mais frequentes. Volta em breve!",
+                            Introduction = "Encontra aqui as respostas às dúvidas sobre o nosso dia.",
+                            IsEnabled = false,
+                            NavigationLabel = "Perguntas frequentes",
+                            Title = "Perguntas frequentes",
+                            Version = new Guid("00000000-0000-0000-0000-000000000000")
+                        });
+                });
+
             modelBuilder.Entity("CasamentoTatianaDiogo.Models.Guest", b =>
                 {
                     b.Property<int>("Id")

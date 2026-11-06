@@ -1,0 +1,64 @@
+@model FaqPageViewModel
+@{ ViewData["Title"] = "Gerir perguntas frequentes"; }
+<div class="container py-5">
+    <div class="d-flex flex-wrap justify-content-between gap-3 mb-4">
+        <div><h1>Perguntas frequentes</h1><p>Prepara as respostas, define a ordem e escolhe o que os convidados podem consultar.</p></div>
+        <a class="btn btn-outline-primary align-self-start" asp-controller="Dashboard" asp-action="Index">Voltar ao painel</a>
+    </div>
+    <div class="row g-3 mb-4">
+        <div class="col-12 col-md-4"><div class="elegant-card p-3"><strong class="d-block fs-3">@Model.Items.Count(x => x.IsPublished)</strong>Perguntas publicadas</div></div>
+        <div class="col-12 col-md-4"><div class="elegant-card p-3"><strong class="d-block fs-3">@Model.Items.Count(x => !x.IsPublished)</strong>Rascunhos</div></div>
+        <div class="col-12 col-md-4"><div class="elegant-card p-3"><strong class="d-block fs-3">@(Model.Settings.IsEnabled ? "Ativo" : "Desativado")</strong>Estado do módulo</div></div>
+    </div>
+    <div class="d-flex flex-wrap gap-2 mb-4">
+        <a class="btn btn-primary" asp-action="Create"><i class="bi bi-plus-lg" aria-hidden="true"></i> Adicionar pergunta</a>
+        <a class="btn btn-outline-primary" asp-action="Preview">Pré-visualizar perguntas</a>
+        @if (Model.Settings.IsEnabled) { <a class="btn btn-outline-primary" asp-controller="Faq" asp-action="Index" target="_top">Ver página pública</a> }
+        <a class="btn btn-outline-primary" href="#faq-settings">Definições da página</a>
+    </div>
+    @if (Model.Items.Count == 0)
+    {
+        <p class="elegant-card p-4">Ainda não existem perguntas. Adiciona a primeira e ativa o módulo nas definições quando o conteúdo estiver pronto.</p>
+    }
+    else
+    {
+        <div class="table-responsive" tabindex="0" role="region" aria-label="Lista de perguntas frequentes">
+            <table class="table align-middle">
+                <caption>As perguntas são apresentadas por ordem crescente. Em caso de empate, aparece primeiro a que foi criada primeiro.</caption>
+                <thead><tr><th scope="col">Ordem</th><th scope="col">Pergunta</th><th scope="col">Estado</th><th scope="col">Ações</th></tr></thead>
+                <tbody>
+                    @foreach (var item in Model.Items)
+                    {
+                        <tr>
+                            <td>@item.DisplayOrder</td><th scope="row" class="faq-admin-question">@item.Question</th><td>@(item.IsPublished ? "Publicada" : "Rascunho")</td>
+                            <td><div class="d-flex flex-wrap gap-2">
+                                <a class="btn btn-sm btn-outline-primary" asp-action="Edit" asp-route-id="@item.Id" aria-label="Editar: @item.Question">Editar</a>
+                                <form asp-action="Delete" asp-route-id="@item.Id" method="post" data-delete-confirmation data-delete-message="Eliminar a pergunta «@item.Question»?">
+                                    <input type="hidden" name="version" value="@item.Version" />
+                                    <button class="btn btn-sm btn-outline-danger" type="submit" aria-label="Eliminar: @item.Question">Eliminar</button>
+                                </form>
+                            </div></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    <section id="faq-settings" class="admin-form mt-5" aria-labelledby="faq-settings-title">
+        <h2 id="faq-settings-title">Definições da página</h2>
+        <form asp-action="Settings" method="post">
+            <partial name="_FormErrors" />
+            <input asp-for="Settings.Version" type="hidden" />
+            @if (Context.Response.StatusCode == 409) { <p><a asp-action="Index">Recarregar as definições atuais</a></p> }
+            <div class="form-check mb-3"><input asp-for="Settings.IsEnabled" class="form-check-input" aria-describedby="faq-enabled-help" /><label asp-for="Settings.IsEnabled" class="form-check-label">Ativar o módulo no site</label></div>
+            <p class="form-text" id="faq-enabled-help">Quando desativado, o acesso público e o link no menu ficam indisponíveis. As perguntas continuam guardadas.</p>
+            <div class="mb-3"><label asp-for="Settings.Title" class="form-label">Título da página (obrigatório)</label><input asp-for="Settings.Title" class="form-control" required maxlength="150" /><span asp-validation-for="Settings.Title" class="text-danger"></span></div>
+            <div class="mb-3"><label asp-for="Settings.NavigationLabel" class="form-label">Nome no menu (obrigatório)</label><input asp-for="Settings.NavigationLabel" class="form-control" required maxlength="40" /><span asp-validation-for="Settings.NavigationLabel" class="text-danger"></span></div>
+            <div class="mb-3"><label asp-for="Settings.Introduction" class="form-label">Introdução (opcional)</label><textarea asp-for="Settings.Introduction" class="form-control" rows="3" maxlength="2000"></textarea><span asp-validation-for="Settings.Introduction" class="text-danger"></span></div>
+            <div class="mb-3"><label asp-for="Settings.EmptyMessage" class="form-label">Mensagem quando não há perguntas publicadas (obrigatório)</label><textarea asp-for="Settings.EmptyMessage" class="form-control" rows="3" required maxlength="500"></textarea><span asp-validation-for="Settings.EmptyMessage" class="text-danger"></span></div>
+            <button class="btn btn-primary" type="submit">Guardar definições</button>
+        </form>
+    </section>
+</div>
+@section Styles { <link rel="stylesheet" href="~/css/pages/faq.css" asp-append-version="true" /> }
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

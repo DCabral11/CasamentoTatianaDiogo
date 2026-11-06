@@ -12,7 +12,7 @@ public sealed class SiteMusicFilter(IWeddingSettingsService settings) : IAsyncRe
     public async Task OnResultExecutionAsync(ResultExecutingContext context, ResultExecutionDelegate next)
     {
         var request = context.HttpContext.Request;
-        if (context.Controller is HomeController or InformationController or PhotosController or RsvpController &&
+        if (context.Controller is HomeController or InformationController or PhotosController or RsvpController or FaqController &&
             context.Result is ViewResult view && context.HttpContext.Response.StatusCode == 200 &&
             HttpMethods.IsGet(request.Method) && !request.Query.ContainsKey("sitePage") &&
             request.Headers["Sec-Fetch-Dest"] == "document")

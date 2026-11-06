@@ -1,0 +1,39 @@
+@model FaqPageViewModel
+@{ ViewData["Title"] = Model.Settings.Title; }
+<section class="page-header">
+    <div class="container narrow">
+        <h1>@Model.Settings.Title</h1>
+        @if (!string.IsNullOrWhiteSpace(Model.Settings.Introduction))
+        {
+            <p class="faq-text">@Model.Settings.Introduction</p>
+        }
+    </div>
+</section>
+<div class="container narrow py-4 py-md-5 faq-page">
+    @if (Model.IsPreview)
+    {
+        <div class="feedback-card feedback-card-warning mb-4" role="status">
+            <div><strong>Pré-visualização da administração</strong>
+            <p>Inclui rascunhos. O módulo está @(Model.Settings.IsEnabled ? "ativo" : "desativado") para os convidados.</p>
+            <a asp-controller="FaqAdmin" asp-action="Index">Voltar à gestão das perguntas</a></div>
+        </div>
+    }
+    @if (Model.Items.Count == 0)
+    {
+        <p class="elegant-card p-4 faq-text">@Model.Settings.EmptyMessage</p>
+    }
+    @foreach (var item in Model.Items)
+    {
+        <details class="faq-item elegant-card mb-3" id="pergunta-@item.Id">
+            <summary><h2>@item.Question</h2></summary>
+            <div class="faq-answer">
+                @if (Model.IsPreview && !item.IsPublished)
+                {
+                    <p class="small"><strong>Rascunho — não visível aos convidados</strong></p>
+                }
+                <div class="faq-text">@item.Answer</div>
+            </div>
+        </details>
+    }
+</div>
+@section Styles { <link rel="stylesheet" href="~/css/pages/faq.css" asp-append-version="true" /> }

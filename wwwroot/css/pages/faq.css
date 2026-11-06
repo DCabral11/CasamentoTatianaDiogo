@@ -1,0 +1,11 @@
+.faq-text { white-space: pre-wrap; overflow-wrap: anywhere; }
+.faq-item summary { padding: 1.25rem 1.5rem; color: var(--ink); cursor: pointer; border-radius: inherit; overflow-wrap: anywhere; }
+.faq-item summary h2 { display: inline; font-family: inherit; font-size: 1.1rem; line-height: 1.6; font-weight: 600; }
+.faq-item summary::marker { color: var(--accent-ink); }
+.faq-item summary:focus-visible { outline: 3px solid var(--accent-ink); outline-offset: 3px; }
+.faq-item[open] summary { border-bottom: 1px solid var(--line); }
+.faq-answer { padding: 1.25rem 1.5rem; line-height: 1.8; }
+.faq-admin-question { overflow-wrap: anywhere; max-width: 32rem; }
+@media (max-width: 575px) {
+    .faq-item summary, .faq-answer { padding: 1rem; }
+}

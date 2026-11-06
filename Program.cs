@@ -89,6 +89,7 @@ builder.Services.AddScoped<IRsvpService, RsvpService>();
 builder.Services.AddScoped<IRsvpEmailNotificationService, RsvpEmailNotificationService>();
 builder.Services.AddScoped<RsvpVerificationService>();
 builder.Services.AddScoped<ExcelImportService>();
+builder.Services.AddScoped<FaqService>();
 builder.Services.AddScoped<IRsvpVerificationSender, RsvpVerificationSender>();
 builder.Services.AddSingleton<IGoogleDriveService, GoogleDriveService>();
 builder.Services.AddScoped<IPhotoUploadService, PhotoUploadService>();

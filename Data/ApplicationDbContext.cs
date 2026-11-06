@@ -17,6 +17,8 @@ namespace CasamentoTatianaDiogo.Data
         public DbSet<RsvpVerificationLimit> RsvpVerificationLimits => Set<RsvpVerificationLimit>();
         public DbSet<AdminImportDraft> AdminImportDrafts => Set<AdminImportDraft>();
         public DbSet<RsvpEditSession> RsvpEditSessions => Set<RsvpEditSession>();
+        public DbSet<FaqItem> FaqItems => Set<FaqItem>();
+        public DbSet<FaqPageSettings> FaqPageSettings => Set<FaqPageSettings>();
 
         public DbSet<WeddingSettings> WeddingSettings => Set<WeddingSettings>();
         public DbSet<TimelineEvent> TimelineEvents => Set<TimelineEvent>();
@@ -36,6 +38,8 @@ namespace CasamentoTatianaDiogo.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            builder.Entity<FaqItem>().HasIndex(x => new { x.IsPublished, x.DisplayOrder });
+            builder.Entity<FaqPageSettings>().HasData(new FaqPageSettings());
             MusicProgramSchema.Configure(builder);
 
             builder.Entity<PlanningCategory>().HasIndex(x => x.NormalizedName).IsUnique();

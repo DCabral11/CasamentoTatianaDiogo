@@ -1,0 +1,16 @@
+@model FaqItem
+@{ ViewData["Title"] = Model.Id == 0 ? "Adicionar pergunta" : "Editar pergunta"; }
+<div class="container narrow py-5">
+    <h1>@ViewData["Title"]</h1>
+    <form asp-action="Save" method="post" class="admin-form">
+        <partial name="_FormErrors" />
+        <input asp-for="Id" type="hidden" /><input asp-for="Version" type="hidden" />
+        @if (Context.Response.StatusCode == 409) { <p><a asp-action="Edit" asp-route-id="@Model.Id">Consultar a versão atual</a></p> }
+        <div class="mb-3"><label asp-for="Question" class="form-label">Pergunta (obrigatório)</label><input asp-for="Question" class="form-control" required maxlength="300" /><span asp-validation-for="Question" class="text-danger"></span></div>
+        <div class="mb-3"><label asp-for="Answer" class="form-label">Resposta (obrigatório)</label><textarea asp-for="Answer" class="form-control" rows="8" required maxlength="6000" aria-describedby="faq-answer-help"></textarea><div id="faq-answer-help" class="form-text">Os parágrafos e quebras de linha serão mantidos. Usa texto simples, sem HTML.</div><span asp-validation-for="Answer" class="text-danger"></span></div>
+        <div class="mb-3"><label asp-for="DisplayOrder" class="form-label">Ordem de apresentação</label><input asp-for="DisplayOrder" class="form-control" type="number" min="0" max="10000" required aria-describedby="faq-order-help" /><div id="faq-order-help" class="form-text">Os números menores aparecem primeiro. Podes usar 10, 20, 30 para deixar espaço entre perguntas.</div><span asp-validation-for="DisplayOrder" class="text-danger"></span></div>
+        <div class="form-check mb-4"><input asp-for="IsPublished" class="form-check-input" /><label asp-for="IsPublished" class="form-check-label">Publicar esta pergunta (visível quando o módulo estiver ativo)</label></div>
+        <div class="d-flex flex-wrap gap-2"><button class="btn btn-primary" type="submit">Guardar pergunta</button><a class="btn btn-outline-primary" asp-action="Index">Cancelar</a></div>
+    </form>
+</div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

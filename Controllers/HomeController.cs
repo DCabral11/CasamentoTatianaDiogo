@@ -16,8 +16,10 @@ namespace CasamentoTatianaDiogo.Controllers
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Status(int id)
+        public IActionResult Status([FromRoute] int id)
         {
+            // Re-executed POSTs retain form fields; an item ID must never replace the HTTP status.
+            if (id < 400 || id > 599) id = StatusCodes.Status404NotFound;
             Response.StatusCode = id;
 
             return id switch

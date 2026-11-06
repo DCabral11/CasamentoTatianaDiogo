@@ -4,10 +4,12 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject CasamentoTatianaDiogo.Services.Interfaces.ISiteContentService SiteContent
 @inject CasamentoTatianaDiogo.Services.SiteThemeService SiteTheme
+@inject CasamentoTatianaDiogo.Services.FaqService Faqs
 
 @{
     var siteText = await SiteContent.GetAsync();
     var theme = await SiteTheme.GetAsync();
+    var faqSettings = await Faqs.GetSettingsAsync();
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
     var isAdminScreen = Context.Request.Path.StartsWithSegments("/Admin");
     var isAdminDashboard = Context.Request.Path.StartsWithSegments("/Admin/Dashboard");
@@ -53,6 +55,10 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Photos" asp-action="Index" aria-current="@(currentController == "Photos" ? "location" : null)">@siteText.GetValueOrDefault("NavPhotos", "Enviar fotografias")</a>
                         </li>
+                        @if (faqSettings.IsEnabled)
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-controller="Faq" asp-action="Index" aria-current="@(currentController == "Faq" ? "page" : null)">@faqSettings.NavigationLabel</a></li>
+                        }
                         @if (isAdminScreen && User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
