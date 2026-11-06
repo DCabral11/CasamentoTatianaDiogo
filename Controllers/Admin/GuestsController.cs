@@ -1,5 +1,9 @@
-﻿using CasamentoTatianaDiogo.Data;
+﻿#region References
+
+using CasamentoTatianaDiogo.Common.Errors;
+using CasamentoTatianaDiogo.Data;
 using CasamentoTatianaDiogo.Models;
+using CasamentoTatianaDiogo.Services.Interfaces;
 using CsvHelper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,43 +11,23 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using System.Text;
-using CasamentoTatianaDiogo.Common.Errors;
+
+#endregion
 
 namespace CasamentoTatianaDiogo.Controllers.Admin
 {
     [Authorize(Roles = "Admin")]
     [Route("Admin/[controller]/[action]/{id?}")]
-    public class GuestsController(ApplicationDbContext db, IWebHostEnvironment environment, Services.Interfaces.IAppMessageService messages) : Controller
+    public class GuestsController(ApplicationDbContext db, IWebHostEnvironment environment, IAppMessageService messages) : Controller
     {
-        async Task Load()
-        {
-            var families = await db.Families
-                .OrderBy(f => f.Name)
-                .ThenBy(f => f.GroupCode)
-                .Select(f => new
-                {
-                    f.Id,
-                    Name = string.IsNullOrWhiteSpace(f.GroupCode) ? f.Name : $"{f.Name} — {f.GroupCode}"
-                })
-                .ToListAsync();
-
-            ViewBag.Families = new SelectList(families, "Id", "Name");
-
-            var avatarsDirectory = Path.Combine(environment.WebRootPath, "images", "guests");
-            var validExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { ".jpg", ".jpeg", ".png", ".webp" };
-            var avatars = Directory.Exists(avatarsDirectory)
-                ? Directory.EnumerateFiles(avatarsDirectory)
-                    .Where(path => validExtensions.Contains(Path.GetExtension(path)))
-                    .Select(Path.GetFileName)
-                    .OrderBy(fileName => fileName, StringComparer.OrdinalIgnoreCase)
-                    .ToList()
-                : [];
-
-            ViewBag.Avatars = new SelectList(avatars);
-        }
-
+        /// <summary>
+        /// Loads the list of guests.
+        /// </summary>
         public async Task<IActionResult> Index() => View("~/Views/Admin/Guests/Index.cshtml", await db.Guests.Include(g => g.Family).OrderBy(g => g.DisplayName).ToListAsync());
 
+        /// <summary>
+        /// Handles the creation of a new guest.
+        /// </summary>
         public async Task<IActionResult> Create()
         {
             await Load();
@@ -51,6 +35,9 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             return View("~/Views/Admin/Guests/Edit.cshtml", new Guest());
         }
 
+        /// <summary>
+        /// Handles the editing of an existing guest.
+        /// </summary>
         public async Task<IActionResult> Edit(int id)
         {
             await Load();
@@ -58,6 +45,9 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             return View("~/Views/Admin/Guests/Edit.cshtml", await db.Guests.FindAsync(id));
         }
 
+        /// <summary>
+        /// Handles the saving of a guest.
+        /// </summary>
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Save(Guest m)
         {
@@ -65,9 +55,11 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
                 m.DisplayName = $"{m.FirstName} {m.LastName}";
 
             var avatarsDirectory = Path.Combine(environment.WebRootPath, "images", "guests");
+
             if (!string.IsNullOrWhiteSpace(m.AvatarFileName))
             {
                 m.AvatarFileName = Path.GetFileName(m.AvatarFileName);
+
                 if (!System.IO.File.Exists(Path.Combine(avatarsDirectory, m.AvatarFileName)))
                     ModelState.AddModelError(nameof(m.AvatarFileName), messages.Get(ErrorCode.GuestAvatarNotFound));
             }
@@ -89,6 +81,9 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             return RedirectToAction(nameof(Index));
         }
 
+        /// <summary>
+        /// Handles the deletion of a guest.
+        /// </summary>
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
@@ -104,6 +99,9 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             return RedirectToAction(nameof(Index));
         }
 
+        /// <summary>
+        /// Exports the list of guests to a CSV file.
+        /// </summary>
         public async Task<FileResult> ExportCsv()
         {
             var rows = await db.Guests.Include(g => g.Family).ToListAsync();
@@ -126,5 +124,36 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
 
             return File(ms.ToArray(), "text/csv", "guests.csv");
         }
+
+        #region Private Methods
+
+        /// <summary>
+        /// Loads the necessary data for the guest creation/editing form, including families and avatars.
+        /// </summary>
+        async Task Load()
+        {
+            var families = await db.Families.OrderBy(f => f.Name).ThenBy(f => f.GroupCode).Select(f => new
+            {
+                f.Id,
+                Name = string.IsNullOrWhiteSpace(f.GroupCode) ? f.Name : $"{f.Name} — {f.GroupCode}"
+            }).ToListAsync();
+
+            ViewBag.Families = new SelectList(families, "Id", "Name");
+
+            var avatarsDirectory = Path.Combine(environment.WebRootPath, "images", "guests");
+            var validExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { ".jpg", ".jpeg", ".png", ".webp" };
+            var avatars = Directory.Exists(avatarsDirectory)
+                ? Directory.EnumerateFiles(avatarsDirectory)
+                    .Where(path => validExtensions.Contains(Path.GetExtension(path)))
+                    .Select(Path.GetFileName)
+                    .OrderBy(fileName => fileName, StringComparer.OrdinalIgnoreCase)
+                    .ToList()
+                : [];
+
+            ViewBag.Avatars = new SelectList(avatars);
+        }
+
+        #endregion
     }
+
 }
