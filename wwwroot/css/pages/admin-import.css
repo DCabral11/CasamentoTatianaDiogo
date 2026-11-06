@@ -2,3 +2,6 @@
 .excel-import-card h2 { margin-top: 0.45rem; font-family: Georgia, serif; font-size: 1.55rem; }
 .excel-import-card hr { margin: 2rem 0; border-color: rgba(var(--primary-rgb), 0.18); opacity: 1; }
 .excel-import-icon { display: inline-grid; width: 3.4rem; height: 3.4rem; place-items: center; border-radius: 1rem; color: var(--accent-ink); background: var(--secondary); font-size: 1.55rem; }
+.import-value { white-space: pre-wrap; overflow-wrap: anywhere; max-width: 28rem; min-width: 9rem; }
+.import-review-row summary { cursor: pointer; overflow-wrap: anywhere; }
+.import-review-row summary:focus-visible { outline: 3px solid currentColor; outline-offset: 4px; }

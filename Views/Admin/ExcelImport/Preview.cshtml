@@ -1,0 +1,65 @@
+@model CasamentoTatianaDiogo.ViewModels.Admin.ImportPreviewViewModel
+@inject CasamentoTatianaDiogo.Services.WeddingClock Clock
+@{
+    ViewData["Title"] = "Rever importação";
+}
+<div class="container py-5">
+    <h1>Rever importação de @(Model.ImportType == "families" ? "famílias" : "convidados")</h1>
+    <p>Nenhum registo foi alterado. Confere os dados e as diferenças antes de confirmar.</p>
+    <p class="text-muted">Pré-visualização válida até @Clock.ToLocal(Model.ExpiresAt).ToString("HH:mm 'de' dd/MM/yyyy") (@Clock.TimeZoneId).</p>
+    <div class="row g-3 mb-4">
+        @foreach (var action in new[] { "Criar", "Atualizar", "Sem alterações", "Erro" })
+        {
+            <div class="col-6 col-lg-3"><div class="elegant-card p-3 h-100"><strong class="d-block fs-2">@Model.Plan.Count(x => x.Action == action)</strong><span>@action</span></div></div>
+        }
+    </div>
+    @if (!Model.CanConfirm)
+    {
+        <div class="feedback-card feedback-card-error mb-4" role="alert">Existem erros. Corrige as linhas indicadas antes de confirmar; nenhuma linha será importada enquanto houver erros.</div>
+    }
+    <p>Abre cada linha para consultar todos os campos. Nas atualizações, os valores atuais e novos são apresentados lado a lado; «Vazio» significa que o campo ficará sem valor.</p>
+    @foreach (var row in Model.Plan)
+    {
+        <details class="elegant-card p-3 mb-3 import-review-row" open="@(row.Errors.Count > 0)">
+            <summary><strong>Linha @row.Number · @row.Action</strong> — @row.After.GetValueOrDefault("Nome apresentado", row.After.GetValueOrDefault("Nome", "")) @(row.TargetId.HasValue ? $"(ID {row.TargetId})" : "")</summary>
+            @if (row.Errors.Count > 0)
+            {
+                <ul class="text-danger mt-3">@foreach (var error in row.Errors) { <li>@error</li> }</ul>
+            }
+            <div class="table-responsive mt-3" tabindex="0" role="region" aria-label="Comparação da linha @row.Number">
+                <table class="table align-middle">
+                    <caption>Dados da linha @row.Number</caption>
+                    <thead><tr><th scope="col">Campo</th><th scope="col">Valor atual</th><th scope="col">Valor após importar</th></tr></thead>
+                    <tbody>
+                        @foreach (var value in row.After)
+                        {
+                            var before = row.Before.GetValueOrDefault(value.Key, "");
+                            var changed = row.TargetId.HasValue && before != value.Value;
+                            <tr>
+                                <th scope="row">@value.Key @if (changed) { <small class="d-block">Será alterado</small> }</th>
+                                <td class="import-value">@(row.TargetId == null ? "Novo registo" : string.IsNullOrEmpty(before) ? "Vazio" : before)</td>
+                                <td class="import-value">@if (changed) { <strong>@(string.IsNullOrEmpty(value.Value) ? "Vazio" : value.Value)</strong> } else { @(string.IsNullOrEmpty(value.Value) ? "Vazio" : value.Value) }</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </details>
+    }
+    <div class="elegant-card p-4 mt-4">
+        <h2 class="h4">Confirmar as alterações</h2>
+        <p>A importação aplica todos os registos válidos em conjunto. Respostas RSVP e acompanhantes existentes são preservados.</p>
+        <div class="d-flex flex-wrap gap-2 align-items-start">
+            <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@Model.Id">Corrigir dados</a>
+            <form asp-action="Confirm" method="post">
+                <input type="hidden" name="id" value="@Model.Id" /><input type="hidden" name="revision" value="@Model.Revision" />
+                <button type="submit" class="btn btn-primary" disabled="@(!Model.CanConfirm)">Confirmar importação</button>
+            </form>
+            <form asp-action="Cancel" method="post">
+                <input type="hidden" name="id" value="@Model.Id" /><input type="hidden" name="revision" value="@Model.Revision" />
+                <button type="submit" class="btn btn-outline-secondary">Cancelar importação</button>
+            </form>
+        </div>
+    </div>
+</div>
+@section Styles { <link rel="stylesheet" href="~/css/pages/admin-import.css" asp-append-version="true" /> }

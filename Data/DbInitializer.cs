@@ -84,6 +84,7 @@ namespace CasamentoTatianaDiogo.Data
             if (db.Database.IsSqlServer())
             {
                 await RsvpVerificationSchema.UpgradeSqlServerAsync(db);
+                await AdminImportSchema.UpgradeSqlServerAsync(db);
                 await PlanningSchema.UpgradeSqlServerAsync(db);
                 await MusicProgramSchema.UpgradeSqlServerAsync(db);
             }

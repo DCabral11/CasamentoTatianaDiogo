@@ -1,399 +1,160 @@
-#region References
-
-using CasamentoTatianaDiogo.Common.Extensions;
+using System.Data.Common;
+using System.Security.Claims;
 using CasamentoTatianaDiogo.Data;
-using CasamentoTatianaDiogo.Models;
+using CasamentoTatianaDiogo.Services;
 using CasamentoTatianaDiogo.ViewModels.Admin;
 using ClosedXML.Excel;
-using DocumentFormat.OpenXml.Office2013.PowerPoint.Roaming;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
 
-#endregion
+namespace CasamentoTatianaDiogo.Controllers.Admin;
 
-namespace CasamentoTatianaDiogo.Controllers.Admin
+[Authorize(Roles = "Admin")]
+[Route("Admin/[controller]/[action]")]
+[ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
+public class ExcelImportController(ApplicationDbContext db, ExcelImportService imports) : Controller
 {
-    [Authorize(Roles = "Admin")]
-    [Route("Admin/[controller]/[action]")]
-    public class ExcelImportController(ApplicationDbContext db, IWebHostEnvironment environment) : Controller
+    private string Owner => User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+    private const string ViewPath = "~/Views/Admin/ExcelImport/";
+    [HttpGet] public IActionResult Families() => View(ViewPath + "Index.cshtml", CreateViewModel("families"));
+    [HttpGet] public IActionResult Guests() => View(ViewPath + "Index.cshtml", CreateViewModel("guests"));
+    [HttpGet] public FileResult DownloadFamiliesTemplate() => Template("families");
+    [HttpGet] public FileResult DownloadGuestsTemplate() => Template("guests");
+
+    [HttpPost, ValidateAntiForgeryToken, RequestSizeLimit(6 * 1024 * 1024)]
+    public Task<IActionResult> ImportFamilies(ExcelImportViewModel model) => Upload("families", model.File);
+    [HttpPost, ValidateAntiForgeryToken, RequestSizeLimit(6 * 1024 * 1024)]
+    public Task<IActionResult> ImportGuests(ExcelImportViewModel model) => Upload("guests", model.File);
+
+    private async Task<IActionResult> Upload(string type, IFormFile? file)
     {
-        #region Fields & Properties
-
-        private static readonly string[] FamilyColumns = ["Nome", "Referência", "Permitir resposta familiar", "Notas"];
-        private static readonly string[] GuestColumns = ["Nome", "Apelido", "Nome apresentado", "E-mail", "Telefone", "Referência da família", "Permitir acompanhante", "Criança", "Notas", "Avatar"];
-
-        public IActionResult Families() => View("~/Views/Admin/ExcelImport/Index.cshtml", CreateViewModel("families"));
-        public IActionResult Guests() => View("~/Views/Admin/ExcelImport/Index.cshtml", CreateViewModel("guests"));
-
-        [HttpGet]
-        public FileResult DownloadFamiliesTemplate() => CreateTemplate("Famílias", FamilyColumns, "Preenche uma linha por família. A referência é opcional, mas deve ser única quando existir.", "familias-template.xlsx");
-        [HttpGet]
-        public FileResult DownloadGuestsTemplate() => CreateTemplate("Convidados", GuestColumns, "Preenche uma linha por convidado. A referência da família tem de corresponder a uma referência já criada nas Famílias.", "convidados-template.xlsx");
-
-        #endregion
-
-        #region Import Methods
-
-        /// <summary>
-        /// Imports families from an Excel file. 
-        /// Validates the data and adds new families to the database. 
-        /// If there are any errors, returns an error view with the list of errors.
-        /// </summary>
-        public async Task<IActionResult> ImportFamilies(ExcelImportViewModel model)
-        {
-            var errors = new List<string>();
-            var rows = ReadRows(model.File, "Famílias", FamilyColumns, errors);
-            var newFamilies = new List<Family>();
-            var existingReferences = await db.Families.Where(f => f.GroupCode != null).Select(f => f.GroupCode!).ToListAsync();
-            var references = new HashSet<string>(existingReferences, StringComparer.OrdinalIgnoreCase);
-
-            foreach (var row in rows)
-            {
-                var name = Value(row, "Nome");
-                var reference = Value(row, "Referência");
-                var notes = Value(row, "Notas");
-
-                #region Validate 'Nome da Família'
-
-                if (string.IsNullOrWhiteSpace(name))
-                    errors.Add($"Linha {row.Number}: indica o nome da família.");
-                else if (name.Length > 150)
-                    errors.Add($"Linha {row.Number}: o nome da família pode ter no máximo 150 caracteres.");
-
-                #endregion
-
-                #region Validate 'Referência'
-
-                if (reference.Length > 50)
-                    errors.Add($"Linha {row.Number}: a referência pode ter no máximo 50 caracteres.");
-                else if (!string.IsNullOrWhiteSpace(reference) && !references.Add(reference))
-                    errors.Add($"Linha {row.Number}: a referência «{reference}» já existe ou está repetida no ficheiro.");
-
-                #endregion
-
-                #region Validate 'Notas'
-
-                if (notes.Length > 1000)
-                    errors.Add($"Linha {row.Number}: as notas podem ter no máximo 1000 caracteres.");
-
-                #endregion
-
-                var allowGroupRsvp = ReadBoolean(Value(row, "Permitir resposta familiar"), true, row.Number, "Permitir resposta familiar", errors);
-
-                newFamilies.Add(new Family
-                {
-                    Name = name,
-                    GroupCode = EmptyToNull(reference),
-                    Notes = EmptyToNull(notes),
-                    AllowGroupRsvp = allowGroupRsvp
-                });
-            }
-
-            if (errors.Count > 0)
-                return ImportError("families", errors);
-
-            if (newFamilies.Count == 0)
-                return ImportError("families", ["O ficheiro não tem linhas preenchidas para importar."]);
-
-            db.Families.AddRange(newFamilies);
-            await db.SaveChangesAsync();
-            TempData["Success"] = $"Foram importadas {newFamilies.Count} famílias.";
-
-            return RedirectToAction("Index", "InvitationGroups");
-        }
-
-        /// <summary>
-        /// Imports guests from an Excel file.
-        /// Validates the data and adds new guests to the database.
-        /// If there are any errors, returns an error view with the list of errors.
-        /// </summary>
-        [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> ImportGuests(ExcelImportViewModel model)
-        {
-            var errors = new List<string>();
-            var rows = ReadRows(model.File, "Convidados", GuestColumns, errors);
-            var familyByReference = await db.Families.Where(f => f.GroupCode != null).ToDictionaryAsync(f => f.GroupCode!, f => f.Id, StringComparer.OrdinalIgnoreCase);
-            var avatarsDirectory = Path.Combine(environment.WebRootPath, "images", "guests");
-            var guests = new List<Guest>();
-            var emailValidator = new EmailAddressAttribute();
-
-            foreach (var row in rows)
-            {
-                var firstName = Value(row, "Nome");
-                var lastName = Value(row, "Apelido");
-                var displayName = Value(row, "Nome apresentado");
-                var email = Value(row, "E-mail");
-                var phone = Value(row, "Telefone");
-                var familyReference = Value(row, "Referência da família");
-                var notes = Value(row, "Notas");
-                var avatar = Path.GetFileName(Value(row, "Avatar"));
-
-                #region Field Validation
-
-                if (string.IsNullOrWhiteSpace(firstName) || firstName.Length > 100)
-                    errors.Add($"Linha {row.Number}: indica um nome com no máximo 100 caracteres.");
-
-                if (string.IsNullOrWhiteSpace(lastName) || lastName.Length > 100)
-                    errors.Add($"Linha {row.Number}: indica um apelido com no máximo 100 caracteres.");
-                
-                if (displayName.Length > 220)
-                    errors.Add($"Linha {row.Number}: o nome apresentado pode ter no máximo 220 caracteres.");
-                
-                if (!string.IsNullOrWhiteSpace(email) && (email.Length > 200 || !emailValidator.IsValid(email)))
-                    errors.Add($"Linha {row.Number}: indica um e-mail válido.");
-                
-                if (phone.Length > 50)
-                    errors.Add($"Linha {row.Number}: o telefone pode ter no máximo 50 caracteres.");
-                
-                if (notes.Length > 1000)
-                    errors.Add($"Linha {row.Number}: as notas podem ter no máximo 1000 caracteres.");
-                
-                var familyId = 0;
-                
-                if (string.IsNullOrWhiteSpace(familyReference) || !familyByReference.TryGetValue(familyReference, out familyId))
-                    errors.Add($"Linha {row.Number}: a referência da família «{familyReference}» não existe. Importa ou cria primeiro a família.");
-                
-                if (!string.IsNullOrWhiteSpace(avatar) && !System.IO.File.Exists(Path.Combine(avatarsDirectory, avatar)))
-                    errors.Add($"Linha {row.Number}: o avatar «{avatar}» não existe na pasta de avatares.");
-
-                #endregion
-
-                var allowPlusOne = ReadBoolean(Value(row, "Permitir acompanhante"), false, row.Number, "Permitir acompanhante", errors);
-                var isChild = ReadBoolean(Value(row, "Criança"), false, row.Number, "Criança", errors);
-
-                guests.Add(new Guest
-                {
-                    FirstName = firstName,
-                    LastName = lastName,
-                    DisplayName = string.IsNullOrWhiteSpace(displayName) ? $"{firstName} {lastName}".Trim() : displayName,
-                    Email = EmptyToNull(email),
-                    Phone = EmptyToNull(phone),
-                    FamilyId = familyId,
-                    AllowPlusOne = allowPlusOne,
-                    IsChild = isChild,
-                    Notes = EmptyToNull(notes),
-                    AvatarFileName = EmptyToNull(avatar)
-                });
-            }
-
-            if (errors.Count > 0)
-                return ImportError("guests", errors);
-
-            if (guests.Count == 0)
-                return ImportError("guests", ["O ficheiro não tem linhas preenchidas para importar."]);
-
-            db.Guests.AddRange(guests);
-            await db.SaveChangesAsync();
-            TempData["Success"] = $"Foram importados {guests.Count} convidados.";
-
-            return RedirectToAction("Index", "Guests");
-        }
-
-        #endregion
-
-        #region Private Methods
-
-        /// <summary>
-        /// Handles import errors by returning the import view with the list of errors.
-        /// </summary>
-        private IActionResult ImportError(string importType, IReadOnlyList<string> errors)
+        var errors = new List<string>();
+        var rows = ExcelImportService.ReadRows(file, type, errors);
+        if (errors.Count > 0)
         {
             ViewBag.ImportErrors = errors;
-
-            return View("~/Views/Admin/ExcelImport/Index.cshtml", CreateViewModel(importType));
+            return View(ViewPath + "Index.cshtml", CreateViewModel(type));
         }
+        var draft = await imports.CreateDraftAsync(type, Owner, rows);
+        return RedirectToAction(nameof(Preview), new { id = draft.Id });
+    }
 
-        /// <summary>
-        /// Handles the creation of the view model for the import views based on the import type (families or guests).
-        /// </summary>
-        private static ExcelImportViewModel CreateViewModel(string importType) => importType == "families"
-            ?
-            new ExcelImportViewModel
-            {
-                ImportType = "families",
-                Title = "Importar Famílias",
-                Description = "Importa famílias a partir de um ficheiro Excel de uma só vez. Cada linha do ficheiro representa uma família.",
-                TemplateAction = nameof(DownloadFamiliesTemplate),
-                SubmitAction = nameof(ImportFamilies),
-                ExpectedSheetName = "Famílias",
-                Columns = FamilyColumns
-            }
-            :
-            new ExcelImportViewModel
-            {
-                ImportType = "guests",
-                Title = "Importar Convidados",
-                Description = "Importa convidados a partir de um ficheiro Excel de uma só vez. Cada linha do ficheiro representa um convidado.",
-                TemplateAction = nameof(DownloadGuestsTemplate),
-                SubmitAction = nameof(ImportGuests),
-                ExpectedSheetName = "Convidados",
-                Columns = GuestColumns
-            };
+    [HttpGet]
+    public async Task<IActionResult> Preview(Guid id)
+    {
+        var draft = await imports.GetDraftAsync(id, Owner);
+        return draft == null ? Unavailable() : View(ViewPath + "Preview.cshtml", ExcelImportService.Preview(draft));
+    }
 
-        /// <summary>
-        /// Reads rows from the provided Excel file, validates the sheet name and columns, and returns a list of ImportRow objects. 
-        /// If there are any errors during reading or validation, they are added to the errors list.
-        /// </summary>
-        private static List<ImportRow> ReadRows(IFormFile? file, string sheetName, IReadOnlyList<string> columns, List<string> errors)
+    [HttpGet]
+    public async Task<IActionResult> Edit(Guid id)
+    {
+        var draft = await imports.GetDraftAsync(id, Owner);
+        return draft == null ? Unavailable() : View(ViewPath + "Edit.cshtml", ExcelImportService.Preview(draft));
+    }
+
+    [HttpPost, ValidateAntiForgeryToken, RequestFormLimits(ValueCountLimit = 15000)]
+    public async Task<IActionResult> Review(Guid id, Guid revision, List<ImportInputRow> rows)
+    {
+        var draft = await imports.GetDraftAsync(id, Owner);
+        if (draft == null) return Unavailable();
+        if (draft.Revision != revision) return Changed(id);
+        var original = ExcelImportService.Preview(draft).Rows;
+        if (!ModelState.IsValid || rows.Count != original.Count || rows.Count > ExcelImportService.MaxRows ||
+            !rows.Select(x => x.Number).SequenceEqual(original.Select(x => x.Number)) ||
+            rows.Any(x => x.Values == null || x.Values.Count > 12 || x.Values.Values.Any(v => v?.Length > 2000)))
+            return BadRequest("Os dados da revisão são inválidos. Volta a carregar o ficheiro.");
+        foreach (var row in rows)
+            row.Values = ExcelImportService.Columns(draft.ImportType).ToDictionary(x => x, x => row.Values.GetValueOrDefault(x) ?? "");
+        if (!await imports.ReviewAsync(draft, rows)) return Changed(id);
+        TempData["Success"] = "Pré-visualização atualizada. Revê as diferenças antes de confirmar a importação.";
+        return RedirectToAction(nameof(Preview), new { id });
+    }
+
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> Confirm(Guid id, Guid revision)
+    {
+        var draft = await imports.GetDraftAsync(id, Owner);
+        if (draft == null) return Unavailable();
+        if (draft.Revision != revision) return Changed(id);
+        var preview = ExcelImportService.Preview(draft);
+        if (!preview.CanConfirm) return Changed(id);
+        try
         {
-            #region File Validation
-
-            if (file is null || file.Length == 0)
+            if (await imports.ConfirmAsync(draft))
             {
-                errors.Add("Seleciona um ficheiro Excel preenchido antes de continuar.");
-                
-                return [];
-            }
-
-            if (!string.Equals(Path.GetExtension(file.FileName), ".xlsx", StringComparison.OrdinalIgnoreCase))
-            {
-                errors.Add("Seleciona um ficheiro no formato .xlsx.");
-
-                return [];
-            }
-
-            #endregion
-
-            try
-            {
-                using var stream = file.OpenReadStream();
-                using var workbook = new XLWorkbook(stream);
-
-                var sheet = workbook.Worksheets.FirstOrDefault(w => string.Equals(w.Name, sheetName, StringComparison.OrdinalIgnoreCase));
-
-                #region Sheet Validation
-
-                if (sheet is null)
-                {
-                    errors.Add($"Não foi encontrada a folha «{sheetName}». Usa o modelo disponibilizado.");
-
-                    return [];
-                }
-
-                #endregion
-
-                #region Columns Validations
-
-                var headers = sheet.Row(1).CellsUsed().ToDictionary(cell => cell.GetString().Trim(), cell => cell.Address.ColumnNumber, StringComparer.OrdinalIgnoreCase);
-                var missingColumns = columns.Where(column => !headers.ContainsKey(column)).ToList();
-
-                if (missingColumns.Count > 0)
-                {
-                    errors.Add($"Faltam as colunas: {string.Join(", ", missingColumns)}.");
-
-                    return [];
-                }
-
-                #endregion
-
-                var lastRow = sheet.LastRowUsed()?.RowNumber() ?? 1;
-                var rows = new List<ImportRow>();
-
-                for (var rowNumber = 2; rowNumber <= lastRow; rowNumber++)
-                {
-                    var values = headers.ToDictionary(pair => pair.Key, pair => sheet.Cell(rowNumber, pair.Value).GetString().Trim(), StringComparer.OrdinalIgnoreCase);
-
-                    if (values.Values.All(string.IsNullOrWhiteSpace))
-                        continue;
-
-                    rows.Add(new ImportRow(rowNumber, values));
-                }
-
-                return rows;
-            }
-            catch (Exception)
-            {
-                errors.Add("Não foi possível ler este ficheiro. Confirma que é um Excel .xlsx criado a partir do modelo.");
-
-                return [];
+                TempData["Success"] = $"Importação concluída: {preview.Plan.Count(x => x.Action == "Criar")} criados, " +
+                    $"{preview.Plan.Count(x => x.Action == "Atualizar")} atualizados e {preview.Plan.Count(x => x.Action == "Sem alterações")} sem alterações.";
+                return RedirectToAction("Index", draft.ImportType == "families" ? "InvitationGroups" : "Guests");
             }
         }
-
-        /// <summary>
-        /// Reads a boolean value from the provided string. 
-        /// Accepts various representations of true and false. 
-        /// If the value is invalid, adds an error message to the errors list and returns the default value.
-        /// </summary>
-        private static bool ReadBoolean(string value, bool defaultValue, int rowNumber, string columnName, List<string> errors)
+        catch (Exception ex) when (ex is DbUpdateException or DbException)
         {
-            if (string.IsNullOrWhiteSpace(value))
-                return defaultValue;
-
-            return value.Trim().ToLowerInvariant() switch
-            {
-                "sim" or "s" or "true" or "1" or "x" => true,
-                "não" or "nao" or "n" or "false" or "0" => false,
-                _ => InvalidBoolean(defaultValue, rowNumber, columnName, errors)
-            };
+            db.ChangeTracker.Clear();
         }
+        await imports.ReviewAsync(draft, preview.Rows);
+        TempData["Error"] = "A importação não foi concluída. Os dados podem ter mudado desde a pré-visualização. Revê a versão atualizada e confirma novamente.";
+        return RedirectToAction(nameof(Preview), new { id });
+    }
 
-        /// <summary>
-        /// Validates an invalid boolean value by adding an error message to the errors list and returning the default value.
-        /// </summary>
-        private static bool InvalidBoolean(bool defaultValue, int rowNumber, string columnName, List<string> errors)
-        {
-            errors.Add($"Linha {rowNumber}: «{columnName}» aceita Sim ou Não.");
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> Cancel(Guid id, Guid revision)
+    {
+        var draft = await imports.GetDraftAsync(id, Owner);
+        if (draft == null) return Unavailable();
+        if (draft.Revision != revision) return Changed(id);
+        var deleted = await db.AdminImportDrafts.Where(x => x.Id == id && x.OwnerId == Owner && x.Revision == revision && x.CompletedAt == null).ExecuteDeleteAsync();
+        if (deleted != 1) return Changed(id);
+        TempData["Success"] = "Importação cancelada. Nenhum registo foi alterado.";
+        return RedirectToAction(draft.ImportType == "families" ? nameof(Families) : nameof(Guests));
+    }
 
-            return defaultValue;
-        }
+    private IActionResult Changed(Guid id)
+    {
+        TempData["Error"] = "Esta pré-visualização foi alterada ou contém erros. Revê a versão atual antes de continuar.";
+        return RedirectToAction(nameof(Preview), new { id });
+    }
+    private IActionResult Unavailable()
+    {
+        Response.StatusCode = StatusCodes.Status410Gone;
+        return View(ViewPath + "Unavailable.cshtml");
+    }
+    private static ExcelImportViewModel CreateViewModel(string type) => new()
+    {
+        ImportType = type, Title = "Importar " + ExcelImportService.Sheet(type),
+        Description = "Carrega o Excel, revê e corrige os dados, e só depois confirma as alterações.",
+        TemplateAction = type == "families" ? nameof(DownloadFamiliesTemplate) : nameof(DownloadGuestsTemplate),
+        SubmitAction = type == "families" ? nameof(ImportFamilies) : nameof(ImportGuests),
+        ExpectedSheetName = ExcelImportService.Sheet(type), Columns = ExcelImportService.Columns(type)
+    };
 
-        /// <summary>
-        /// Creates Excel file template for importing data with the specified sheet name, headers, note, and file name.
-        /// </summary>
-        private static FileResult CreateTemplate(string sheetName, IReadOnlyList<string> headers, string note, string fileName)
-        {
-            using var workbook = new XLWorkbook();
-
-            var instructions = workbook.Worksheets.Add("Instruções");
-            instructions.Cell("A1").Value = "Importação de dados";
-            instructions.Cell("A2").Value = note;
-            instructions.Cell("A4").Value = "Não alteres os títulos das colunas nem o nome da folha de dados.";
-            instructions.Column(1).Width = 110;
-            instructions.Range("A1:A1").Style.Font.Bold = true;
-            instructions.Range("A1:A1").Style.Font.FontSize = 16;
-            instructions.Range("A2:A4").Style.Alignment.WrapText = true;
-
-            var data = workbook.Worksheets.Add(sheetName);
-
-            for (var index = 0; index < headers.Count; index++)
-                data.Cell(1, index + 1).Value = headers[index];
-
-            var headerRange = data.Range(1, 1, 1, headers.Count);
-            headerRange.Style.Fill.BackgroundColor = XLColor.FromHtml("#BD4742");
-            headerRange.Style.Font.FontColor = XLColor.White;
-            headerRange.Style.Font.Bold = true;
-            headerRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-
-            data.SheetView.FreezeRows(1);
-            data.Columns(1, headers.Count).AdjustToContents();
-
-            for (var index = 1; index <= headers.Count; index++)
-                data.Column(index).Width = Math.Max(data.Column(index).Width, 18);
-
-            using var stream = new MemoryStream();
-            workbook.SaveAs(stream);
-
-            return new FileContentResult(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") { FileDownloadName = fileName };
-        }
-
-        /// <summary>
-        /// Gets the trimmed value of a specific column from an ImportRow.
-        /// </summary>
-        private static string Value(ImportRow row, string column) => row.Values.GetValueOrDefault(column, string.Empty).Trim();
-
-        /// <summary>
-        /// Sets empty strings to null for database storage.
-        /// </summary>
-        private static string? EmptyToNull(string value) => value.NullIfWhiteSpace();
-
-        #endregion
-
-        #region Structures
-
-        private sealed record ImportRow(int Number, Dictionary<string, string> Values);
-
-        #endregion
+    private static FileResult Template(string type)
+    {
+        using var book = new XLWorkbook();
+        var instructions = book.Worksheets.Add("Instruções");
+        instructions.Cell("A1").Value = "Importação com pré-visualização e confirmação";
+        instructions.Cell("A2").Value = "ID vazio: novo registo. ID existente: atualizar esse registo. Consulta o ID na lista da administração.";
+        instructions.Cell("A3").Value = type == "families"
+            ? "Uma referência existente também identifica a família a atualizar. Não repitas a referência ou o ID."
+            : "Para atualizar convidados, indica o ID. Não são associados apenas pelo nome. A referência da família tem de existir.";
+        instructions.Cell("A4").Value = "Os campos opcionais vazios apagam o valor anterior nas atualizações. Revê a comparação antes de confirmar.";
+        instructions.Cell("A5").Value = "Até 500 linhas e 5 MB. Usa valores, não fórmulas. Booleanos: Sim ou Não. Não alteres os títulos nem a folha.";
+        instructions.Column(1).Width = 110;
+        instructions.Range("A1:A5").Style.Alignment.WrapText = true;
+        instructions.Rows(1, 5).Height = 40;
+        var sheet = book.Worksheets.Add(ExcelImportService.Sheet(type));
+        var headers = ExcelImportService.Columns(type);
+        for (var i = 0; i < headers.Length; i++) sheet.Cell(1, i + 1).Value = headers[i];
+        var header = sheet.Range(1, 1, 1, headers.Length);
+        header.Style.Fill.BackgroundColor = XLColor.FromHtml("#BD4742");
+        header.Style.Font.FontColor = XLColor.White;
+        header.Style.Font.Bold = true;
+        sheet.Columns(1, headers.Length).Width = 26;
+        sheet.SheetView.FreezeRows(1);
+        using var stream = new MemoryStream();
+        book.SaveAs(stream);
+        return new FileContentResult(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        { FileDownloadName = type == "families" ? "familias-template.xlsx" : "convidados-template.xlsx" };
     }
 }

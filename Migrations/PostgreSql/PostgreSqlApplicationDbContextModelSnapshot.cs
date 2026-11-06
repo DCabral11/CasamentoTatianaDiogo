@@ -22,6 +22,46 @@ namespace CasamentoTatianaDiogo.Migrations.PostgreSql
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("CasamentoTatianaDiogo.Models.AdminImportDraft", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("CompletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ImportType")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<string>("OwnerId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)");
+
+                    b.Property<string>("PlanJson")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("Revision")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("RowsJson")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExpiresAt");
+
+                    b.ToTable("AdminImportDrafts");
+                });
+
             modelBuilder.Entity("CasamentoTatianaDiogo.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")

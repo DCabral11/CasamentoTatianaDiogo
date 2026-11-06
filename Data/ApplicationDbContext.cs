@@ -15,6 +15,7 @@ namespace CasamentoTatianaDiogo.Data
         public DbSet<RsvpInvitationContact> RsvpInvitationContacts => Set<RsvpInvitationContact>();
         public DbSet<RsvpVerificationChallenge> RsvpVerificationChallenges => Set<RsvpVerificationChallenge>();
         public DbSet<RsvpVerificationLimit> RsvpVerificationLimits => Set<RsvpVerificationLimit>();
+        public DbSet<AdminImportDraft> AdminImportDrafts => Set<AdminImportDraft>();
 
         public DbSet<WeddingSettings> WeddingSettings => Set<WeddingSettings>();
         public DbSet<TimelineEvent> TimelineEvents => Set<TimelineEvent>();
@@ -71,6 +72,7 @@ namespace CasamentoTatianaDiogo.Data
             builder.Entity<RsvpVerificationChallenge>().HasIndex(x => x.CreatedAt);
             builder.Entity<RsvpVerificationChallenge>().HasIndex(x => new { x.FamilyId, x.Channel, x.NormalizedContact });
             builder.Entity<RsvpVerificationLimit>().HasIndex(x => x.WindowEndsAt);
+            builder.Entity<AdminImportDraft>().HasIndex(x => x.ExpiresAt);
         }
     }
 }
