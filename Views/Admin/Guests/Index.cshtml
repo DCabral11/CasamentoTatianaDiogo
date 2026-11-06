@@ -2,6 +2,7 @@
 
 <div class="container py-5">
     <h1>Convidados</h1>
+    @if (TempData["Error"] is string error) { <div class="alert alert-danger" role="alert">@error</div> }
     <p>
         <a class="btn btn-primary" href="/Admin/Guests/Create"><i class="bi bi-person-plus"></i> Adicionar convidado</a>
         <a class="btn btn-outline-primary" asp-controller="ExcelImport" asp-action="Guests"><i class="bi bi-file-earmark-arrow-up"></i> Importar Excel</a>
@@ -13,6 +14,7 @@
                 <th>Id</th>
                 <th>Avatar</th>
                 <th>Nome</th>
+                <th>Acompanhante</th>
                 <th>E-mail</th>
                 <th>Telefone</th>
                 <th>Resposta</th>
@@ -26,6 +28,7 @@
                     <td>@item.Id</td>
                     <td><span class="guest-avatar admin-guest-avatar" style="--avatar-scale:@item.AvatarScale.ToString(System.Globalization.CultureInfo.InvariantCulture);--avatar-position-x:@item.AvatarPositionX%;--avatar-position-y:@item.AvatarPositionY%;">@if (!string.IsNullOrWhiteSpace(item.AvatarFileName)) { <img src="@($"/images/guests/{System.Uri.EscapeDataString(item.AvatarFileName)}")" alt="" /> } else { <i class="bi bi-person-heart"></i> }</span></td>
                     <td>@item.DisplayName</td>
+                    <td>@if (item.IsPlusOne) { <span>Plus-One de <a asp-action="Edit" asp-route-id="@item.MainGuestId">@item.MainGuest?.DisplayName</a></span> } else { <span>@(item.AllowPlusOne ? "Pode levar acompanhante" : "—")</span> }</td>
                     <td>@item.Email</td>
                     <td>@item.Phone</td>
                     <td>@item.CurrentStatus</td>

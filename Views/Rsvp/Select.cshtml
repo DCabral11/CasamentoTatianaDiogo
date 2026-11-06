@@ -147,11 +147,16 @@
                     <i class="bi bi-person-plus"></i>
                     <div>
                         <p class="rsvp-card-label">Acompanhante</p>
-                        <h2>@plusOne.PlusOneDisplayName</h2>
+                        <h2>@(Model.PlusOnes.Count == 1 ? plusOne.PlusOneDisplayName : "Quem te acompanha")</h2>
                     </div>
                 </div>
-                <input type="hidden" name="PlusOneId" value="@plusOne.Id" />
-                <fieldset><legend class="h6">O/a @plusOne.PlusOneFirstName também vai estar presente?</legend>
+                @if (Model.PlusOnes.Count == 1) { <input type="hidden" name="PlusOneId" value="@plusOne.Id" /> }
+                else
+                {
+                    <label for="PlusOneId" class="form-label">Acompanhante</label>
+                    @Html.DropDownList("PlusOneId", new Microsoft.AspNetCore.Mvc.Rendering.SelectList(Model.PlusOnes, "Id", "PlusOneDisplayName", Model.Input.PlusOneId), "Seleciona o acompanhante", new { @class = "form-select mb-3" })
+                }
+                <fieldset><legend class="h6">O acompanhante também vai estar presente?</legend>
                 <div class="d-flex gap-3">
                     <div class="form-check">
                         @Html.RadioButton("PlusOneAttending", "true", Model.Input.PlusOneAttending, new { @class = "form-check-input", id = "plus-one-yes" })

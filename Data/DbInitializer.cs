@@ -88,7 +88,10 @@ namespace CasamentoTatianaDiogo.Data
                 await PlanningSchema.UpgradeSqlServerAsync(db);
                 await MusicProgramSchema.UpgradeSqlServerAsync(db);
                 await FaqSchema.UpgradeSqlServerAsync(db);
+                await GuestCompanionSchema.UpgradeSqlServerAsync(db);
             }
+
+            await Services.GuestCompanions.UpgradeExistingAsync(db);
 
             if (!await db.PlanningCategories.AnyAsync())
             {

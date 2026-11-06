@@ -41,6 +41,10 @@ namespace CasamentoTatianaDiogo.Models
 
         public bool AllowPlusOne { get; set; }
 
+        public bool IsPlusOne { get; set; }
+        public int? MainGuestId { get; set; }
+        public Guest? MainGuest { get; set; }
+
         public bool IsChild { get; set; }
 
         [StringLength(1000)]

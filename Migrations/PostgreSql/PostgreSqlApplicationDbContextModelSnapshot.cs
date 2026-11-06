@@ -340,10 +340,16 @@ namespace CasamentoTatianaDiogo.Migrations.PostgreSql
                     b.Property<bool>("IsChild")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("IsPlusOne")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
+
+                    b.Property<int?>("MainGuestId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Notes")
                         .HasMaxLength(1000)
@@ -357,9 +363,14 @@ namespace CasamentoTatianaDiogo.Migrations.PostgreSql
 
                     b.HasIndex("FamilyId");
 
+                    b.HasIndex("MainGuestId");
+
                     b.HasIndex("FirstName", "LastName");
 
-                    b.ToTable("Guests");
+                    b.ToTable("Guests", t =>
+                        {
+                            t.HasCheckConstraint("CK_Guests_Companion", "(NOT \"IsPlusOne\" AND \"MainGuestId\" IS NULL) OR (\"IsPlusOne\" AND \"MainGuestId\" IS NOT NULL AND \"MainGuestId\" <> \"Id\" AND NOT \"AllowPlusOne\")");
+                        });
                 });
 
             modelBuilder.Entity("CasamentoTatianaDiogo.Models.MusicMoment", b =>
@@ -720,6 +731,12 @@ namespace CasamentoTatianaDiogo.Migrations.PostgreSql
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("CompanionGuestId")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsArchived")
+                        .HasColumnType("boolean");
+
                     b.Property<int>("MainGuestId")
                         .HasColumnType("integer");
 
@@ -739,6 +756,9 @@ namespace CasamentoTatianaDiogo.Migrations.PostgreSql
                         .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CompanionGuestId")
+                        .IsUnique();
 
                     b.HasIndex("MainGuestId");
 
@@ -1358,7 +1378,14 @@ namespace CasamentoTatianaDiogo.Migrations.PostgreSql
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("CasamentoTatianaDiogo.Models.Guest", "MainGuest")
+                        .WithMany()
+                        .HasForeignKey("MainGuestId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.Navigation("Family");
+
+                    b.Navigation("MainGuest");
                 });
 
             modelBuilder.Entity("CasamentoTatianaDiogo.Models.MusicMoment", b =>
@@ -1382,11 +1409,18 @@ namespace CasamentoTatianaDiogo.Migrations.PostgreSql
 
             modelBuilder.Entity("CasamentoTatianaDiogo.Models.PlusOne", b =>
                 {
+                    b.HasOne("CasamentoTatianaDiogo.Models.Guest", "CompanionGuest")
+                        .WithMany()
+                        .HasForeignKey("CompanionGuestId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("CasamentoTatianaDiogo.Models.Guest", "MainGuest")
                         .WithMany("PlusOnes")
                         .HasForeignKey("MainGuestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("CompanionGuest");
 
                     b.Navigation("MainGuest");
                 });

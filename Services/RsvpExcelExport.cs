@@ -19,7 +19,7 @@ public static class RsvpExcelExport
             "Telefone", "Criança", "Acompanhante permitido", "Notas do convidado", "Estado atual",
             "Email verificado do convite", "Contacto associado em (hora local)", "Contacto associado em (UTC)",
             "Registos de resposta", "ID da última resposta", "Última resposta enviada em (hora local)",
-            "Última atualização (hora local)", "Restrições alimentares", "Mensagem", "Sugestão musical");
+            "Última atualização (hora local)", "Restrições alimentares", "Mensagem", "Sugestão musical", "É Plus-One", "ID do convidado que acompanha");
         AddRow(history, 1, "ID resposta", "ID convidado", "Convidado", "ID família", "Família", "Referência do convite",
             "Última resposta deste convidado", "Presença nesta resposta", "Estado atual do convidado",
             "Email do convidado", "Telefone", "Email verificado do convite",
@@ -49,7 +49,7 @@ public static class RsvpExcelExport
                 guest.Family?.Notes, guest.Email, guest.Phone, YesNo(guest.IsChild), YesNo(guest.AllowPlusOne),
                 guest.Notes, Status(guest.CurrentStatus), contact?.NormalizedContact, Local(contact?.ConfirmedAt),
                 contact?.ConfirmedAt, responses.Count, latest?.Id, Local(latest?.SubmittedAt), Local(latest?.UpdatedAt),
-                latest?.DietaryRestrictions, latest?.Message, latest?.MusicRequest);
+                latest?.DietaryRestrictions, latest?.Message, latest?.MusicRequest, YesNo(guest.IsPlusOne), guest.MainGuestId);
 
             foreach (var response in responses)
             {
@@ -63,7 +63,7 @@ public static class RsvpExcelExport
                     response.PlusOneMessage, response.PlusOneMusicRequest, response.SubmittedFromIp, response.UserAgent);
             }
 
-            foreach (var companion in guest.PlusOnes.OrderBy(p => p.Id))
+            foreach (var companion in guest.PlusOnes.Where(p => !p.IsArchived).OrderBy(p => p.Id))
             {
                 var selected = latest?.PlusOneId == companion.Id;
                 var presence = latest == null ? "Por responder"
@@ -88,7 +88,7 @@ public static class RsvpExcelExport
         AddRow(summary, 10, "Crianças confirmadas", guests.Count(g => g.IsChild && g.CurrentStatus == RsvpStatus.Attending));
         AddRow(summary, 11, "Acompanhantes confirmados", confirmedCompanions);
         AddRow(summary, 12, "Total de presenças confirmadas",
-            guests.Count(g => g.CurrentStatus == RsvpStatus.Attending) + confirmedCompanions);
+            guests.Count(g => !g.IsPlusOne && g.CurrentStatus == RsvpStatus.Attending) + confirmedCompanions);
         AddRow(summary, 13, "Registos de resposta guardados", historyRow - 2);
         AddRow(summary, 14, "Leitura do histórico",
             "A folha Respostas inclui todos os registos guardados. Ao atualizar uma resposta, a aplicação substitui o conteúdo desse registo. As datas identificam o envio inicial e a última atualização.");

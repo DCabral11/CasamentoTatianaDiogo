@@ -30,7 +30,7 @@ public class RsvpVerificationService(ApplicationDbContext db, IRsvpVerificationS
 
     public async Task<RsvpContactViewModel?> GetContactFormAsync(int guestId)
     {
-        var guest = await db.Guests.AsNoTracking().Where(x => x.Id == guestId)
+        var guest = await db.Guests.AsNoTracking().Where(x => x.Id == guestId && !x.IsPlusOne)
             .Select(x => new { x.DisplayName, x.FamilyId, FamilyName = x.Family!.Name }).SingleOrDefaultAsync();
         if (guest == null) return null;
         var binding = await db.RsvpInvitationContacts.AsNoTracking().SingleOrDefaultAsync(x => x.FamilyId == guest.FamilyId);
@@ -52,7 +52,7 @@ public class RsvpVerificationService(ApplicationDbContext db, IRsvpVerificationS
         var normalized = RsvpContact.Normalize(channel, contact);
         if (normalized == null)
             throw new RsvpVerificationException("Indica um endereço de email válido.");
-        var familyId = await db.Guests.Where(x => x.Id == guestId).Select(x => (int?)x.FamilyId).SingleOrDefaultAsync(cancellationToken);
+        var familyId = await db.Guests.Where(x => x.Id == guestId && !x.IsPlusOne).Select(x => (int?)x.FamilyId).SingleOrDefaultAsync(cancellationToken);
         if (!familyId.HasValue) throw new RsvpVerificationException("O convite não foi encontrado.");
         if (!await ContactAllowedAsync(familyId.Value, channel, normalized, cancellationToken))
             throw new RsvpVerificationException(ContactUnavailable);
@@ -137,7 +137,7 @@ public class RsvpVerificationService(ApplicationDbContext db, IRsvpVerificationS
         var now = Now;
         var challenge = await db.RsvpVerificationChallenges.AsNoTracking().SingleOrDefaultAsync(x =>
             x.Id == id.Value && x.Channel == RsvpVerificationChannel.Email && x.VerifiedAt != null && x.SessionExpiresAt > now);
-        if (challenge == null || !await db.Guests.AnyAsync(x => x.Id == guestId && x.FamilyId == challenge.FamilyId) ||
+        if (challenge == null || !await db.Guests.AnyAsync(x => x.Id == guestId && !x.IsPlusOne && x.FamilyId == challenge.FamilyId) ||
             !await ContactAllowedAsync(challenge.FamilyId, challenge.Channel, challenge.NormalizedContact)) return null;
         return new(challenge.Id, challenge.FamilyId, challenge.Channel, challenge.NormalizedContact);
     }

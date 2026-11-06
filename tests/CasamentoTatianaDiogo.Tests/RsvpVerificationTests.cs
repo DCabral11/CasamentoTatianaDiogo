@@ -428,6 +428,7 @@ public class RsvpVerificationTests : IDisposable
         var verification = Verification(db);
         Assert.Null(await verification.CreateReceiptTokenAsync(token));
         var plusOne = new PlusOne { MainGuestId = guestId, PlusOneFirstName = "Pedro", PlusOneDisplayName = "Pedro Santos" };
+        (await db.Guests.FindAsync(guestId))!.AllowPlusOne = true;
         db.PlusOnes.Add(plusOne);
         await db.SaveChangesAsync();
         var result = await Submit(db, new()

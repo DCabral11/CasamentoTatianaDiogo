@@ -124,6 +124,10 @@ public class ExcelImportService(ApplicationDbContext db, IWebHostEnvironment env
                     IsChild = Boolean(Value("Criança"), false, "Criança", row.Errors)
                 };
                 Validate(candidate, row.Errors);
+                candidate.Id = existing?.Id ?? 0;
+                candidate.IsPlusOne = existing?.IsPlusOne ?? false;
+                candidate.MainGuestId = existing?.MainGuestId;
+                foreach (var error in await GuestCompanions.ValidateAsync(db, candidate)) row.Errors.Add(error.Message);
                 var sameName = guests.Where(x => x.FamilyId == candidate.FamilyId && Key(x.FirstName) == Key(candidate.FirstName) && Key(x.LastName) == Key(candidate.LastName)).ToList();
                 if (existing == null && sameName.Count > 0)
                     row.Errors.Add($"Já existe este nome nesta família (ID: {string.Join(", ", sameName.Select(x => x.Id))}). Indica o ID para atualizar; não é possível escolher apenas pelo nome.");
@@ -204,6 +208,9 @@ public class ExcelImportService(ApplicationDbContext db, IWebHostEnvironment env
                     guest.IsChild = values["Criança"] == "Sim"; guest.Notes = values["Notas"].NullIfWhiteSpace();
                     guest.AvatarFileName = values["Avatar"].NullIfWhiteSpace();
                     if (!row.TargetId.HasValue) db.Guests.Add(guest);
+                    else await GuestCompanions.SyncAsync(db, guest);
+                    var family = await db.Families.FindAsync(guest.FamilyId);
+                    if (family != null) family.RsvpVersion = Guid.NewGuid();
                 }
             }
             await db.SaveChangesAsync();

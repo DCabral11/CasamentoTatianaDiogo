@@ -82,6 +82,8 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             {
                 db.RsvpResponses.RemoveRange(guest.RsvpResponses);
                 guest.CurrentStatus = RsvpStatus.Pending;
+                foreach (var companion in await db.Guests.Where(g => g.MainGuestId == guest.Id).ToListAsync())
+                    companion.CurrentStatus = RsvpStatus.Pending;
                 guest.Family!.RsvpVersion = Guid.NewGuid();
                 try { await db.SaveChangesAsync(); }
                 catch (DbUpdateConcurrencyException)

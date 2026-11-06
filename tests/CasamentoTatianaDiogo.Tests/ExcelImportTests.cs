@@ -80,6 +80,7 @@ public class ExcelImportTests
         var input = ExcelImportService.Preview(draft).Rows;
         input[0].Values["ID"] = guest.Id.ToString();
         input[0].Values["E-mail"] = "new@example.test";
+        input[0].Values["Permitir acompanhante"] = "Sim";
         input[1].Values["Referência da família"] = "S01";
         input[1].Values["Notas"] = "<script>alert('test')</script>";
         await Review(client, draft, input);

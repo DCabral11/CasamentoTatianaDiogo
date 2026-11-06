@@ -10,6 +10,11 @@ namespace CasamentoTatianaDiogo.Models
 
         public Guest? MainGuest { get; set; }
 
+        // Retained internally to preserve RSVP references; managed through Guests.
+        public int? CompanionGuestId { get; set; }
+        public Guest? CompanionGuest { get; set; }
+        public bool IsArchived { get; set; }
+
         [Required, StringLength(100)]
         public string PlusOneFirstName { get; set; } = string.Empty;
 

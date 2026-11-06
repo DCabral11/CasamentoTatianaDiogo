@@ -62,9 +62,16 @@ namespace CasamentoTatianaDiogo.Data
             builder.Entity<Family>().HasIndex(x => x.GroupCode).IsUnique().HasFilter("[GroupCode] IS NOT NULL");
 
             builder.Entity<Guest>().HasIndex(x => new { x.FirstName, x.LastName });
+            builder.Entity<Guest>().HasOne(x => x.MainGuest).WithMany().HasForeignKey(x => x.MainGuestId).OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Guest>().ToTable(t => t.HasCheckConstraint("CK_Guests_Companion",
+                Database.IsSqlServer()
+                    ? "([IsPlusOne] = 0 AND [MainGuestId] IS NULL) OR ([IsPlusOne] = 1 AND [MainGuestId] IS NOT NULL AND [MainGuestId] <> [Id] AND [AllowPlusOne] = 0)"
+                    : "(NOT \"IsPlusOne\" AND \"MainGuestId\" IS NULL) OR (\"IsPlusOne\" AND \"MainGuestId\" IS NOT NULL AND \"MainGuestId\" <> \"Id\" AND NOT \"AllowPlusOne\")"));
             builder.Entity<Guest>().HasOne(x => x.Family).WithMany(x => x.Guests).HasForeignKey(x => x.FamilyId).OnDelete(DeleteBehavior.Restrict);
             
             builder.Entity<PlusOne>().HasOne(x => x.MainGuest).WithMany(x => x.PlusOnes).HasForeignKey(x => x.MainGuestId).OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<PlusOne>().HasOne(x => x.CompanionGuest).WithMany().HasForeignKey(x => x.CompanionGuestId).OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<PlusOne>().HasIndex(x => x.CompanionGuestId).IsUnique();
 
             builder.Entity<RsvpResponse>().HasIndex(x => new { x.GuestId, x.SubmittedAt });
             builder.Entity<RsvpResponse>().HasOne(x => x.Guest).WithMany(x => x.RsvpResponses).HasForeignKey(x => x.GuestId).OnDelete(DeleteBehavior.Cascade);

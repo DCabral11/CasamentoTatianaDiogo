@@ -1,4 +1,4 @@
-﻿using CasamentoTatianaDiogo.Data;
+using CasamentoTatianaDiogo.Data;
 using CasamentoTatianaDiogo.Models;
 using CasamentoTatianaDiogo.Common.Errors;
 using CasamentoTatianaDiogo.Common.Extensions;
@@ -47,6 +47,7 @@ namespace CasamentoTatianaDiogo.Services
             var normalizedQuery = query.NormalizeForSearch();
             var guests = (await db.Guests
                 .AsNoTracking()
+                .Where(g => !g.IsPlusOne)
                 .Include(g => g.Family)
                 .OrderBy(g => g.DisplayName)
                 .ToListAsync())
@@ -63,7 +64,7 @@ namespace CasamentoTatianaDiogo.Services
         {
             var access = await verification.GetAccessAsync(verificationToken, guestId);
             if (access == null) return null;
-            var guest = await db.Guests.Include(g => g.Family).Include(g => g.PlusOnes).FirstOrDefaultAsync(g => g.Id == guestId);
+            var guest = await db.Guests.Include(g => g.Family).Include(g => g.PlusOnes.Where(p => !p.IsArchived)).ThenInclude(p => p.CompanionGuest).FirstOrDefaultAsync(g => g.Id == guestId);
 
             if (guest == null) 
                 return null;
@@ -80,7 +81,7 @@ namespace CasamentoTatianaDiogo.Services
                 await db.SaveChangesAsync();
             }
 
-            var related = await db.Guests.Where(g => g.FamilyId == guest.FamilyId && g.Id != guest.Id).OrderBy(g => g.DisplayName).ToListAsync();
+            var related = await db.Guests.Where(g => g.FamilyId == guest.FamilyId && g.Id != guest.Id && !g.IsPlusOne).OrderBy(g => g.DisplayName).ToListAsync();
             var hasExisting = await db.RsvpResponses.AnyAsync(r => r.GuestId == guestId);
             var guestIds = related.Select(x => x.Id).Append(guestId).ToList();
             var responses = await db.RsvpResponses.AsNoTracking().Where(x => guestIds.Contains(x.GuestId))
@@ -92,7 +93,7 @@ namespace CasamentoTatianaDiogo.Services
             {
                 Guest = guest,
                 RelatedGuests = related,
-                PlusOnes = guest.PlusOnes.ToList(),
+                PlusOnes = guest.AllowPlusOne && !guest.IsPlusOne ? guest.PlusOnes.ToList() : [],
                 HasExistingResponse = hasExisting,
                 HasConcurrentEditor = await OtherEditorAsync(edit?.Id ?? Guid.Empty, access.FamilyId),
                 HasConcurrencyConflict = edit == null || edit.ExpectedVersion != guest.Family!.RsvpVersion,
@@ -151,7 +152,7 @@ namespace CasamentoTatianaDiogo.Services
             if (model.Status is not (Enums.RsvpStatus.Attending or Enums.RsvpStatus.NotAttending))
                 return AppResult.Failure(ErrorCode.RsvpStatusRequired, messages.Get(ErrorCode.RsvpStatusRequired), nameof(model.Status));
 
-            var guest = await db.Guests.Include(g => g.Family).Include(g => g.PlusOnes).FirstOrDefaultAsync(g => g.Id == model.GuestId);
+            var guest = await db.Guests.Include(g => g.Family).Include(g => g.PlusOnes.Where(p => !p.IsArchived)).ThenInclude(p => p.CompanionGuest).FirstOrDefaultAsync(g => g.Id == model.GuestId);
 
             if (guest == null)
                 return AppResult.Failure(ErrorCode.RsvpGuestNotFound, messages.Get(ErrorCode.RsvpGuestNotFound));
@@ -167,7 +168,7 @@ namespace CasamentoTatianaDiogo.Services
                 return AppResult.Failure(ErrorCode.InvalidRequest, "Escolhe uma resposta de presença válida.");
             var requestedIds = model.FamilyResponses.Where(x => x.Status.HasValue).Select(x => x.GuestId).Distinct().ToList();
             if (requestedIds.Count > 0 && (guest.Family?.AllowGroupRsvp != true ||
-                await db.Guests.CountAsync(x => requestedIds.Contains(x.Id) && x.FamilyId == access.FamilyId && x.Id != guest.Id) != requestedIds.Count))
+                await db.Guests.CountAsync(x => requestedIds.Contains(x.Id) && x.FamilyId == access.FamilyId && x.Id != guest.Id && !x.IsPlusOne) != requestedIds.Count))
                 return AppResult.Failure(ErrorCode.AccessDenied, "Só podes responder pelos convidados autorizados deste convite.");
 
             var responsesByGuestId = model.FamilyResponses
@@ -176,8 +177,8 @@ namespace CasamentoTatianaDiogo.Services
 
             if (guest.Family?.AllowGroupRsvp == true)
             {
-                var familyGuests = await db.Guests
-                    .Where(g => g.FamilyId == guest.FamilyId && g.Id != guest.Id)
+                var familyGuests = await db.Guests.Include(g => g.PlusOnes.Where(p => !p.IsArchived)).ThenInclude(p => p.CompanionGuest)
+                    .Where(g => g.FamilyId == guest.FamilyId && g.Id != guest.Id && !g.IsPlusOne)
                     .ToListAsync();
 
                 guestsToRespond.AddRange(familyGuests.Where(g =>
@@ -193,7 +194,7 @@ namespace CasamentoTatianaDiogo.Services
                 ? guest.PlusOnes.FirstOrDefault(p => p.Id == model.PlusOneId.Value)
                 : null;
 
-            if (bringingPlusOne && plusOne == null)
+            if (bringingPlusOne && (plusOne == null || !guest.AllowPlusOne || guest.IsPlusOne))
                 return AppResult.Failure(ErrorCode.RsvpInvalidPlusOne, messages.Get(ErrorCode.RsvpInvalidPlusOne));
 
             var emailDetails = new List<RsvpEmailDetail>();
@@ -220,11 +221,26 @@ namespace CasamentoTatianaDiogo.Services
                 response.DietaryRestrictions = responseGuest.Id == guest.Id ? (attending ? model.DietaryRestrictions : null) : familyResponse?.DietaryRestrictions;
                 response.Message = responseGuest.Id == guest.Id ? model.Message : familyResponse?.Message;
                 response.MusicRequest = responseGuest.Id == guest.Id ? (attending ? model.MusicRequest : null) : familyResponse?.MusicRequest;
-                response.PlusOneAttending = responseGuest.Id == guest.Id && bringingPlusOne;
-                response.PlusOneId = response.PlusOneAttending ? plusOne?.Id : null;
-                response.PlusOneDietaryRestrictions = response.PlusOneAttending ? model.PlusOneDietaryRestrictions : null;
-                response.PlusOneMessage = response.PlusOneAttending ? model.PlusOneMessage : null;
-                response.PlusOneMusicRequest = response.PlusOneAttending ? model.PlusOneMusicRequest : null;
+                if (responseGuest.Id == guest.Id)
+                {
+                    response.PlusOneAttending = bringingPlusOne;
+                    response.PlusOneId = bringingPlusOne ? plusOne?.Id : null;
+                    response.PlusOneDietaryRestrictions = bringingPlusOne ? model.PlusOneDietaryRestrictions : null;
+                    response.PlusOneMessage = bringingPlusOne ? model.PlusOneMessage : null;
+                    response.PlusOneMusicRequest = bringingPlusOne ? model.PlusOneMusicRequest : null;
+                }
+                else if (response.Status != Enums.RsvpStatus.Attending)
+                {
+                    response.PlusOneAttending = false;
+                    response.PlusOneId = null;
+                    response.PlusOneDietaryRestrictions = null;
+                    response.PlusOneMessage = null;
+                    response.PlusOneMusicRequest = null;
+                }
+                var selectedCompanion = responseGuest.PlusOnes.FirstOrDefault(p => p.Id == response.PlusOneId);
+                foreach (var companion in responseGuest.PlusOnes.Where(p => p.CompanionGuest != null))
+                    companion.CompanionGuest!.CurrentStatus = response.PlusOneAttending && companion.Id == response.PlusOneId
+                        ? Enums.RsvpStatus.Attending : Enums.RsvpStatus.NotAttending;
                 response.UpdatedAt = savedAt;
                 response.SubmittedFromIp = ip;
                 response.UserAgent = userAgent;
@@ -233,7 +249,7 @@ namespace CasamentoTatianaDiogo.Services
 
                 receiptPeople.Add(new(responseGuest.DisplayName, response.Status, response.DietaryRestrictions,
                     response.Message, response.MusicRequest,
-                    response.PlusOneAttending ? new RsvpReceiptPerson(plusOne!.PlusOneDisplayName,
+                    response.PlusOneAttending ? new RsvpReceiptPerson(selectedCompanion!.PlusOneDisplayName,
                         Enums.RsvpStatus.Attending, response.PlusOneDietaryRestrictions,
                         response.PlusOneMessage, response.PlusOneMusicRequest) : null));
 
@@ -243,7 +259,7 @@ namespace CasamentoTatianaDiogo.Services
                     response.DietaryRestrictions,
                     response.Message,
                     response.MusicRequest,
-                    response.PlusOneAttending ? plusOne?.PlusOneDisplayName : null,
+                    response.PlusOneAttending ? selectedCompanion?.PlusOneDisplayName : null,
                     response.PlusOneDietaryRestrictions,
                     response.PlusOneMessage,
                     response.PlusOneMusicRequest));
