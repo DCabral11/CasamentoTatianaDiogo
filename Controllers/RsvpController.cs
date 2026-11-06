@@ -54,11 +54,17 @@ public class RsvpController(IRsvpService rsvp, IAppMessageService messages,
     }
 
     [HttpGet]
-    public async Task<IActionResult> Contact(int id)
+    public async Task<IActionResult> Contact(int id, bool changeContact = false)
     {
         var model = await verification.GetContactFormAsync(id);
+        if (model != null && !changeContact)
+            model.PendingCode = await PendingCodeForAsync(id);
         return model == null ? NotFound() : View(model);
     }
+
+    // A refresh/bookmark of the completed code-request page can resume safely by GET.
+    [HttpGet]
+    public IActionResult SendCode() => RedirectToAction(nameof(Verify));
 
     [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> SendCode(RsvpContactViewModel model, CancellationToken cancellationToken)
@@ -73,11 +79,15 @@ public class RsvpController(IRsvpService rsvp, IAppMessageService messages,
                 HttpContext.Connection.RemoteIpAddress?.ToString(), cancellationToken);
             Response.Cookies.Append(ChallengeCookie, token, CookieOptions(TimeSpan.FromMinutes(10)));
             Response.Cookies.Delete(AccessCookie, CookieOptions(null));
-            return RedirectToAction(nameof(Verify));
+            form.PendingCode = await verification.GetCodeFormAsync(token);
+            ModelState.Clear();
+            ViewData["RsvpCodeSent"] = true;
+            return View("Contact", form);
         }
         catch (RsvpVerificationException exception)
         {
             ModelState.AddModelError(string.Empty, exception.Message);
+            form.PendingCode = await PendingCodeForAsync(model.GuestId);
             return View("Contact", form);
         }
     }
@@ -94,7 +104,10 @@ public class RsvpController(IRsvpService rsvp, IAppMessageService messages,
     [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> Verify(RsvpCodeViewModel model)
     {
-        var form = await verification.GetCodeFormAsync(Request.Cookies[ChallengeCookie]);
+        // Bind the code to the request displayed in this form, even if another tab
+        // requested a code for a different invitation and replaced the cookie.
+        var token = model.ChallengeToken ?? Request.Cookies[ChallengeCookie];
+        var form = await verification.GetCodeFormAsync(token);
         if (form == null)
         {
             TempData["Error"] = RsvpVerificationService.InvalidCode;
@@ -102,7 +115,7 @@ public class RsvpController(IRsvpService rsvp, IAppMessageService messages,
         }
         try
         {
-            var ticket = await verification.VerifyCodeAsync(Request.Cookies[ChallengeCookie], model.Code);
+            var ticket = await verification.VerifyCodeAsync(token, model.Code);
             Response.Cookies.Append(AccessCookie, ticket.Token, CookieOptions(TimeSpan.FromMinutes(30)));
             Response.Cookies.Delete(ChallengeCookie, CookieOptions(null));
             return RedirectToAction(nameof(Select), new { id = ticket.GuestId });
@@ -175,4 +188,10 @@ public class RsvpController(IRsvpService rsvp, IAppMessageService messages,
         HttpOnly = true, Secure = !environment.IsDevelopment(), SameSite = SameSiteMode.Lax,
         Path = "/", MaxAge = lifetime, IsEssential = true
     };
+
+    private async Task<RsvpCodeViewModel?> PendingCodeForAsync(int guestId)
+    {
+        var pending = await verification.GetCodeFormAsync(Request.Cookies[ChallengeCookie]);
+        return pending?.GuestId == guestId ? pending : null;
+    }
 }

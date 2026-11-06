@@ -35,7 +35,7 @@ public class RsvpDeadlineTests
             await client.PostAsync("/Rsvp/" + action, new FormUrlEncodedContent(
                 fields.Append(("__RequestVerificationToken", token)).Select(pair =>
                     new KeyValuePair<string, string>(pair.Item1, pair.Item2))));
-        Assert.Equal(HttpStatusCode.Redirect, (await Post("SendCode", ("GuestId", guestId.ToString()), ("Contact", "ana@example.test"))).StatusCode);
+        Assert.Equal(HttpStatusCode.OK, (await Post("SendCode", ("GuestId", guestId.ToString()), ("Contact", "ana@example.test"))).StatusCode);
         Assert.Equal(HttpStatusCode.Redirect, (await Post("Verify", ("Code", sender.Code))).StatusCode);
         Assert.Contains("guest-status", await client.GetStringAsync("/Rsvp/Select/" + guestId));
 

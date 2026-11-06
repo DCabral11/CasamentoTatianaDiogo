@@ -44,7 +44,11 @@ public class RsvpVerificationHttpTests
         {
             ["GuestId"] = guest.ToString(), ["Contact"] = "ana@example.test", ["__RequestVerificationToken"] = csrf
         }));
-        Assert.Equal(HttpStatusCode.Redirect, send.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, send.StatusCode);
+        var sentHtml = await send.Content.ReadAsStringAsync();
+        Assert.Contains("name=\"Code\"", sentHtml);
+        Assert.Contains("action=\"/Rsvp/Verify\"", sentHtml);
+        Assert.DoesNotContain("data-send-code", sentHtml);
         Assert.Single(sender.Messages);
         var cookies = send.Headers.GetValues("Set-Cookie");
         Assert.Contains(cookies, x => x.StartsWith("Casamento.RsvpChallenge=") && x.Contains("secure", StringComparison.OrdinalIgnoreCase) && x.Contains("httponly", StringComparison.OrdinalIgnoreCase));
@@ -197,6 +201,106 @@ public class RsvpVerificationHttpTests
     }
 
     private static FormUrlEncodedContent Form(Dictionary<string, string> values) => new(values);
+
+    [Fact]
+    public async Task CodeFieldAppearsImmediatelyInsideMusicPageAndResumesUntilExpiry()
+    {
+        var sender = new RecordingVerificationSender();
+        var time = new MutableTime();
+        using var app = new HttpTests.TestApplication(verificationSender: sender, time: time);
+        using var client = app.Client();
+        var (guest, other) = await Seed(app);
+        using (var scope = app.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            (await db.WeddingSettings.SingleAsync()).SpotifyTrackUrl = "https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT";
+            await db.SaveChangesAsync();
+        }
+        client.DefaultRequestHeaders.Add("Sec-Fetch-Dest", "iframe");
+        var csrf = await HttpTests.AntiforgeryToken(client, $"/Rsvp/Contact/{guest}");
+        Task<HttpResponseMessage> Send() => client.PostAsync("/Rsvp/SendCode", Form(new()
+        {
+            ["GuestId"] = guest.ToString(), ["Contact"] = "ana@example.test", ["__RequestVerificationToken"] = csrf
+        }));
+        var sent = await Send();
+        Assert.Equal(HttpStatusCode.OK, sent.StatusCode);
+        var html = WebUtility.HtmlDecode(await sent.Content.ReadAsStringAsync());
+        Assert.Contains("Código enviado.", html);
+        Assert.Contains("name=\"Code\"", html);
+        Assert.Contains("Verificar e continuar", html);
+        Assert.DoesNotContain("id=\"guest-page\"", html);
+        Assert.DoesNotContain("ana@example.test", html);
+        Assert.DoesNotContain("value=\"" + sender.Code + "\"", html);
+        Assert.Contains("name=\"Code\"", await client.GetStringAsync($"/Rsvp/Contact/{guest}"));
+        Assert.Contains("data-send-code", await client.GetStringAsync($"/Rsvp/Contact/{guest}?changeContact=true"));
+        Assert.DoesNotContain("name=\"Code\"", await client.GetStringAsync($"/Rsvp/Contact/{other}"));
+        var repeated = await Send();
+        Assert.Contains("name=\"Code\"", await repeated.Content.ReadAsStringAsync());
+        Assert.Single(sender.Messages);
+        Assert.Equal("/Rsvp/Verify", (await client.GetAsync("/Rsvp/SendCode")).Headers.Location!.OriginalString);
+        time.Advance(TimeSpan.FromMinutes(11));
+        Assert.DoesNotContain("name=\"Code\"", await client.GetStringAsync($"/Rsvp/Contact/{guest}"));
+    }
+
+    [Fact]
+    public async Task DisplayedChallengeSurvivesAnotherTabAndIncorrectCode()
+    {
+        var sender = new RecordingVerificationSender();
+        using var app = new HttpTests.TestApplication(verificationSender: sender);
+        using var client = app.Client();
+        var (guest, other) = await Seed(app);
+        var csrf = await HttpTests.AntiforgeryToken(client, $"/Rsvp/Contact/{guest}");
+        async Task<string> Send(int id, string email)
+        {
+            var response = await client.PostAsync("/Rsvp/SendCode", Form(new()
+            {
+                ["GuestId"] = id.ToString(), ["Contact"] = email, ["__RequestVerificationToken"] = csrf
+            }));
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            return await response.Content.ReadAsStringAsync();
+        }
+        var firstHtml = await Send(guest, "ana@example.test");
+        var firstCode = sender.Code;
+        var challenge = System.Text.RegularExpressions.Regex.Match(firstHtml,
+            "name=\"ChallengeToken\"[^>]*value=\"([^\"]+)\"").Groups[1].Value;
+        Assert.NotEmpty(challenge);
+        await Send(other, "eva@example.test");
+        Task<HttpResponseMessage> Verify(string token, string code) => client.PostAsync("/Rsvp/Verify", Form(new()
+        {
+            ["ChallengeToken"] = token, ["Code"] = code, ["GuestId"] = other.ToString(), ["__RequestVerificationToken"] = csrf
+        }));
+        // Invalid posted tokens must not silently verify the invitation in the cookie.
+        var forged = await Verify("invalid", sender.Code);
+        Assert.Equal("/Rsvp", forged.Headers.Location!.OriginalString);
+        var wrong = await Verify(challenge, "wrong");
+        var wrongHtml = WebUtility.HtmlDecode(await wrong.Content.ReadAsStringAsync());
+        Assert.Contains("O código é inválido", wrongHtml);
+        Assert.Contains(challenge, wrongHtml);
+        var verified = await Verify(challenge, firstCode);
+        Assert.Equal(HttpStatusCode.Redirect, verified.StatusCode);
+        Assert.EndsWith("/" + guest, verified.Headers.Location!.OriginalString);
+        Assert.Equal(HttpStatusCode.OK, (await client.GetAsync($"/Rsvp/Select/{guest}")).StatusCode);
+        Assert.Equal(HttpStatusCode.Redirect, (await client.GetAsync($"/Rsvp/Select/{other}")).StatusCode);
+    }
+
+    [Fact]
+    public async Task DeliveryFailurePreservesEmailAndDoesNotClaimCodeWasSent()
+    {
+        var sender = new RecordingVerificationSender { Fail = true };
+        using var app = new HttpTests.TestApplication(verificationSender: sender);
+        using var client = app.Client();
+        var (guest, _) = await Seed(app);
+        var csrf = await HttpTests.AntiforgeryToken(client, $"/Rsvp/Contact/{guest}");
+        var response = await client.PostAsync("/Rsvp/SendCode", Form(new()
+        {
+            ["GuestId"] = guest.ToString(), ["Contact"] = "ana@example.test", ["__RequestVerificationToken"] = csrf
+        }));
+        var html = WebUtility.HtmlDecode(await response.Content.ReadAsStringAsync());
+        Assert.Contains("data-send-code", html);
+        Assert.Contains("value=\"ana@example.test\"", html);
+        Assert.DoesNotContain("name=\"Code\"", html);
+        Assert.DoesNotContain("Código enviado.", html);
+    }
 
     [Fact]
     public async Task ConflictShowsEnteredValuesAndCannotBeBypassedByOverwriteCheckbox()

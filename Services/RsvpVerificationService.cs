@@ -101,6 +101,7 @@ public class RsvpVerificationService(ApplicationDbContext db, IRsvpVerificationS
             x.Id == id.Value && x.Channel == RsvpVerificationChannel.Email && x.VerifiedAt == null && x.ExpiresAt > now && x.Attempts < 5) : null;
         return challenge == null ? null : new RsvpCodeViewModel
         {
+            ChallengeToken = token,
             GuestId = challenge.GuestId,
             MaskedContact = RsvpContact.Mask(challenge.Channel, challenge.NormalizedContact)
         };

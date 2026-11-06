@@ -1,0 +1,15 @@
+@model RsvpCodeViewModel
+<form asp-action="Verify" method="post" class="elegant-card p-4" data-code-form data-resume-url="@Url.Action("Verify", "Rsvp")">
+    @Html.AntiForgeryToken()
+    <input asp-for="ChallengeToken" type="hidden" />
+    <p>Enviámos um código por email para <strong>@Model.MaskedContact</strong>. Consulta também a pasta de spam.</p>
+    <partial name="_FormErrors" />
+    <label asp-for="Code" class="form-label">Código de verificação (6 algarismos)</label>
+    <input asp-for="Code" type="text" class="form-control form-control-lg mb-2" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" minlength="6" maxlength="6" required autofocus="@ViewData.ModelState.IsValid" aria-describedby="code-help" />
+    <span asp-validation-for="Code" class="text-danger"></span>
+    <p id="code-help" class="form-text">O código é válido durante 10 minutos. Se pedires outro para este convite e email, usa o mais recente.</p>
+    <div class="d-flex flex-wrap gap-2 mt-3">
+        <button type="submit" class="btn btn-primary rounded-pill">Verificar e continuar</button>
+        <a asp-action="Contact" asp-route-id="@Model.GuestId" asp-route-changeContact="true" class="btn btn-link">Pedir novo código ou corrigir email</a>
+    </div>
+</form>

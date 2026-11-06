@@ -1,12 +1,23 @@
 @model RsvpContactViewModel
 @{
-    ViewData["Title"] = "Verificar email";
+    ViewData["Title"] = Model.PendingCode == null ? "Verificar email" : "Introduzir código";
 }
 <section class="page-header">
-    <div class="container"><h1><i class="bi bi-shield-check" aria-hidden="true"></i> Verificar email</h1><p>Recebe um código por email para confirmar a tua presença.</p></div>
+    <div class="container"><h1><i class="bi bi-shield-check" aria-hidden="true"></i> @ViewData["Title"]</h1><p>@(Model.PendingCode == null ? "1. Pede o código no teu email." : "2. Introduz o código para aceder ao convite.")</p></div>
 </section>
 <div class="container py-5 narrow">
-    <form asp-action="SendCode" method="post" class="elegant-card p-4">
+    @if (Model.PendingCode != null)
+    {
+        @if (ViewData["RsvpCodeSent"] is true)
+        {
+            <div class="feedback-card feedback-card-success mb-3" role="status">Código enviado. Introduz os 6 algarismos no campo abaixo para continuar.</div>
+        }
+        <h2 class="h4">@Model.GuestName</h2>
+        <partial name="_CodeForm" model="Model.PendingCode" />
+    }
+    else
+    {
+    <form asp-action="SendCode" method="post" class="elegant-card p-4" data-send-code>
         @Html.AntiForgeryToken()
         <input asp-for="GuestId" type="hidden" />
         <h2 class="h4">@Model.GuestName</h2>
@@ -36,4 +47,6 @@
         <button class="btn btn-primary rounded-pill" disabled="@(!Model.EmailAvailable)">Receber código por email</button>
         <a asp-action="Index" class="btn btn-link">Escolher outro convidado</a>
     </form>
+    }
 </div>
+@section Scripts { <script src="~/js/rsvp-verification.js" asp-append-version="true"></script> }
