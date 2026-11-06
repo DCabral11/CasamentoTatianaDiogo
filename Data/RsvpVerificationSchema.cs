@@ -6,6 +6,8 @@ namespace CasamentoTatianaDiogo.Data;
 internal static class RsvpVerificationSchema
 {
     public static Task UpgradeSqlServerAsync(ApplicationDbContext db) => db.Database.ExecuteSqlRawAsync("""
+        IF COL_LENGTH(N'[Families]', N'RsvpVersion') IS NULL
+            ALTER TABLE [Families] ADD [RsvpVersion] uniqueidentifier NOT NULL CONSTRAINT [DF_Families_RsvpVersion] DEFAULT '00000000-0000-0000-0000-000000000000';
         IF OBJECT_ID(N'[RsvpInvitationContacts]', N'U') IS NULL
         BEGIN
             CREATE TABLE [RsvpInvitationContacts] (
@@ -41,6 +43,17 @@ internal static class RsvpVerificationSchema
             ALTER TABLE [RsvpVerificationChallenges] ADD [ReceiptJson] nvarchar(max) NULL;
         IF COL_LENGTH(N'[RsvpVerificationChallenges]', N'ReceiptExpiresAt') IS NULL
             ALTER TABLE [RsvpVerificationChallenges] ADD [ReceiptExpiresAt] datetime2 NULL;
+        IF OBJECT_ID(N'[RsvpEditSessions]', N'U') IS NULL
+        BEGIN
+            CREATE TABLE [RsvpEditSessions] (
+                [Id] uniqueidentifier NOT NULL PRIMARY KEY, [ChallengeId] uniqueidentifier NOT NULL,
+                [GuestId] int NOT NULL, [FamilyId] int NOT NULL, [ExpectedVersion] uniqueidentifier NOT NULL,
+                [LastSeenAt] datetime2 NOT NULL,
+                CONSTRAINT [FK_RsvpEditSessions_Challenge] FOREIGN KEY ([ChallengeId]) REFERENCES [RsvpVerificationChallenges] ([Id]) ON DELETE CASCADE
+            );
+            CREATE INDEX [IX_RsvpEditSessions_ChallengeId] ON [RsvpEditSessions] ([ChallengeId]);
+            CREATE INDEX [IX_RsvpEditSessions_FamilyId_LastSeenAt] ON [RsvpEditSessions] ([FamilyId], [LastSeenAt]);
+        END
         IF OBJECT_ID(N'[RsvpVerificationLimits]', N'U') IS NULL
         BEGIN
             CREATE TABLE [RsvpVerificationLimits] (

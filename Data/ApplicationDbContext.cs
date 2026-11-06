@@ -16,6 +16,7 @@ namespace CasamentoTatianaDiogo.Data
         public DbSet<RsvpVerificationChallenge> RsvpVerificationChallenges => Set<RsvpVerificationChallenge>();
         public DbSet<RsvpVerificationLimit> RsvpVerificationLimits => Set<RsvpVerificationLimit>();
         public DbSet<AdminImportDraft> AdminImportDrafts => Set<AdminImportDraft>();
+        public DbSet<RsvpEditSession> RsvpEditSessions => Set<RsvpEditSession>();
 
         public DbSet<WeddingSettings> WeddingSettings => Set<WeddingSettings>();
         public DbSet<TimelineEvent> TimelineEvents => Set<TimelineEvent>();
@@ -50,6 +51,10 @@ namespace CasamentoTatianaDiogo.Data
             builder.Entity<TimelineEvent>().HasIndex(x => new { x.IsActive, x.DisplayOrder, x.EventDateTime });
 
             builder.Entity<Family>().HasIndex(x => x.Name);
+            builder.Entity<Family>().Property(x => x.RsvpVersion).IsConcurrencyToken();
+            builder.Entity<RsvpEditSession>().HasOne<RsvpVerificationChallenge>().WithMany()
+                .HasForeignKey(x => x.ChallengeId).OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<RsvpEditSession>().HasIndex(x => new { x.FamilyId, x.LastSeenAt });
             builder.Entity<Family>().HasIndex(x => x.GroupCode).IsUnique().HasFilter("[GroupCode] IS NOT NULL");
 
             builder.Entity<Guest>().HasIndex(x => new { x.FirstName, x.LastName });

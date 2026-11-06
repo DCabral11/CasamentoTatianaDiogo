@@ -193,6 +193,10 @@ namespace CasamentoTatianaDiogo.Migrations.PostgreSql
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
 
+                    b.Property<Guid>("RsvpVersion")
+                        .IsConcurrencyToken()
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
                     b.HasIndex("GroupCode")
@@ -653,6 +657,36 @@ namespace CasamentoTatianaDiogo.Migrations.PostgreSql
                     b.HasIndex("MainGuestId");
 
                     b.ToTable("PlusOnes");
+                });
+
+            modelBuilder.Entity("CasamentoTatianaDiogo.Models.RsvpEditSession", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ChallengeId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ExpectedVersion")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("FamilyId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("GuestId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("LastSeenAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChallengeId");
+
+                    b.HasIndex("FamilyId", "LastSeenAt");
+
+                    b.ToTable("RsvpEditSessions");
                 });
 
             modelBuilder.Entity("CasamentoTatianaDiogo.Models.RsvpInvitationContact", b =>
@@ -1269,6 +1303,15 @@ namespace CasamentoTatianaDiogo.Migrations.PostgreSql
                         .IsRequired();
 
                     b.Navigation("MainGuest");
+                });
+
+            modelBuilder.Entity("CasamentoTatianaDiogo.Models.RsvpEditSession", b =>
+                {
+                    b.HasOne("CasamentoTatianaDiogo.Models.RsvpVerificationChallenge", null)
+                        .WithMany()
+                        .HasForeignKey("ChallengeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("CasamentoTatianaDiogo.Models.RsvpInvitationContact", b =>

@@ -34,6 +34,10 @@ From the repository root on a computer with .NET SDK 10:
 
 The script prompts for the database URL, administrator email and password, runs PostgreSQL migrations and seeds the site settings. It restores the previous process environment afterward and does not write passwords to files. The password needs at least 12 characters, uppercase and lowercase letters, a digit and a symbol. Production setup does not create the development test guests. Keep the selected administrator credentials for login.
 
+At the connection prompt, paste the complete direct PostgreSQL URL from Neon, starting with `postgresql://`, on one line. Do not paste a `psql` command, only the hostname, or the masked asterisks. Surrounding spaces/quotes and a `DATABASE_URL_UNPOOLED=` prefix are accepted. The Neon hostname must not contain `-pooler`. Leave the administrator email blank when an administrator already exists.
+
+If setup reports an invalid connection format, it has not connected to the database or applied migrations. Check the value locally and run the script again; do not publish the URL or password in logs or messages.
+
 Alternatively, set `ASPNETCORE_ENVIRONMENT=Production`, `Database__Provider=PostgreSql`, `DATABASE_URL_UNPOOLED` (or `POSTGRES_URL_NON_POOLING`), `AdminSeed__Email` and `AdminSeed__Password` in the process environment, then run:
 
 ```powershell

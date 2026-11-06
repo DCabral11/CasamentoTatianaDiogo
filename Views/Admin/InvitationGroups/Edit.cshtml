@@ -6,6 +6,11 @@
     <h1>@ViewData["Title"]</h1><p class="text-muted">Organiza convidados que pertencem ao mesmo agregado.</p>
     <form method="post" action="/Admin/InvitationGroups/Save" class="admin-form">
         @Html.AntiForgeryToken()<input asp-for="Id" type="hidden" /><partial name="_FormErrors" />
+        <input asp-for="RsvpVersion" type="hidden" />
+        @if (Context.Response.StatusCode == 409)
+        {
+            <p><a asp-action="Edit" asp-route-id="@Model.Id">Abrir a versão mais recente do convite</a> (os campos abaixo mantêm os dados que tentaste guardar).</p>
+        }
         <div class="mb-3"><label asp-for="Name" class="form-label">Nome da família</label><input asp-for="Name" class="form-control" placeholder="Ex.: Família Silva" /></div>
         <div class="mb-3"><label asp-for="GroupCode" class="form-label">Nome de referência</label><input asp-for="GroupCode" aria-describedby="family-reference-help" class="form-control" placeholder="Ex.: Colegas do trabalho" /><div class="form-text" id="family-reference-help">Uso interno para distinguir famílias com o mesmo nome. Este nome aparece ao escolher a família de um convidado.</div></div>
         <div class="form-check mb-3"><input asp-for="AllowGroupRsvp" class="form-check-input" /><label asp-for="AllowGroupRsvp" class="form-check-label">Permitir respostas por vários membros da família</label></div>

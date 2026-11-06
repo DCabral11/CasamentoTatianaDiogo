@@ -21,9 +21,20 @@
         <div class="feedback-card feedback-card-warning mb-3" role="status"><i class="bi bi-info-circle" aria-hidden="true"></i><span>Já existe uma resposta para este convidado. Seleciona a opção no fim do formulário para a atualizar.</span></div>
     }
 
-    <form asp-action="Submit" method="post" data-rsvp-draft="@Model.DraftScope">
+    <div id="rsvp-other-editor" class="feedback-card feedback-card-warning mb-3" role="status" hidden="@(!Model.HasConcurrentEditor)">
+        Outra pessoa ou outro separador está a editar este convite. Combina quem vai responder para evitar alterações em simultâneo.
+    </div>
+    <div id="rsvp-concurrency-conflict" class="feedback-card feedback-card-warning mb-3" role="alert" hidden="@(!Model.HasConcurrencyConflict)">
+        <div><strong>É necessário rever a resposta atual.</strong>
+        <p>O convite foi alterado entretanto ou este formulário já não é válido. Os dados que preencheste continuam abaixo para consulta e cópia; não serão guardados sobre uma resposta mais recente.</p>
+        <p>Ao abrir a versão atual, o formulário será preenchido com os dados mais recentes. Volta a aplicar apenas as alterações que pretendes manter.</p>
+        <a asp-action="Select" asp-route-id="@Model.Guest.Id" class="btn btn-outline-primary" data-rsvp-reload>Rever resposta mais recente</a></div>
+    </div>
+    <p id="rsvp-presence-unavailable" class="text-muted" role="status" hidden>Não foi possível verificar quem está a editar. A proteção contra substituição continua ativa ao guardar.</p>
+    <form asp-action="Submit" method="post" data-rsvp-draft="@Model.DraftScope" data-edit-status-url="@Url.Action("EditStatus")">
         @Html.AntiForgeryToken()
         <input type="hidden" name="GuestId" value="@Model.Guest.Id" />
+        <input type="hidden" name="EditSessionId" value="@Model.Input.EditSessionId" />
         <partial name="_FormErrors" />
         <p id="rsvp-draft-restored" class="text-muted" role="status" hidden>Recuperámos os dados que preencheste. Podes revê-los antes de voltar a enviar.</p>
 
@@ -168,7 +179,7 @@
             <label class="form-check-label" for="overwrite-rsvp">Confirmo que quero substituir uma resposta anterior, caso exista.</label>
         </div>
 
-        <button class="btn btn-primary btn-lg rounded-pill">Submeter respostas</button>
+        <button class="btn btn-primary btn-lg rounded-pill" data-rsvp-submit disabled="@Model.HasConcurrencyConflict">Submeter respostas</button>
     </form>
 </div>
 

@@ -42,6 +42,11 @@ public class RsvpVerificationTests : IDisposable
     private ApplicationDbContext Db() => new(new DbContextOptionsBuilder<ApplicationDbContext>().UseSqlite(connection).Options);
     private RsvpVerificationService Verification(ApplicationDbContext db) => new(db, sender, protection, time, NullLogger<RsvpVerificationService>.Instance);
     private RsvpService Rsvp(ApplicationDbContext db) => new(db, new QuietNotifications(), new TestWebEnvironment(), new AppMessageService(), Verification(db), time);
+    private async Task<CasamentoTatianaDiogo.Common.Errors.AppResult> Submit(ApplicationDbContext db, RsvpSubmitViewModel model, string? token, string? ip, string? agent)
+    {
+        model.EditSessionId = (await Rsvp(db).GetSelectionAsync(model.GuestId, token))?.Input.EditSessionId ?? Guid.Empty;
+        return await Rsvp(db).SubmitAsync(model, token, ip, agent);
+    }
     private async Task<string> Request(int id, RsvpVerificationChannel channel, string contact, string ip = "127.0.0.1")
     {
         using var db = Db();
@@ -57,7 +62,7 @@ public class RsvpVerificationTests : IDisposable
     {
         var token = await Verified(guestId, channel, contact);
         using var db = Db();
-        var result = await Rsvp(db).SubmitAsync(new() { GuestId = guestId, Status = RsvpStatus.Attending }, token, null, null);
+        var result = await Submit(db, new() { GuestId = guestId, Status = RsvpStatus.Attending }, token, null, null);
         Assert.True(result.Succeeded, result.Message);
     }
 
@@ -75,7 +80,7 @@ public class RsvpVerificationTests : IDisposable
     {
         using var db = Db();
         Assert.Null(await Rsvp(db).GetSelectionAsync(guestId, null));
-        Assert.False((await Rsvp(db).SubmitAsync(new() { GuestId = guestId, Status = RsvpStatus.Attending }, null, null, null)).Succeeded);
+        Assert.False((await Submit(db, new() { GuestId = guestId, Status = RsvpStatus.Attending }, null, null, null)).Succeeded);
         Assert.Empty(db.RsvpResponses);
         Assert.Empty(db.RsvpInvitationContacts);
     }
@@ -89,7 +94,7 @@ public class RsvpVerificationTests : IDisposable
         {
             Assert.NotNull(await Rsvp(db).GetSelectionAsync(relativeId, token));
             Assert.Null(await Rsvp(db).GetSelectionAsync(otherGuestId, token));
-            Assert.True((await Rsvp(db).SubmitAsync(new()
+            Assert.True((await Submit(db, new()
             {
                 GuestId = guestId, Status = RsvpStatus.Attending, DietaryRestrictions = "Sem glúten",
                 FamilyResponses = [new() { GuestId = relativeId, Status = RsvpStatus.Attending }]
@@ -107,7 +112,7 @@ public class RsvpVerificationTests : IDisposable
             var selection = await Rsvp(db).GetSelectionAsync(guestId, updateToken);
             Assert.Equal("Sem glúten", selection!.Input.DietaryRestrictions);
             Assert.Equal(RsvpStatus.Attending, selection.Input.Status);
-            Assert.True((await Rsvp(db).SubmitAsync(new() { GuestId = guestId, Status = RsvpStatus.NotAttending, ConfirmOverwrite = true }, updateToken, null, null)).Succeeded);
+            Assert.True((await Submit(db, new() { GuestId = guestId, Status = RsvpStatus.NotAttending, ConfirmOverwrite = true }, updateToken, null, null)).Succeeded);
         }
         using (var db = Db())
         {
@@ -246,7 +251,7 @@ public class RsvpVerificationTests : IDisposable
     {
         var token = await Verified(guestId, RsvpVerificationChannel.Email, "ana@example.test");
         using var db = Db();
-        Assert.False((await Rsvp(db).SubmitAsync(new()
+        Assert.False((await Submit(db, new()
         {
             GuestId = guestId, Status = RsvpStatus.Attending,
             FamilyResponses = [new() { GuestId = otherGuestId, Status = RsvpStatus.Attending }]
@@ -260,11 +265,11 @@ public class RsvpVerificationTests : IDisposable
     {
         var first = await Verified(guestId, RsvpVerificationChannel.Email, "ana@example.test");
         var second = await Verified(relativeId, RsvpVerificationChannel.Email, "rui@example.test");
-        using (var db = Db()) Assert.True((await Rsvp(db).SubmitAsync(new() { GuestId = guestId, Status = RsvpStatus.Attending }, first, null, null)).Succeeded);
+        using (var db = Db()) Assert.True((await Submit(db, new() { GuestId = guestId, Status = RsvpStatus.Attending }, first, null, null)).Succeeded);
         using (var db = Db())
         {
             Assert.Null(await Verification(db).GetAccessAsync(second, relativeId));
-            Assert.False((await Rsvp(db).SubmitAsync(new() { GuestId = relativeId, Status = RsvpStatus.Attending }, second, null, null)).Succeeded);
+            Assert.False((await Submit(db, new() { GuestId = relativeId, Status = RsvpStatus.Attending }, second, null, null)).Succeeded);
             Assert.Single(db.RsvpResponses);
         }
     }
@@ -275,10 +280,10 @@ public class RsvpVerificationTests : IDisposable
         var first = await Verified(guestId, RsvpVerificationChannel.Email, "ana@example.test");
         time.Advance(TimeSpan.FromMinutes(1));
         var second = await Verified(otherGuestId, RsvpVerificationChannel.Email, "ana@example.test");
-        using (var db = Db()) Assert.True((await Rsvp(db).SubmitAsync(new() { GuestId = guestId, Status = RsvpStatus.Attending }, first, null, null)).Succeeded);
+        using (var db = Db()) Assert.True((await Submit(db, new() { GuestId = guestId, Status = RsvpStatus.Attending }, first, null, null)).Succeeded);
         using (var db = Db())
         {
-            Assert.False((await Rsvp(db).SubmitAsync(new() { GuestId = otherGuestId, Status = RsvpStatus.Attending }, second, null, null)).Succeeded);
+            Assert.False((await Submit(db, new() { GuestId = otherGuestId, Status = RsvpStatus.Attending }, second, null, null)).Succeeded);
             Assert.Single(db.RsvpInvitationContacts);
             Assert.Single(db.RsvpResponses);
         }
@@ -309,11 +314,111 @@ public class RsvpVerificationTests : IDisposable
     {
         var token = await Verified(guestId, RsvpVerificationChannel.Email, "ana@example.test");
         using var db = Db();
-        Assert.False((await Rsvp(db).SubmitAsync(new() { GuestId = guestId, Status = RsvpStatus.Pending }, token, null, null)).Succeeded);
+        Assert.False((await Submit(db, new() { GuestId = guestId, Status = RsvpStatus.Pending }, token, null, null)).Succeeded);
         Assert.Empty(db.RsvpInvitationContacts);
     }
 
     public void Dispose() => connection.Dispose();
+
+    [Fact]
+    public async Task TwoEditorsAreWarnedAndStaleFamilyResponsesRequireAnExplicitReload()
+    {
+        var first = await Verified(guestId, RsvpVerificationChannel.Email, "ana@example.test");
+        time.Advance(TimeSpan.FromMinutes(1));
+        var second = await Verified(relativeId, RsvpVerificationChannel.Email, "ana@example.test");
+        Guid firstEdit, secondEdit;
+        using (var db = Db()) firstEdit = (await Rsvp(db).GetSelectionAsync(guestId, first))!.Input.EditSessionId;
+        using (var db = Db())
+        {
+            var selection = (await Rsvp(db).GetSelectionAsync(relativeId, second))!;
+            secondEdit = selection.Input.EditSessionId;
+            Assert.True(selection.HasConcurrentEditor);
+            Assert.True((await Rsvp(db).HeartbeatAsync(guestId, firstEdit, first))!.OtherEditor);
+        }
+        time.Advance(TimeSpan.FromMinutes(3));
+        using (var db = Db()) Assert.False((await Rsvp(db).HeartbeatAsync(guestId, firstEdit, first))!.OtherEditor);
+        using (var db = Db()) Assert.True((await Rsvp(db).SubmitAsync(new()
+        {
+            GuestId = guestId, EditSessionId = firstEdit, Status = RsvpStatus.Attending,
+            FamilyResponses = [new() { GuestId = relativeId, Status = RsvpStatus.Attending, Message = "Resposta recente" }]
+        }, first, null, null)).Succeeded);
+        using (var db = Db())
+        {
+            Assert.True((await Rsvp(db).HeartbeatAsync(relativeId, secondEdit, second))!.HasChanged);
+            var stale = new RsvpSubmitViewModel { GuestId = relativeId, EditSessionId = secondEdit,
+                Status = RsvpStatus.NotAttending, ConfirmOverwrite = true, Message = "Resposta antiga" };
+            var result = await Rsvp(db).SubmitAsync(stale, second, null, null);
+            Assert.Equal(CasamentoTatianaDiogo.Common.Errors.ErrorCode.RsvpConcurrencyConflict, result.Error!.Code);
+            Assert.Equal("Resposta recente", (await db.RsvpResponses.AsNoTracking().SingleAsync(x => x.GuestId == relativeId)).Message);
+            var unchangedForm = (await Rsvp(db).GetSelectionAsync(relativeId, second, secondEdit))!;
+            Assert.True(unchangedForm.HasConcurrencyConflict);
+            var refreshed = (await Rsvp(db).GetSelectionAsync(relativeId, second))!;
+            Assert.False(refreshed.HasConcurrencyConflict);
+            Assert.NotEqual(unchangedForm.DraftScope, refreshed.DraftScope);
+            stale.EditSessionId = refreshed.Input.EditSessionId;
+            stale.Message = "Alteração revista";
+            Assert.True((await Rsvp(db).SubmitAsync(stale, second, null, null)).Succeeded);
+        }
+    }
+
+    [Fact]
+    public async Task AWriterWinningBetweenReadAndSaveRollsBackTheWholeLosingBatch()
+    {
+        var losingToken = await Verified(guestId, RsvpVerificationChannel.Email, "ana@example.test");
+        time.Advance(TimeSpan.FromMinutes(1));
+        var winningToken = await Verified(guestId, RsvpVerificationChannel.Email, "ana@example.test");
+        Guid losingEdit, winningEdit;
+        using (var db = Db())
+        {
+            losingEdit = (await Rsvp(db).GetSelectionAsync(guestId, losingToken))!.Input.EditSessionId;
+            winningEdit = (await Rsvp(db).GetSelectionAsync(guestId, winningToken))!.Input.EditSessionId;
+        }
+        var interceptor = new BeforeResponseSave(async () =>
+        {
+            using var winner = Db();
+            Assert.True((await Rsvp(winner).SubmitAsync(new() { GuestId = guestId, EditSessionId = winningEdit,
+                Status = RsvpStatus.Attending, Message = "Vencedor" }, winningToken, null, null)).Succeeded);
+        });
+        using (var loser = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>()
+            .UseSqlite(connection).AddInterceptors(interceptor).Options))
+        {
+            var result = await Rsvp(loser).SubmitAsync(new() { GuestId = guestId, EditSessionId = losingEdit,
+                Status = RsvpStatus.NotAttending, ConfirmOverwrite = true,
+                FamilyResponses = [new() { GuestId = relativeId, Status = RsvpStatus.NotAttending }]
+            }, losingToken, null, null);
+            Assert.Equal(CasamentoTatianaDiogo.Common.Errors.ErrorCode.RsvpConcurrencyConflict, result.Error!.Code);
+        }
+        using var final = Db();
+        Assert.Equal("Vencedor", (await final.RsvpResponses.SingleAsync()).Message);
+        Assert.Equal(RsvpStatus.Pending, (await final.Guests.SingleAsync(x => x.Id == relativeId)).CurrentStatus);
+        Assert.Single(await final.RsvpVerificationChallenges.Where(x => x.ReceiptJson != null).ToListAsync());
+        Assert.NotNull(await Verification(final).GetAccessAsync(losingToken, guestId));
+    }
+
+    [Fact]
+    public async Task EditingSessionsCannotBeForgedOrMovedToAnotherGuestOrVerification()
+    {
+        var token = await Verified(guestId, RsvpVerificationChannel.Email, "ana@example.test");
+        using var db = Db();
+        var id = (await Rsvp(db).GetSelectionAsync(guestId, token))!.Input.EditSessionId;
+        Assert.Null(await Rsvp(db).HeartbeatAsync(relativeId, id, token));
+        Assert.Null(await Rsvp(db).HeartbeatAsync(guestId, id, "forged"));
+        foreach (var edit in new[] { Guid.Empty, Guid.NewGuid(), id })
+            Assert.False((await Rsvp(db).SubmitAsync(new() { GuestId = relativeId, EditSessionId = edit,
+                Status = RsvpStatus.Attending }, token, null, null)).Succeeded);
+        Assert.Empty(await db.RsvpResponses.ToListAsync());
+    }
+
+    private sealed class BeforeResponseSave(Func<Task> before) : Microsoft.EntityFrameworkCore.Diagnostics.SaveChangesInterceptor
+    {
+        public override async ValueTask<Microsoft.EntityFrameworkCore.Diagnostics.InterceptionResult<int>> SavingChangesAsync(
+            Microsoft.EntityFrameworkCore.Diagnostics.DbContextEventData data,
+            Microsoft.EntityFrameworkCore.Diagnostics.InterceptionResult<int> result, CancellationToken cancellationToken = default)
+        {
+            if (data.Context!.ChangeTracker.Entries<RsvpResponse>().Any(x => x.State is EntityState.Added or EntityState.Modified)) await before();
+            return result;
+        }
+    }
 
     [Fact]
     public async Task ReceiptCapturesOnlySavedPeopleAndCompanionAndCannotAuthorizeAnEdit()
@@ -325,7 +430,7 @@ public class RsvpVerificationTests : IDisposable
         var plusOne = new PlusOne { MainGuestId = guestId, PlusOneFirstName = "Pedro", PlusOneDisplayName = "Pedro Santos" };
         db.PlusOnes.Add(plusOne);
         await db.SaveChangesAsync();
-        var result = await Rsvp(db).SubmitAsync(new()
+        var result = await Submit(db, new()
         {
             GuestId = guestId, Status = RsvpStatus.Attending, Message = "Obrigado!\nAté breve.",
             DietaryRestrictions = "Sem glúten", MusicRequest = "A nossa música",

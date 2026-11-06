@@ -74,8 +74,10 @@ public class RsvpVerificationHttpTests
         }));
         Assert.Equal(HttpStatusCode.Redirect, forged.StatusCode);
         var familyField = $"FamilyResponses[{selectedRelative}]";
+        var editSessionId = await EditId(client, guest);
         var incomplete = await client.PostAsync("/Rsvp/Submit", Form(new()
         {
+            ["EditSessionId"] = editSessionId,
             ["GuestId"] = guest.ToString(), ["Status"] = "Attending", ["Message"] = "Até breve!", ["__RequestVerificationToken"] = csrf,
             ["FamilyResponses.Index"] = selectedRelative.ToString(), [familyField + ".GuestId"] = selectedRelative.ToString(),
             [familyField + ".Message"] = "Vamos juntos", [familyField + ".Status"] = ""
@@ -89,6 +91,7 @@ public class RsvpVerificationHttpTests
         Assert.DoesNotMatch($"id=\"family-guest-toggle-{unselectedRelative}\"[^>]*checked", redisplayed);
         var save = await client.PostAsync("/Rsvp/Submit", Form(new()
         {
+            ["EditSessionId"] = editSessionId,
             ["GuestId"] = guest.ToString(), ["Status"] = "Attending", ["Message"] = "Até breve!", ["__RequestVerificationToken"] = csrf,
             ["FamilyResponses.Index"] = selectedRelative.ToString(), [familyField + ".GuestId"] = selectedRelative.ToString(),
             [familyField + ".Message"] = "Vamos juntos", [familyField + ".Status"] = "Attending"
@@ -172,15 +175,18 @@ public class RsvpVerificationHttpTests
         Assert.Equal(HttpStatusCode.Redirect, verified.StatusCode);
         var html = await client.GetStringAsync($"/Rsvp/Select/{guest}");
         Assert.Contains("Mensagem anterior", html);
+        var editSessionId = await EditId(client, guest);
         csrf = await HttpTests.AntiforgeryToken(client, $"/Rsvp/Select/{guest}");
         var invalid = await client.PostAsync("/Rsvp/Submit", Form(new()
         {
+            ["EditSessionId"] = editSessionId,
             ["GuestId"] = guest.ToString(), ["Message"] = "Manter este texto", ["__RequestVerificationToken"] = csrf
         }));
         Assert.Equal(HttpStatusCode.OK, invalid.StatusCode);
         Assert.Contains("Manter este texto", await invalid.Content.ReadAsStringAsync());
         var saved = await client.PostAsync("/Rsvp/Submit", Form(new()
         {
+            ["EditSessionId"] = editSessionId,
             ["GuestId"] = guest.ToString(), ["Status"] = "NotAttending", ["ConfirmOverwrite"] = "true", ["__RequestVerificationToken"] = csrf
         }));
         Assert.Equal(HttpStatusCode.Redirect, saved.StatusCode);
@@ -191,6 +197,49 @@ public class RsvpVerificationHttpTests
     }
 
     private static FormUrlEncodedContent Form(Dictionary<string, string> values) => new(values);
+
+    [Fact]
+    public async Task ConflictShowsEnteredValuesAndCannotBeBypassedByOverwriteCheckbox()
+    {
+        var sender = new RecordingVerificationSender();
+        var time = new MutableTime();
+        using var app = new HttpTests.TestApplication(verificationSender: sender, time: time);
+        using var first = app.Client();
+        using var second = app.Client();
+        var (guest, _) = await Seed(app);
+        async Task<(string Csrf, string Edit)> Verify(HttpClient client)
+        {
+            var csrf = await HttpTests.AntiforgeryToken(client, $"/Rsvp/Contact/{guest}");
+            await client.PostAsync("/Rsvp/SendCode", Form(new() { ["GuestId"] = guest.ToString(), ["Contact"] = "ana@example.test", ["__RequestVerificationToken"] = csrf }));
+            csrf = await HttpTests.AntiforgeryToken(client, "/Rsvp/Verify");
+            await client.PostAsync("/Rsvp/Verify", Form(new() { ["Code"] = sender.Code, ["__RequestVerificationToken"] = csrf }));
+            return (csrf, await EditId(client, guest));
+        }
+        var a = await Verify(first);
+        time.Advance(TimeSpan.FromMinutes(1));
+        var b = await Verify(second);
+        Task<HttpResponseMessage> Save(HttpClient client, string csrf, string edit, string message) => client.PostAsync("/Rsvp/Submit", Form(new()
+        {
+            ["GuestId"] = guest.ToString(), ["EditSessionId"] = edit, ["Status"] = "Attending",
+            ["Message"] = message, ["ConfirmOverwrite"] = "true", ["__RequestVerificationToken"] = csrf
+        }));
+        Assert.Equal(HttpStatusCode.BadRequest, (await second.PostAsync("/Rsvp/EditStatus", Form(new()))).StatusCode);
+        Assert.Equal(HttpStatusCode.Redirect, (await Save(first, a.Csrf, a.Edit, "Resposta mais recente")).StatusCode);
+        var conflict = await Save(second, b.Csrf, b.Edit, "O meu texto por guardar");
+        Assert.Equal(HttpStatusCode.Conflict, conflict.StatusCode);
+        var html = WebUtility.HtmlDecode(await conflict.Content.ReadAsStringAsync());
+        Assert.Contains("O meu texto por guardar", html);
+        Assert.Contains("Rever resposta mais recente", html);
+        Assert.Contains($"name=\"EditSessionId\" value=\"{b.Edit}\"", html);
+        Assert.Matches("data-rsvp-submit[^>]*disabled", html);
+        Assert.Equal(HttpStatusCode.Conflict, (await Save(second, b.Csrf, b.Edit, "Tentar outra vez")).StatusCode);
+        var refreshed = await EditId(second, guest);
+        Assert.Equal(HttpStatusCode.Redirect, (await Save(second, b.Csrf, refreshed, "Resposta revista")).StatusCode);
+        using var scope = app.Services.CreateScope();
+        Assert.Equal("Resposta revista", await scope.ServiceProvider.GetRequiredService<ApplicationDbContext>().RsvpResponses.Select(x => x.Message).SingleAsync());
+    }
+    private static async Task<string> EditId(HttpClient client, int guest) => System.Text.RegularExpressions.Regex.Match(
+        await client.GetStringAsync($"/Rsvp/Select/{guest}"), "name=\"EditSessionId\" value=\"([^\"]+)\"").Groups[1].Value;
     private static async Task<(int Guest, int Other)> Seed(HttpTests.TestApplication app)
     {
         using var scope = app.Services.CreateScope();

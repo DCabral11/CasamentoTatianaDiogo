@@ -9,6 +9,7 @@ namespace CasamentoTatianaDiogo.Models
     public class Family
     {
         public int Id { get; set; }
+        public Guid RsvpVersion { get; set; }
 
         [Required, StringLength(150)]
         public string Name { get; set; } = string.Empty;

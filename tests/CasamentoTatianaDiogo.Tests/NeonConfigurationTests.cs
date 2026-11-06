@@ -105,6 +105,49 @@ public class NeonConfigurationTests
     }
 
     private static IConfiguration Config(Dictionary<string, string?> values) => new ConfigurationBuilder().AddInMemoryCollection(values).Build();
+
+    [Theory]
+    [InlineData("  {0}\r\n")]
+    [InlineData("\"{0}\"")]
+    [InlineData("'{0}'")]
+    [InlineData("DATABASE_URL_UNPOOLED='{0}'")]
+    [InlineData("export POSTGRES_URL_NON_POOLING=\"{0}\"")]
+    [InlineData("$env:DATABASE_URL_UNPOOLED = '{0}'")]
+    public void PastedUrlsAcceptWhitespaceQuotesAndEnvironmentAssignments(string format)
+    {
+        var values = new Dictionary<string, string?> { ["DATABASE_URL_UNPOOLED"] = string.Format(format, DirectUrl) };
+        var result = Resolve(values, initialize: true);
+        Assert.Equal(DirectHost, result.Host);
+        Assert.Equal("test-password", result.Password);
+    }
+
+    [Theory]
+    [InlineData("psql 'postgresql://owner:SECRET_SENTINEL@host/db'")]
+    [InlineData("postgresql://owner:SECRET_SENTINEL@host/db?unsupported=SECRET_SENTINEL")]
+    [InlineData("postgresql://owner:SECRET_SENTINEL@host/db?sslmode=SECRET_SENTINEL")]
+    [InlineData("postgresql://owner:SECRET_SENTINEL@host/db?connect_timeout=invalid")]
+    [InlineData("postgresql://owner:SECRET_SENTINEL@host/db#broken")]
+    [InlineData("SECRET_SENTINEL")]
+    [InlineData("Host=host;Unsupported=SECRET_SENTINEL")]
+    [InlineData("DATABASE_URL_UNPOOLED=postgresql://owner:SECRET_SENTINEL@host/db\nPGHOST=host")]
+    public void InvalidConnectionsFailWithInstructionsWithoutLeakingParserInput(string input)
+    {
+        var error = Assert.Throws<InvalidOperationException>(() => DatabaseConfiguration.NormalizePostgresConnection(input));
+        Assert.Contains("formato inválido", error.Message);
+        Assert.DoesNotContain("SECRET_SENTINEL", error.ToString());
+        Assert.Null(error.InnerException);
+    }
+
+    [Fact]
+    public void NormalizationPreservesEscapedCredentialsAndNativeNpgsqlStrings()
+    {
+        var url = $" 'postgresql://owner:p%40ss%3B%3D%27%22%2B@{DirectHost}/neondb?sslmode=require' ";
+        Assert.Equal("p@ss;='\"+", new NpgsqlConnectionStringBuilder(DatabaseConfiguration.NormalizePostgresConnection(url)).Password);
+        var original = new NpgsqlConnectionStringBuilder { Username = "owner", Password = "  spaces;=inside  ", Host = DirectHost, Database = "neondb" };
+        var parsed = new NpgsqlConnectionStringBuilder(DatabaseConfiguration.NormalizePostgresConnection(original.ConnectionString));
+        Assert.Equal(original.Password, parsed.Password);
+        Assert.Equal(original.Host, parsed.Host);
+    }
     private static NpgsqlConnectionStringBuilder Resolve(Dictionary<string, string?> values, bool initialize = false) =>
         new(DatabaseConfiguration.ResolvePostgresConnection(Config(values), initialize));
 }

@@ -41,9 +41,19 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             if (m.Id == 0)
                 db.Add(m);
             else
+            {
                 db.Update(m);
+                m.RsvpVersion = Guid.NewGuid();
+            }
 
-            await db.SaveChangesAsync();
+            try { await db.SaveChangesAsync(); }
+            catch (DbUpdateConcurrencyException)
+            {
+                db.ChangeTracker.Clear();
+                ModelState.AddModelError(string.Empty, "Este convite foi alterado por outra pessoa. Os teus dados não foram guardados. Abre a versão mais recente antes de continuar.");
+                Response.StatusCode = StatusCodes.Status409Conflict;
+                return View("~/Views/Admin/InvitationGroups/Edit.cshtml", m);
+            }
 
             return RedirectToAction(nameof(Index));
         }

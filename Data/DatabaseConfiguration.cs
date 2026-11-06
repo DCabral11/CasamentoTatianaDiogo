@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using System.Text.RegularExpressions;
 
 namespace CasamentoTatianaDiogo.Data;
 
@@ -84,13 +85,38 @@ public static class DatabaseConfiguration
 
     public static string NormalizePostgresConnection(string connection)
     {
+        // Pasted dashboard/.env values may include surrounding whitespace, quotes or the key.
+        // Never interpolate the input or retain parser exceptions: either can contain credentials.
+        try
+        {
+            connection = Unquote(connection.Trim());
+            connection = Regex.Replace(connection,
+                @"^(?:export\s+|\$env:)?(?:DATABASE_URL(?:_UNPOOLED)?|POSTGRES_URL(?:_NON_POOLING)?|POSTGRES_PRISMA_URL)\s*=\s*",
+                "", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+            connection = Unquote(connection.Trim());
+            if (connection.Length == 0 || connection.Contains('\n') || connection.Contains('\r'))
+                throw new FormatException();
+            return new NpgsqlConnectionStringBuilder(ParsePostgresConnection(connection)).ConnectionString;
+        }
+        catch (Exception ex) when (ex is ArgumentException or FormatException or InvalidOperationException or OverflowException)
+        {
+            throw new InvalidOperationException("A ligação PostgreSQL tem um formato inválido. Cola o URL completo começado por postgresql://utilizador:password@host/base, numa só linha. Não coles o comando psql, asteriscos nem apenas o hostname. Também é aceite uma connection string Npgsql (Host=...;Database=...;Username=...;Password=...). Confirma os parâmetros do URL; não partilhes as credenciais.");
+        }
+    }
+
+    private static string Unquote(string value) => value.Length >= 2 &&
+        ((value[0] == '\'' && value[^1] == '\'') || (value[0] == '"' && value[^1] == '"'))
+            ? value[1..^1].Trim() : value;
+
+    private static string ParsePostgresConnection(string connection)
+    {
         if (!connection.StartsWith("postgres://", StringComparison.OrdinalIgnoreCase) &&
             !connection.StartsWith("postgresql://", StringComparison.OrdinalIgnoreCase))
             return connection;
 
         var uri = new Uri(connection);
         var userInfo = uri.UserInfo.Split(':', 2);
-        if (userInfo.Length != 2 || uri.AbsolutePath.Length <= 1)
+        if (string.IsNullOrWhiteSpace(uri.Host) || userInfo.Length != 2 || userInfo[0].Length == 0 || uri.AbsolutePath.Length <= 1 || uri.Fragment.Length > 0)
             throw new InvalidOperationException("DATABASE_URL deve incluir utilizador, password e nome da base de dados.");
 
         var builder = new NpgsqlConnectionStringBuilder

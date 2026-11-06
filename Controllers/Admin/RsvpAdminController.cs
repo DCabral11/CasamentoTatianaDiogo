@@ -59,15 +59,20 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int id, int? familyId)
+        public async Task<IActionResult> Delete(int id, int? familyId, Guid rsvpVersion)
         {
             var guest = await db.Guests
+                .Include(g => g.Family)
                 .Include(g => g.RsvpResponses)
                 .FirstOrDefaultAsync(g => g.Id == id);
 
             if (guest == null)
             {
                 TempData["Error"] = "Não encontrámos a resposta que pretendia apagar.";
+            }
+            else if (guest.Family!.RsvpVersion != rsvpVersion)
+            {
+                TempData["Error"] = "Este convite foi alterado desde que abriste a lista. Nada foi apagado; revê a resposta mais recente.";
             }
             else if (guest.RsvpResponses.Count == 0)
             {
@@ -77,7 +82,14 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             {
                 db.RsvpResponses.RemoveRange(guest.RsvpResponses);
                 guest.CurrentStatus = RsvpStatus.Pending;
-                await db.SaveChangesAsync();
+                guest.Family!.RsvpVersion = Guid.NewGuid();
+                try { await db.SaveChangesAsync(); }
+                catch (DbUpdateConcurrencyException)
+                {
+                    db.ChangeTracker.Clear();
+                    TempData["Error"] = "A resposta foi alterada entretanto. Nada foi apagado; revê a versão atual antes de tentar novamente.";
+                    return RedirectToAction(nameof(Index), new { familyId });
+                }
                 TempData["Success"] = $"A resposta de {guest.DisplayName} foi apagada. O estado voltou a ‘Por responder’.";
             }
 

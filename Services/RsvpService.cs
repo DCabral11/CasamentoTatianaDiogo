@@ -14,6 +14,29 @@ namespace CasamentoTatianaDiogo.Services
 {
     public class RsvpService(ApplicationDbContext db, IRsvpEmailNotificationService emailNotifications, IWebHostEnvironment environment, IAppMessageService messages, RsvpVerificationService verification, TimeProvider time) : IRsvpService
     {
+        public const string ConcurrentChange = "Este convite foi alterado entretanto ou este formulário já não é válido. A tua resposta não foi guardada. Revê a resposta mais recente antes de voltar a enviar.";
+        private AppResult Conflict() => AppResult.Failure(ErrorCode.RsvpConcurrencyConflict, ConcurrentChange);
+
+        public async Task<RsvpEditStatus?> HeartbeatAsync(int guestId, Guid editSessionId, string? verificationToken)
+        {
+            var access = await verification.GetAccessAsync(verificationToken, guestId);
+            if (access == null) return null;
+            var edit = await db.RsvpEditSessions.AsNoTracking().SingleOrDefaultAsync(x => x.Id == editSessionId &&
+                x.ChallengeId == access.ChallengeId && x.GuestId == guestId && x.FamilyId == access.FamilyId);
+            if (edit == null) return null;
+            var now = time.GetUtcNow().UtcDateTime;
+            await db.RsvpEditSessions.Where(x => x.Id == edit.Id).ExecuteUpdateAsync(s => s.SetProperty(x => x.LastSeenAt, now));
+            var version = await db.Families.Where(x => x.Id == access.FamilyId).Select(x => x.RsvpVersion).SingleAsync();
+            return new(await OtherEditorAsync(edit.Id, access.FamilyId), version != edit.ExpectedVersion);
+        }
+
+        private async Task<bool> OtherEditorAsync(Guid id, int familyId)
+        {
+            var now = time.GetUtcNow().UtcDateTime;
+            return await db.RsvpEditSessions.AnyAsync(x => x.Id != id && x.FamilyId == familyId && x.LastSeenAt > now.AddMinutes(-2) &&
+                db.RsvpVerificationChallenges.Any(c => c.Id == x.ChallengeId && c.SessionExpiresAt > now));
+        }
+
         public async Task<List<Guest>> SearchGuestsAsync(string query)
         {
             query = (query ?? string.Empty).Trim();
@@ -36,7 +59,7 @@ namespace CasamentoTatianaDiogo.Services
             return guests;
         }
 
-        public async Task<RsvpSelectionViewModel?> GetSelectionAsync(int guestId, string? verificationToken)
+        public async Task<RsvpSelectionViewModel?> GetSelectionAsync(int guestId, string? verificationToken, Guid? editSessionId = null)
         {
             var access = await verification.GetAccessAsync(verificationToken, guestId);
             if (access == null) return null;
@@ -44,6 +67,18 @@ namespace CasamentoTatianaDiogo.Services
 
             if (guest == null) 
                 return null;
+
+            RsvpEditSession? edit;
+            if (editSessionId.HasValue)
+                edit = await db.RsvpEditSessions.AsNoTracking().SingleOrDefaultAsync(x => x.Id == editSessionId &&
+                    x.ChallengeId == access.ChallengeId && x.GuestId == guestId && x.FamilyId == access.FamilyId);
+            else
+            {
+                edit = new RsvpEditSession { ChallengeId = access.ChallengeId, GuestId = guestId, FamilyId = access.FamilyId,
+                    ExpectedVersion = guest.Family!.RsvpVersion, LastSeenAt = time.GetUtcNow().UtcDateTime };
+                db.RsvpEditSessions.Add(edit);
+                await db.SaveChangesAsync();
+            }
 
             var related = await db.Guests.Where(g => g.FamilyId == guest.FamilyId && g.Id != guest.Id).OrderBy(g => g.DisplayName).ToListAsync();
             var hasExisting = await db.RsvpResponses.AnyAsync(r => r.GuestId == guestId);
@@ -59,11 +94,14 @@ namespace CasamentoTatianaDiogo.Services
                 RelatedGuests = related,
                 PlusOnes = guest.PlusOnes.ToList(),
                 HasExistingResponse = hasExisting,
+                HasConcurrentEditor = await OtherEditorAsync(edit?.Id ?? Guid.Empty, access.FamilyId),
+                HasConcurrencyConflict = edit == null || edit.ExpectedVersion != guest.Family!.RsvpVersion,
                 VerifiedContact = RsvpContact.Mask(access.Channel, access.Contact),
                 DraftScope = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(
-                    $"rsvp:{access.FamilyId}:{guestId}:{access.Contact}"))),
+                    $"rsvp:{access.FamilyId}:{guestId}:{access.Contact}:{edit?.ExpectedVersion}"))),
                 Input = new RsvpSubmitViewModel
                 {
+                    EditSessionId = edit?.Id ?? Guid.Empty,
                     GuestId = guestId, Status = current?.Status, DietaryRestrictions = current?.DietaryRestrictions,
                     Message = current?.Message, MusicRequest = current?.MusicRequest,
                     PlusOneId = current?.PlusOneId, PlusOneAttending = current?.PlusOneAttending == true,
@@ -117,6 +155,10 @@ namespace CasamentoTatianaDiogo.Services
 
             if (guest == null)
                 return AppResult.Failure(ErrorCode.RsvpGuestNotFound, messages.Get(ErrorCode.RsvpGuestNotFound));
+
+            var edit = await db.RsvpEditSessions.AsNoTracking().SingleOrDefaultAsync(x => x.Id == model.EditSessionId &&
+                x.ChallengeId == access.ChallengeId && x.GuestId == model.GuestId && x.FamilyId == access.FamilyId);
+            if (edit == null || edit.ExpectedVersion != guest.Family!.RsvpVersion) return Conflict();
 
             var guestsToRespond = new List<Guest> { guest };
 
@@ -224,10 +266,18 @@ namespace CasamentoTatianaDiogo.Services
                 $"RSVP-{challenge.Id:N}", model.GuestId, savedAt,
                 RsvpContact.Mask(access.Channel, access.Contact), receiptPeople));
             challenge.ReceiptExpiresAt = savedAt.AddHours(24);
+            // The family version update and all answers commit atomically. A concurrent winner
+            // makes EF roll back the entire batch, including first responses and contact claims.
+            guest.Family!.RsvpVersion = Guid.NewGuid();
             try
             {
                 // The contact claim and all responses are committed in one SaveChanges transaction.
                 await db.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                db.ChangeTracker.Clear();
+                return Conflict();
             }
             catch (DbUpdateException ex) when (bindingAdded && RsvpVerificationService.IsUniqueViolation(ex))
             {

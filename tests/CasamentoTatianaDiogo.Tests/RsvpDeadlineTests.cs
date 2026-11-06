@@ -50,7 +50,7 @@ public class RsvpDeadlineTests
             Assert.Contains("05/06/2027", html);
             Assert.DoesNotContain("guest-status", html);
         }
-        foreach (var action in new[] { "Search", "SendCode", "Verify", "Submit" })
+        foreach (var action in new[] { "Search", "SendCode", "Verify", "Submit", "EditStatus" })
         {
             var response = await Post(action, ("GuestId", guestId.ToString()), ("Status", "Attending"),
                 ("Contact", "ana@example.test"), ("Query", "Ana"), ("Code", sender.Code));

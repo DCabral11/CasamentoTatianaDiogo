@@ -18,10 +18,13 @@ namespace CasamentoTatianaDiogo.Services.Interfaces
     {
         Task<List<Guest>> SearchGuestsAsync(string query);
 
-        Task<RsvpSelectionViewModel?> GetSelectionAsync(int guestId, string? verificationToken);
+        Task<RsvpSelectionViewModel?> GetSelectionAsync(int guestId, string? verificationToken, Guid? editSessionId = null);
+        Task<RsvpEditStatus?> HeartbeatAsync(int guestId, Guid editSessionId, string? verificationToken);
 
         Task<CasamentoTatianaDiogo.Common.Errors.AppResult> SubmitAsync(RsvpSubmitViewModel model, string? verificationToken, string? ip, string? userAgent);
     }
+
+    public record RsvpEditStatus(bool OtherEditor, bool HasChanged);
 
     public interface IRsvpEmailNotificationService
     {

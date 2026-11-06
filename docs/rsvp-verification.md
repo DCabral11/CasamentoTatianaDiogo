@@ -2,6 +2,18 @@
 
 O QR e o endereço geral dos convites mantêm-se. O convidado pesquisa o nome, indica o email e introduz o código recebido antes de consultar ou guardar a resposta. A aplicação envia códigos apenas por email.
 
+## Edição simultânea
+
+Cada formulário RSVP aberto após a verificação tem uma sessão própria, associada à versão do convite naquele momento. Um aviso indica se outro formulário desse convite esteve ativo nos últimos dois minutos; a verificação é renovada a cada 30 segundos enquanto a página está visível. O aviso não revela nomes, contactos ou respostas de outros utilizadores. Ao fechar ou deixar uma página inativa, o aviso desaparece após esse intervalo.
+
+A proteção de gravação é independente do aviso e de JavaScript: a versão do convite é verificada na base de dados, na mesma transação que guarda as respostas, acompanhantes, contacto e recibo. A primeira gravação prevalece. Qualquer envio com uma versão anterior é rejeitado por inteiro, mesmo que a opção de substituir a resposta esteja marcada. Isto abrange todos os convidados da família, incluindo a primeira confirmação.
+
+Em caso de conflito, os campos preenchidos continuam visíveis para consulta/cópia. **Rever resposta mais recente** abre um formulário com os dados atuais; o rascunho antigo não é restaurado automaticamente sobre essa versão. O utilizador deve reaplicar apenas as alterações pretendidas. Corrigir um erro de validação não renova silenciosamente a versão do formulário.
+
+A ficha de família da administração também rejeita gravações com uma versão ultrapassada. Apagar uma resposta RSVP na administração exige a versão apresentada na lista e invalida formulários RSVP anteriores.
+
+Aplicar a migração PostgreSQL `AddRsvpConcurrentEditing` antes do deployment. A inicialização SQL Server inclui a atualização equivalente. Não há novas variáveis de ambiente.
+
 ## Recibo após a confirmação
 
 Após guardar uma resposta, o convidado é encaminhado para `/Rsvp/Receipt`. O recibo apresenta referência, data/hora no fuso do casamento, email verificado parcialmente oculto, totais de presenças/ausências e os dados de cada pessoa incluída nesse envio, incluindo acompanhantes. Pode ser impresso ou guardado como PDF através do navegador.

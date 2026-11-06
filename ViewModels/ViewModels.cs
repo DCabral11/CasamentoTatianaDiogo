@@ -31,11 +31,14 @@ namespace CasamentoTatianaDiogo.ViewModels
         public bool HasExistingResponse { get; set; }
         public string VerifiedContact { get; set; } = string.Empty;
         public string DraftScope { get; set; } = string.Empty;
+        public bool HasConcurrentEditor { get; set; }
+        public bool HasConcurrencyConflict { get; set; }
         public RsvpSubmitViewModel Input { get; set; } = new();
     }
 
     public class RsvpSubmitViewModel
     {
+        public Guid EditSessionId { get; set; }
         [Required]
         public int GuestId { get; set; }
 

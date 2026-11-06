@@ -18,7 +18,16 @@ if (!string.IsNullOrWhiteSpace(localSettingsPath))
     builder.Configuration.AddEnvironmentVariables();
 }
 
-builder.Services.AddWeddingDatabase(builder.Configuration, initializeDatabase);
+try
+{
+    builder.Services.AddWeddingDatabase(builder.Configuration, initializeDatabase);
+}
+catch (InvalidOperationException exception) when (initializeDatabase)
+{
+    Console.Error.WriteLine(exception.Message);
+    Environment.ExitCode = 1;
+    return;
+}
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {

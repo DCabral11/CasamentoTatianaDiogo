@@ -144,11 +144,20 @@ public class RsvpController(IRsvpService rsvp, IAppMessageService messages,
                 return RedirectToAction(nameof(Receipt));
             }
             ModelState.AddModelError(result.Error?.Field ?? string.Empty, result.Message);
+            if (result.Error?.Code == ErrorCode.RsvpConcurrencyConflict)
+                Response.StatusCode = StatusCodes.Status409Conflict;
         }
-        var form = await rsvp.GetSelectionAsync(model.GuestId, AccessToken);
+        var form = await rsvp.GetSelectionAsync(model.GuestId, AccessToken, model.EditSessionId);
         if (form == null) return RedirectToAction(nameof(Contact), new { id = model.GuestId });
         form.Input = model;
         return View("Select", form);
+    }
+
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> EditStatus(int guestId, Guid editSessionId)
+    {
+        var status = await rsvp.HeartbeatAsync(guestId, editSessionId, AccessToken);
+        return status == null ? Unauthorized() : Json(status);
     }
 
     [HttpGet]
