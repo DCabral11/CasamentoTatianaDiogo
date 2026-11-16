@@ -1,34 +1,54 @@
 @model CasamentoTatianaDiogo.ViewModels.Admin.ImportPreviewViewModel
-@{ ViewData["Title"] = "Corrigir dados da importação"; }
+@using CasamentoTatianaDiogo.Services
+@{
+    ViewData["Title"] = "Corrigir dados da importação";
+    var errors = Model.Plan.Where(row => row.Errors.Count > 0).ToDictionary(row => row.Number, row => row.Errors);
+    var rows = Model.Rows.Where(row => errors.ContainsKey(row.Number)).ToList();
+}
 <div class="container py-5">
     <h1>Corrigir dados da importação</h1>
-    <p>Estas alterações atualizam apenas a pré-visualização. No passo seguinte poderás rever novamente os dados antes de importar.</p>
+    <p>Corrige as linhas indicadas. No passo seguinte podes rever a importação completa antes de confirmar.</p>
     <form asp-action="Review" method="post">
         <input type="hidden" name="id" value="@Model.Id" /><input type="hidden" name="revision" value="@Model.Revision" />
-        @for (var i = 0; i < Model.Rows.Count; i++)
+        @for (var i = 0; i < rows.Count; i++)
         {
-            var row = Model.Rows[i];
+            var row = rows[i];
             <fieldset class="elegant-card p-4 mb-4">
                 <legend class="h5">Linha @row.Number</legend>
                 <input type="hidden" name="Rows[@i].Number" value="@row.Number" />
-                @if (Model.Plan[i].Errors.Count > 0)
-                {
-                    <ul class="text-danger">@foreach (var error in Model.Plan[i].Errors) { <li>@error</li> }</ul>
-                }
+                <ul class="text-danger">@foreach (var error in errors[row.Number]) { <li>@error</li> }</ul>
                 <div class="row g-3">
                     @for (var c = 0; c < Model.Columns.Length; c++)
                     {
                         var column = Model.Columns[c];
                         var inputId = $"row-{i}-field-{c}";
                         <div class="col-12 col-md-6 col-lg-4">
-                            <label for="@inputId" class="form-label">@column</label>
-                            @if (column == "Notas")
+                            @if (ExcelImportService.IsBooleanColumn(column))
                             {
-                                <textarea id="@inputId" name="Rows[@i].Values[@column]" class="form-control" rows="3" maxlength="1000">@row.Values.GetValueOrDefault(column)</textarea>
+                                var choice = ExcelImportService.BooleanChoice(row.Values.GetValueOrDefault(column, ""), column);
+                                <fieldset>
+                                    <legend class="form-label fs-6">@column</legend>
+                                    @foreach (var option in new[] { "Sim", "Não" })
+                                    {
+                                        var optionId = inputId + (option == "Sim" ? "-yes" : "-no");
+                                        <div class="form-check form-check-inline">
+                                            <input id="@optionId" type="radio" class="form-check-input" name="Rows[@i].Values[@column]" value="@option" required checked="@(choice == (option == "Sim"))" />
+                                            <label for="@optionId" class="form-check-label">@option</label>
+                                        </div>
+                                    }
+                                </fieldset>
                             }
                             else
                             {
-                                <input id="@inputId" name="Rows[@i].Values[@column]" value="@row.Values.GetValueOrDefault(column)" class="form-control" maxlength="2000" />
+                                <label for="@inputId" class="form-label">@column</label>
+                                @if (column == "Notas")
+                                {
+                                    <textarea id="@inputId" name="Rows[@i].Values[@column]" class="form-control" rows="3" maxlength="1000">@row.Values.GetValueOrDefault(column)</textarea>
+                                }
+                                else
+                                {
+                                    <input id="@inputId" name="Rows[@i].Values[@column]" value="@row.Values.GetValueOrDefault(column)" class="form-control" maxlength="2000" />
+                                }
                             }
                         </div>
                     }

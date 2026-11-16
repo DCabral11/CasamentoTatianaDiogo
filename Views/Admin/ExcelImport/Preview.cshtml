@@ -50,7 +50,10 @@
         <h2 class="h4">Confirmar as alterações</h2>
         <p>A importação aplica todos os registos válidos em conjunto. Respostas RSVP e acompanhantes existentes são preservados.</p>
         <div class="d-flex flex-wrap gap-2 align-items-start">
-            <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@Model.Id">Corrigir dados</a>
+            @if (Model.Plan.Any(row => row.Errors.Count > 0))
+            {
+                <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@Model.Id">Corrigir linhas com erros</a>
+            }
             <form asp-action="Confirm" method="post">
                 <input type="hidden" name="id" value="@Model.Id" /><input type="hidden" name="revision" value="@Model.Revision" />
                 <button type="submit" class="btn btn-primary" disabled="@(!Model.CanConfirm)">Confirmar importação</button>

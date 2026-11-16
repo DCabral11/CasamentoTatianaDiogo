@@ -24,7 +24,9 @@ public class ExcelImportTests
         var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         db.Families.Add(new() { Name = "Nome anterior", GroupCode = "F01", Notes = "Nota anterior" });
         await db.SaveChangesAsync();
-        var rows = new[] { FamilyRow("Nome novo", "F01"), FamilyRow("Família nova", "F02") };
+        var update = FamilyRow("Nome novo", "F01");
+        update["Permitir resposta familiar"] = "talvez";
+        var rows = new[] { FamilyRow("Família nova", "F02"), update };
         var upload = await Upload(client, "families", rows, includeId: false);
         Assert.Equal(HttpStatusCode.Redirect, upload.StatusCode);
         var preview = WebUtility.HtmlDecode(await client.GetStringAsync(upload.Headers.Location));
@@ -34,12 +36,27 @@ public class ExcelImportTests
         Assert.Contains("Vazio", preview);
         Assert.Single(await db.Families.AsNoTracking().ToListAsync());
         var draft = await db.AdminImportDrafts.AsNoTracking().SingleAsync();
-        var edit = await client.GetStringAsync($"/Admin/ExcelImport/Edit?id={draft.Id}");
+        var editUrl = $"/Admin/ExcelImport/Edit?id={draft.Id}";
+        var edit = WebUtility.HtmlDecode(await client.GetStringAsync(editUrl));
         Assert.Contains("Rows[0].Values[Nome]", edit);
-        var input = ExcelImportService.Preview(draft).Rows;
-        input[0].Values["Nome"] = "Nome revisto";
-        var review = await Review(client, draft, input);
+        Assert.Contains("<legend class=\"h5\">Linha 3</legend>", edit);
+        Assert.DoesNotContain("Família nova", edit);
+        Assert.DoesNotContain("Rows[1]", edit);
+        Assert.Contains("name=\"Rows[0].Values[Permitir resposta familiar]\" value=\"Sim\"", edit);
+        Assert.Contains("name=\"Rows[0].Values[Permitir resposta familiar]\" value=\"Não\"", edit);
+        Assert.DoesNotContain("checked=", edit);
+        var inputs = ExcelImportService.Preview(draft).Rows;
+        var correction = inputs[1];
+        Assert.Equal(HttpStatusCode.BadRequest, (await Review(client, draft, [correction])).StatusCode);
+        correction.Values["Nome"] = "Nome revisto";
+        correction.Values["Permitir resposta familiar"] = "Não";
+        Assert.Equal(HttpStatusCode.BadRequest, (await Review(client, draft, inputs)).StatusCode);
+        var review = await Review(client, draft, [correction]);
         Assert.Equal(HttpStatusCode.Redirect, review.StatusCode);
+        var cleanPreview = WebUtility.HtmlDecode(await client.GetStringAsync(review.Headers.Location));
+        Assert.Contains("Família nova", cleanPreview);
+        Assert.DoesNotContain("Corrigir linhas com erros", cleanPreview);
+        Assert.Equal(HttpStatusCode.Redirect, (await client.GetAsync(editUrl)).StatusCode);
         Assert.Equal("Nome anterior", await db.Families.AsNoTracking().Select(x => x.Name).SingleAsync());
         Assert.Equal(HttpStatusCode.Redirect, (await Post(client, "Confirm", draft)).StatusCode);
         Assert.Single(await db.Families.AsNoTracking().ToListAsync()); // old revision cannot apply
@@ -49,6 +66,7 @@ public class ExcelImportTests
         Assert.Equal(2, await db.Families.CountAsync());
         var updated = await db.Families.AsNoTracking().SingleAsync(x => x.GroupCode == "F01");
         Assert.Equal("Nome revisto", updated.Name);
+        Assert.False(updated.AllowGroupRsvp);
         Assert.Null(updated.Notes);
         Assert.Equal(HttpStatusCode.Gone, (await Post(client, "Confirm", draft)).StatusCode);
         Assert.Equal(2, await db.Families.CountAsync());
@@ -78,6 +96,13 @@ public class ExcelImportTests
         await Post(client, "Confirm", draft);
         Assert.Single(await db.Guests.ToListAsync());
         var input = ExcelImportService.Preview(draft).Rows;
+        var edit = WebUtility.HtmlDecode(await client.GetStringAsync($"/Admin/ExcelImport/Edit?id={draft.Id}"));
+        foreach (var field in new[] { "Permitir acompanhante", "Criança" })
+        {
+            Assert.Contains($"name=\"Rows[0].Values[{field}]\" value=\"Sim\"", edit);
+            Assert.Contains($"name=\"Rows[0].Values[{field}]\" value=\"Não\"", edit);
+            foreach (var row in input) row.Values[field] = "Não";
+        }
         input[0].Values["ID"] = guest.Id.ToString();
         input[0].Values["E-mail"] = "new@example.test";
         input[0].Values["Permitir acompanhante"] = "Sim";

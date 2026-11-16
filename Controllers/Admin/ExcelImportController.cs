@@ -51,7 +51,9 @@ public class ExcelImportController(ApplicationDbContext db, ExcelImportService i
     public async Task<IActionResult> Edit(Guid id)
     {
         var draft = await imports.GetDraftAsync(id, Owner);
-        return draft == null ? Unavailable() : View(ViewPath + "Edit.cshtml", ExcelImportService.Preview(draft));
+        if (draft == null) return Unavailable();
+        var preview = ExcelImportService.Preview(draft);
+        return preview.CanConfirm ? RedirectToAction(nameof(Preview), new { id }) : View(ViewPath + "Edit.cshtml", preview);
     }
 
     [HttpPost, ValidateAntiForgeryToken, RequestFormLimits(ValueCountLimit = 15000)]
@@ -60,14 +62,18 @@ public class ExcelImportController(ApplicationDbContext db, ExcelImportService i
         var draft = await imports.GetDraftAsync(id, Owner);
         if (draft == null) return Unavailable();
         if (draft.Revision != revision) return Changed(id);
-        var original = ExcelImportService.Preview(draft).Rows;
-        if (!ModelState.IsValid || rows.Count != original.Count || rows.Count > ExcelImportService.MaxRows ||
-            !rows.Select(x => x.Number).SequenceEqual(original.Select(x => x.Number)) ||
-            rows.Any(x => x.Values == null || x.Values.Count > 12 || x.Values.Values.Any(v => v?.Length > 2000)))
-            return BadRequest("Os dados da revisão são inválidos. Volta a carregar o ficheiro.");
+        var preview = ExcelImportService.Preview(draft);
+        var errorNumbers = preview.Plan.Where(x => x.Errors.Count > 0).Select(x => x.Number);
+        if (!ModelState.IsValid || rows.Count == 0 || !rows.Select(x => x.Number).SequenceEqual(errorNumbers) ||
+            rows.Any(x => x.Values == null || x.Values.Count != preview.Columns.Length ||
+                preview.Columns.Any(c => !x.Values.ContainsKey(c) ||
+                    (ExcelImportService.IsBooleanColumn(c) && x.Values[c] is not ("Sim" or "Não"))) ||
+                x.Values.Values.Any(v => v?.Length > 2000)))
+            return BadRequest("A correção é inválida. Volta à pré-visualização e revê as linhas com erros.");
+        var originals = preview.Rows.ToDictionary(x => x.Number);
         foreach (var row in rows)
-            row.Values = ExcelImportService.Columns(draft.ImportType).ToDictionary(x => x, x => row.Values.GetValueOrDefault(x) ?? "");
-        if (!await imports.ReviewAsync(draft, rows)) return Changed(id);
+            originals[row.Number].Values = preview.Columns.ToDictionary(c => c, c => row.Values[c] ?? "");
+        if (!await imports.ReviewAsync(draft, preview.Rows)) return Changed(id);
         TempData["Success"] = "Pré-visualização atualizada. Revê as diferenças antes de confirmar a importação.";
         return RedirectToAction(nameof(Preview), new { id });
     }

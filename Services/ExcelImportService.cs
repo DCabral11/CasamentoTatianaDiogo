@@ -93,7 +93,7 @@ public class ExcelImportService(ApplicationDbContext db, IWebHostEnvironment env
                 var candidate = new Family
                 {
                     Name = Value("Nome"), GroupCode = reference.NullIfWhiteSpace(), Notes = Value("Notas").NullIfWhiteSpace(),
-                    AllowGroupRsvp = Boolean(Value("Permitir resposta familiar"), true, "Permitir resposta familiar", row.Errors)
+                    AllowGroupRsvp = Boolean(Value("Permitir resposta familiar"), "Permitir resposta familiar", row.Errors)
                 };
                 Validate(candidate, row.Errors);
                 row.TargetId = existing?.Id;
@@ -122,8 +122,8 @@ public class ExcelImportService(ApplicationDbContext db, IWebHostEnvironment env
                     Email = ContactFormats.SaveEmail(Value("E-mail"), settings, 200, row.Errors.Add),
                     Phone = ContactFormats.SavePhone(Value("Telefone"), settings, row.Errors.Add),
                     FamilyId = row.FamilyId, AvatarFileName = avatar.NullIfWhiteSpace(), Notes = Value("Notas").NullIfWhiteSpace(),
-                    AllowPlusOne = Boolean(Value("Permitir acompanhante"), false, "Permitir acompanhante", row.Errors),
-                    IsChild = Boolean(Value("Criança"), false, "Criança", row.Errors)
+                    AllowPlusOne = Boolean(Value("Permitir acompanhante"), "Permitir acompanhante", row.Errors),
+                    IsChild = Boolean(Value("Criança"), "Criança", row.Errors)
                 };
                 Validate(candidate, row.Errors);
                 candidate.Id = existing?.Id ?? 0;
@@ -241,15 +241,22 @@ public class ExcelImportService(ApplicationDbContext db, IWebHostEnvironment env
                 _ => "Existe um campo inválido. Revê os dados desta linha."
             });
     }
-    private static bool Boolean(string value, bool fallback, string column, List<string> errors)
+    public static bool IsBooleanColumn(string column) => column is "Permitir resposta familiar" or "Permitir acompanhante" or "Criança";
+
+    public static bool? BooleanChoice(string value, string column) => value.Trim().ToLowerInvariant() switch
     {
-        switch (value.ToLowerInvariant())
-        {
-            case "": return fallback;
-            case "sim": case "s": case "true": case "1": case "x": return true;
-            case "não": case "nao": case "n": case "false": case "0": return false;
-            default: errors.Add($"«{column}» aceita Sim ou Não."); return fallback;
-        }
+        "" => column == "Permitir resposta familiar",
+        "sim" or "s" or "true" or "1" or "x" => true,
+        "não" or "nao" or "n" or "false" or "0" => false,
+        _ => null
+    };
+
+    private static bool Boolean(string value, string column, List<string> errors)
+    {
+        var choice = BooleanChoice(value, column);
+        if (choice.HasValue) return choice.Value;
+        errors.Add($"«{column}» aceita Sim ou Não.");
+        return column == "Permitir resposta familiar";
     }
     private static Dictionary<string, string> FamilyValues(Family f) => new()
     { ["Nome"] = f.Name, ["Referência"] = f.GroupCode ?? "", ["Permitir resposta familiar"] = f.AllowGroupRsvp ? "Sim" : "Não", ["Notas"] = f.Notes ?? "" };

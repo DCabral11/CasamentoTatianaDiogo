@@ -4,7 +4,7 @@ Os dois imports da administração usam o mesmo processo:
 
 1. Descarregar o modelo e carregar um ficheiro `.xlsx` (até 5 MB e 500 linhas, sem fórmulas).
 2. Rever os totais de registos a criar, atualizar, sem alterações e com erros. Abrir cada linha para comparar todos os valores atuais com os propostos.
-3. Se necessário, usar **Corrigir dados**. A opção **Validar e rever pré-visualização** guarda apenas a revisão temporária e mostra uma nova comparação.
+3. Usar **Corrigir linhas com erros** para editar as linhas assinaladas pelo número original do Excel. Nos campos booleanos, escolher **Sim** ou **Não**. A opção **Validar e rever pré-visualização** revalida o lote completo e mostra a nova comparação.
 4. Escolher **Confirmar importação** para aplicar o lote inteiro. Enquanto houver erros, nenhuma linha é importada. **Cancelar importação** elimina apenas a revisão temporária.
 
 ## Identificar os registos a atualizar
