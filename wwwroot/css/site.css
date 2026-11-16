@@ -919,6 +919,11 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
     position: relative;
 }
 
+.travel-guidance {
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+}
+
 .location-card h3 i {
     color: var(--accent-ink);
 }

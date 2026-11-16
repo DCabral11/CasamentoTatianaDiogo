@@ -79,6 +79,64 @@ public class HttpTests
     }
 
     [Fact]
+    public async Task InformationOffersTravelGuidanceAndADatedCalendarDownload()
+    {
+        using var app = new TestApplication();
+        using var client = app.Client();
+        var page = await client.GetStringAsync("/Information");
+        Assert.DoesNotContain("download=\"casamento.ics\"", page);
+        Assert.Contains("Estacionamento", page);
+        Assert.Equal(HttpStatusCode.NotFound, (await client.GetAsync("/Information/Calendar")).StatusCode);
+
+        using var scope = app.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var wedding = await db.WeddingSettings.SingleAsync();
+        wedding.WeddingDateTime = new DateTime(2027, 6, 5, 11, 0, 0);
+        wedding.CeremonyLocationName = "Igreja de São Pedro";
+        wedding.CeremonyAddress = "Praça, 2";
+        wedding.ReceptionLocationName = "Quinta";
+        wedding.ReceptionAddress = new string('á', 70);
+        await db.SaveChangesAsync();
+
+        const string adminUrl = "/Admin/Content/Travel";
+        Assert.Equal(HttpStatusCode.Redirect, (await client.GetAsync(adminUrl)).StatusCode);
+        await ExcelImportTests.Login(app, client);
+        var fields = new Dictionary<string, string>
+        {
+            ["guidance[InformationParking]"] = "Entrada pela rua lateral.",
+            ["guidance[InformationTransport]"] = "Autocarro junto à estação.",
+            ["guidance[InformationLodging]"] = "Pedir a tarifa de grupo.",
+            ["__RequestVerificationToken"] = await AntiforgeryToken(client, adminUrl)
+        };
+        Assert.Equal(HttpStatusCode.Redirect, (await client.PostAsync(adminUrl, new FormUrlEncodedContent(fields))).StatusCode);
+        page = WebUtility.HtmlDecode(await client.GetStringAsync("/Information"));
+        Assert.Contains("Entrada pela rua lateral.", page);
+        Assert.Contains("Autocarro junto à estação.", page);
+        Assert.Contains("Pedir a tarifa de grupo.", page);
+        Assert.Contains("travelmode=transit&destination=" + Uri.EscapeDataString("Igreja de São Pedro, Praça, 2"), page);
+        Assert.Contains("download=\"casamento.ics\"", page);
+        using var response = await client.GetAsync("/Information/Calendar");
+        response.EnsureSuccessStatusCode();
+        Assert.Equal("text/calendar", response.Content.Headers.ContentType?.MediaType);
+        Assert.Equal("casamento.ics", response.Content.Headers.ContentDisposition?.FileNameStar);
+        var ics = await response.Content.ReadAsStringAsync();
+        Assert.Contains("DTSTART:20270605T100000Z\r\n", ics);
+        Assert.Contains("LOCATION:Igreja de São Pedro\\, Praça\\, 2\r\n", ics);
+        Assert.Contains(wedding.ReceptionAddress, ics.Replace("\r\n ", ""));
+        Assert.All(ics.Split("\r\n"), line => Assert.InRange(System.Text.Encoding.UTF8.GetByteCount(line), 0, 75));
+
+        var form = WebUtility.HtmlDecode(await client.GetStringAsync(adminUrl));
+        Assert.Contains("Entrada pela rua lateral.", form);
+        fields["guidance[InformationParking]"] = "";
+        fields["guidance[InformationTransport]"] = "Partida às 10h.";
+        Assert.Equal(HttpStatusCode.Redirect, (await client.PostAsync(adminUrl, new FormUrlEncodedContent(fields))).StatusCode);
+        page = WebUtility.HtmlDecode(await client.GetStringAsync("/Information"));
+        Assert.DoesNotContain("Entrada pela rua lateral.", page);
+        Assert.Contains("Partida às 10h.", page);
+        Assert.Contains("Pedir a tarifa de grupo.", page);
+    }
+
+    [Fact]
     public async Task ProductionPagesAndHealthChecksWorkWithoutStartupSchemaChanges()
     {
         using var app = new TestApplication();

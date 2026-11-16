@@ -1,10 +1,22 @@
 @model InformationViewModel
+@inject CasamentoTatianaDiogo.Services.Interfaces.ISiteContentService ContentTexts
+@inject CasamentoTatianaDiogo.Services.WeddingClock Clock
 @{
     ViewData["Title"] = "Informações";
 
     var settings = Model.Settings;
-    var ceremonyQuery = $"{settings.CeremonyLocationName}, {settings.CeremonyAddress}";
-    var receptionQuery = $"{settings.ReceptionLocationName}, {settings.ReceptionAddress}";
+    var calendarAvailable = Clock.EventStartUtc(settings.WeddingDateTime).HasValue;
+    var ceremonyQuery = WeddingTravel.Address(settings.CeremonyLocationName, settings.CeremonyAddress);
+    var receptionQuery = WeddingTravel.Address(settings.ReceptionLocationName, settings.ReceptionAddress);
+    var texts = await ContentTexts.GetAsync();
+    var travelLinks = new[] {
+        (Topic: WeddingTravel.Parking, Label: "Procurar parques perto da cerimónia", Url: ceremonyQuery.Length == 0 ? null :
+            "https://www.google.com/maps/search/?api=1&query=" + Uri.EscapeDataString("Estacionamento perto de " + ceremonyQuery)),
+        (Topic: WeddingTravel.Transport, Label: "Ver percurso em transportes públicos", Url: ceremonyQuery.Length == 0 ? null :
+            "https://www.google.com/maps/dir/?api=1&travelmode=transit&destination=" + Uri.EscapeDataString(ceremonyQuery)),
+        (Topic: WeddingTravel.Lodging, Label: "Procurar alojamento perto da receção", Url: receptionQuery.Length == 0 ? null :
+            "https://www.google.com/maps/search/?api=1&query=" + Uri.EscapeDataString("Alojamento perto de " + receptionQuery))
+    };
     var ceremonyEmbedUrl = GetEmbedUrl(settings.CeremonyGoogleMapsEmbedUrl, $"https://www.google.com/maps?q={Uri.EscapeDataString(ceremonyQuery)}&output=embed");
     var receptionEmbedUrl = GetEmbedUrl(settings.ReceptionGoogleMapsEmbedUrl, $"https://www.google.com/maps?q={Uri.EscapeDataString(receptionQuery)}&output=embed");
     var arrival = Model.TimelineEvents.FirstOrDefault();
@@ -53,6 +65,44 @@
                 </div>
             </div>
         </div>
+    </div>
+</section>
+
+<section class="container pt-5" aria-labelledby="travel-heading">
+    <div class="d-flex flex-wrap gap-3 align-items-center justify-content-between mb-4">
+        <div>
+            <h2 id="travel-heading">Planear a visita</h2>
+            @if (calendarAvailable && settings.WeddingDateTime is DateTime date)
+            {
+                <p class="mb-0"><time datetime="@date.ToString("yyyy-MM-ddTHH:mm")">@date.ToString("d 'de' MMMM 'de' yyyy 'às' HH:mm", System.Globalization.CultureInfo.GetCultureInfo("pt-PT"))</time> · Hora local</p>
+            }
+            else
+            {
+                <p class="mb-0">O evento ficará disponível no calendário quando a data e a hora estiverem definidas.</p>
+            }
+        </div>
+        @if (calendarAvailable)
+        {
+            <a class="btn btn-primary" asp-action="Calendar" download="casamento.ics"><i class="bi bi-calendar-plus" aria-hidden="true"></i> Adicionar ao calendário (.ics)</a>
+        }
+    </div>
+    <div class="row g-3">
+        @foreach (var link in travelLinks)
+        {
+            <div class="col-12 col-lg-4">
+                <div class="elegant-card p-4 h-100">
+                    <div class="location-card-heading">
+                        <span class="location-marker" aria-hidden="true"><i class="bi @link.Topic.Icon"></i></span>
+                        <h3 class="h5 mb-0">@link.Topic.Title</h3>
+                    </div>
+                    <p class="travel-guidance">@texts.GetValueOrDefault(link.Topic.Key, link.Topic.DefaultText)</p>
+                    @if (link.Url != null)
+                    {
+                        <a href="@link.Url" target="_blank" rel="noopener">@link.Label <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i><span class="visually-hidden"> (Google Maps, abre num novo separador)</span></a>
+                    }
+                </div>
+            </div>
+        }
     </div>
 </section>
 
