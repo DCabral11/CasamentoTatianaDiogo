@@ -2,9 +2,9 @@
 @{ ViewData["Title"] = "Mapa da sala"; }
 <div class="container py-5">
     <h1>Mapa da sala</h1>
-    <div class="d-flex flex-wrap gap-2 mb-4">
-        <a asp-action="Index" class="btn btn-outline-primary">Distribuir lugares</a>
+    <div class="admin-page-actions">
         <a asp-action="Table" class="btn btn-primary">Adicionar mesa</a>
+        <a asp-action="Index" class="btn btn-outline-primary">Distribuir lugares</a>
     </div>
     @if (Model.Tables.Count == 0) { <p>Adiciona uma mesa para a posicionar no mapa.</p> }
     else

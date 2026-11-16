@@ -27,7 +27,10 @@
             <div class="col-md-6"><label asp-for="NextPayment" class="form-label">Prazo / próximo pagamento</label><input asp-for="NextPayment" type="date" class="form-control" /></div>
             <div class="col-12"><label asp-for="Notes" class="form-label">Notas</label><textarea asp-for="Notes" rows="3" class="form-control"></textarea></div>
         </div>
-        <button class="btn btn-primary mt-3">Guardar linha</button> <a class="btn btn-link mt-3" asp-action="Budget">Cancelar</a>
+        <div class="admin-form-actions">
+            <button class="btn btn-primary">Guardar linha</button>
+            <a class="btn btn-link" asp-action="Budget">Cancelar</a>
+        </div>
     </form>
     @if (Model.Id != 0)
     {

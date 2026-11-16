@@ -11,8 +11,10 @@
         <label asp-for="Name" class="form-label">Nome da categoria</label>
         <input asp-for="Name" required class="form-control" aria-describedby="category-help" />
         <p class="form-text" id="category-help">A mesma lista é usada no orçamento e nos fornecedores. Ao renomear uma categoria, o nome é atualizado nos dois módulos.</p>
-        <button class="btn btn-primary">Guardar categoria</button>
-        @if (Model.Id != 0) { <a class="btn btn-link" asp-action="Categories" asp-route-id="">Cancelar</a> }
+        <div class="admin-form-actions">
+            <button class="btn btn-primary">Guardar categoria</button>
+            @if (Model.Id != 0) { <a class="btn btn-link" asp-action="Categories" asp-route-id="">Cancelar</a> }
+        </div>
     </form>
     <partial name="_AdminFilters" />
     @if (categories.Count == 0) { <p>Não há categorias nesta seleção.</p> }

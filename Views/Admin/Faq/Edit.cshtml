@@ -10,7 +10,10 @@
         <div class="mb-3"><label asp-for="Answer" class="form-label">Resposta (obrigatório)</label><textarea asp-for="Answer" class="form-control" rows="8" required maxlength="6000" aria-describedby="faq-answer-help"></textarea><div id="faq-answer-help" class="form-text">Os parágrafos e quebras de linha serão mantidos. Usa texto simples, sem HTML.</div><span asp-validation-for="Answer" class="text-danger"></span></div>
         <div class="mb-3"><label asp-for="DisplayOrder" class="form-label">Ordem de apresentação</label><input asp-for="DisplayOrder" class="form-control" type="number" min="0" max="10000" required aria-describedby="faq-order-help" /><div id="faq-order-help" class="form-text">Os números menores aparecem primeiro. Podes usar 10, 20, 30 para deixar espaço entre perguntas.</div><span asp-validation-for="DisplayOrder" class="text-danger"></span></div>
         <div class="form-check mb-4"><input asp-for="IsPublished" class="form-check-input" /><label asp-for="IsPublished" class="form-check-label">Publicar esta pergunta (visível quando o módulo estiver ativo)</label></div>
-        <div class="d-flex flex-wrap gap-2"><button class="btn btn-primary" type="submit">Guardar pergunta</button><a class="btn btn-outline-primary" asp-action="Index">Cancelar</a></div>
+        <div class="admin-form-actions">
+            <button class="btn btn-primary" type="submit">Guardar pergunta</button>
+            <a class="btn btn-outline-primary" asp-action="Index">Cancelar</a>
+        </div>
     </form>
 </div>
 @section Scripts { <partial name="_ValidationScriptsPartial" /> }

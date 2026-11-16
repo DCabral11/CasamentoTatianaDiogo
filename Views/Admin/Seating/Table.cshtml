@@ -15,8 +15,10 @@
                     <select asp-for="MapColumn" class="form-select">@for (var c = 1; c <= 4; c++) { <option value="@c">@c</option> }</select></div>
             </div>
         </fieldset>
-        <button class="btn btn-primary" type="submit">Guardar mesa</button>
-        <a asp-action="Index" class="btn btn-link">Voltar ao plano</a>
+        <div class="admin-form-actions">
+            <button class="btn btn-primary" type="submit">Guardar mesa</button>
+            <a asp-action="Index" class="btn btn-link">Voltar ao plano</a>
+        </div>
     </form>
     @if (Model.Id != 0)
     {

@@ -25,6 +25,8 @@
                 <textarea id="@field.Phase" name="guidance[@field.Key]" class="form-control" rows="3" placeholder="@field.DefaultText">@Model.GetValueOrDefault(field.Key)</textarea>
             </div>
         }
-        <button type="submit" class="btn btn-primary">Guardar mensagens</button>
+        <div class="admin-form-actions">
+            <button type="submit" class="btn btn-primary">Guardar mensagens</button>
+        </div>
     </form>
 </div>

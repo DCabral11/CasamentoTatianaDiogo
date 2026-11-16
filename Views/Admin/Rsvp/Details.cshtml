@@ -9,13 +9,13 @@
 }
 
 <div class="container py-5 narrow">
-    <div class="d-flex justify-content-between align-items-start gap-3 mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
         <div>
             <p class="text-uppercase small text-muted mb-1">Recibo de resposta</p>
             <h1 class="mb-1">@Model.Guest?.DisplayName</h1>
             <p class="text-muted mb-0">@Model.Guest?.Family?.Name</p>
         </div>
-        <a class="btn btn-outline-primary" href="/Admin/Rsvp/Index"><i class="bi bi-arrow-left"></i> Voltar</a>
+        <a class="btn btn-outline-primary" href="/Admin/Rsvp/Index"><i class="bi bi-arrow-left" aria-hidden="true"></i> Voltar às respostas</a>
     </div>
 
     <p><a asp-action="History" asp-route-id="@Model.GuestId">Consultar histórico de alterações</a></p>

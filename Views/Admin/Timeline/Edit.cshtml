@@ -11,7 +11,10 @@
         <div class="row g-3"><div class="col-md-6"><label asp-for="EventDateTime" class="form-label">Data e hora</label><input asp-for="EventDateTime" asp-format="{0:yyyy-MM-ddTHH:mm}" type="datetime-local" class="form-control" /></div><div class="col-md-6"><label asp-for="DisplayOrder" class="form-label">Ordem de apresentação</label><input asp-for="DisplayOrder" type="number" min="1" class="form-control" /></div></div>
         <div class="mt-3"><label asp-for="IconName" class="form-label">Ícone Bootstrap</label><input asp-for="IconName" aria-describedby="timeline-icon-help" class="form-control" placeholder="Ex.: bi-heart" /><div class="form-text" id="timeline-icon-help">Consulta os nomes em icons.getbootstrap.com.</div></div>
         <div class="form-check mt-3"><input asp-for="IsActive" class="form-check-input" /><label asp-for="IsActive" class="form-check-label">Mostrar este momento aos convidados</label></div>
-        <button class="btn btn-primary mt-4">Guardar momento</button><a class="btn btn-link mt-4" href="/Admin/Timeline/Index">Cancelar</a>
+        <div class="admin-form-actions">
+            <button class="btn btn-primary">Guardar momento</button>
+            <a class="btn btn-link" href="/Admin/Timeline/Index">Cancelar</a>
+        </div>
     </form>
 </div>
 @section Scripts { <partial name="_ValidationScriptsPartial" /> }

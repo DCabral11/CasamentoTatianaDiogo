@@ -13,6 +13,7 @@
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
     var isAdminScreen = Context.Request.Path.StartsWithSegments("/Admin");
     var isAdminDashboard = Context.Request.Path.StartsWithSegments("/Admin/Dashboard");
+    var showAdminReturn = isAdminScreen && User.IsInRole("Admin");
     var messagePage = isAdminScreen ? null : WeddingPageMessages.Find(currentController);
     if (messagePage?.Controller == "Home" && !Equals(ViewContext.RouteData.Values["action"], "Index")) { messagePage = null; }
 }
@@ -37,11 +38,18 @@
 
     <body class="@(isAdminScreen ? "admin-screen" : "")" data-post-result="@(HttpMethods.IsPost(Context.Request.Method) ? "true" : null)">
         <a class="skip-link" href="#main-content">Saltar para o conteúdo</a>
-        <nav class="navbar navbar-expand-lg navbar-light navbar-logo-bg shadow-sm sticky-top" aria-label="Navegação principal">
+        <nav class="navbar @(showAdminReturn ? "admin-navbar navbar-expand-xl" : "navbar-expand-lg") navbar-light navbar-logo-bg shadow-sm sticky-top" aria-label="Navegação principal">
             <div class="container">
                 <a class="navbar-brand" asp-controller="Home" asp-action="Index" aria-label="@siteText.GetValueOrDefault("NavHome", "Início")" aria-current="@(currentController == "Home" && Equals(ViewContext.RouteData.Values["action"], "Index") ? "page" : null)">
                     <img src="@theme.Logo" class="nav-logo" alt="" onerror="this.onerror=null;this.src='/images/navbar.png'" />
                 </a>
+                @if (showAdminReturn)
+                {
+                    <a class="btn btn-outline-primary admin-return" asp-controller="@(isAdminDashboard ? "Home" : "Dashboard")" asp-action="Index">
+                        <i class="bi bi-arrow-left" aria-hidden="true"></i>
+                        @(isAdminDashboard ? "Voltar ao site" : "Voltar ao painel")
+                    </a>
+                }
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Menu principal">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -60,15 +68,6 @@
                         @if (faqSettings.IsEnabled)
                         {
                             <li class="nav-item"><a class="nav-link" asp-controller="Faq" asp-action="Index" aria-current="@(currentController == "Faq" ? "page" : null)">@faqSettings.NavigationLabel</a></li>
-                        }
-                        @if (isAdminScreen && User.IsInRole("Admin"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" href="@(isAdminDashboard ? "/" : "/Admin/Dashboard/Index")">
-                                    <i class="bi bi-arrow-left"></i>
-                                    @(isAdminDashboard ? "Voltar ao site" : "Voltar ao painel")
-                                </a>
-                            </li>
                         }
                     </ul>
                 </div>
@@ -105,7 +104,10 @@
 
         <footer class="py-5 text-center text-muted">
             @siteText.GetValueOrDefault("FooterText", "Feito com amor por Diogo") <i class="bi bi-heart-fill text-danger"></i>
-            <div class="mt-2"><a class="small text-muted" href="/Admin/Dashboard/Index" target="_top">Administração</a></div>
+            @if (!showAdminReturn)
+            {
+                <div class="mt-2"><a class="small text-muted" href="/Admin/Dashboard/Index" target="_top">Administração</a></div>
+            }
         </footer> 
 
         @if (isAdminScreen)

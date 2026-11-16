@@ -23,6 +23,28 @@ namespace CasamentoTatianaDiogo.Tests;
 public class HttpTests
 {
     [Fact]
+    public async Task AdminReturnLinkIsAvailableWithTheMobileMenuClosed()
+    {
+        using var app = new TestApplication();
+        using var client = app.Client();
+        Assert.DoesNotContain("admin-return", await client.GetStringAsync("/Admin/Login"));
+        await ExcelImportTests.Login(app, client);
+
+        foreach (var path in new[] { "/Admin/Settings/Index", "/Admin/Photos/Settings", "/Admin/Musicas", "/Admin/Guests/Create" })
+        {
+            var html = await client.GetStringAsync(path);
+            var link = Assert.Single(Regex.Matches(html, @"<a\b[^>]*\badmin-return\b[^>]*>[\s\S]*?</a>").Cast<Match>());
+            Assert.Contains("href=\"/Admin/Dashboard/Index\"", link.Value);
+            Assert.Contains("Voltar ao painel", link.Value);
+            Assert.Single(Regex.Matches(html, "Voltar ao painel").Cast<Match>());
+            Assert.InRange(link.Index, 0, html.IndexOf("id=\"nav\"", StringComparison.Ordinal));
+        }
+
+        Assert.Contains("Voltar ao site", await client.GetStringAsync("/Admin/Dashboard/Index"));
+        Assert.DoesNotContain("admin-return", await client.GetStringAsync("/Information"));
+    }
+
+    [Fact]
     public async Task SpotifySettingAcceptsOneTrackAndOnlyWrapsPublicNavigations()
     {
         using var app = new TestApplication();

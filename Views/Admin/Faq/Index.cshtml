@@ -1,20 +1,20 @@
 @model FaqPageViewModel
 @{ ViewData["Title"] = "Gerir perguntas frequentes"; }
 <div class="container py-5">
-    <div class="d-flex flex-wrap justify-content-between gap-3 mb-4">
-        <div><h1>Perguntas frequentes</h1><p>Prepara as respostas, define a ordem e escolhe o que os convidados podem consultar.</p></div>
-        <a class="btn btn-outline-primary align-self-start" asp-controller="Dashboard" asp-action="Index">Voltar ao painel</a>
+    <header>
+        <h1>Perguntas frequentes</h1>
+        <p>Prepara as respostas, define a ordem e escolhe o que os convidados podem consultar.</p>
+    </header>
+    <div class="admin-page-actions">
+        <a class="btn btn-primary" asp-action="Create"><i class="bi bi-plus-lg" aria-hidden="true"></i> Adicionar pergunta</a>
+        <a class="btn btn-outline-primary" asp-action="Preview">Pré-visualizar perguntas</a>
+        @if (Model.Settings.IsEnabled) { <a class="btn btn-outline-primary" asp-controller="Faq" asp-action="Index" target="_top">Ver página pública</a> }
+        <a class="btn btn-outline-primary" href="#faq-settings">Definições da página</a>
     </div>
     <div class="row g-3 mb-4">
         <div class="col-12 col-md-4"><div class="elegant-card p-3"><strong class="d-block fs-3">@(ViewData["PublishedCount"] ?? Model.Items.Count(x => x.IsPublished))</strong>Perguntas publicadas</div></div>
         <div class="col-12 col-md-4"><div class="elegant-card p-3"><strong class="d-block fs-3">@(ViewData["DraftCount"] ?? Model.Items.Count(x => !x.IsPublished))</strong>Rascunhos</div></div>
         <div class="col-12 col-md-4"><div class="elegant-card p-3"><strong class="d-block fs-3">@(Model.Settings.IsEnabled ? "Ativo" : "Desativado")</strong>Estado do módulo</div></div>
-    </div>
-    <div class="d-flex flex-wrap gap-2 mb-4">
-        <a class="btn btn-primary" asp-action="Create"><i class="bi bi-plus-lg" aria-hidden="true"></i> Adicionar pergunta</a>
-        <a class="btn btn-outline-primary" asp-action="Preview">Pré-visualizar perguntas</a>
-        @if (Model.Settings.IsEnabled) { <a class="btn btn-outline-primary" asp-controller="Faq" asp-action="Index" target="_top">Ver página pública</a> }
-        <a class="btn btn-outline-primary" href="#faq-settings">Definições da página</a>
     </div>
     <partial name="_AdminFilters" />
     @if (Model.Items.Count == 0)
@@ -57,7 +57,9 @@
             <div class="mb-3"><label asp-for="Settings.NavigationLabel" class="form-label">Nome no menu (obrigatório)</label><input asp-for="Settings.NavigationLabel" class="form-control" required maxlength="40" /><span asp-validation-for="Settings.NavigationLabel" class="text-danger"></span></div>
             <div class="mb-3"><label asp-for="Settings.Introduction" class="form-label">Introdução (opcional)</label><textarea asp-for="Settings.Introduction" class="form-control" rows="3" maxlength="2000"></textarea><span asp-validation-for="Settings.Introduction" class="text-danger"></span></div>
             <div class="mb-3"><label asp-for="Settings.EmptyMessage" class="form-label">Mensagem quando não há perguntas publicadas (obrigatório)</label><textarea asp-for="Settings.EmptyMessage" class="form-control" rows="3" required maxlength="500"></textarea><span asp-validation-for="Settings.EmptyMessage" class="text-danger"></span></div>
-            <button class="btn btn-primary" type="submit">Guardar definições</button>
+            <div class="admin-form-actions">
+                <button class="btn btn-primary" type="submit">Guardar definições</button>
+            </div>
         </form>
     </section>
 </div>

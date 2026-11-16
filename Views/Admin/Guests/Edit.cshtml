@@ -23,7 +23,10 @@
         <p class="form-text" id="plus-one-help">O Plus-One deve pertencer à mesma família/convite da pessoa que acompanha. Quem é Plus-One não pode levar outro acompanhante. A presença é confirmada no RSVP do convidado principal.</p>
         <div class="form-check mt-2"><input asp-for="IsChild" class="form-check-input" /><label asp-for="IsChild" class="form-check-label">É criança</label></div>
         <div class="mt-3"><label asp-for="Notes" class="form-label">Notas internas</label><textarea asp-for="Notes" class="form-control" rows="3"></textarea></div>
-        <button class="btn btn-primary mt-4">Guardar convidado</button><a class="btn btn-link mt-4" href="/Admin/Guests/Index">Cancelar</a>
+        <div class="admin-form-actions">
+            <button class="btn btn-primary">Guardar convidado</button>
+            <a class="btn btn-link" href="/Admin/Guests/Index">Cancelar</a>
+        </div>
     </form>
 </div>
 @section Scripts { <partial name="_ValidationScriptsPartial" /><script src="~/js/admin-guest-avatar.js" asp-append-version="true"></script><script src="~/js/admin-guest-companion.js" asp-append-version="true"></script> }

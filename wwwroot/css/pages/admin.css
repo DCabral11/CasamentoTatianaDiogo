@@ -3,6 +3,42 @@
 .admin-screen .btn-outline-danger, .admin-screen .btn-danger { border-color: #b63c38; }
 .admin-screen .btn-link { color: var(--accent-ink); box-shadow: none; }
 .admin-screen .btn-sm { min-height: 2.2rem; padding: 0.4rem 0.7rem; border-radius: 0.65rem; font-size: 0.82rem; }
+
+.admin-navbar .admin-return {
+    flex: none;
+    min-height: 2.75rem;
+}
+.admin-page-actions,
+.admin-form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .65rem;
+}
+.admin-page-actions { margin-block: 1rem 1.5rem; }
+.admin-form-actions {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+}
+@media (max-width: 1199.98px) {
+    .admin-navbar .navbar-brand {
+        flex: 1 1 0;
+        min-width: 0;
+        margin-right: .5rem;
+    }
+    .admin-navbar .nav-logo { max-width: min(100%, 14rem); }
+    .admin-navbar .admin-return { margin-right: .5rem; }
+}
+@media (max-width: 575.98px) {
+    .admin-page-actions,
+    .admin-form-actions {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .admin-form-actions > form > .btn { width: 100%; }
+}
+
 .delete-confirmation-card { overflow: hidden; border: 1px solid rgba(var(--primary-rgb), 0.18); border-radius: 1.5rem; background: var(--surface); box-shadow: 0 24px 55px rgba(51, 45, 42, 0.2); }
 .delete-confirmation-icon { display: inline-grid; width: 4.25rem; height: 4.25rem; place-items: center; margin-bottom: 1.1rem; border-radius: 50%; color: #a93632; background: #fff0ee; font-size: 1.9rem; }
 .delete-confirmation-label { margin-bottom: 0.35rem; color: #a93632; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }

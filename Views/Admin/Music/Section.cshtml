@@ -12,7 +12,10 @@
         <div class="mb-3"><label asp-for="DisplayOrder" class="form-label">Ordem no programa</label>
             <input asp-for="DisplayOrder" class="form-control" min="1" max="9999" required aria-describedby="order-help" />
             <small id="order-help">Os números mais baixos aparecem primeiro.</small></div>
-        <button class="btn btn-primary">Guardar secção</button> <a class="btn btn-link" asp-action="Index">Cancelar</a>
+        <div class="admin-form-actions">
+            <button class="btn btn-primary">Guardar secção</button>
+            <a class="btn btn-link" asp-action="Index">Cancelar</a>
+        </div>
     </form>
     @if (Model.Id != 0)
     {

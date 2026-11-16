@@ -5,7 +5,7 @@
 }
 <div class="container py-5 seating-list">
     <h1>@ViewData["Title"]</h1>
-    <div class="seating-print-tools d-flex flex-wrap gap-2 mb-4">
+    <div class="seating-print-tools admin-page-actions">
         <button id="print-seating" type="button" class="btn btn-primary">Imprimir lista</button>
         <a asp-action="Print" asp-route-alphabetical="@(!alphabetical)" class="btn btn-outline-primary">@(alphabetical ? "Lista por mesa" : "Lista alfabética")</a>
         <a asp-action="Index" class="btn btn-link">Voltar ao plano</a>

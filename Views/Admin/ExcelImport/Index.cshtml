@@ -39,7 +39,9 @@
             <label asp-for="File" class="form-label">Ficheiro Excel</label>
             <input asp-for="File" class="form-control" required aria-describedby="import-format import-columns" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
             <div class="form-text" id="import-columns">Colunas esperadas: @string.Join(" · ", Model.Columns)</div>
-            <button class="btn btn-primary mt-4"><i class="bi bi-eye" aria-hidden="true"></i> Pré-visualizar importação</button>
+            <div class="admin-form-actions">
+                <button class="btn btn-primary"><i class="bi bi-eye" aria-hidden="true"></i> Pré-visualizar importação</button>
+            </div>
         </form>
     </section>
 </div>
