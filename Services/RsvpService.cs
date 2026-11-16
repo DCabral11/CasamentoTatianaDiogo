@@ -45,17 +45,20 @@ namespace CasamentoTatianaDiogo.Services
                 return [];
 
             var normalizedQuery = query.NormalizeForSearch();
-            var guests = (await db.Guests
-                .AsNoTracking()
-                .Where(g => !g.IsPlusOne)
-                .Include(g => g.Family)
-                .OrderBy(g => g.DisplayName)
-                .ToListAsync())
-                .Where(guest => guest.FirstName.NormalizeForSearch().Contains(normalizedQuery) ||
-                                guest.LastName.NormalizeForSearch().Contains(normalizedQuery) ||
-                                guest.DisplayName.NormalizeForSearch().Contains(normalizedQuery))
-                .Take(20)
-                .ToList();
+            var ids = new List<int>(20);
+            var candidates = db.Guests.AsNoTracking().Where(g => !g.IsPlusOne).OrderBy(g => g.DisplayName).ThenBy(g => g.Id)
+                .Select(g => new { g.Id, g.FirstName, g.LastName, g.DisplayName });
+            await foreach (var candidate in candidates.AsAsyncEnumerable())
+            {
+                if (candidate.FirstName.NormalizeForSearch().Contains(normalizedQuery) ||
+                    candidate.LastName.NormalizeForSearch().Contains(normalizedQuery) ||
+                    candidate.DisplayName.NormalizeForSearch().Contains(normalizedQuery))
+                    ids.Add(candidate.Id);
+                if (ids.Count == 20) break;
+            }
+            if (ids.Count == 0) return [];
+            var guests = await db.Guests.AsNoTracking().Include(g => g.Family).Where(g => ids.Contains(g.Id))
+                .OrderBy(g => g.DisplayName).ThenBy(g => g.Id).ToListAsync();
             PopulateProfileImagePaths(guests);
             return guests;
         }
@@ -82,11 +85,9 @@ namespace CasamentoTatianaDiogo.Services
             }
 
             var related = await db.Guests.Where(g => g.FamilyId == guest.FamilyId && g.Id != guest.Id && !g.IsPlusOne).OrderBy(g => g.DisplayName).ToListAsync();
-            var hasExisting = await db.RsvpResponses.AnyAsync(r => r.GuestId == guestId);
             var guestIds = related.Select(x => x.Id).Append(guestId).ToList();
-            var responses = await db.RsvpResponses.AsNoTracking().Where(x => guestIds.Contains(x.GuestId))
-                .OrderByDescending(x => x.SubmittedAt).ToListAsync();
-            var current = responses.FirstOrDefault(x => x.GuestId == guestId);
+            var responses = await LatestResponses(guestIds).AsNoTracking().ToDictionaryAsync(x => x.GuestId);
+            var current = responses.GetValueOrDefault(guestId);
             PopulateProfileImagePaths([guest, .. related]);
 
             return new RsvpSelectionViewModel
@@ -94,7 +95,7 @@ namespace CasamentoTatianaDiogo.Services
                 Guest = guest,
                 RelatedGuests = related,
                 PlusOnes = guest.AllowPlusOne && !guest.IsPlusOne ? guest.PlusOnes.ToList() : [],
-                HasExistingResponse = hasExisting,
+                HasExistingResponse = current != null,
                 HasConcurrentEditor = await OtherEditorAsync(edit?.Id ?? Guid.Empty, access.FamilyId),
                 HasConcurrencyConflict = edit == null || edit.ExpectedVersion != guest.Family!.RsvpVersion,
                 VerifiedContact = RsvpContact.Mask(access.Channel, access.Contact),
@@ -110,7 +111,7 @@ namespace CasamentoTatianaDiogo.Services
                     PlusOneMessage = current?.PlusOneMessage, PlusOneMusicRequest = current?.PlusOneMusicRequest,
                     FamilyResponses = related.Select(person =>
                     {
-                        var response = responses.FirstOrDefault(x => x.GuestId == person.Id);
+                        var response = responses.GetValueOrDefault(person.Id);
                         return new FamilyGuestRsvpInput
                         {
                             GuestId = person.Id, Status = response?.Status, DietaryRestrictions = response?.DietaryRestrictions,
@@ -120,6 +121,10 @@ namespace CasamentoTatianaDiogo.Services
                 }
             };
         }
+
+        private IQueryable<RsvpResponse> LatestResponses(List<int> guestIds) =>
+            db.RsvpResponses.Where(r => guestIds.Contains(r.GuestId)).GroupBy(r => r.GuestId)
+                .Select(group => group.OrderByDescending(r => r.SubmittedAt).ThenByDescending(r => r.Id).First());
 
         private void PopulateProfileImagePaths(IEnumerable<Guest> guests)
         {
@@ -167,25 +172,26 @@ namespace CasamentoTatianaDiogo.Services
                 x.Status is not (Enums.RsvpStatus.Attending or Enums.RsvpStatus.NotAttending)))
                 return AppResult.Failure(ErrorCode.InvalidRequest, "Escolhe uma resposta de presença válida.");
             var requestedIds = model.FamilyResponses.Where(x => x.Status.HasValue).Select(x => x.GuestId).Distinct().ToList();
-            if (requestedIds.Count > 0 && (guest.Family?.AllowGroupRsvp != true ||
-                await db.Guests.CountAsync(x => requestedIds.Contains(x.Id) && x.FamilyId == access.FamilyId && x.Id != guest.Id && !x.IsPlusOne) != requestedIds.Count))
+            if (requestedIds.Count > 0 && guest.Family?.AllowGroupRsvp != true)
                 return AppResult.Failure(ErrorCode.AccessDenied, "Só podes responder pelos convidados autorizados deste convite.");
 
             var responsesByGuestId = model.FamilyResponses
                 .GroupBy(response => response.GuestId)
                 .ToDictionary(group => group.Key, group => group.Last());
 
-            if (guest.Family?.AllowGroupRsvp == true)
+            if (requestedIds.Count > 0)
             {
                 var familyGuests = await db.Guests.Include(g => g.PlusOnes.Where(p => !p.IsArchived)).ThenInclude(p => p.CompanionGuest)
-                    .Where(g => g.FamilyId == guest.FamilyId && g.Id != guest.Id && !g.IsPlusOne)
+                    .Where(g => requestedIds.Contains(g.Id) && g.FamilyId == access.FamilyId && g.Id != guest.Id && !g.IsPlusOne)
                     .ToListAsync();
-
-                guestsToRespond.AddRange(familyGuests.Where(g =>
-                    responsesByGuestId.TryGetValue(g.Id, out var response) && response.Status is not null));
+                if (familyGuests.Count != requestedIds.Count)
+                    return AppResult.Failure(ErrorCode.AccessDenied, "Só podes responder pelos convidados autorizados deste convite.");
+                guestsToRespond.AddRange(familyGuests.Where(g => responsesByGuestId[g.Id].Status.HasValue));
             }
 
-            if (await db.RsvpResponses.AnyAsync(r => guestsToRespond.Select(g => g.Id).Contains(r.GuestId)) && !model.ConfirmOverwrite)
+            var respondentIds = guestsToRespond.Select(g => g.Id).ToList();
+            var latestResponses = await LatestResponses(respondentIds).ToDictionaryAsync(r => r.GuestId);
+            if (latestResponses.Count > 0 && !model.ConfirmOverwrite)
                 return AppResult.Failure(ErrorCode.RsvpExistingResponse, messages.Get(ErrorCode.RsvpExistingResponse), nameof(model.ConfirmOverwrite));
 
             var attending = model.Status == Enums.RsvpStatus.Attending;
@@ -203,7 +209,7 @@ namespace CasamentoTatianaDiogo.Services
 
             foreach (var responseGuest in guestsToRespond)
             {
-                var response = await db.RsvpResponses.OrderByDescending(r => r.SubmittedAt).FirstOrDefaultAsync(r => r.GuestId == responseGuest.Id);
+                var response = latestResponses.GetValueOrDefault(responseGuest.Id);
 
                 if (response == null)
                 {

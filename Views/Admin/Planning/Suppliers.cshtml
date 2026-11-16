@@ -1,7 +1,7 @@
 @inject CasamentoTatianaDiogo.Services.Interfaces.IWeddingSettingsService ContactSettings
 @using CasamentoTatianaDiogo.Services
 @{ var formats = await ContactSettings.GetAsync(); }
-@model List<Supplier>
+@model List<CasamentoTatianaDiogo.ViewModels.Admin.SupplierListRow>
 @{
     ViewData["Title"] = "Fornecedores";
     var pt = CultureInfo.GetCultureInfo("pt-PT");
@@ -20,14 +20,15 @@
             <caption class="visually-hidden">Fornecedores e respetivas linhas de orçamento</caption>
             <thead><tr><th>Categoria</th><th>Nome</th><th>Contacto</th><th>Email</th><th>Site</th><th>Estado</th><th>Notas</th><th>Preço</th><th>Orçamento</th></tr></thead>
             <tbody>
-            @foreach (var supplier in Model)
+            @foreach (var row in Model)
             {
+                var supplier = row.Supplier;
                 <tr>
-                    <td>@supplier.Category!.Name</td><th scope="row"><a asp-action="SupplierForm" asp-route-id="@supplier.Id">@supplier.Name</a></th>
+                    <td>@row.CategoryName</td><th scope="row"><a asp-action="SupplierForm" asp-route-id="@supplier.Id">@supplier.Name</a></th>
                     <td>@(ContactFormats.Phone(supplier.Contact, formats)?.Display ?? supplier.Contact) @if (supplier.Phone != null) { <span class="d-block">@(ContactFormats.Phone(supplier.Phone, formats)?.Display ?? supplier.Phone)</span> }</td><td>@(ContactFormats.Email(supplier.Email, formats)?.Display ?? supplier.Email)</td>
                     <td>@if (supplier.Website != null) { <a href="@supplier.Website">@supplier.Website</a> }</td>
                     <td>@supplier.Status</td><td>@supplier.Notes</td><td class="text-nowrap">@(supplier.Price?.ToString("C2", pt) ?? "Por definir")</td>
-                    <td>@if (supplier.Lines.Count > 0) { <a asp-action="Budget" asp-route-supplierId="@supplier.Id">Ver linhas (@supplier.Lines.Count)</a> }
+                    <td>@if (row.BudgetLineCount > 0) { <a asp-action="Budget" asp-route-supplierId="@supplier.Id">Ver linhas (@row.BudgetLineCount)</a> }
                         <a class="d-block" asp-action="Line" asp-route-supplierId="@supplier.Id">Adicionar linha</a></td>
                 </tr>
             }

@@ -1,3 +1,4 @@
+using CasamentoTatianaDiogo.Services.Interfaces;
 using static CasamentoTatianaDiogo.Services.AdminFilterOptions;
 using CasamentoTatianaDiogo.ViewModels.Admin;
 using CasamentoTatianaDiogo.Data;
@@ -14,33 +15,27 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
 {
     [Authorize(Roles = "Admin")]
     [Route("Admin/Rsvp/[action]/{id?}")]
-    public class RsvpAdminController(ApplicationDbContext db, WeddingClock clock) : Controller
+    public class RsvpAdminController(ApplicationDbContext db, WeddingClock clock, IWeddingSettingsService settingsService) : Controller
     {
-        public async Task<IActionResult> Index(int? familyId)
+        public async Task<IActionResult> Index()
         {
-            ViewData["FamilyId"] = familyId;
-            return View("~/Views/Admin/Rsvp/Index.cshtml", await GuestsAsync(this, db, await db.Guests.AsNoTracking()
-            .Include(g => g.Family)
-            .Include(g => g.RsvpResponses)
-                        .OrderBy(g => g.DisplayName)
-            .ToListAsync()));
+            var query = await GuestQueryAsync(this, db, settingsService);
+            var rows = await query.Select(g => new RsvpAdminRow(g.Id, g.DisplayName, g.Family!.Name,
+                g.Family.RsvpVersion, g.CurrentStatus, g.IsPlusOne, g.MainGuestId, g.RsvpResponses.Any())).ToListAsync(HttpContext.RequestAborted);
+            return View("~/Views/Admin/Rsvp/Index.cshtml", rows);
         }
 
         [HttpGet, ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         public async Task<FileResult> ExportExcel(int? familyId)
         {
-            var guests = await db.Guests.AsNoTracking().AsSplitQuery()
-                .Include(guest => guest.Family)
-                .Include(guest => guest.PlusOnes)
-                .Include(guest => guest.RsvpResponses).ThenInclude(response => response.PlusOne)
-                .Where(guest => !familyId.HasValue || guest.FamilyId == familyId)
-                .OrderBy(guest => guest.Family!.Name).ThenBy(guest => guest.DisplayName).ThenBy(guest => guest.Id)
-                .ToListAsync();
-            guests = await GuestsAsync(this, db, guests);
+            var query = await GuestQueryAsync(this, db, settingsService, export: true);
+            var guests = await query.AsSplitQuery().Include(g => g.Family).Include(g => g.PlusOnes)
+                .Include(g => g.RsvpResponses).ThenInclude(r => r.PlusOne)
+                .OrderBy(g => g.Family!.Name).ThenBy(g => g.DisplayName).ThenBy(g => g.Id).ToListAsync(HttpContext.RequestAborted);
             var contacts = await db.RsvpInvitationContacts.AsNoTracking()
                 .Where(contact => !familyId.HasValue || contact.FamilyId == familyId)
                 .ToDictionaryAsync(contact => contact.FamilyId);
-            var formats = await db.WeddingSettings.AsNoTracking().FirstOrDefaultAsync() ?? new CasamentoTatianaDiogo.Models.WeddingSettings();
+            var formats = await settingsService.GetAsync();
             var bytes = RsvpExcelExport.Create(guests, contacts, clock, familyId, formats);
             return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 $"historico-rsvp-{clock.Now:yyyyMMdd-HHmm}.xlsx");
@@ -103,9 +98,10 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
 
         public async Task<FileResult> ExportCsv()
         {
-            var rows = await GuestsAsync(this, db, await db.Guests.AsNoTracking().Include(g => g.Family).OrderBy(g => g.DisplayName).ToListAsync());
+            var query = await GuestQueryAsync(this, db, settingsService, export: true);
+            var rows = await query.Include(g => g.Family).ToListAsync(HttpContext.RequestAborted);
 
-            var formats = await db.WeddingSettings.AsNoTracking().FirstOrDefaultAsync() ?? new CasamentoTatianaDiogo.Models.WeddingSettings();
+            var formats = await settingsService.GetAsync();
             using var ms = new MemoryStream();
             using var sw = new StreamWriter(ms, Encoding.UTF8);
             using var csv = new CsvWriter(sw, CultureInfo.InvariantCulture);

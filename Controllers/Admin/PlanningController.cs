@@ -24,8 +24,8 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
         {
             var rows = await db.BudgetLines.AsNoTracking().Include(x => x.Category).Include(x => x.Supplier)
                 .OrderBy(x => x.Category!.Name).ThenBy(x => x.Id).ToListAsync();
-            var categories = await db.PlanningCategories.AsNoTracking().OrderBy(x => x.Name).ToListAsync();
-            var suppliers = await db.Suppliers.AsNoTracking().OrderBy(x => x.Name).ToListAsync();
+            var categories = await db.PlanningCategories.OrderBy(x => x.Name).Select(x => new { x.Id, x.Name }).ToListAsync();
+            var suppliers = await db.Suppliers.OrderBy(x => x.Name).Select(x => new { x.Id, x.Name }).ToListAsync();
             var filtered = new AdminListFilters<BudgetLine>(this, rows, "Categoria, fornecedor ou notas", x => $"{x.Category!.Name} {x.Supplier?.Name} {x.Notes}")
                 .Select("categoryId", "Categoria", categories.Select(x => new AdminFilterOption(x.Id.ToString(), x.Name)), x => x.CategoryId.ToString())
                 .Select("supplierId", "Fornecedor", suppliers.Select(x => new AdminFilterOption(x.Id.ToString(), x.Name)), x => x.SupplierId?.ToString() ?? "")
@@ -107,13 +107,18 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
         [HttpGet("Fornecedores")]
         public async Task<IActionResult> Suppliers(int? categoryId)
         {
-            var rows = await db.Suppliers.AsNoTracking().Include(x => x.Category).Include(x => x.Lines).OrderBy(x => x.Name).ThenBy(x => x.Id).ToListAsync();
-            var categories = await db.PlanningCategories.AsNoTracking().OrderBy(x => x.Name).ToListAsync();
-            var filtered = new AdminListFilters<Supplier>(this, rows, "Nome, contacto, email ou notas", x => $"{x.Name} {x.Contact} {x.Phone} {x.Email} {x.Website} {x.Notes}")
-                .Select("categoryId", "Categoria", categories.Select(x => new AdminFilterOption(x.Id.ToString(), x.Name)), x => x.CategoryId.ToString())
-                .Select("status", "Estado", States(Supplier.States), x => x.Status)
-                .Select("linked", "Com linhas de orçamento", YesNo, x => Flag(x.Lines.Any())).Results();
-            return await Page("Suppliers", filtered, categoryId);
+            var page = new AdminQueryPage<Supplier>(this, db.Suppliers.AsNoTracking(), "Nome, contacto, email ou notas");
+            var categories = await db.PlanningCategories.OrderBy(x => x.Name)
+                .Select(x => new { x.Id, x.Name }).ToListAsync(page.Cancellation);
+            page.Select("categoryId", "Categoria", categories.Select(x => new AdminFilterOption(x.Id.ToString(), x.Name)),
+                value => { var key = int.Parse(value); return x => x.CategoryId == key; });
+            page.Select("status", "Estado", States(Supplier.States), value => x => x.Status == value);
+            page.Select("linked", "Com linhas de orçamento", YesNo, value => x => x.Lines.Any() == (value == "yes"));
+            var query = await page.BuildAsync(q => q.OrderBy(x => x.Name).ThenBy(x => x.Id),
+                x => new { x.Id, x.Name, x.Contact, x.Phone, x.Email, x.Website, x.Notes }, x => x.Id,
+                x => $"{x.Name} {x.Contact} {x.Phone} {x.Email} {x.Website} {x.Notes}");
+            var rows = await query.Select(x => new SupplierListRow(x, x.Category!.Name, x.Lines.Count)).ToListAsync(page.Cancellation);
+            return await Page("Suppliers", rows, categoryId);
         }
 
         [HttpGet("Fornecedores/Ficha/{id:int?}")]
@@ -280,7 +285,8 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
 
         private async Task<ViewResult> Page(string name, object model, int? categoryId = null)
         {
-            ViewBag.Categories = await db.PlanningCategories.AsNoTracking().OrderBy(x => x.Name).ToListAsync();
+            if (name is "Line" or "Supplier" or "Categories")
+                ViewBag.Categories = await db.PlanningCategories.AsNoTracking().OrderBy(x => x.Name).ToListAsync();
             ViewBag.CategoryFilter = categoryId;
             if (name == "Categories")
             {

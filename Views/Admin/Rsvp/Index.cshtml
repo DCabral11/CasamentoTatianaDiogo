@@ -1,4 +1,4 @@
-@model IEnumerable<Guest>
+@model IEnumerable<CasamentoTatianaDiogo.ViewModels.Admin.RsvpAdminRow>
 
 <div class="container py-5">
     <h1>Respostas de presença</h1>
@@ -37,18 +37,18 @@
             {
                 <tr>
                     <td>@g.DisplayName</td>
-                    <td>@g.Family?.Name</td>
+                    <td>@g.FamilyName</td>
                     <td>@(g.CurrentStatus switch { CasamentoTatianaDiogo.Models.Enums.RsvpStatus.Attending => "Vai estar presente", CasamentoTatianaDiogo.Models.Enums.RsvpStatus.NotAttending => "Não vai estar presente", _ => "Por responder" })</td>
                     <td class="text-end">
                         @if (g.IsPlusOne && g.CurrentStatus != CasamentoTatianaDiogo.Models.Enums.RsvpStatus.Pending)
                         {
                             <a class="btn btn-sm btn-outline-primary" href="/Admin/Rsvp/Details/@g.MainGuestId">Ver resposta principal</a>
                         }
-                        @if (g.RsvpResponses.Any())
+                        @if (g.HasResponse)
                         {
                             <a class="btn btn-sm btn-outline-primary" href="/Admin/Rsvp/Details/@g.Id"><i class="bi bi-receipt"></i> Consultar</a>
                             <form method="post" action="/Admin/Rsvp/Delete/@g.Id" class="d-inline" data-delete-confirmation data-delete-message="Queres mesmo apagar a resposta de «@g.DisplayName»? O convite voltará a ficar por responder.">
-                                <input type="hidden" name="rsvpVersion" value="@(g.Family!.RsvpVersion)" />
+                                <input type="hidden" name="rsvpVersion" value="@g.FamilyVersion" />
                                 @Html.AntiForgeryToken()
                                 <button type="submit" class="btn btn-sm btn-outline-danger">
                                     <i class="bi bi-trash3"></i> Apagar resposta

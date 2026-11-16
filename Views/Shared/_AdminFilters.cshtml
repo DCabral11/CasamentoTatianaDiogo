@@ -43,6 +43,21 @@
             <div class="alert alert-danger mt-3 mb-0" role="alert"><ul class="mb-0">@foreach (var error in filters.Errors) { <li>@error</li> }</ul></div>
         }
         <p class="mt-3 mb-0" role="status">@filters.Count de @filters.Total registos@(filters.Active ? " correspondem aos filtros." : ".")</p>
+        @if (filters.Pages > 1)
+        {
+            string PageUrl(int page)
+            {
+                var values = Context.Request.Query.Where(x => !x.Key.Equals("page", StringComparison.OrdinalIgnoreCase))
+                    .ToDictionary(x => x.Key, x => (string?)x.Value.ToString());
+                values["page"] = page.ToString();
+                return Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString(filters.Action, values);
+            }
+            <nav class="mt-2 d-flex flex-wrap align-items-center gap-3" aria-label="Páginas de resultados">
+                @if (filters.Page > 1) { <a rel="prev" href="@PageUrl(filters.Page - 1)">Anterior</a> }
+                <span>Página @filters.Page de @filters.Pages</span>
+                @if (filters.Page < filters.Pages) { <a rel="next" href="@PageUrl(filters.Page + 1)">Seguinte</a> }
+            </nav>
+        }
         @if (filters.Count == 0 && filters.Active && filters.Errors.Count == 0)
         {
             <p class="mt-2 mb-0">Nenhum resultado encontrado. Altera a pesquisa ou limpa os filtros.</p>

@@ -19,10 +19,26 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
     {
         public async Task<IActionResult> Index()
         {
-            var rows = await db.PhotoUploads.AsNoTracking().OrderByDescending(p => p.UploadedAt).ThenByDescending(p => p.Id).ToListAsync();
-            return View("~/Views/Admin/Photos/Index.cshtml", new AdminListFilters<PhotoUpload>(this, rows, "Convidado, ficheiro ou notas", x => $"{x.GuestName} {x.OriginalFileName} {x.Notes}")
-                .Select("type", "Formato", rows.Select(x => x.ContentType).Distinct().Order().Select(x => new AdminFilterOption(x, x)), x => x.ContentType)
-                .Dates("Envio (hora de Lisboa)", x => DateOnly.FromDateTime(clock.ToLocal(x.UploadedAt))).Results());
+            var page = new AdminQueryPage<PhotoUpload>(this, db.PhotoUploads.AsNoTracking(), "Convidado, ficheiro ou notas");
+            var types = await db.PhotoUploads.Select(x => x.ContentType).Distinct().OrderBy(x => x).ToListAsync(page.Cancellation);
+            page.Select("type", "Formato", States(types), value => p => p.ContentType == value);
+            var from = page.Date("from", "Envio (hora de Lisboa) desde");
+            var until = page.Date("until", "Envio (hora de Lisboa) até");
+            if (from > until) page.InvalidDates();
+            if (from.HasValue && from > DateOnly.MinValue)
+            {
+                var start = clock.StartOfDayUtc(from.Value);
+                page.Where(p => p.UploadedAt >= start);
+            }
+            if (until.HasValue && until < DateOnly.MaxValue)
+            {
+                var end = clock.StartOfDayUtc(until.Value.AddDays(1));
+                page.Where(p => p.UploadedAt < end);
+            }
+            var query = await page.BuildAsync(q => q.OrderByDescending(p => p.UploadedAt).ThenByDescending(p => p.Id),
+                p => new { p.Id, p.GuestName, p.OriginalFileName, p.Notes }, p => p.Id,
+                p => $"{p.GuestName} {p.OriginalFileName} {p.Notes}");
+            return View("~/Views/Admin/Photos/Index.cshtml", await query.ToListAsync(page.Cancellation));
         }
 
         public async Task<IActionResult> Settings() => View("~/Views/Admin/Photos/Settings.cshtml", await db.PhotoUploadSettings.FirstAsync());

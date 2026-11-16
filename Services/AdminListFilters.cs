@@ -79,16 +79,23 @@ public static class AdminFilterOptions
     public static List<AdminFilterOption> YesNo => Options(("yes", "Sim"), ("no", "Não"));
     public static List<AdminFilterOption> RsvpStates => Options(("Pending", "Por responder"), ("Attending", "Vai estar presente"), ("NotAttending", "Não vai estar presente"));
 
-    public static async Task<List<Guest>> GuestsAsync(Controller controller, ApplicationDbContext db, List<Guest> rows)
+    public static async Task<IQueryable<Guest>> GuestQueryAsync(Controller controller, ApplicationDbContext db,
+        Interfaces.IWeddingSettingsService settings, bool export = false)
     {
-        var families = await db.Families.AsNoTracking().OrderBy(x => x.Name).ThenBy(x => x.Id).ToListAsync();
-        var formats = await db.WeddingSettings.AsNoTracking().FirstOrDefaultAsync() ?? new WeddingSettings();
-        return new AdminListFilters<Guest>(controller, rows, "Nome, email, telefone ou família", g =>
-            $"{g.DisplayName} {g.FirstName} {g.LastName} {g.Email} {g.Phone} {ContactFormats.Phone(g.Phone, formats)?.Display} {ContactFormats.Email(g.Email, formats)?.Display} {g.Family?.Name} {g.Family?.GroupCode}")
-            .Select("familyId", "Família", families.Select(x => new AdminFilterOption(x.Id.ToString(), $"{x.Name} — {x.GroupCode ?? "#" + x.Id}")), g => g.FamilyId.ToString())
-            .Select("status", "Estado da resposta", RsvpStates, g => g.CurrentStatus.ToString())
-            .Select("kind", "Tipo de convidado", Options(("guest", "Convidado principal"), ("plus-one", "Plus-One")), g => g.IsPlusOne ? "plus-one" : "guest")
-            .Select("child", "É criança", YesNo, g => Flag(g.IsChild))
-            .Select("allowPlusOne", "Pode levar acompanhante", YesNo, g => Flag(g.AllowPlusOne)).Results();
+        var page = new AdminQueryPage<Guest>(controller, db.Guests.AsNoTracking(), "Nome, email, telefone ou família");
+        var families = await db.Families.OrderBy(f => f.Name).ThenBy(f => f.Id)
+            .Select(f => new { f.Id, f.Name, f.GroupCode }).ToListAsync(page.Cancellation);
+        page.Select("familyId", "Família", families.Select(f => new AdminFilterOption(f.Id.ToString(), $"{f.Name} — {f.GroupCode ?? "#" + f.Id}")),
+            value => { var key = int.Parse(value); return g => g.FamilyId == key; });
+        page.Select("status", "Estado da resposta", RsvpStates,
+            value => { var status = Enum.Parse<Models.Enums.RsvpStatus>(value); return g => g.CurrentStatus == status; });
+        page.Select("kind", "Tipo de convidado", Options(("guest", "Convidado principal"), ("plus-one", "Plus-One")),
+            value => g => g.IsPlusOne == (value == "plus-one"));
+        page.Select("child", "É criança", YesNo, value => g => g.IsChild == (value == "yes"));
+        page.Select("allowPlusOne", "Pode levar acompanhante", YesNo, value => g => g.AllowPlusOne == (value == "yes"));
+        var formats = page.Value("q").Length > 0 ? await settings.GetAsync() : null;
+        return await page.BuildAsync(q => q.OrderBy(g => g.DisplayName).ThenBy(g => g.Id),
+            g => new { g.Id, g.DisplayName, g.FirstName, g.LastName, g.Email, g.Phone, g.Family!.Name, g.Family.GroupCode },
+            g => g.Id, g => $"{g.DisplayName} {g.FirstName} {g.LastName} {g.Email} {g.Phone} {ContactFormats.Phone(g.Phone, formats!)?.Display} {ContactFormats.Email(g.Email, formats!)?.Display} {g.Name} {g.GroupCode}", export);
     }
 }

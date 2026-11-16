@@ -11,5 +11,7 @@ public class AdminFilterPanel
     public List<string> Errors { get; } = [];
     public int Total { get; set; }
     public int Count { get; set; }
+    public int Page { get; set; } = 1;
+    public int Pages { get; set; } = 1;
     public bool Active => Search.Length > 0 || Fields.Any(x => x.Value.Length > 0);
 }

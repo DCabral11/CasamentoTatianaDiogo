@@ -11,8 +11,10 @@ namespace CasamentoTatianaDiogo.Services
 
         public Task<WeddingSettings> GetAsync() => currentSettings ??= LoadSettingsAsync();
 
-        private async Task<WeddingSettings> LoadSettingsAsync() => await db.WeddingSettings.FirstOrDefaultAsync() ?? new WeddingSettings();
+        private async Task<WeddingSettings> LoadSettingsAsync() => await db.WeddingSettings.AsNoTracking().FirstOrDefaultAsync() ?? new WeddingSettings();
 
-        public async Task<PhotoUploadSettings> GetPhotoSettingsAsync() => await db.PhotoUploadSettings.FirstOrDefaultAsync() ?? new PhotoUploadSettings();
+        private Task<PhotoUploadSettings>? currentPhotoSettings;
+        public Task<PhotoUploadSettings> GetPhotoSettingsAsync() => currentPhotoSettings ??= ReadPhotoSettingsAsync();
+        private async Task<PhotoUploadSettings> ReadPhotoSettingsAsync() => await db.PhotoUploadSettings.AsNoTracking().FirstOrDefaultAsync() ?? new PhotoUploadSettings();
     }
 }

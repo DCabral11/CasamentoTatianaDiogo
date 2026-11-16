@@ -22,13 +22,19 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
         /// </summary>
         public async Task<IActionResult> Index()
         {
-            var rows = await db.Families.AsNoTracking().Include(f => f.Guests).OrderBy(f => f.Name).ThenBy(f => f.Id).ToListAsync();
-            var filtered = new AdminListFilters<Family>(this, rows, "Família, referência ou nome de convidado", f =>
-                    $"{f.Name} {f.GroupCode} {string.Join(' ', f.Guests.Select(g => g.DisplayName))}")
-                .Select("groupRsvp", "Permite resposta familiar", YesNo, f => Flag(f.AllowGroupRsvp))
-                .Select("status", "Situação das respostas", Options(("empty", "Sem convidados"), ("pending", "Com respostas em falta"), ("complete", "Todos responderam")),
-                    f => f.Guests.Count == 0 ? "empty" : f.Guests.Any(g => g.CurrentStatus == Models.Enums.RsvpStatus.Pending) ? "pending" : "complete").Results();
-            return View("~/Views/Admin/InvitationGroups/Index.cshtml", filtered);
+            var page = new AdminQueryPage<Family>(this, db.Families.AsNoTracking(), "Família, referência ou nome de convidado");
+            page.Select("groupRsvp", "Permite resposta familiar", YesNo, value => f => f.AllowGroupRsvp == (value == "yes"));
+            page.Select("status", "Situação das respostas", Options(("empty", "Sem convidados"), ("pending", "Com respostas em falta"), ("complete", "Todos responderam")),
+                value => value switch
+                {
+                    "empty" => f => !f.Guests.Any(),
+                    "pending" => f => f.Guests.Any(g => g.CurrentStatus == Models.Enums.RsvpStatus.Pending),
+                    _ => f => f.Guests.Any() && !f.Guests.Any(g => g.CurrentStatus == Models.Enums.RsvpStatus.Pending)
+                });
+            var query = await page.BuildAsync(q => q.OrderBy(f => f.Name).ThenBy(f => f.Id),
+                f => new { f.Id, f.Name, f.GroupCode, Names = f.Guests.OrderBy(g => g.Id).Select(g => g.DisplayName).ToList() },
+                f => f.Id, f => $"{f.Name} {f.GroupCode} {string.Join(' ', f.Names)}");
+            return View("~/Views/Admin/InvitationGroups/Index.cshtml", await query.ToListAsync(page.Cancellation));
         }
 
         /// <summary>

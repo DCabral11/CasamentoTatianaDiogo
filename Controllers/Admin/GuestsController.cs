@@ -21,12 +21,16 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
 {
     [Authorize(Roles = "Admin")]
     [Route("Admin/[controller]/[action]/{id?}")]
-    public class GuestsController(ApplicationDbContext db, IWebHostEnvironment environment, IAppMessageService messages) : Controller
+    public class GuestsController(ApplicationDbContext db, IWebHostEnvironment environment, IAppMessageService messages, IWeddingSettingsService settingsService) : Controller
     {
         /// <summary>
         /// Loads the list of guests.
         /// </summary>
-        public async Task<IActionResult> Index() => View("~/Views/Admin/Guests/Index.cshtml", await GuestsAsync(this, db, await db.Guests.AsNoTracking().Include(g => g.Family).Include(g => g.MainGuest).OrderBy(g => g.DisplayName).ToListAsync()));
+        public async Task<IActionResult> Index()
+        {
+            var query = await GuestQueryAsync(this, db, settingsService);
+            return View("~/Views/Admin/Guests/Index.cshtml", await query.Include(g => g.MainGuest).ToListAsync(HttpContext.RequestAborted));
+        }
 
         /// <summary>
         /// Handles the creation of a new guest.
@@ -74,7 +78,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
                 m.DisplayName = $"{m.FirstName} {m.LastName}";
                 ModelState.Remove(nameof(m.DisplayName));
             }
-            var settings = await db.WeddingSettings.AsNoTracking().FirstOrDefaultAsync() ?? new WeddingSettings();
+            var settings = await settingsService.GetAsync();
             m.Phone = ContactFormats.SavePhone(m.Phone, settings, e => ModelState.AddModelError(nameof(m.Phone), e));
             m.Email = ContactFormats.SaveEmail(m.Email, settings, 200, e => ModelState.AddModelError(nameof(m.Email), e));
             foreach (var error in await GuestCompanions.ValidateAsync(db, m))
@@ -151,9 +155,10 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
         /// </summary>
         public async Task<FileResult> ExportCsv()
         {
-            var rows = await GuestsAsync(this, db, await db.Guests.AsNoTracking().Include(g => g.Family).Include(g => g.MainGuest).OrderBy(g => g.DisplayName).ToListAsync());
+            var query = await GuestQueryAsync(this, db, settingsService, export: true);
+            var rows = await query.Include(g => g.Family).Include(g => g.MainGuest).ToListAsync(HttpContext.RequestAborted);
 
-            var formats = await db.WeddingSettings.AsNoTracking().FirstOrDefaultAsync() ?? new CasamentoTatianaDiogo.Models.WeddingSettings();
+            var formats = await settingsService.GetAsync();
             using var ms = new MemoryStream();
             using var sw = new StreamWriter(ms, Encoding.UTF8);
             using var csv = new CsvWriter(sw, CultureInfo.InvariantCulture);

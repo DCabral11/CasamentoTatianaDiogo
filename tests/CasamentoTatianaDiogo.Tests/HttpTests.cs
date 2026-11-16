@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -201,8 +202,10 @@ public class HttpTests
         private readonly bool schemaReady;
         private readonly IRsvpVerificationSender? verificationSender;
         private readonly TimeProvider? time;
-        public TestApplication(bool initializeSchema = true, IRsvpVerificationSender? verificationSender = null, TimeProvider? time = null)
+        private readonly DbCommandInterceptor? queries;
+        public TestApplication(bool initializeSchema = true, IRsvpVerificationSender? verificationSender = null, TimeProvider? time = null, DbCommandInterceptor? queries = null)
         {
+            this.queries = queries;
             connection.Open();
             schemaReady = initializeSchema;
             this.verificationSender = verificationSender;
@@ -238,7 +241,11 @@ public class HttpTests
                 services.RemoveAll<ApplicationDbContext>();
                 services.RemoveAll<DbContextOptions<ApplicationDbContext>>();
                 services.RemoveAll<IDbContextOptionsConfiguration<ApplicationDbContext>>();
-                services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(connection));
+                services.AddDbContext<ApplicationDbContext>(options =>
+                {
+                    options.UseSqlite(connection);
+                    if (queries != null) options.AddInterceptors(queries);
+                });
                 services.RemoveAll<IGoogleDriveService>();
                 services.AddSingleton<IGoogleDriveService, HttpDrive>();
                 if (verificationSender != null)
