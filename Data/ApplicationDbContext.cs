@@ -26,6 +26,7 @@ namespace CasamentoTatianaDiogo.Data
         public DbSet<Guest> Guests => Set<Guest>();
         public DbSet<PlusOne> PlusOnes => Set<PlusOne>();
         public DbSet<RsvpResponse> RsvpResponses => Set<RsvpResponse>();
+        public DbSet<RsvpChange> RsvpChanges => Set<RsvpChange>();
         public DbSet<PhotoUploadSettings> PhotoUploadSettings => Set<PhotoUploadSettings>();
         public DbSet<PhotoUpload> PhotoUploads => Set<PhotoUpload>();
         public DbSet<SiteContent> SiteContents => Set<SiteContent>();
@@ -87,6 +88,8 @@ namespace CasamentoTatianaDiogo.Data
             builder.Entity<PlusOne>().HasIndex(x => x.CompanionGuestId).IsUnique();
 
             builder.Entity<RsvpResponse>().HasIndex(x => new { x.GuestId, x.SubmittedAt });
+            builder.Entity<RsvpChange>().HasIndex(x => new { x.GuestId, x.ChangedAt, x.Id });
+            builder.Entity<RsvpChange>().HasIndex(x => new { x.ChangedAt, x.Id });
             builder.Entity<RsvpResponse>().HasOne(x => x.Guest).WithMany(x => x.RsvpResponses).HasForeignKey(x => x.GuestId).OnDelete(DeleteBehavior.Cascade);
             builder.Entity<RsvpResponse>().HasOne(x => x.PlusOne).WithMany().HasForeignKey(x => x.PlusOneId).OnDelete(DeleteBehavior.NoAction);
 

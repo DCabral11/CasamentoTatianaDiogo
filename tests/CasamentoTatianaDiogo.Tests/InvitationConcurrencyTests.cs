@@ -16,6 +16,7 @@ public class InvitationConcurrencyTests
     {
         using var app = new HttpTests.TestApplication();
         using var client = app.Client();
+        Assert.Equal(HttpStatusCode.Redirect, (await client.GetAsync("/Admin/Rsvp/History")).StatusCode);
         using var scope = app.Services.CreateScope();
         var services = scope.ServiceProvider;
         await services.GetRequiredService<RoleManager<IdentityRole>>().CreateAsync(new IdentityRole("Admin"));
@@ -51,11 +52,19 @@ public class InvitationConcurrencyTests
         { ["rsvpVersion"] = v.ToString(), ["__RequestVerificationToken"] = csrf }));
         await Delete(version);
         Assert.Single(await db.RsvpResponses.ToListAsync());
+        Assert.Empty(await db.RsvpChanges.ToListAsync());
         var currentVersion = await db.Families.AsNoTracking().Select(x => x.RsvpVersion).SingleAsync();
         var list = await client.GetStringAsync("/Admin/Rsvp/Index");
         Assert.Contains(currentVersion.ToString(), list);
         await Delete(currentVersion);
         Assert.Empty(await db.RsvpResponses.ToListAsync());
+        var entry = await db.RsvpChanges.SingleAsync();
+        Assert.Equal("Resposta apagada", entry.Operation);
+        Assert.Contains(new RsvpFieldChange("Presença", "Confirmada", null), entry.Fields);
+        var auditPage = WebUtility.HtmlDecode(await client.GetStringAsync($"/Admin/Rsvp/History/{guest.Id}"));
+        Assert.Contains("Resposta apagada", auditPage);
+        Assert.Contains("concurrency@example.test", auditPage);
+        Assert.Contains("Confirmada", auditPage);
         Assert.NotEqual(currentVersion, await db.Families.AsNoTracking().Select(x => x.RsvpVersion).SingleAsync());
     }
 }

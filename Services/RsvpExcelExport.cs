@@ -7,13 +7,22 @@ namespace CasamentoTatianaDiogo.Services;
 public static class RsvpExcelExport
 {
     public static byte[] Create(IReadOnlyList<Guest> guests,
-        IReadOnlyDictionary<int, RsvpInvitationContact> contacts, WeddingClock clock, int? familyId, WeddingSettings formats)
+        IReadOnlyDictionary<int, RsvpInvitationContact> contacts, WeddingClock clock, int? familyId, WeddingSettings formats,
+        IReadOnlyList<RsvpChange> changes)
     {
         using var workbook = new XLWorkbook();
         var summary = workbook.AddWorksheet("Resumo");
         var people = workbook.AddWorksheet("Convidados");
         var history = workbook.AddWorksheet("Respostas");
         var companions = workbook.AddWorksheet("Acompanhantes");
+        var audit = workbook.AddWorksheet("Alterações");
+        AddRow(audit, 1, "ID alteração", "ID convidado", "Convidado", "Família", "Data (hora local)", "Data (UTC)",
+            "Origem", "Operação", "Campo", "Antes", "Depois");
+        var auditRow = 2;
+        foreach (var entry in changes)
+            foreach (var field in entry.Fields)
+                AddRow(audit, auditRow++, entry.Id, entry.GuestId, entry.GuestName, entry.FamilyName, clock.ToLocal(entry.ChangedAt),
+                    entry.ChangedAt, entry.Actor, entry.Operation, field.Field, field.Before, field.After);
         AddRow(people, 1, "ID convidado", "Nome", "Apelido", "Nome apresentado", "ID família", "Família",
             "Referência do convite", "Resposta familiar permitida", "Notas da família", "Email do convidado",
             "Telefone", "Criança", "Acompanhante permitido", "Notas do convidado", "Estado atual",
@@ -93,7 +102,7 @@ public static class RsvpExcelExport
             guests.Count(g => !g.IsPlusOne && g.CurrentStatus == RsvpStatus.Attending) + confirmedCompanions);
         AddRow(summary, 13, "Registos de resposta guardados", historyRow - 2);
         AddRow(summary, 14, "Leitura do histórico",
-            "A folha Respostas inclui todos os registos guardados. Ao atualizar uma resposta, a aplicação substitui o conteúdo desse registo. As datas identificam o envio inicial e a última atualização.");
+            "A folha Respostas apresenta os registos guardados. A folha Alterações compara os valores antes e depois de cada alteração desde a ativação do histórico.");
         AddRow(summary, 15, "Dados dos convidados e convites",
             "Nomes, contactos, notas e associações familiares refletem o cadastro atual. Campos vazios correspondem a informação por preencher ou indisponível.");
         AddRow(summary, 16, "Acompanhantes",
@@ -103,6 +112,7 @@ public static class RsvpExcelExport
         Format(people, "ConvidadosRsvp", true);
         Format(history, "RespostasRsvp", true);
         Format(companions, "AcompanhantesRsvp", true);
+        Format(audit, "AlteracoesRsvp", true);
         people.SheetView.FreezeColumns(4);
         history.SheetView.FreezeColumns(3);
         companions.SheetView.FreezeColumns(4);

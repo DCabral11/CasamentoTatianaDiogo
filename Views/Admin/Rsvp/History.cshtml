@@ -1,0 +1,44 @@
+@model CasamentoTatianaDiogo.ViewModels.Admin.RsvpHistoryPage
+@inject CasamentoTatianaDiogo.Services.WeddingClock Clock
+@{ ViewData["Title"] = "Histórico de alterações do RSVP"; }
+<div class="container py-5">
+    <h1>Histórico de alterações do RSVP</h1>
+    @if (Model.GuestId.HasValue) { <h2 class="h4">@Model.GuestName</h2> }
+    <div class="d-flex flex-wrap gap-3 mb-4">
+        <a asp-action="Index">Voltar às respostas</a>
+        @if (Model.GuestId.HasValue) { <a asp-action="History" asp-route-id="">Ver todos os convidados</a> }
+        @if (Model.HasReceipt) { <a asp-action="Details" asp-route-id="@Model.GuestId">Consultar resposta atual</a> }
+    </div>
+    @if (Model.Entries.Count == 0)
+    {
+        <p>Ainda não há alterações registadas. O histórico começa com os envios e eliminações feitos após a ativação desta funcionalidade.</p>
+    }
+    else
+    {
+        <p>Hora local do casamento (@Clock.TimeZoneId).</p>
+        @foreach (var entry in Model.Entries)
+        {
+            <article class="elegant-card p-3 mb-3">
+                <h2 class="h5">@entry.Operation · @entry.GuestName</h2>
+                <p><time datetime="@DateTime.SpecifyKind(entry.ChangedAt, DateTimeKind.Utc).ToString("O")">@Clock.ToLocal(entry.ChangedAt).ToString("dd/MM/yyyy 'às' HH:mm:ss")</time>
+                    · @entry.Actor · Família @entry.FamilyName</p>
+                <div class="table-responsive"><table class="table align-middle mb-0">
+                    <thead><tr><th scope="col">Campo</th><th scope="col">Antes</th><th scope="col">Depois</th></tr></thead>
+                    <tbody>@foreach (var field in entry.Fields)
+                    {
+                        <tr><th scope="row">@field.Field</th><td class="import-value">@(field.Before ?? "—")</td><td class="import-value">@(field.After ?? "—")</td></tr>
+                    }</tbody>
+                </table></div>
+            </article>
+        }
+        @if (Model.Pages > 1)
+        {
+            <nav aria-label="Páginas do histórico" class="d-flex gap-3">
+                @if (Model.Page > 1) { <a asp-action="History" asp-route-id="@Model.GuestId" asp-route-page="@(Model.Page - 1)">Anterior</a> }
+                <span>Página @Model.Page de @Model.Pages</span>
+                @if (Model.Page < Model.Pages) { <a asp-action="History" asp-route-id="@Model.GuestId" asp-route-page="@(Model.Page + 1)">Seguinte</a> }
+            </nav>
+        }
+    }
+</div>
+@section Styles { <link rel="stylesheet" href="~/css/pages/admin-import.css" asp-append-version="true" /> }

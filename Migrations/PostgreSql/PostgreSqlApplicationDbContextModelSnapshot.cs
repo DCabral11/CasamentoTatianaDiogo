@@ -796,6 +796,53 @@ namespace CasamentoTatianaDiogo.Migrations.PostgreSql
                     b.ToTable("ReceptionTables");
                 });
 
+            modelBuilder.Entity("CasamentoTatianaDiogo.Models.RsvpChange", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Actor")
+                        .IsRequired()
+                        .HasMaxLength(320)
+                        .HasColumnType("character varying(320)");
+
+                    b.Property<DateTime>("ChangedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ChangesJson")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FamilyName")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
+
+                    b.Property<int>("GuestId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("GuestName")
+                        .IsRequired()
+                        .HasMaxLength(220)
+                        .HasColumnType("character varying(220)");
+
+                    b.Property<string>("Operation")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChangedAt", "Id");
+
+                    b.HasIndex("GuestId", "ChangedAt", "Id");
+
+                    b.ToTable("RsvpChanges");
+                });
+
             modelBuilder.Entity("CasamentoTatianaDiogo.Models.RsvpEditSession", b =>
                 {
                     b.Property<Guid>("Id")

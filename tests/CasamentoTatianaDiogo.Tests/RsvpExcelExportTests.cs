@@ -32,7 +32,7 @@ public class RsvpExcelExportTests
             ["email"] = admin.Email, ["password"] = "ExportTest!2027", ["__RequestVerificationToken"] = csrf
         }));
         using (var empty = new XLWorkbook(new MemoryStream(await client.GetByteArrayAsync("/Admin/Rsvp/ExportExcel"))))
-            Assert.Equal(4, empty.Worksheets.Count);
+            Assert.Equal(5, empty.Worksheets.Count);
 
         var db = services.GetRequiredService<ApplicationDbContext>();
         var guest = new Guest
@@ -55,12 +55,24 @@ public class RsvpExcelExportTests
                 SubmittedFromIp = "192.0.2.1", UserAgent = "Test browser" });
         await db.SaveChangesAsync();
 
+        var outsider = await db.Guests.SingleAsync(g => g.FamilyId != guest.FamilyId);
+        foreach (var person in new[] { guest, outsider })
+            db.RsvpChanges.Add(new() { GuestId = person.Id, GuestName = person.DisplayName, FamilyName = person.Family!.Name,
+                ChangedAt = submitted, Operation = "Resposta alterada", Actor = "Convite", ChangesJson = System.Text.Json.JsonSerializer.Serialize(
+                    new[] { new RsvpFieldChange("Mensagem", "=1+1", "Novo texto") }) });
+        await db.SaveChangesAsync();
         var response = await client.GetAsync("/Admin/Rsvp/ExportExcel?familyId=" + guest.FamilyId);
         Assert.Equal("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", response.Content.Headers.ContentType!.MediaType);
         using var workbook = new XLWorkbook(new MemoryStream(await response.Content.ReadAsByteArrayAsync()));
         var people = workbook.Worksheet("Convidados");
         var history = workbook.Worksheet("Respostas");
         var companions = workbook.Worksheet("Acompanhantes");
+        var audit = workbook.Worksheet("Alterações");
+        Assert.Equal(2, audit.LastRowUsed()!.RowNumber());
+        Assert.Equal("Ana Silva", audit.Cell(2, 3).GetString());
+        Assert.Equal("=1+1", audit.Cell(2, 10).GetString());
+        Assert.False(audit.Cell(2, 10).HasFormula);
+        Assert.Equal("Novo texto", audit.Cell(2, 11).GetString());
         Assert.Equal(2, people.LastRowUsed()!.RowNumber());
         Assert.Equal(3, history.LastRowUsed()!.RowNumber());
         Assert.Equal("convite@example.test", people.Cell(2, 16).GetString());

@@ -203,6 +203,10 @@ namespace CasamentoTatianaDiogo.Services
             if (bringingPlusOne && (plusOne == null || !guest.AllowPlusOne || guest.IsPlusOne))
                 return AppResult.Failure(ErrorCode.RsvpInvalidPlusOne, messages.Get(ErrorCode.RsvpInvalidPlusOne));
 
+            var binding = await db.RsvpInvitationContacts.AsNoTracking().SingleOrDefaultAsync(x => x.FamilyId == access.FamilyId);
+            if (binding != null && (binding.Channel != access.Channel || binding.NormalizedContact != access.Contact))
+                return AppResult.Failure(ErrorCode.AccessDenied, RsvpVerificationService.ContactUnavailable);
+
             var emailDetails = new List<RsvpEmailDetail>();
             var receiptPeople = new List<RsvpReceiptPerson>();
             var savedAt = time.GetUtcNow().UtcDateTime;
@@ -210,6 +214,7 @@ namespace CasamentoTatianaDiogo.Services
             foreach (var responseGuest in guestsToRespond)
             {
                 var response = latestResponses.GetValueOrDefault(responseGuest.Id);
+                var before = RsvpHistory.Snapshot(response, responseGuest.PlusOnes);
 
                 if (response == null)
                 {
@@ -252,6 +257,8 @@ namespace CasamentoTatianaDiogo.Services
                 response.UserAgent = userAgent;
 
                 responseGuest.CurrentStatus = response.Status;
+                RsvpHistory.Record(db, responseGuest, guest.Family!.Name, savedAt, $"Convite de {guest.DisplayName}",
+                    before, RsvpHistory.Snapshot(response, responseGuest.PlusOnes));
 
                 receiptPeople.Add(new(responseGuest.DisplayName, response.Status, response.DietaryRestrictions,
                     response.Message, response.MusicRequest,
@@ -271,9 +278,6 @@ namespace CasamentoTatianaDiogo.Services
                     response.PlusOneMusicRequest));
             }
 
-            var binding = await db.RsvpInvitationContacts.AsNoTracking().SingleOrDefaultAsync(x => x.FamilyId == access.FamilyId);
-            if (binding != null && (binding.Channel != access.Channel || binding.NormalizedContact != access.Contact))
-                return AppResult.Failure(ErrorCode.AccessDenied, RsvpVerificationService.ContactUnavailable);
             var bindingAdded = binding == null;
             if (bindingAdded)
                 db.RsvpInvitationContacts.Add(new RsvpInvitationContact

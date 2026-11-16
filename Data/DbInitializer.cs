@@ -90,6 +90,17 @@ namespace CasamentoTatianaDiogo.Data
                 await FaqSchema.UpgradeSqlServerAsync(db);
                 await GuestCompanionSchema.UpgradeSqlServerAsync(db);
                 await db.Database.ExecuteSqlRawAsync("""
+                    IF OBJECT_ID(N'RsvpChanges', N'U') IS NULL
+                    BEGIN
+                        CREATE TABLE RsvpChanges (Id bigint IDENTITY PRIMARY KEY, GuestId int NOT NULL,
+                            GuestName nvarchar(220) NOT NULL, FamilyName nvarchar(150) NOT NULL,
+                            ChangedAt datetime2 NOT NULL, Operation nvarchar(30) NOT NULL, Actor nvarchar(320) NOT NULL,
+                            ChangesJson nvarchar(max) NOT NULL);
+                        CREATE INDEX IX_RsvpChanges_GuestId_ChangedAt_Id ON RsvpChanges(GuestId, ChangedAt, Id);
+                        CREATE INDEX IX_RsvpChanges_ChangedAt_Id ON RsvpChanges(ChangedAt, Id);
+                    END;
+                    """);
+                await db.Database.ExecuteSqlRawAsync("""
                     IF OBJECT_ID(N'ReceptionTables', N'U') IS NULL
                     BEGIN
                         CREATE TABLE ReceptionTables (Id int IDENTITY PRIMARY KEY, Name nvarchar(100) NOT NULL,

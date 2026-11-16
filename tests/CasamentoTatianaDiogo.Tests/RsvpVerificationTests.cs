@@ -119,6 +119,15 @@ public class RsvpVerificationTests : IDisposable
             Assert.Single(db.RsvpInvitationContacts);
             Assert.Equal(RsvpStatus.NotAttending, (await db.Guests.FindAsync(guestId))!.CurrentStatus);
             Assert.Null((await db.RsvpResponses.SingleAsync(x => x.GuestId == guestId)).DietaryRestrictions);
+            var entries = await db.RsvpChanges.OrderBy(c => c.Id).ToListAsync();
+            Assert.Equal(3, entries.Count);
+            Assert.Contains(entries, c => c.GuestId == relativeId && c.Operation == "Resposta criada");
+            var update = Assert.Single(entries, c => c.Operation == "Resposta alterada");
+            Assert.Equal(guestId, update.GuestId);
+            Assert.Equal(time.GetUtcNow().UtcDateTime, update.ChangedAt);
+            Assert.Equal(2, update.Fields.Count);
+            Assert.Contains(new RsvpFieldChange("Restrições alimentares", "Sem glúten", null), update.Fields);
+            Assert.Contains(new RsvpFieldChange("Presença", "Confirmada", "Não vai estar presente"), update.Fields);
         }
     }
 
@@ -392,6 +401,7 @@ public class RsvpVerificationTests : IDisposable
         Assert.Equal("Vencedor", (await final.RsvpResponses.SingleAsync()).Message);
         Assert.Equal(RsvpStatus.Pending, (await final.Guests.SingleAsync(x => x.Id == relativeId)).CurrentStatus);
         Assert.Single(await final.RsvpVerificationChallenges.Where(x => x.ReceiptJson != null).ToListAsync());
+        Assert.Equal(guestId, (await final.RsvpChanges.SingleAsync()).GuestId);
         Assert.NotNull(await Verification(final).GetAccessAsync(losingToken, guestId));
     }
 

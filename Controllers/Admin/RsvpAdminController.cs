@@ -15,7 +15,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
 {
     [Authorize(Roles = "Admin")]
     [Route("Admin/Rsvp/[action]/{id?}")]
-    public class RsvpAdminController(ApplicationDbContext db, WeddingClock clock, IWeddingSettingsService settingsService) : Controller
+    public class RsvpAdminController(ApplicationDbContext db, WeddingClock clock, IWeddingSettingsService settingsService, TimeProvider time) : Controller
     {
         public async Task<IActionResult> Index()
         {
@@ -23,6 +23,24 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             var rows = await query.Select(g => new RsvpAdminRow(g.Id, g.DisplayName, g.Family!.Name,
                 g.Family.RsvpVersion, g.CurrentStatus, g.IsPlusOne, g.MainGuestId, g.RsvpResponses.Any())).ToListAsync(HttpContext.RequestAborted);
             return View("~/Views/Admin/Rsvp/Index.cshtml", rows);
+        }
+
+        [HttpGet, ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
+        public async Task<IActionResult> History(int? id, int page = 1)
+        {
+            const int size = 25;
+            var changes = db.RsvpChanges.AsNoTracking().AsQueryable();
+            if (id.HasValue) changes = changes.Where(change => change.GuestId == id);
+            var count = await changes.CountAsync();
+            var pages = count == 0 ? 1 : (count - 1) / size + 1;
+            page = Math.Clamp(page, 1, pages);
+            var entries = await changes.OrderByDescending(change => change.ChangedAt).ThenByDescending(change => change.Id)
+                .Skip((page - 1) * size).Take(size).ToListAsync();
+            var guest = id.HasValue ? await db.Guests.Where(g => g.Id == id)
+                .Select(g => new { g.DisplayName, HasReceipt = g.RsvpResponses.Any() }).SingleOrDefaultAsync() : null;
+            if (id.HasValue && guest == null && entries.Count == 0) return NotFound();
+            return View("~/Views/Admin/Rsvp/History.cshtml", new RsvpHistoryPage(id,
+                guest?.DisplayName ?? entries.FirstOrDefault()?.GuestName, guest?.HasReceipt == true, page, pages, entries));
         }
 
         [HttpGet, ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
@@ -36,7 +54,11 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
                 .Where(contact => !familyId.HasValue || contact.FamilyId == familyId)
                 .ToDictionaryAsync(contact => contact.FamilyId);
             var formats = await settingsService.GetAsync();
-            var bytes = RsvpExcelExport.Create(guests, contacts, clock, familyId, formats);
+            var changes = db.RsvpChanges.AsNoTracking().AsQueryable();
+            if (ViewData["AdminFilters"] is AdminFilterPanel { Active: true })
+                changes = changes.Where(c => query.Select(g => g.Id).Contains(c.GuestId));
+            var audit = await changes.OrderByDescending(x => x.ChangedAt).ThenByDescending(x => x.Id).ToListAsync(HttpContext.RequestAborted);
+            var bytes = RsvpExcelExport.Create(guests, contacts, clock, familyId, formats, audit);
             return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 $"historico-rsvp-{clock.Now:yyyyMMdd-HHmm}.xlsx");
         }
@@ -61,7 +83,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
         {
             var guest = await db.Guests
                 .Include(g => g.Family)
-                .Include(g => g.RsvpResponses)
+                .Include(g => g.RsvpResponses).ThenInclude(r => r.PlusOne)
                 .FirstOrDefaultAsync(g => g.Id == id);
 
             if (guest == null)
@@ -78,6 +100,10 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             }
             else
             {
+                var at = time.GetUtcNow().UtcDateTime;
+                foreach (var response in guest.RsvpResponses)
+                    RsvpHistory.Record(db, guest, guest.Family.Name, at, $"Administração · {User.Identity?.Name}",
+                        RsvpHistory.Snapshot(response, guest.PlusOnes), []);
                 db.RsvpResponses.RemoveRange(guest.RsvpResponses);
                 guest.CurrentStatus = RsvpStatus.Pending;
                 foreach (var companion in await db.Guests.Where(g => g.MainGuestId == guest.Id).ToListAsync())

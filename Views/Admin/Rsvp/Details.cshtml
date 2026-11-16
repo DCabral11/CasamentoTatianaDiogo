@@ -1,5 +1,6 @@
 @inject CasamentoTatianaDiogo.Services.Interfaces.IWeddingSettingsService ContactSettings
 @model RsvpResponse
+@inject CasamentoTatianaDiogo.Services.WeddingClock Clock
 @{
     ViewData["Title"] = "Recibo de resposta";
     var attendance = Model.Status == CasamentoTatianaDiogo.Models.Enums.RsvpStatus.Attending
@@ -17,6 +18,7 @@
         <a class="btn btn-outline-primary" href="/Admin/Rsvp/Index"><i class="bi bi-arrow-left"></i> Voltar</a>
     </div>
 
+    <p><a asp-action="History" asp-route-id="@Model.GuestId">Consultar histórico de alterações</a></p>
     <article class="admin-form">
         <dl class="row mb-0">
             <dt class="col-sm-4">Intenção de presença</dt><dd class="col-sm-8">@attendance</dd>
@@ -24,8 +26,8 @@
             {
                 <dt class="col-sm-4">@(verifiedContact.Channel == RsvpVerificationChannel.Email ? "Email verificado" : "Contacto anterior")</dt><dd class="col-sm-8">@(CasamentoTatianaDiogo.Services.ContactFormats.Email(verifiedContact.NormalizedContact, await ContactSettings.GetAsync())?.Display ?? verifiedContact.NormalizedContact)</dd>
             }
-            <dt class="col-sm-4">Enviada em</dt><dd class="col-sm-8">@Model.SubmittedAt.ToLocalTime().ToString("dd/MM/yyyy 'às' HH:mm")</dd>
-            @if (Model.UpdatedAt.HasValue) { <dt class="col-sm-4">Atualizada em</dt><dd class="col-sm-8">@Model.UpdatedAt.Value.ToLocalTime().ToString("dd/MM/yyyy 'às' HH:mm")</dd> }
+            <dt class="col-sm-4">Enviada em</dt><dd class="col-sm-8">@Clock.ToLocal(Model.SubmittedAt).ToString("dd/MM/yyyy 'às' HH:mm")</dd>
+            @if (Model.UpdatedAt.HasValue) { <dt class="col-sm-4">Atualizada em</dt><dd class="col-sm-8">@Clock.ToLocal(Model.UpdatedAt.Value).ToString("dd/MM/yyyy 'às' HH:mm")</dd> }
             @if (!string.IsNullOrWhiteSpace(Model.DietaryRestrictions)) { <dt class="col-sm-4">Restrições alimentares</dt><dd class="col-sm-8">@Model.DietaryRestrictions</dd> }
             @if (!string.IsNullOrWhiteSpace(Model.MusicRequest)) { <dt class="col-sm-4">Sugestão musical</dt><dd class="col-sm-8">@Model.MusicRequest</dd> }
             @if (!string.IsNullOrWhiteSpace(Model.Message)) { <dt class="col-sm-4">Mensagem</dt><dd class="col-sm-8">@Model.Message</dd> }
