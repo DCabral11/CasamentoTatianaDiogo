@@ -765,6 +765,37 @@ namespace CasamentoTatianaDiogo.Migrations.PostgreSql
                     b.ToTable("PlusOnes");
                 });
 
+            modelBuilder.Entity("CasamentoTatianaDiogo.Models.ReceptionTable", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("MapColumn")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MapRow")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<Guid>("Revision")
+                        .IsConcurrencyToken()
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MapRow", "MapColumn")
+                        .IsUnique();
+
+                    b.ToTable("ReceptionTables");
+                });
+
             modelBuilder.Entity("CasamentoTatianaDiogo.Models.RsvpEditSession", b =>
                 {
                     b.Property<Guid>("Id")
@@ -965,6 +996,23 @@ namespace CasamentoTatianaDiogo.Migrations.PostgreSql
                     b.ToTable("RsvpVerificationLimits");
                 });
 
+            modelBuilder.Entity("CasamentoTatianaDiogo.Models.SeatAssignment", b =>
+                {
+                    b.Property<int>("GuestId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SeatId")
+                        .IsConcurrencyToken()
+                        .HasColumnType("integer");
+
+                    b.HasKey("GuestId");
+
+                    b.HasIndex("SeatId")
+                        .IsUnique();
+
+                    b.ToTable("SeatAssignments");
+                });
+
             modelBuilder.Entity("CasamentoTatianaDiogo.Models.SiteContent", b =>
                 {
                     b.Property<int>("Id")
@@ -1048,6 +1096,28 @@ namespace CasamentoTatianaDiogo.Migrations.PostgreSql
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Suppliers");
+                });
+
+            modelBuilder.Entity("CasamentoTatianaDiogo.Models.TableSeat", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Number")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TableId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TableId", "Number")
+                        .IsUnique();
+
+                    b.ToTable("TableSeats");
                 });
 
             modelBuilder.Entity("CasamentoTatianaDiogo.Models.TimelineEvent", b =>
@@ -1495,6 +1565,21 @@ namespace CasamentoTatianaDiogo.Migrations.PostgreSql
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("CasamentoTatianaDiogo.Models.SeatAssignment", b =>
+                {
+                    b.HasOne("CasamentoTatianaDiogo.Models.Guest", null)
+                        .WithOne()
+                        .HasForeignKey("CasamentoTatianaDiogo.Models.SeatAssignment", "GuestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CasamentoTatianaDiogo.Models.TableSeat", null)
+                        .WithOne("Assignment")
+                        .HasForeignKey("CasamentoTatianaDiogo.Models.SeatAssignment", "SeatId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("CasamentoTatianaDiogo.Models.Supplier", b =>
                 {
                     b.HasOne("CasamentoTatianaDiogo.Models.PlanningCategory", "Category")
@@ -1504,6 +1589,15 @@ namespace CasamentoTatianaDiogo.Migrations.PostgreSql
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("CasamentoTatianaDiogo.Models.TableSeat", b =>
+                {
+                    b.HasOne("CasamentoTatianaDiogo.Models.ReceptionTable", null)
+                        .WithMany("Seats")
+                        .HasForeignKey("TableId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1574,9 +1668,19 @@ namespace CasamentoTatianaDiogo.Migrations.PostgreSql
                     b.Navigation("Moments");
                 });
 
+            modelBuilder.Entity("CasamentoTatianaDiogo.Models.ReceptionTable", b =>
+                {
+                    b.Navigation("Seats");
+                });
+
             modelBuilder.Entity("CasamentoTatianaDiogo.Models.Supplier", b =>
                 {
                     b.Navigation("Lines");
+                });
+
+            modelBuilder.Entity("CasamentoTatianaDiogo.Models.TableSeat", b =>
+                {
+                    b.Navigation("Assignment");
                 });
 #pragma warning restore 612, 618
         }

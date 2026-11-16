@@ -1,0 +1,25 @@
+@model CasamentoTatianaDiogo.ViewModels.Admin.GuestSeatForm
+@{ ViewData["Title"] = "Lugar do convidado"; }
+<div class="container py-5 narrow">
+    <h1>Lugar de @Model.Guest.Name</h1>
+    <p>@Model.Guest.Family · @Model.Guest.Response</p>
+    <form method="post" asp-action="Assign" asp-route-id="@Model.Guest.Id" class="admin-form">
+        <input name="originalSeatId" type="hidden" value="@Model.OriginalSeatId" />
+        <label for="seat-id" class="form-label">Mesa e lugar</label>
+        <select class="form-select mb-3" name="seatId" id="seat-id" required>
+            <option value="0" selected="@(Model.OriginalSeatId == 0)">Sem lugar atribuído</option>
+            @foreach (var group in Model.Options.GroupBy(s => new { s.Table, s.Row, s.Column }))
+            {
+                <optgroup label="@group.Key.Table · Fila @group.Key.Row, coluna @group.Key.Column">@foreach (var seat in group) {
+                    <option value="@seat.Id" selected="@(seat.Id == Model.OriginalSeatId)">@seat.Table · Lugar @seat.Number</option>
+                }</optgroup>
+            }
+        </select>
+        @if (Model.Options.All(s => s.Id == Model.OriginalSeatId))
+        {
+            <p>Não há outros lugares livres. Podes <a asp-action="Table">adicionar uma mesa</a> ou aumentar a capacidade de uma mesa existente.</p>
+        }
+        <button class="btn btn-primary" type="submit">Guardar lugar</button>
+        <a asp-action="Index" class="btn btn-link">Voltar ao plano</a>
+    </form>
+</div>

@@ -90,6 +90,26 @@ namespace CasamentoTatianaDiogo.Data
                 await FaqSchema.UpgradeSqlServerAsync(db);
                 await GuestCompanionSchema.UpgradeSqlServerAsync(db);
                 await db.Database.ExecuteSqlRawAsync("""
+                    IF OBJECT_ID(N'ReceptionTables', N'U') IS NULL
+                    BEGIN
+                        CREATE TABLE ReceptionTables (Id int IDENTITY PRIMARY KEY, Name nvarchar(100) NOT NULL,
+                            MapRow int NOT NULL, MapColumn int NOT NULL, Revision uniqueidentifier NOT NULL);
+                        CREATE UNIQUE INDEX IX_ReceptionTables_MapRow_MapColumn ON ReceptionTables(MapRow, MapColumn);
+                    END;
+                    IF OBJECT_ID(N'TableSeats', N'U') IS NULL
+                    BEGIN
+                        CREATE TABLE TableSeats (Id int IDENTITY PRIMARY KEY, TableId int NOT NULL REFERENCES ReceptionTables(Id) ON DELETE CASCADE,
+                            Number int NOT NULL);
+                        CREATE UNIQUE INDEX IX_TableSeats_TableId_Number ON TableSeats(TableId, Number);
+                    END;
+                    IF OBJECT_ID(N'SeatAssignments', N'U') IS NULL
+                    BEGIN
+                        CREATE TABLE SeatAssignments (GuestId int PRIMARY KEY REFERENCES Guests(Id) ON DELETE CASCADE,
+                            SeatId int NOT NULL REFERENCES TableSeats(Id));
+                        CREATE UNIQUE INDEX IX_SeatAssignments_SeatId ON SeatAssignments(SeatId);
+                    END;
+                    """);
+                await db.Database.ExecuteSqlRawAsync("""
                     IF COL_LENGTH(N'WeddingSettings', N'PhoneRegion') IS NULL
                         ALTER TABLE WeddingSettings ADD PhoneRegion nvarchar(2) NOT NULL DEFAULT N'PT';
                     IF COL_LENGTH(N'WeddingSettings', N'PhoneDisplay') IS NULL

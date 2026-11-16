@@ -34,6 +34,9 @@ namespace CasamentoTatianaDiogo.Data
         public DbSet<BudgetLine> BudgetLines => Set<BudgetLine>();
         public DbSet<MusicSection> MusicSections => Set<MusicSection>();
         public DbSet<MusicMoment> MusicMoments => Set<MusicMoment>();
+        public DbSet<ReceptionTable> ReceptionTables => Set<ReceptionTable>();
+        public DbSet<TableSeat> TableSeats => Set<TableSeat>();
+        public DbSet<SeatAssignment> SeatAssignments => Set<SeatAssignment>();
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -41,6 +44,16 @@ namespace CasamentoTatianaDiogo.Data
             builder.Entity<FaqItem>().HasIndex(x => new { x.IsPublished, x.DisplayOrder });
             builder.Entity<FaqPageSettings>().HasData(new FaqPageSettings());
             MusicProgramSchema.Configure(builder);
+            builder.Entity<ReceptionTable>().HasIndex(x => new { x.MapRow, x.MapColumn }).IsUnique();
+            builder.Entity<ReceptionTable>().Property(x => x.Revision).IsConcurrencyToken();
+            builder.Entity<ReceptionTable>().HasMany(x => x.Seats).WithOne().HasForeignKey(x => x.TableId);
+            builder.Entity<TableSeat>().HasIndex(x => new { x.TableId, x.Number }).IsUnique();
+            builder.Entity<SeatAssignment>().HasKey(x => x.GuestId);
+            builder.Entity<SeatAssignment>().HasOne<Guest>().WithOne().HasForeignKey<SeatAssignment>(x => x.GuestId)
+                .OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<TableSeat>().HasOne(x => x.Assignment).WithOne().HasForeignKey<SeatAssignment>(x => x.SeatId)
+                .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<SeatAssignment>().Property(x => x.SeatId).IsConcurrencyToken();
 
             builder.Entity<PlanningCategory>().HasIndex(x => x.NormalizedName).IsUnique();
             builder.Entity<Supplier>().HasOne(x => x.Category).WithMany().HasForeignKey(x => x.CategoryId).OnDelete(DeleteBehavior.Restrict);

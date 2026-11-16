@@ -1,0 +1,62 @@
+@model CasamentoTatianaDiogo.ViewModels.Admin.SeatingPlan
+@{
+    ViewData["Title"] = "Plano de mesas";
+    var capacity = Model.Tables.Sum(t => t.Seats.Count);
+}
+<div class="container py-5">
+    <h1>Plano de mesas</h1>
+    <div class="d-flex flex-wrap gap-2 my-3">
+        <a asp-action="Table" class="btn btn-primary">Adicionar mesa</a>
+        <a asp-action="Map" class="btn btn-outline-primary">Mapa da sala</a>
+        <a asp-action="Print" class="btn btn-outline-primary">Lista por mesa</a>
+        <a asp-action="Print" asp-route-alphabetical="true" class="btn btn-outline-primary">Lista alfabética</a>
+    </div>
+    <section aria-labelledby="tables-heading" class="my-4">
+        <h2 id="tables-heading">Mesas e capacidade</h2>
+        @if (Model.Tables.Count == 0)
+        {
+            <p>Adiciona a primeira mesa para começar a distribuir os lugares.</p>
+        }
+        else
+        {
+            <p>@Model.Places.Count de @capacity lugares ocupados · @(capacity - Model.Places.Count) livres</p>
+            <div class="table-responsive"><table class="table align-middle">
+                <thead><tr><th>Mesa</th><th>Ocupados</th><th>Capacidade</th><th>Livres</th><th>Posição no mapa</th><th></th></tr></thead>
+                <tbody>
+                @foreach (var table in Model.Tables)
+                {
+                    var occupied = table.Seats.Count(s => s.Assignment != null);
+                    <tr><th scope="row">@table.Name</th><td>@occupied</td><td>@table.Seats.Count</td><td>@(table.Seats.Count - occupied)</td>
+                        <td>Fila @table.MapRow · Coluna @table.MapColumn</td>
+                        <td><a asp-action="Table" asp-route-id="@table.Id" aria-label="Editar mesa @table.Name">Editar</a></td></tr>
+                }
+                </tbody>
+            </table></div>
+        }
+    </section>
+    <section aria-labelledby="seating-guests">
+        <h2 id="seating-guests">Distribuir lugares</h2>
+        <p>@Model.Guests.Count(g => g.Status == CasamentoTatianaDiogo.Models.Enums.RsvpStatus.Attending && !Model.Places.ContainsKey(g.Id)) convidados com presença confirmada ainda sem lugar.</p>
+        @if (Model.Guests.Count > 0)
+        {
+            <div class="mb-3" hidden id="seat-search-box">
+                <label for="seat-search" class="form-label">Pesquisar por convidado ou família</label>
+                <input type="search" id="seat-search" class="form-control" />
+            </div>
+            <div class="table-responsive"><table class="table align-middle">
+                <thead><tr><th>Convidado</th><th>Família</th><th>RSVP</th><th>Lugar</th><th></th></tr></thead>
+                <tbody id="seating-guests-list">
+                @foreach (var guest in Model.Guests)
+                {
+                    var place = Model.Places.GetValueOrDefault(guest.Id);
+                    <tr data-name="@guest.Name @guest.Family"><th scope="row">@guest.Name @if (guest.IsPlusOne) { <small>(acompanhante)</small> }</th>
+                        <td>@guest.Family</td><td>@guest.Response</td><td>@(place ?? "Sem lugar")</td>
+                        <td><a asp-action="Guest" asp-route-id="@guest.Id" aria-label="Gerir lugar de @guest.Name">@(place == null ? "Atribuir lugar" : "Alterar lugar")</a></td></tr>
+                }
+                </tbody>
+            </table></div>
+            <p id="seat-no-match" role="status" hidden>Nenhum convidado corresponde à pesquisa.</p>
+        }
+    </section>
+</div>
+@section Scripts { <script src="~/js/seating.js" asp-append-version="true"></script> }

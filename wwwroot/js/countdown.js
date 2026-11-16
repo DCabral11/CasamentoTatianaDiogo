@@ -24,10 +24,10 @@
         const m = Math.floor((s % 3600) / 60);
         const sec = s % 60;
 
-        el.querySelector('[data-days]').textContent = d;
-        el.querySelector('[data-hours]').textContent = h;
-        el.querySelector('[data-minutes]').textContent = m;
-        el.querySelector('[data-seconds]').textContent = sec;
+        el.querySelector('[data-days]').textContent = String(d).padStart(2, '0');
+        el.querySelector('[data-hours]').textContent = String(h).padStart(2, '0');
+        el.querySelector('[data-minutes]').textContent = String(m).padStart(2, '0');
+        el.querySelector('[data-seconds]').textContent = String(sec).padStart(2, '0');
     }
 
     tick();

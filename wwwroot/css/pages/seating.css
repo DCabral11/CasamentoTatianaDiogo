@@ -1,0 +1,33 @@
+.seating-scroll { overflow-x: auto; }
+.seating-floor {
+    min-width: 44rem;
+    padding: 1rem;
+    border: 1px solid var(--line);
+    border-radius: 1rem;
+}
+.seating-floor section + section { margin-top: 1.25rem; }
+.seating-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: .8rem;
+    align-items: start;
+}
+.seating-map-table {
+    padding: 1rem;
+    border: 2px solid var(--accent-ink);
+    border-radius: 1.6rem;
+    background: var(--secondary);
+    overflow-wrap: anywhere;
+}
+.seating-map-table summary { cursor: pointer; }
+.seating-map-table summary span { display: block; margin: .4rem 0; }
+.seating-places { padding-left: 1.6rem; }
+@media print {
+    body.admin-screen { background: white !important; color: black; }
+    .navbar, footer, .skip-link, .modal, .seating-print-tools, .feedback-card { display: none !important; }
+    .seating-list { width: 100%; max-width: none; padding: 0 !important; }
+    .seating-list th, .seating-list td { color: black; background: white; }
+    .seating-list h2, .seating-list section > p { break-after: avoid; }
+    .seating-list tr { break-inside: avoid; }
+    .seating-list thead { display: table-header-group; }
+}
