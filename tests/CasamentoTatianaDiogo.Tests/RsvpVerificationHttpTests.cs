@@ -36,7 +36,7 @@ public class RsvpVerificationHttpTests
         Assert.StartsWith("/Rsvp/Contact", denied.Headers.Location!.OriginalString);
         Assert.Equal(HttpStatusCode.BadRequest, (await client.PostAsync("/Rsvp/SendCode", Form(new() { ["GuestId"] = guest.ToString() }))).StatusCode);
         var contactHtml = await client.GetStringAsync($"/Rsvp/Contact/{guest}");
-        Assert.Contains("type=\"email\"", contactHtml);
+        Assert.Contains("inputmode=\"email\"", contactHtml);
         Assert.DoesNotContain("SMS", contactHtml);
         Assert.DoesNotContain("name=\"Channel\"", contactHtml);
         var csrf = await HttpTests.AntiforgeryToken(client, $"/Rsvp/Contact/{guest}");

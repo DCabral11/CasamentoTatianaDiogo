@@ -49,12 +49,25 @@
         </fieldset>
 
         <fieldset class="admin-fieldset">
+            <legend>Formato dos contactos</legend>
+            <div class="row g-3">
+                <div class="col-md-6"><label asp-for="PhoneRegion" class="form-label">País dos números sem indicativo</label><select asp-for="PhoneRegion" class="form-select">
+                    @foreach (var region in CasamentoTatianaDiogo.Services.ContactFormats.Regions()) { <option value="@region.Code">@region.Label</option> }
+                </select></div>
+                <div class="col-md-6"><label asp-for="PhoneDisplay" class="form-label">Apresentação do telefone</label><select asp-for="PhoneDisplay" class="form-select"><option value="international">Internacional, com espaços</option><option value="compact">Internacional, compacto</option><option value="national">Nacional para o país escolhido</option></select></div>
+                <div class="col-md-6"><label asp-for="ExtensionLabel" class="form-label">Etiqueta da extensão</label><select asp-for="ExtensionLabel" class="form-select"><option>ext.</option><option>ramal</option><option>x</option></select></div>
+                <div class="col-md-6"><label asp-for="EmailDomainDisplay" class="form-label">Apresentação do domínio do email</label><select asp-for="EmailDomainDisplay" class="form-select"><option value="unicode">Com caracteres internacionais</option><option value="ascii">ASCII (Punycode)</option></select></div>
+                <div class="col-md-6"><label asp-for="DefaultEmailDomain" class="form-label">Domínio de email predefinido (opcional)</label><input asp-for="DefaultEmailDomain" class="form-control" aria-describedby="email-domain-help" placeholder="exemplo.pt" /><div id="email-domain-help" class="form-text">Completa nomes sem domínio nos contactos da administração e nas importações. No RSVP, o convidado indica o endereço completo.</div></div>
+            </div>
+        </fieldset>
+        <fieldset class="admin-fieldset">
             <legend>Contactos</legend>
+            <partial name="_ContactFormatHelp" />
             <div class="row g-3">
                 <div class="col-md-6"><label asp-for="BridePhone" class="form-label">Telefone da noiva</label><input asp-for="BridePhone" type="tel" class="form-control" /></div>
                 <div class="col-md-6"><label asp-for="GroomPhone" class="form-label">Telefone do noivo</label><input asp-for="GroomPhone" type="tel" class="form-control" /></div>
-                <div class="col-md-6"><label asp-for="BrideEmail" class="form-label">E-mail da noiva</label><input asp-for="BrideEmail" type="email" class="form-control" /></div>
-                <div class="col-md-6"><label asp-for="GroomEmail" class="form-label">E-mail do noivo</label><input asp-for="GroomEmail" type="email" class="form-control" /></div>
+                <div class="col-md-6"><label asp-for="BrideEmail" class="form-label">E-mail da noiva</label><input asp-for="BrideEmail" type="text" inputmode="email" spellcheck="false" class="form-control" /></div>
+                <div class="col-md-6"><label asp-for="GroomEmail" class="form-label">E-mail do noivo</label><input asp-for="GroomEmail" type="text" inputmode="email" spellcheck="false" class="form-control" /></div>
             </div>
         </fieldset>
 

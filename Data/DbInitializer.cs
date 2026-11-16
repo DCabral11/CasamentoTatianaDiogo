@@ -89,6 +89,20 @@ namespace CasamentoTatianaDiogo.Data
                 await MusicProgramSchema.UpgradeSqlServerAsync(db);
                 await FaqSchema.UpgradeSqlServerAsync(db);
                 await GuestCompanionSchema.UpgradeSqlServerAsync(db);
+                await db.Database.ExecuteSqlRawAsync("""
+                    IF COL_LENGTH(N'WeddingSettings', N'PhoneRegion') IS NULL
+                        ALTER TABLE WeddingSettings ADD PhoneRegion nvarchar(2) NOT NULL DEFAULT N'PT';
+                    IF COL_LENGTH(N'WeddingSettings', N'PhoneDisplay') IS NULL
+                        ALTER TABLE WeddingSettings ADD PhoneDisplay nvarchar(max) NOT NULL DEFAULT N'international';
+                    IF COL_LENGTH(N'WeddingSettings', N'ExtensionLabel') IS NULL
+                        ALTER TABLE WeddingSettings ADD ExtensionLabel nvarchar(max) NOT NULL DEFAULT N'ext.';
+                    IF COL_LENGTH(N'WeddingSettings', N'EmailDomainDisplay') IS NULL
+                        ALTER TABLE WeddingSettings ADD EmailDomainDisplay nvarchar(max) NOT NULL DEFAULT N'unicode';
+                    IF COL_LENGTH(N'WeddingSettings', N'DefaultEmailDomain') IS NULL
+                        ALTER TABLE WeddingSettings ADD DefaultEmailDomain nvarchar(200) NULL;
+                    IF COL_LENGTH(N'Suppliers', N'Phone') IS NULL
+                        ALTER TABLE Suppliers ADD Phone nvarchar(50) NULL;
+                    """);
             }
 
             await Services.GuestCompanions.UpgradeExistingAsync(db);

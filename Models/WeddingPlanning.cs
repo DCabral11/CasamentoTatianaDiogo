@@ -18,7 +18,8 @@ public class Supplier
     public PlanningCategory? Category { get; set; }
     [Required(ErrorMessage = "Indica o nome do fornecedor."), StringLength(150)] public string Name { get; set; } = "";
     [StringLength(150)] public string? Contact { get; set; }
-    [EmailAddress(ErrorMessage = "Indica um email válido."), StringLength(254)] public string? Email { get; set; }
+    [StringLength(254)] public string? Email { get; set; }
+    [StringLength(50)] public string? Phone { get; set; }
     [Url(ErrorMessage = "Indica o endereço completo do site."), StringLength(500)] public string? Website { get; set; }
     [StringLength(40)] public string Status { get; set; } = States[0];
     [StringLength(2000)] public string? Notes { get; set; }

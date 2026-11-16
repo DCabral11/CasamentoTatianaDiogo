@@ -1,4 +1,4 @@
-﻿using CasamentoTatianaDiogo.Data;
+using CasamentoTatianaDiogo.Data;
 using CasamentoTatianaDiogo.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +15,15 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(WeddingSettings m)
         {
+            if (!Services.ContactFormats.SupportedRegion(m.PhoneRegion))
+                ModelState.AddModelError(nameof(m.PhoneRegion), "Escolhe um país da lista.");
+            if (!string.IsNullOrWhiteSpace(m.DefaultEmailDomain) && Services.ContactFormats.Domain(m.DefaultEmailDomain) == null)
+                ModelState.AddModelError(nameof(m.DefaultEmailDomain), "Indica apenas o domínio, por exemplo exemplo.pt.");
+            m.DefaultEmailDomain = Services.ContactFormats.Domain(m.DefaultEmailDomain);
+            m.BridePhone = Services.ContactFormats.SavePhone(m.BridePhone, m, e => ModelState.AddModelError(nameof(m.BridePhone), e));
+            m.GroomPhone = Services.ContactFormats.SavePhone(m.GroomPhone, m, e => ModelState.AddModelError(nameof(m.GroomPhone), e));
+            m.BrideEmail = Services.ContactFormats.SaveEmail(m.BrideEmail, m, 200, e => ModelState.AddModelError(nameof(m.BrideEmail), e));
+            m.GroomEmail = Services.ContactFormats.SaveEmail(m.GroomEmail, m, 200, e => ModelState.AddModelError(nameof(m.GroomEmail), e));
             if (ViewModels.SiteTheme.NormalizeLogo(m.LogoPath) == null)
                 ModelState.AddModelError(nameof(m.LogoPath), "Indica um caminho de imagem ou um endereço HTTP ou HTTPS.");
             

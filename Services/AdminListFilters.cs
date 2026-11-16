@@ -82,8 +82,9 @@ public static class AdminFilterOptions
     public static async Task<List<Guest>> GuestsAsync(Controller controller, ApplicationDbContext db, List<Guest> rows)
     {
         var families = await db.Families.AsNoTracking().OrderBy(x => x.Name).ThenBy(x => x.Id).ToListAsync();
+        var formats = await db.WeddingSettings.AsNoTracking().FirstOrDefaultAsync() ?? new WeddingSettings();
         return new AdminListFilters<Guest>(controller, rows, "Nome, email, telefone ou família", g =>
-            $"{g.DisplayName} {g.FirstName} {g.LastName} {g.Email} {g.Phone} {g.Family?.Name} {g.Family?.GroupCode}")
+            $"{g.DisplayName} {g.FirstName} {g.LastName} {g.Email} {g.Phone} {ContactFormats.Phone(g.Phone, formats)?.Display} {ContactFormats.Email(g.Email, formats)?.Display} {g.Family?.Name} {g.Family?.GroupCode}")
             .Select("familyId", "Família", families.Select(x => new AdminFilterOption(x.Id.ToString(), $"{x.Name} — {x.GroupCode ?? "#" + x.Id}")), g => g.FamilyId.ToString())
             .Select("status", "Estado da resposta", RsvpStates, g => g.CurrentStatus.ToString())
             .Select("kind", "Tipo de convidado", Options(("guest", "Convidado principal"), ("plus-one", "Plus-One")), g => g.IsPlusOne ? "plus-one" : "guest")

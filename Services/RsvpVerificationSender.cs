@@ -24,6 +24,7 @@ public class RsvpVerificationSender(IConfiguration config) : IRsvpVerificationSe
         };
         using var smtp = new SmtpClient(config["RsvpEmail:Host"], config.GetValue("RsvpEmail:Port", 587))
         {
+            DeliveryFormat = contact.Any(c => c > 127) ? SmtpDeliveryFormat.International : SmtpDeliveryFormat.SevenBit,
             EnableSsl = config.GetValue("RsvpEmail:UseSsl", true), Timeout = 15000
         };
         if (!string.IsNullOrWhiteSpace(config["RsvpEmail:Username"]))

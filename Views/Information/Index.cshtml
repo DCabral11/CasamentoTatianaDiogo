@@ -1,4 +1,4 @@
-﻿@model InformationViewModel 
+@model InformationViewModel
 @{
     ViewData["Title"] = "Informações";
 
@@ -114,8 +114,8 @@
             <div class="elegant-card contact-card p-3 h-100">
                 <div class="contact-card-heading"><i class="bi bi-person-heart"></i><h4>@settings.BrideName</h4></div>
                 <div class="contact-details">
-                    @if (!string.IsNullOrWhiteSpace(settings.BridePhone)) { <a href="tel:@settings.BridePhone"><i class="bi bi-phone"></i><span>@settings.BridePhone</span></a> }
-                    @if (!string.IsNullOrWhiteSpace(settings.BrideEmail)) { <a href="mailto:@settings.BrideEmail"><i class="bi bi-envelope"></i><span>@settings.BrideEmail</span></a> }
+                    @if (CasamentoTatianaDiogo.Services.ContactFormats.Phone(settings.BridePhone, settings) is { } bridePhone) { <a href="@bridePhone.Link"><i class="bi bi-phone"></i><span>@bridePhone.Display</span></a> } else if (!string.IsNullOrWhiteSpace(settings.BridePhone)) { <span>@settings.BridePhone</span> }
+                    @if (CasamentoTatianaDiogo.Services.ContactFormats.Email(settings.BrideEmail, settings) is { } brideEmail) { <a href="@brideEmail.Link"><i class="bi bi-envelope"></i><span>@brideEmail.Display</span></a> } else if (!string.IsNullOrWhiteSpace(settings.BrideEmail)) { <span>@settings.BrideEmail</span> }
                 </div>
             </div>
         </div>
@@ -123,8 +123,8 @@
             <div class="elegant-card contact-card p-3 h-100">
                 <div class="contact-card-heading"><i class="bi bi-person-heart"></i><h4>@settings.GroomName</h4></div>
                 <div class="contact-details">
-                    @if (!string.IsNullOrWhiteSpace(settings.GroomPhone)) { <a href="tel:@settings.GroomPhone"><i class="bi bi-phone"></i><span>@settings.GroomPhone</span></a> }
-                    @if (!string.IsNullOrWhiteSpace(settings.GroomEmail)) { <a href="mailto:@settings.GroomEmail"><i class="bi bi-envelope"></i><span>@settings.GroomEmail</span></a> }
+                    @if (CasamentoTatianaDiogo.Services.ContactFormats.Phone(settings.GroomPhone, settings) is { } groomPhone) { <a href="@groomPhone.Link"><i class="bi bi-phone"></i><span>@groomPhone.Display</span></a> } else if (!string.IsNullOrWhiteSpace(settings.GroomPhone)) { <span>@settings.GroomPhone</span> }
+                    @if (CasamentoTatianaDiogo.Services.ContactFormats.Email(settings.GroomEmail, settings) is { } groomEmail) { <a href="@groomEmail.Link"><i class="bi bi-envelope"></i><span>@groomEmail.Display</span></a> } else if (!string.IsNullOrWhiteSpace(settings.GroomEmail)) { <span>@settings.GroomEmail</span> }
                 </div>
             </div>
         </div>

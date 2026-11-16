@@ -65,7 +65,7 @@ public class RsvpExcelExportTests
         Assert.Equal(3, history.LastRowUsed()!.RowNumber());
         Assert.Equal("convite@example.test", people.Cell(2, 16).GetString());
         Assert.Equal("Nota privada", people.Cell(2, 14).GetString());
-        Assert.Equal("+351912345678", people.Cell(2, 11).GetString());
+        Assert.Equal("+351 912 345 678", people.Cell(2, 11).GetString());
         Assert.Equal(12, history.Cell(2, 13).GetDateTime().Hour);
         Assert.Equal(11, history.Cell(2, 14).GetDateTime().Hour);
         Assert.Equal("Sim", history.Cell(2, 7).GetString());

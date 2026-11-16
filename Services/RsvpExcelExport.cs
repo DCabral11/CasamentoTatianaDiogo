@@ -7,7 +7,7 @@ namespace CasamentoTatianaDiogo.Services;
 public static class RsvpExcelExport
 {
     public static byte[] Create(IReadOnlyList<Guest> guests,
-        IReadOnlyDictionary<int, RsvpInvitationContact> contacts, WeddingClock clock, int? familyId)
+        IReadOnlyDictionary<int, RsvpInvitationContact> contacts, WeddingClock clock, int? familyId, WeddingSettings formats)
     {
         using var workbook = new XLWorkbook();
         var summary = workbook.AddWorksheet("Resumo");
@@ -39,6 +39,8 @@ public static class RsvpExcelExport
         var confirmedCompanions = 0;
         foreach (var guest in guests)
         {
+            var email = ContactFormats.Email(guest.Email, formats)?.Display ?? guest.Email;
+            var phone = ContactFormats.Phone(guest.Phone, formats)?.Display ?? guest.Phone;
             var responses = guest.RsvpResponses.OrderByDescending(r => r.SubmittedAt).ThenByDescending(r => r.Id).ToList();
             var latest = responses.FirstOrDefault();
             var contact = contacts.GetValueOrDefault(guest.FamilyId);
@@ -46,7 +48,7 @@ public static class RsvpExcelExport
                 confirmedCompanions++;
             AddRow(people, peopleRow++, guest.Id, guest.FirstName, guest.LastName, guest.DisplayName,
                 guest.FamilyId, guest.Family?.Name, guest.Family?.GroupCode, YesNo(guest.Family?.AllowGroupRsvp == true),
-                guest.Family?.Notes, guest.Email, guest.Phone, YesNo(guest.IsChild), YesNo(guest.AllowPlusOne),
+                guest.Family?.Notes, email, phone, YesNo(guest.IsChild), YesNo(guest.AllowPlusOne),
                 guest.Notes, Status(guest.CurrentStatus), contact?.NormalizedContact, Local(contact?.ConfirmedAt),
                 contact?.ConfirmedAt, responses.Count, latest?.Id, Local(latest?.SubmittedAt), Local(latest?.UpdatedAt),
                 latest?.DietaryRestrictions, latest?.Message, latest?.MusicRequest, YesNo(guest.IsPlusOne), guest.MainGuestId);
@@ -55,7 +57,7 @@ public static class RsvpExcelExport
             {
                 AddRow(history, historyRow++, response.Id, guest.Id, guest.DisplayName, guest.FamilyId,
                     guest.Family?.Name, guest.Family?.GroupCode, YesNo(response.Id == latest?.Id), Status(response.Status),
-                    Status(guest.CurrentStatus), guest.Email, guest.Phone, contact?.NormalizedContact,
+                    Status(guest.CurrentStatus), email, phone, contact?.NormalizedContact,
                     Local(response.SubmittedAt), response.SubmittedAt, Local(response.UpdatedAt), response.UpdatedAt,
                     response.DietaryRestrictions, response.Message, response.MusicRequest, YesNo(response.PlusOneAttending),
                     response.PlusOneId, response.PlusOne?.PlusOneFirstName, response.PlusOne?.PlusOneLastName,

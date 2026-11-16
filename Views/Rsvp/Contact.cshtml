@@ -37,7 +37,7 @@
         }
         <div class="mb-3">
             <label asp-for="Contact" class="form-label">O teu email</label>
-            <input asp-for="Contact" type="email" class="form-control" required aria-describedby="contact-help" autocomplete="email" spellcheck="false" placeholder="nome@exemplo.pt" />
+            <input asp-for="Contact" type="text" inputmode="email" class="form-control" required aria-describedby="contact-help" autocomplete="email" spellcheck="false" placeholder="nome@exemplo.pt" />
             <div id="contact-help" class="form-text">Cada email só pode confirmar um convite. Usa um endereço ao qual tenhas acesso.</div>
         </div>
         @if (!Model.EmailAvailable)

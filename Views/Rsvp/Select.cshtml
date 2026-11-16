@@ -1,3 +1,4 @@
+@inject CasamentoTatianaDiogo.Services.Interfaces.IWeddingSettingsService ContactSettings
 @model RsvpSelectionViewModel
 @using CasamentoTatianaDiogo.Models.Enums
 @using Microsoft.AspNetCore.Mvc.Rendering
@@ -15,7 +16,7 @@
 </section>
 
 <div class="container py-4 narrow rsvp-selection">
-    <div class="feedback-card feedback-card-success mb-3" role="status"><i class="bi bi-shield-check" aria-hidden="true"></i><span>Contacto verificado: @Model.VerifiedContact. Após a confirmação, usa este mesmo contacto para atualizar o convite.</span></div>
+    <div class="feedback-card feedback-card-success mb-3" role="status"><i class="bi bi-shield-check" aria-hidden="true"></i><span>Contacto verificado: @(CasamentoTatianaDiogo.Services.ContactFormats.Email(Model.VerifiedContact, await ContactSettings.GetAsync())?.Display ?? Model.VerifiedContact). Após a confirmação, usa este mesmo contacto para atualizar o convite.</span></div>
     @if (Model.HasExistingResponse)
     {
         <div class="feedback-card feedback-card-warning mb-3" role="status"><i class="bi bi-info-circle" aria-hidden="true"></i><span>Já existe uma resposta para este convidado. Seleciona a opção no fim do formulário para a atualizar.</span></div>

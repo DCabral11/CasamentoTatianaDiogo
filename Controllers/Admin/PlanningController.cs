@@ -109,7 +109,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
         {
             var rows = await db.Suppliers.AsNoTracking().Include(x => x.Category).Include(x => x.Lines).OrderBy(x => x.Name).ThenBy(x => x.Id).ToListAsync();
             var categories = await db.PlanningCategories.AsNoTracking().OrderBy(x => x.Name).ToListAsync();
-            var filtered = new AdminListFilters<Supplier>(this, rows, "Nome, contacto, email ou notas", x => $"{x.Name} {x.Contact} {x.Email} {x.Website} {x.Notes}")
+            var filtered = new AdminListFilters<Supplier>(this, rows, "Nome, contacto, email ou notas", x => $"{x.Name} {x.Contact} {x.Phone} {x.Email} {x.Website} {x.Notes}")
                 .Select("categoryId", "Categoria", categories.Select(x => new AdminFilterOption(x.Id.ToString(), x.Name)), x => x.CategoryId.ToString())
                 .Select("status", "Estado", States(Supplier.States), x => x.Status)
                 .Select("linked", "Com linhas de orçamento", YesNo, x => Flag(x.Lines.Any())).Results();
@@ -125,8 +125,11 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
         }
 
         [HttpPost("Fornecedores/Guardar"), ValidateAntiForgeryToken]
-        public async Task<IActionResult> SaveSupplier([Bind("Id,CategoryId,Name,Contact,Email,Website,Status,Notes,Price")] Supplier supplier)
+        public async Task<IActionResult> SaveSupplier([Bind("Id,CategoryId,Name,Contact,Phone,Email,Website,Status,Notes,Price")] Supplier supplier)
         {
+            var settings = await db.WeddingSettings.AsNoTracking().FirstOrDefaultAsync() ?? new WeddingSettings();
+            supplier.Phone = ContactFormats.SavePhone(supplier.Phone, settings, e => ModelState.AddModelError(nameof(supplier.Phone), e));
+            supplier.Email = ContactFormats.SaveEmail(supplier.Email, settings, 254, e => ModelState.AddModelError(nameof(supplier.Email), e));
             await ValidateCategory(supplier.CategoryId);
             ValidateAmount(nameof(supplier.Price), supplier.Price);
 
@@ -155,7 +158,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
                         (x.CategoryId == supplier.CategoryId || !x.Lines.Any()))
                     .ExecuteUpdateAsync(s => s.SetProperty(x => x.CategoryId, supplier.CategoryId)
                         .SetProperty(x => x.Name, supplier.Name).SetProperty(x => x.Contact, supplier.Contact)
-                        .SetProperty(x => x.Email, supplier.Email).SetProperty(x => x.Website, supplier.Website)
+                        .SetProperty(x => x.Phone, supplier.Phone).SetProperty(x => x.Email, supplier.Email).SetProperty(x => x.Website, supplier.Website)
                         .SetProperty(x => x.Status, supplier.Status).SetProperty(x => x.Price, supplier.Price)
                         .SetProperty(x => x.Notes, supplier.Notes));
                 

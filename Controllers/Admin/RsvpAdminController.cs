@@ -40,7 +40,8 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             var contacts = await db.RsvpInvitationContacts.AsNoTracking()
                 .Where(contact => !familyId.HasValue || contact.FamilyId == familyId)
                 .ToDictionaryAsync(contact => contact.FamilyId);
-            var bytes = RsvpExcelExport.Create(guests, contacts, clock, familyId);
+            var formats = await db.WeddingSettings.AsNoTracking().FirstOrDefaultAsync() ?? new CasamentoTatianaDiogo.Models.WeddingSettings();
+            var bytes = RsvpExcelExport.Create(guests, contacts, clock, familyId, formats);
             return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 $"historico-rsvp-{clock.Now:yyyyMMdd-HHmm}.xlsx");
         }
@@ -104,6 +105,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
         {
             var rows = await GuestsAsync(this, db, await db.Guests.AsNoTracking().Include(g => g.Family).OrderBy(g => g.DisplayName).ToListAsync());
 
+            var formats = await db.WeddingSettings.AsNoTracking().FirstOrDefaultAsync() ?? new CasamentoTatianaDiogo.Models.WeddingSettings();
             using var ms = new MemoryStream();
             using var sw = new StreamWriter(ms, Encoding.UTF8);
             using var csv = new CsvWriter(sw, CultureInfo.InvariantCulture);
@@ -113,8 +115,8 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
                 g.DisplayName,
                 Family = g.Family!.Name,
                 g.CurrentStatus,
-                g.Email,
-                g.Phone,
+                Email = ContactFormats.Email(g.Email, formats)?.Display ?? g.Email,
+                Phone = ContactFormats.Phone(g.Phone, formats)?.Display ?? g.Phone,
                 g.Notes
             }));
 

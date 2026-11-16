@@ -52,6 +52,12 @@ namespace CasamentoTatianaDiogo.Models
         
         [StringLength(200)] 
         public string? GroomEmail { get; set; }
+
+        [Required, StringLength(2)] public string PhoneRegion { get; set; } = "PT";
+        [Required, RegularExpression("international|compact|national")] public string PhoneDisplay { get; set; } = "international";
+        [Required, RegularExpression(@"ext\.|ramal|x")] public string ExtensionLabel { get; set; } = "ext.";
+        [Required, RegularExpression("unicode|ascii")] public string EmailDomainDisplay { get; set; } = "unicode";
+        [StringLength(200)] public string? DefaultEmailDomain { get; set; }
         
         public string? CoupleStory { get; set; }
         

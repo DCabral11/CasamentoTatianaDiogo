@@ -66,6 +66,7 @@ public class ExcelImportService(ApplicationDbContext db, IWebHostEnvironment env
     {
         var families = await db.Families.AsNoTracking().OrderBy(x => x.Id).ToListAsync();
         var guests = type == "guests" ? await db.Guests.AsNoTracking().OrderBy(x => x.Id).ToListAsync() : [];
+        var settings = type == "guests" ? await db.WeddingSettings.AsNoTracking().FirstOrDefaultAsync() ?? new WeddingSettings() : new WeddingSettings();
         var plan = new List<ImportPlanRow>();
         var targets = new HashSet<int>();
         var keys = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -118,7 +119,8 @@ public class ExcelImportService(ApplicationDbContext db, IWebHostEnvironment env
                 {
                     FirstName = Value("Nome"), LastName = Value("Apelido"),
                     DisplayName = Value("Nome apresentado") == "" ? $"{Value("Nome")} {Value("Apelido")}".Trim() : Value("Nome apresentado"),
-                    Email = Value("E-mail").NullIfWhiteSpace(), Phone = Value("Telefone").NullIfWhiteSpace(),
+                    Email = ContactFormats.SaveEmail(Value("E-mail"), settings, 200, row.Errors.Add),
+                    Phone = ContactFormats.SavePhone(Value("Telefone"), settings, row.Errors.Add),
                     FamilyId = row.FamilyId, AvatarFileName = avatar.NullIfWhiteSpace(), Notes = Value("Notas").NullIfWhiteSpace(),
                     AllowPlusOne = Boolean(Value("Permitir acompanhante"), false, "Permitir acompanhante", row.Errors),
                     IsChild = Boolean(Value("Criança"), false, "Criança", row.Errors)

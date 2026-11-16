@@ -179,7 +179,7 @@ public class ExcelImportTests
     private static Dictionary<string, string> GuestRow(string name, string last, string reference) => new()
         { ["Nome"] = name, ["Apelido"] = last, ["Referência da família"] = reference };
 
-    private static async Task Login(HttpTests.TestApplication app, HttpClient client, string email = "import@example.test")
+    internal static async Task Login(HttpTests.TestApplication app, HttpClient client, string email = "import@example.test")
     {
         using var scope = app.Services.CreateScope();
         var roles = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();

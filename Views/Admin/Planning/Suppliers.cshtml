@@ -1,3 +1,6 @@
+@inject CasamentoTatianaDiogo.Services.Interfaces.IWeddingSettingsService ContactSettings
+@using CasamentoTatianaDiogo.Services
+@{ var formats = await ContactSettings.GetAsync(); }
 @model List<Supplier>
 @{
     ViewData["Title"] = "Fornecedores";
@@ -21,7 +24,7 @@
             {
                 <tr>
                     <td>@supplier.Category!.Name</td><th scope="row"><a asp-action="SupplierForm" asp-route-id="@supplier.Id">@supplier.Name</a></th>
-                    <td>@supplier.Contact</td><td>@supplier.Email</td>
+                    <td>@(ContactFormats.Phone(supplier.Contact, formats)?.Display ?? supplier.Contact) @if (supplier.Phone != null) { <span class="d-block">@(ContactFormats.Phone(supplier.Phone, formats)?.Display ?? supplier.Phone)</span> }</td><td>@(ContactFormats.Email(supplier.Email, formats)?.Display ?? supplier.Email)</td>
                     <td>@if (supplier.Website != null) { <a href="@supplier.Website">@supplier.Website</a> }</td>
                     <td>@supplier.Status</td><td>@supplier.Notes</td><td class="text-nowrap">@(supplier.Price?.ToString("C2", pt) ?? "Por definir")</td>
                     <td>@if (supplier.Lines.Count > 0) { <a asp-action="Budget" asp-route-supplierId="@supplier.Id">Ver linhas (@supplier.Lines.Count)</a> }

@@ -8,7 +8,7 @@ public class RsvpContactViewModel
     public string GuestName { get; set; } = string.Empty;
     public string FamilyName { get; set; } = string.Empty;
     [Required(ErrorMessage = "Indica o email para receber o código.")]
-    [EmailAddress(ErrorMessage = "Indica um endereço de email válido."), StringLength(254)]
+    [StringLength(254)]
     public string Contact { get; set; } = string.Empty;
     public bool EmailAvailable { get; set; }
     public bool HasExistingContact { get; set; }

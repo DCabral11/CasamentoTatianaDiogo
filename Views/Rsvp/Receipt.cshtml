@@ -1,3 +1,4 @@
+@inject CasamentoTatianaDiogo.Services.Interfaces.IWeddingSettingsService ContactSettings
 @model RsvpReceiptViewModel
 @inject CasamentoTatianaDiogo.Services.WeddingClock Clock
 @{
@@ -16,7 +17,7 @@
         <dl class="receipt-details">
             <dt>Referência do recibo</dt><dd class="receipt-reference">@Model.Reference</dd>
             <dt>Data e hora do envio</dt><dd><time datetime="@Model.SavedAtUtc.ToString("O")">@Clock.ToLocal(Model.SavedAtUtc).ToString("dd/MM/yyyy 'às' HH:mm")</time> (@Clock.TimeZoneId)</dd>
-            <dt>Email verificado</dt><dd>@Model.VerifiedContact</dd>
+            <dt>Email verificado</dt><dd>@(CasamentoTatianaDiogo.Services.ContactFormats.Email(Model.VerifiedContact, await ContactSettings.GetAsync())?.Display ?? Model.VerifiedContact)</dd>
         </dl>
         <div class="row g-3 mt-1">
             <div class="col-6"><div class="receipt-total"><strong>@Model.Attending</strong><span>Presenças confirmadas<br /><small>Inclui acompanhantes</small></span></div></div>

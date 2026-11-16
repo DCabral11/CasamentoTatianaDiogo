@@ -1,3 +1,6 @@
+@inject CasamentoTatianaDiogo.Services.Interfaces.IWeddingSettingsService ContactSettings
+@using CasamentoTatianaDiogo.Services
+@{ var formats = await ContactSettings.GetAsync(); }
 @model IEnumerable<Guest>
 
 <div class="container py-5">
@@ -31,8 +34,8 @@
                     <td><span class="guest-avatar admin-guest-avatar" style="--avatar-scale:@item.AvatarScale.ToString(System.Globalization.CultureInfo.InvariantCulture);--avatar-position-x:@item.AvatarPositionX%;--avatar-position-y:@item.AvatarPositionY%;">@if (!string.IsNullOrWhiteSpace(item.AvatarFileName)) { <img src="@($"/images/guests/{System.Uri.EscapeDataString(item.AvatarFileName)}")" alt="" /> } else { <i class="bi bi-person-heart"></i> }</span></td>
                     <td>@item.DisplayName</td>
                     <td>@if (item.IsPlusOne) { <span>Plus-One de <a asp-action="Edit" asp-route-id="@item.MainGuestId">@item.MainGuest?.DisplayName</a></span> } else { <span>@(item.AllowPlusOne ? "Pode levar acompanhante" : "—")</span> }</td>
-                    <td>@item.Email</td>
-                    <td>@item.Phone</td>
+                    <td>@(ContactFormats.Email(item.Email, formats)?.Display ?? item.Email)</td>
+                    <td>@(ContactFormats.Phone(item.Phone, formats)?.Display ?? item.Phone)</td>
                     <td>@item.CurrentStatus</td>
                     <td>
                         <a class="btn btn-sm btn-outline-primary" href="/Admin/Guests/Edit/@item.Id"><i class="bi bi-pencil-square"></i> Editar</a>

@@ -21,10 +21,10 @@ namespace CasamentoTatianaDiogo.Models
         [Required, StringLength(220)]
         public string DisplayName { get; set; } = string.Empty;
 
-        [EmailAddress, StringLength(200)]
+        [StringLength(200)]
         public string? Email { get; set; }
 
-        [Phone, StringLength(50)]
+        [StringLength(50)]
         public string? Phone { get; set; }
 
         [StringLength(255)]

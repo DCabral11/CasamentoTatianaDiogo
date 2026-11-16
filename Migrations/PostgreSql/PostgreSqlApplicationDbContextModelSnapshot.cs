@@ -1026,6 +1026,10 @@ namespace CasamentoTatianaDiogo.Migrations.PostgreSql
                         .HasMaxLength(2000)
                         .HasColumnType("character varying(2000)");
 
+                    b.Property<string>("Phone")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
                     b.Property<decimal?>("Price")
                         .HasPrecision(14, 2)
                         .HasColumnType("numeric(14,2)");
@@ -1127,6 +1131,18 @@ namespace CasamentoTatianaDiogo.Migrations.PostgreSql
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("DefaultEmailDomain")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("EmailDomainDisplay")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ExtensionLabel")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("GroomEmail")
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
@@ -1152,6 +1168,15 @@ namespace CasamentoTatianaDiogo.Migrations.PostgreSql
                         .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("character varying(300)");
+
+                    b.Property<string>("PhoneDisplay")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PhoneRegion")
+                        .IsRequired()
+                        .HasMaxLength(2)
+                        .HasColumnType("character varying(2)");
 
                     b.Property<string>("PrimaryColor")
                         .IsRequired()

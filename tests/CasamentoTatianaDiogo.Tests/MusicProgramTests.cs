@@ -53,9 +53,13 @@ public class MusicProgramTests
         await Save("/Momento/Guardar", ("Id", psalm.Id.ToString()), ("SectionId", id), ("Name", "Primeira dança"), ("Song", "Canção escolhida"), ("DisplayOrder", "2"));
         var page = WebUtility.HtmlDecode(await client.GetStringAsync(root));
         Assert.True(page.IndexOf("Receção", StringComparison.Ordinal) < page.IndexOf("Cancioneiro Missa", StringComparison.Ordinal));
-        var firstGroup = page.Split("Cancioneiro Missa")[0];
+        var firstGroup = page.Split($"<section id=\"seccao-{id}\"")[1].Split("</section>")[0];
         Assert.Contains("Canção escolhida", firstGroup);
         Assert.True(firstGroup.IndexOf("Primeira dança", StringComparison.Ordinal) < firstGroup.IndexOf("Entrada", StringComparison.Ordinal));
+        var filtered = WebUtility.HtmlDecode(await client.GetStringAsync(root + $"?q=cancao&defined=yes&sectionId={id}"));
+        Assert.Contains("Canção escolhida", filtered);
+        Assert.DoesNotContain("Sabes Bem", filtered);
+        Assert.DoesNotContain(">Entrada</th>", filtered);
         var invalid = await Post(root + "/Momento/Guardar", ("SectionId", "9999"), ("Name", "Inválido"), ("DisplayOrder", "1"));
         Assert.Contains("Escolhe uma secção existente.", WebUtility.HtmlDecode(await invalid.Content.ReadAsStringAsync()));
         await Save("/Seccao/" + id + "/Eliminar");

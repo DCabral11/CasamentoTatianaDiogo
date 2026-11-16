@@ -1,3 +1,4 @@
+@inject CasamentoTatianaDiogo.Services.Interfaces.IWeddingSettingsService ContactSettings
 @model RsvpResponse
 @{
     ViewData["Title"] = "Recibo de resposta";
@@ -21,7 +22,7 @@
             <dt class="col-sm-4">Intenção de presença</dt><dd class="col-sm-8">@attendance</dd>
             @if (verifiedContact != null)
             {
-                <dt class="col-sm-4">@(verifiedContact.Channel == RsvpVerificationChannel.Email ? "Email verificado" : "Contacto anterior")</dt><dd class="col-sm-8">@verifiedContact.NormalizedContact</dd>
+                <dt class="col-sm-4">@(verifiedContact.Channel == RsvpVerificationChannel.Email ? "Email verificado" : "Contacto anterior")</dt><dd class="col-sm-8">@(CasamentoTatianaDiogo.Services.ContactFormats.Email(verifiedContact.NormalizedContact, await ContactSettings.GetAsync())?.Display ?? verifiedContact.NormalizedContact)</dd>
             }
             <dt class="col-sm-4">Enviada em</dt><dd class="col-sm-8">@Model.SubmittedAt.ToLocalTime().ToString("dd/MM/yyyy 'às' HH:mm")</dd>
             @if (Model.UpdatedAt.HasValue) { <dt class="col-sm-4">Atualizada em</dt><dd class="col-sm-8">@Model.UpdatedAt.Value.ToLocalTime().ToString("dd/MM/yyyy 'às' HH:mm")</dd> }

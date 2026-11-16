@@ -74,6 +74,9 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
                 m.DisplayName = $"{m.FirstName} {m.LastName}";
                 ModelState.Remove(nameof(m.DisplayName));
             }
+            var settings = await db.WeddingSettings.AsNoTracking().FirstOrDefaultAsync() ?? new WeddingSettings();
+            m.Phone = ContactFormats.SavePhone(m.Phone, settings, e => ModelState.AddModelError(nameof(m.Phone), e));
+            m.Email = ContactFormats.SaveEmail(m.Email, settings, 200, e => ModelState.AddModelError(nameof(m.Email), e));
             foreach (var error in await GuestCompanions.ValidateAsync(db, m))
                 ModelState.AddModelError(error.Field, error.Message);
             if (!await db.Families.AnyAsync(x => x.Id == m.FamilyId))
@@ -150,6 +153,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
         {
             var rows = await GuestsAsync(this, db, await db.Guests.AsNoTracking().Include(g => g.Family).Include(g => g.MainGuest).OrderBy(g => g.DisplayName).ToListAsync());
 
+            var formats = await db.WeddingSettings.AsNoTracking().FirstOrDefaultAsync() ?? new CasamentoTatianaDiogo.Models.WeddingSettings();
             using var ms = new MemoryStream();
             using var sw = new StreamWriter(ms, Encoding.UTF8);
             using var csv = new CsvWriter(sw, CultureInfo.InvariantCulture);
@@ -157,8 +161,8 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             csv.WriteRecords(rows.Select(g => new
             {
                 g.DisplayName,
-                g.Email,
-                g.Phone,
+                Email = ContactFormats.Email(g.Email, formats)?.Display ?? g.Email,
+                Phone = ContactFormats.Phone(g.Phone, formats)?.Display ?? g.Phone,
                 g.AllowPlusOne,
                 g.IsPlusOne,
                 Accompanies = g.MainGuest?.DisplayName,
