@@ -1334,6 +1334,9 @@ namespace CasamentoTatianaDiogo.Migrations.PostgreSql
                     b.Property<DateTime?>("WeddingDateTime")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<DateTime?>("WeddingEndDateTime")
+                        .HasColumnType("timestamp without time zone");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Id")

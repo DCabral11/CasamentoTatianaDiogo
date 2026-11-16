@@ -16,7 +16,7 @@ namespace CasamentoTatianaDiogo.Controllers
         {
             var wedding = await settings.GetAsync();
             if (clock.EventStartUtc(wedding.WeddingDateTime) is not DateTime start) return NotFound();
-            return File(WeddingCalendar.Create(wedding, start), "text/calendar; charset=utf-8", "casamento.ics");
+            return File(WeddingCalendar.Create(wedding, start, clock.EventStartUtc(wedding.WeddingEndDateTime)), "text/calendar; charset=utf-8", "casamento.ics");
         }
     }
 }

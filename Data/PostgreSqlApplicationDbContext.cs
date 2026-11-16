@@ -15,6 +15,7 @@ public class PostgreSqlApplicationDbContext(DbContextOptions<PostgreSqlApplicati
 
         // Wedding schedules are Lisbon wall-clock times. Audit timestamps remain UTC/timestamptz.
         builder.Entity<WeddingSettings>().Property(x => x.WeddingDateTime).HasColumnType("timestamp without time zone");
+        builder.Entity<WeddingSettings>().Property(x => x.WeddingEndDateTime).HasColumnType("timestamp without time zone");
         builder.Entity<TimelineEvent>().Property(x => x.EventDateTime).HasColumnType("timestamp without time zone");
         builder.Entity<PhotoUploadSettings>().Property(x => x.OpensAt).HasColumnType("timestamp without time zone");
         builder.Entity<PhotoUploadSettings>().Property(x => x.ClosesAt).HasColumnType("timestamp without time zone");

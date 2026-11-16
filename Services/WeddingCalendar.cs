@@ -7,7 +7,7 @@ namespace CasamentoTatianaDiogo.Services;
 
 internal static class WeddingCalendar
 {
-    public static byte[] Create(WeddingSettings settings, DateTime startUtc)
+    public static byte[] Create(WeddingSettings settings, DateTime startUtc, DateTime? endUtc)
     {
         var output = new StringBuilder();
         void Line(string text)
@@ -34,6 +34,7 @@ internal static class WeddingCalendar
         Line("UID:d286bdb0-f5b7-4e63-9f46-987a15c2d10b");
         Line("DTSTAMP:" + Timestamp(settings.UpdatedAt));
         Line("DTSTART:" + Timestamp(startUtc));
+        if (endUtc > startUtc) Line("DTEND:" + Timestamp(endUtc.Value));
         Line("SUMMARY:" + Escape($"Casamento de {settings.BrideName} e {settings.GroomName}"));
         var ceremony = WeddingTravel.Address(settings.CeremonyLocationName, settings.CeremonyAddress);
         var reception = WeddingTravel.Address(settings.ReceptionLocationName, settings.ReceptionAddress);

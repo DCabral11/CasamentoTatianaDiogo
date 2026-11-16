@@ -19,6 +19,28 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
     public class ContentController(ApplicationDbContext db) : Controller
     {
         private static readonly string[] TravelKeys = WeddingTravel.Topics.Select(topic => topic.Key).ToArray();
+        private static readonly string[] ManagedKeys = TravelKeys.Concat(WeddingPageMessages.Pages.SelectMany(p => p.Fields).Select(f => f.Key)).ToArray();
+
+        [HttpGet]
+        public async Task<IActionResult> PhaseMessages(string page = "Home")
+        {
+            var section = WeddingPageMessages.Find(page);
+            if (section == null) return NotFound();
+            ViewData["MessagePage"] = section;
+            var keys = section.Fields.Select(f => f.Key).ToArray();
+            var texts = await db.SiteContents.Where(x => keys.Contains(x.Key)).ToDictionaryAsync(x => x.Key, x => x.Value);
+            return View("~/Views/Admin/Content/PhaseMessages.cshtml", texts);
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> PhaseMessages(string page, Dictionary<string, string?> guidance)
+        {
+            var section = WeddingPageMessages.Find(page);
+            if (section == null) return NotFound();
+            ViewData["MessagePage"] = section;
+            var fields = section.Fields.ToDictionary(f => f.Key, f => $"{section.Title} · {f.Label}");
+            return await SaveTexts(fields, guidance, nameof(PhaseMessages), new { page }, "Mensagens guardadas.");
+        }
 
         [HttpGet]
         public async Task<IActionResult> Travel()
@@ -29,31 +51,37 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> Travel(Dictionary<string, string?> guidance)
+        public Task<IActionResult> Travel(Dictionary<string, string?> guidance) =>
+            SaveTexts(WeddingTravel.Topics.ToDictionary(t => t.Key, t => $"Informações · {t.Title}"), guidance,
+                nameof(Travel), null, "As informações práticas foram guardadas.");
+
+        private async Task<IActionResult> SaveTexts(Dictionary<string, string> fields, Dictionary<string, string?> guidance,
+            string action, object? route, string success)
         {
-            if (TravelKeys.Any(key => !guidance.ContainsKey(key)))
+            var keys = fields.Keys.ToArray();
+            if (keys.Any(key => !guidance.ContainsKey(key)))
                 return BadRequest();
 
-            var saved = await db.SiteContents.Where(x => TravelKeys.Contains(x.Key)).ToDictionaryAsync(x => x.Key);
-            foreach (var topic in WeddingTravel.Topics)
+            var saved = await db.SiteContents.Where(x => keys.Contains(x.Key)).ToDictionaryAsync(x => x.Key);
+            foreach (var (key, description) in fields)
             {
-                var value = guidance[topic.Key]?.Trim();
-                var text = saved.GetValueOrDefault(topic.Key);
+                var value = guidance[key]?.Trim();
+                var text = saved.GetValueOrDefault(key);
                 if (string.IsNullOrEmpty(value))
                 {
                     if (text != null) db.SiteContents.Remove(text);
                 }
                 else if (text != null) text.Value = value;
-                else db.SiteContents.Add(new SiteContent { Key = topic.Key, Description = $"Informações · {topic.Title}", Value = value });
+                else db.SiteContents.Add(new SiteContent { Key = key, Description = description, Value = value });
             }
             try { await db.SaveChangesAsync(); }
             catch (DbUpdateException)
             {
                 ModelState.AddModelError("", "Não foi possível guardar as indicações. Revê o texto e tenta novamente.");
-                return View("~/Views/Admin/Content/Travel.cshtml", guidance);
+                return View($"~/Views/Admin/Content/{action}.cshtml", guidance);
             }
-            TempData["Success"] = "As informações práticas foram guardadas.";
-            return RedirectToAction(nameof(Travel));
+            TempData["Success"] = success;
+            return RedirectToAction(action, route);
         }
 
         /// <summary>
@@ -61,7 +89,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
         /// </summary>
         public async Task<IActionResult> Index()
         {
-            var rows = await db.SiteContents.AsNoTracking().Where(x => !TravelKeys.Contains(x.Key))
+            var rows = await db.SiteContents.AsNoTracking().Where(x => !ManagedKeys.Contains(x.Key))
                 .OrderBy(x => x.Description).ThenBy(x => x.Id).ToListAsync();
             return View("~/Views/Admin/Content/Index.cshtml", new AdminListFilters<SiteContent>(this, rows, "Descrição, chave ou texto", x => $"{x.Description} {x.Key} {x.Value}")
                 .Select("html", "Conteúdo HTML", YesNo, x => Flag(x.IsHtml)).Results());

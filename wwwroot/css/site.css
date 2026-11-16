@@ -611,12 +611,16 @@ main :is(input, select, textarea, button, a, [tabindex]) { scroll-margin-top: 6r
 }
 
 .countdown {
+    /* Guests see this clock only until the ceremony begins. */
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     width: min(100%, 440px);
     gap: clamp(0.4rem, 2vw, 1.25rem);
     margin: 0;
 }
+
+[data-wedding-period] [hidden] { display: none !important; }
+.wedding-phase-message { white-space: pre-line; overflow-wrap: anywhere; }
 
 .countdown div,
 .elegant-card,

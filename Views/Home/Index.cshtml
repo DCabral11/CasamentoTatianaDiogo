@@ -21,15 +21,7 @@
                 <span class="couple-name couple-name-second"><span class="couple-ampersand">&amp;</span> @settings.GroomName</span>
             </h1>
 
-            @if (settings.WeddingDateTime.HasValue)
-            {
-                <div id="countdown" class="countdown" data-wedding-date="@settings.WeddingDateTime.Value.ToString("yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture)">
-                    <div><strong data-days>--</strong><span>Dias</span></div>
-                    <div><strong data-hours>--</strong><span>Horas</span></div>
-                    <div><strong data-minutes>--</strong><span>Mins.</span></div>
-                    <div><strong data-seconds>--</strong><span>Segs.</span></div>
-                </div>
-            }
+            <partial name="_WeddingPeriod" model='WeddingPageMessages.Find("Home")' />
 
         </div>
 
@@ -118,7 +110,6 @@
 }
 
 @section Scripts {
-    <script src="~/js/countdown.js" asp-append-version="true"></script>
     @if (Model.CarouselImages.Count > 1)
     {
         <script src="~/js/story-carousel.js" asp-append-version="true"></script>

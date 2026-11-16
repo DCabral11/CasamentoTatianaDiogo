@@ -24,6 +24,8 @@ namespace CasamentoTatianaDiogo.Data
                 await db.Database.ExecuteSqlRawAsync("""
                     IF COL_LENGTH(N'[WeddingSettings]', N'RsvpDeadline') IS NULL
                         ALTER TABLE [WeddingSettings] ADD [RsvpDeadline] date NULL;
+                    IF COL_LENGTH(N'[WeddingSettings]', N'WeddingEndDateTime') IS NULL
+                        ALTER TABLE [WeddingSettings] ADD [WeddingEndDateTime] datetime2 NULL;
                     IF COL_LENGTH(N'[WeddingSettings]', N'SpotifyTrackUrl') IS NULL
                         ALTER TABLE [WeddingSettings] ADD [SpotifyTrackUrl] nvarchar(500) NULL;
                     IF COL_LENGTH(N'[RsvpResponses]', N'PlusOneDietaryRestrictions') IS NULL

@@ -7,6 +7,7 @@ namespace CasamentoTatianaDiogo.Models
         public int Id { get; set; }
 
         public DateTime? WeddingDateTime { get; set; }
+        public DateTime? WeddingEndDateTime { get; set; }
 
         [Display(Name = "Data limite para confirmar presença")]
         public DateOnly? RsvpDeadline { get; set; }

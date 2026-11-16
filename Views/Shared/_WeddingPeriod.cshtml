@@ -1,0 +1,27 @@
+@model WeddingPageMessages
+@inject CasamentoTatianaDiogo.Services.WeddingClock Clock
+@inject CasamentoTatianaDiogo.Services.Interfaces.IWeddingSettingsService Settings
+@inject CasamentoTatianaDiogo.Services.Interfaces.ISiteContentService ContentTexts
+@{
+    var period = Clock.GetPeriod(await Settings.GetAsync());
+    var texts = await ContentTexts.GetAsync();
+    var messages = Model.Fields.ToDictionary(f => f.Phase, f => texts.GetValueOrDefault(f.Key, f.DefaultText));
+    var message = messages[period.Phase];
+    var home = Model.Controller == "Home";
+    var seconds = period.StartUtc is DateTime start ? Math.Max(0L, (long)Math.Ceiling((start - period.Now.UtcDateTime).TotalSeconds)) : 0;
+}
+<div data-wedding-period data-now="@period.Now.ToUnixTimeMilliseconds()"
+     data-start="@(period.StartUtc is DateTime s ? new DateTimeOffset(s).ToUnixTimeMilliseconds() : (long?)null)"
+     data-end="@(period.EndUtc is DateTime e ? new DateTimeOffset(e).ToUnixTimeMilliseconds() : (long?)null)"
+     data-before="@messages["Before"]" data-during="@messages["During"]" data-after="@messages["After"]">
+    @if (home && period.Phase == "Before" && period.StartUtc.HasValue)
+    {
+        <div id="countdown" class="countdown" role="timer" aria-label="Tempo até ao casamento">
+            <div><strong data-days>@((seconds / 86400).ToString("D2"))</strong><span>Dias</span></div>
+            <div><strong data-hours>@((seconds / 3600 % 24).ToString("D2"))</strong><span>Horas</span></div>
+            <div><strong data-minutes>@((seconds / 60 % 60).ToString("D2"))</strong><span>Mins.</span></div>
+            <div><strong data-seconds>@((seconds % 60).ToString("D2"))</strong><span>Segs.</span></div>
+        </div>
+    }
+    <p class="wedding-phase-message @(home ? "" : "container py-3 mb-0")" data-phase-message aria-live="polite" hidden="@(message.Length == 0)">@message</p>
+</div>

@@ -8,13 +8,19 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
 {
     [Authorize(Roles = "Admin")]
     [Route("Admin/[controller]/[action]/{id?}")]
-    public class SettingsController(ApplicationDbContext db) : Controller
+    public class SettingsController(ApplicationDbContext db, Services.WeddingClock clock) : Controller
     {
         public async Task<IActionResult> Index() => View("~/Views/Admin/Settings/Index.cshtml", await db.WeddingSettings.FirstAsync());
 
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(WeddingSettings m)
         {
+            var start = clock.EventStartUtc(m.WeddingDateTime);
+            var end = clock.EventStartUtc(m.WeddingEndDateTime);
+            if (m.WeddingDateTime.HasValue && start == null)
+                ModelState.AddModelError(nameof(m.WeddingDateTime), $"Esta hora de início não existe no fuso {clock.TimeZoneId} devido à mudança da hora.");
+            if (m.WeddingEndDateTime.HasValue && (end == null || start == null || end <= start))
+                ModelState.AddModelError(nameof(m.WeddingEndDateTime), $"Indica uma hora de fim válida no fuso {clock.TimeZoneId}, posterior ao início.");
             if (!Services.ContactFormats.SupportedRegion(m.PhoneRegion))
                 ModelState.AddModelError(nameof(m.PhoneRegion), "Escolhe um país da lista.");
             if (!string.IsNullOrWhiteSpace(m.DefaultEmailDomain) && Services.ContactFormats.Domain(m.DefaultEmailDomain) == null)

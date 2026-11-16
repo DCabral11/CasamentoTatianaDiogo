@@ -13,6 +13,8 @@
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
     var isAdminScreen = Context.Request.Path.StartsWithSegments("/Admin");
     var isAdminDashboard = Context.Request.Path.StartsWithSegments("/Admin/Dashboard");
+    var messagePage = isAdminScreen ? null : WeddingPageMessages.Find(currentController);
+    if (messagePage?.Controller == "Home" && !Equals(ViewContext.RouteData.Values["action"], "Index")) { messagePage = null; }
 }
 
 <!DOCTYPE html>
@@ -94,6 +96,10 @@
                 </div>
             }
 
+            @if (messagePage != null && messagePage.Controller != "Home")
+            {
+                <partial name="_WeddingPeriod" model="messagePage" />
+            }
             @RenderBody()
         </main>
 
@@ -124,6 +130,10 @@
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
+        @if (messagePage != null)
+        {
+            <script src="~/js/countdown.js" asp-append-version="true"></script>
+        }
         @if (isAdminScreen)
         {
             <script src="~/js/admin-delete-confirmation.js" asp-append-version="true"></script>
