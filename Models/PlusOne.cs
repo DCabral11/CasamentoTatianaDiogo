@@ -1,4 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿#region References
+
+using System.ComponentModel.DataAnnotations;
+
+#endregion
 
 namespace CasamentoTatianaDiogo.Models
 {
@@ -10,9 +14,10 @@ namespace CasamentoTatianaDiogo.Models
 
         public Guest? MainGuest { get; set; }
 
-        // Retained internally to preserve RSVP references; managed through Guests.
         public int? CompanionGuestId { get; set; }
+
         public Guest? CompanionGuest { get; set; }
+
         public bool IsArchived { get; set; }
 
         [Required, StringLength(100)]
@@ -23,6 +28,5 @@ namespace CasamentoTatianaDiogo.Models
 
         [Required, StringLength(220)]
         public string PlusOneDisplayName { get; set; } = string.Empty;
-
     }
 }

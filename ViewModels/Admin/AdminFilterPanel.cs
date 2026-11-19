@@ -1,17 +1,33 @@
-namespace CasamentoTatianaDiogo.ViewModels.Admin;
-
-public record AdminFilterOption(string Value, string Label);
-public record AdminFilterField(string Name, string Label, string Value, IReadOnlyList<AdminFilterOption> Options, string Type = "select");
-public class AdminFilterPanel
+namespace CasamentoTatianaDiogo.ViewModels.Admin
 {
-    public string Search { get; set; } = "";
-    public string SearchLabel { get; set; } = "Pesquisar";
-    public string Action { get; set; } = "";
-    public List<AdminFilterField> Fields { get; } = [];
-    public List<string> Errors { get; } = [];
-    public int Total { get; set; }
-    public int Count { get; set; }
-    public int Page { get; set; } = 1;
-    public int Pages { get; set; } = 1;
-    public bool Active => Search.Length > 0 || Fields.Any(x => x.Value.Length > 0);
+    #region Filter Records Definition
+
+    public record AdminFilterOption(string Value, string Label);
+
+    public record AdminFilterField(string Name, string Label, string Value, IReadOnlyList<AdminFilterOption> Options, string Type = "select");
+
+    #endregion
+
+    public class AdminFilterPanel
+    {
+        public string Search { get; set; } = "";
+
+        public string SearchLabel { get; set; } = "Pesquisar";
+
+        public string Action { get; set; } = "";
+
+        public List<AdminFilterField> Fields { get; } = [];
+
+        public List<string> Errors { get; } = [];
+
+        public int Total { get; set; }
+
+        public int Count { get; set; }
+
+        public int Page { get; set; } = 1;
+
+        public int Pages { get; set; } = 1;
+
+        public bool Active => Search.Length > 0 || Fields.Any(x => x.Value.Length > 0);
+    }
 }

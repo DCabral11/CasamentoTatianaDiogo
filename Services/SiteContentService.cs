@@ -4,10 +4,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CasamentoTatianaDiogo.Services
 {
-    public class SiteContentService(ApplicationDbContext db) : ISiteContentService
+    public class SiteContentService(ApplicationDbContext db, PublicContentCache cache) : ISiteContentService
     {
         private Task<IReadOnlyDictionary<string, string>>? current;
-        public Task<IReadOnlyDictionary<string, string>> GetAsync() => current ??= ReadAsync();
+        public Task<IReadOnlyDictionary<string, string>> GetAsync() => current ??= cache.GetAsync("site-text", ReadAsync);
 
         private async Task<IReadOnlyDictionary<string, string>> ReadAsync()
         {

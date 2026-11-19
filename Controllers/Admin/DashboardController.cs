@@ -16,14 +16,46 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CasamentoTatianaDiogo.Controllers.Admin
 {
+    [Route("Admin/[action]")]
+    public class AdminController(SignInManager<ApplicationUser> signInManager, IAppMessageService messages) : Controller
+    {
+        [AllowAnonymous]
+        public IActionResult Login(string? returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+
+            return View("~/Views/Admin/Login.cshtml");
+        }
+
+        [AllowAnonymous, HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(string email, string password, string? returnUrl = null)
+        {
+            var result = await signInManager.PasswordSignInAsync(email, password, false, true);
+
+            if (result.Succeeded)
+                return LocalRedirect(returnUrl ?? "/Admin/Dashboard/Index");
+
+            ModelState.AddModelError("", messages.Get(ErrorCode.AdminLoginFailed));
+
+            return View("~/Views/Admin/Login.cshtml");
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
+        {
+            await signInManager.SignOutAsync();
+
+            return RedirectToAction("Index", "Home", new { area = "" });
+        }
+
+        [AllowAnonymous]
+        public IActionResult AccessDenied() => View("~/Views/Admin/AccessDenied.cshtml");
+    }
 
     [Authorize(Roles = "Admin")]
     [Route("Admin/[controller]/[action]/{id?}")]
     public class DashboardController(ApplicationDbContext db, WeddingClock clock) : Controller
     {
-        /// <summary>
-        /// Loads the dashboard page with the current wedding countdown information and other relevant information for the admin.
-        /// </summary>
         public async Task<IActionResult> Index()
         {
             var guests = await db.Guests.GroupBy(g => g.CurrentStatus).Select(group => new { Status = group.Key, Count = group.Count() }).ToDictionaryAsync(row => row.Status, row => row.Count);
@@ -55,55 +87,5 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
                 UploadedPhotos = await db.PhotoUploads.CountAsync()
             });
         }
-    }
-
-    [Route("Admin/[action]")]
-    public class AdminController(SignInManager<ApplicationUser> signInManager, IAppMessageService messages) : Controller
-    {
-        /// <summary>
-        /// Loads the login page for the admin section. 
-        /// If a return URL is provided, it will be passed to the view for redirection after successful login.
-        /// </summary>
-        [AllowAnonymous]
-        public IActionResult Login(string? returnUrl = null)
-        {
-            ViewData["ReturnUrl"] = returnUrl;
-
-            return View("~/Views/Admin/Login.cshtml");
-        }
-
-        /// <summary>
-        /// Handles the login request for the admin section.
-        /// </summary>
-        [AllowAnonymous, HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(string email, string password, string? returnUrl = null)
-        {
-            var r = await signInManager.PasswordSignInAsync(email, password, false, true);
-
-            if (r.Succeeded)
-                return LocalRedirect(returnUrl ?? "/Admin/Dashboard/Index");
-
-            ModelState.AddModelError("", messages.Get(ErrorCode.AdminLoginFailed));
-
-            return View("~/Views/Admin/Login.cshtml");
-        }
-
-        /// <summary>
-        /// Handles the logout request for the admin section, signing out the current user and redirecting to the home page.
-        /// </summary>
-        [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> Logout()
-        {
-            await signInManager.SignOutAsync();
-
-            return RedirectToAction("Index", "Home", new { area = "" });
-        }
-
-        /// <summary>
-        /// Handles the access denied scenario for the admin section, returning a view that informs the user they do not have permission to access the requested resource.
-        /// </summary>
-        /// <returns></returns>
-        [AllowAnonymous]
-        public IActionResult AccessDenied() => View("~/Views/Admin/AccessDenied.cshtml");
     }
 }

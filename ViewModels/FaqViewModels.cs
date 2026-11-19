@@ -1,5 +1,10 @@
+#region References
+
 using CasamentoTatianaDiogo.Models;
 
-namespace CasamentoTatianaDiogo.ViewModels;
+#endregion
 
-public record FaqPageViewModel(FaqPageSettings Settings, IReadOnlyList<FaqItem> Items, bool IsPreview = false);
+namespace CasamentoTatianaDiogo.ViewModels
+{
+    public record FaqPageViewModel(FaqPageSettings Settings, IReadOnlyList<FaqItem> Items, bool IsPreview = false);
+}

@@ -3,6 +3,7 @@ using System.Data.Common;
 using System.Net;
 using CasamentoTatianaDiogo.Data;
 using CasamentoTatianaDiogo.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
@@ -29,7 +30,114 @@ public class PageLoadingTests
             Assert.Contains(footer.Value, await client.GetStringAsync("/"));
             Assert.Single(queries.Commands, sql => sql.Contains("FROM \"SiteContents\""));
             Assert.Single(queries.Commands, sql => sql.Contains("FROM \"WeddingSettings\""));
+            queries.Commands.Clear();
+            Assert.Contains(footer.Value, await client.GetStringAsync("/"));
+            Assert.Empty(queries.Commands);
         }
+    }
+
+    [Fact]
+    public async Task InformationAndPublishedFaqReusePresentationDataAcrossVisits()
+    {
+        var queries = new QueryLog();
+        using var app = new HttpTests.TestApplication(queries: queries);
+        using var client = app.Client();
+        using (var scope = app.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            (await db.FaqPageSettings.SingleAsync()).IsEnabled = true;
+            db.FaqItems.Add(new FaqItem { Question = "Public question", Answer = "Public answer", IsPublished = true });
+            db.TimelineEvents.Add(new TimelineEvent { Title = "Ceremony", EventDateTime = new(2027, 6, 5, 11, 0, 0) });
+            await db.SaveChangesAsync();
+        }
+        Assert.Contains("Ceremony", await client.GetStringAsync("/Information"));
+        Assert.Contains("Public answer", await client.GetStringAsync("/Faq"));
+        queries.Commands.Clear();
+        Assert.Contains("Ceremony", await client.GetStringAsync("/Information"));
+        Assert.Contains("Public answer", await client.GetStringAsync("/Faq"));
+        Assert.Empty(queries.Commands);
+    }
+
+    [Fact]
+    public async Task MusicEntryPagesDoNotLoadTheirInnerPageModels()
+    {
+        var queries = new QueryLog();
+        using var app = new HttpTests.TestApplication(queries: queries);
+        using var client = app.Client();
+        using (var scope = app.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            (await db.WeddingSettings.SingleAsync()).SpotifyTrackUrl = "https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT";
+            (await db.FaqPageSettings.SingleAsync()).IsEnabled = true;
+            await db.SaveChangesAsync();
+        }
+        client.DefaultRequestHeaders.Add("Sec-Fetch-Dest", "document");
+        queries.Commands.Clear();
+        foreach (var route in new[] { "/", "/Information", "/Photos", "/Faq", "/Rsvp" })
+            Assert.Contains("id=\"guest-page\"", await client.GetStringAsync(route));
+        Assert.DoesNotContain(queries.Commands, sql => sql.Contains("\"TimelineEvents\"") ||
+            sql.Contains("\"PhotoUploadSettings\"") || sql.Contains("\"FaqItems\"") || sql.Contains("\"SiteContents\""));
+
+        queries.Commands.Clear();
+        Assert.DoesNotContain("id=\"guest-page\"", await client.GetStringAsync("/Information?sitePage=1"));
+        Assert.Single(queries.Commands, sql => sql.Contains("\"TimelineEvents\""));
+        Assert.Equal(HttpStatusCode.NotFound, (await client.GetAsync("/Information/Calendar")).StatusCode);
+        var error = await client.GetAsync("/Home/Error");
+        Assert.Equal(HttpStatusCode.InternalServerError, error.StatusCode);
+        Assert.DoesNotContain("id=\"guest-page\"", await error.Content.ReadAsStringAsync());
+    }
+
+    [Fact]
+    public async Task AssetsAreCacheableWithoutCachingRsvpPagesOrReadingTheDatabase()
+    {
+        var queries = new QueryLog();
+        using var app = new HttpTests.TestApplication(queries: queries);
+        using var client = app.Client();
+        queries.Commands.Clear();
+        var script = await client.GetAsync("/js/rsvp-select.js?v=content-hash");
+        Assert.Equal(HttpStatusCode.OK, script.StatusCode);
+        Assert.True(script.Headers.CacheControl!.Public);
+        Assert.Equal(TimeSpan.FromDays(365), script.Headers.CacheControl.MaxAge);
+        Assert.Contains("immutable", script.Headers.CacheControl.ToString());
+        Assert.Contains("s-maxage=31536000", Assert.Single(script.Headers.GetValues("Vercel-CDN-Cache-Control")));
+        Assert.NotNull(script.Headers.ETag);
+        using var conditional = new HttpRequestMessage(HttpMethod.Get, "/js/rsvp-select.js?v=content-hash");
+        conditional.Headers.IfNoneMatch.Add(script.Headers.ETag);
+        var unchanged = await client.SendAsync(conditional);
+        Assert.Equal(HttpStatusCode.NotModified, unchanged.StatusCode);
+        Assert.True(unchanged.Headers.CacheControl!.Public);
+
+        var image = await client.GetAsync("/images/navbar.png");
+        Assert.Equal(HttpStatusCode.OK, image.StatusCode);
+        Assert.Equal(TimeSpan.FromHours(1), image.Headers.CacheControl!.MaxAge);
+        Assert.Contains("s-maxage=86400", Assert.Single(image.Headers.GetValues("Vercel-CDN-Cache-Control")));
+        Assert.Empty(queries.Commands);
+
+        var rsvp = await client.GetAsync("/Rsvp");
+        Assert.True(rsvp.Headers.CacheControl!.NoStore);
+        Assert.False(rsvp.Headers.Contains("Vercel-CDN-Cache-Control"));
+    }
+
+    [Fact]
+    public async Task RsvpDeadlineAndPhotoPermissionsBypassThePresentationCache()
+    {
+        using var app = new HttpTests.TestApplication();
+        using var client = app.Client();
+        await client.GetStringAsync("/");
+        await client.GetStringAsync("/Photos");
+        using (var scope = app.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            // Simulate a change from another instance, without local invalidation.
+            await db.WeddingSettings.ExecuteUpdateAsync(s => s.SetProperty(x => x.RsvpDeadline, new DateOnly(2000, 1, 1)));
+            await db.PhotoUploadSettings.ExecuteUpdateAsync(s => s.SetProperty(x => x.IsEnabled, false));
+        }
+        Assert.DoesNotContain("guest-search", await client.GetStringAsync("/Rsvp"));
+        Assert.Contains("O envio de fotografias n", await client.GetStringAsync("/Photos"));
+        using var fresh = app.Services.CreateScope();
+        var settings = fresh.ServiceProvider.GetRequiredService<CasamentoTatianaDiogo.Services.Interfaces.IWeddingSettingsService>();
+        Assert.Null((await settings.GetPresentationAsync()).RsvpDeadline);
+        Assert.Equal(new DateOnly(2000, 1, 1), (await settings.GetAsync()).RsvpDeadline);
     }
 
     [Fact]

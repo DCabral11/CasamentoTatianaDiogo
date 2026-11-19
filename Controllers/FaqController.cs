@@ -1,15 +1,22 @@
+#region References
+
 using CasamentoTatianaDiogo.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CasamentoTatianaDiogo.Controllers;
+#endregion
 
-[ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
-public class FaqController(FaqService faqs) : Controller
+namespace CasamentoTatianaDiogo.Controllers
 {
-    [HttpGet]
-    public async Task<IActionResult> Index()
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
+    public class FaqController(FaqService faqs) : Controller
     {
-        if (!(await faqs.GetSettingsAsync()).IsEnabled) return NotFound();
-        return View(await faqs.GetPageAsync());
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            if (!(await faqs.GetSettingsAsync()).IsEnabled)
+                return NotFound();
+
+            return View(await faqs.GetPageAsync());
+        }
     }
 }

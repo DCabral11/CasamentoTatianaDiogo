@@ -23,14 +23,21 @@ namespace CasamentoTatianaDiogo.Common.Errors
 
         #endregion
 
+        #region Properties
+
         public bool Succeeded { get; }
 
         public AppError? Error { get; }
 
         public string Message => Error?.Message ?? string.Empty;
 
+        #endregion
+
+        #region Public Methods
+
         public static AppResult Success() => new(true, null);
         public static AppResult Failure(ErrorCode code, string message, string? field = null) => new(false, new AppError(code, message, field));
 
+        #endregion
     }
 }

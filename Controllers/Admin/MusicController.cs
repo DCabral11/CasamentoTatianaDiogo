@@ -1,6 +1,3 @@
-using static CasamentoTatianaDiogo.Services.AdminFilterOptions;
-using CasamentoTatianaDiogo.ViewModels.Admin;
-using CasamentoTatianaDiogo.Services;
 #region References
 
 using CasamentoTatianaDiogo.Data;
@@ -9,6 +6,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using CasamentoTatianaDiogo.ViewModels.Admin;
+using CasamentoTatianaDiogo.Services;
+using static CasamentoTatianaDiogo.Services.AdminFilterOptions;
 
 #endregion
 
@@ -30,15 +30,17 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
         [HttpGet("")]
         public async Task<IActionResult> Index()
         {
-            var sections = await db.MusicSections.AsNoTracking().OrderBy(s => s.DisplayOrder).ThenBy(s => s.Id)
-                .Include(s => s.Moments.OrderBy(m => m.DisplayOrder).ThenBy(m => m.Id)).ToListAsync();
+            var sections = await db.MusicSections.AsNoTracking().OrderBy(s => s.DisplayOrder).ThenBy(s => s.Id).Include(s => s.Moments.OrderBy(m => m.DisplayOrder).ThenBy(m => m.Id)).ToListAsync();
             var sectionNames = sections.ToDictionary(s => s.Id, s => s.Name);
-            var filters = new AdminListFilters<MusicMoment>(this, sections.SelectMany(s => s.Moments).ToList(), "Secção, momento ou música", m => $"{sectionNames[m.SectionId]} {m.Name} {m.Song}")
-                .Select("sectionId", "Secção", sections.Select(s => new AdminFilterOption(s.Id.ToString(), s.Name)), m => m.SectionId.ToString())
-                .Select("defined", "Música definida", YesNo, m => Flag(!string.IsNullOrWhiteSpace(m.Song)));
+            var filters = new AdminListFilters<MusicMoment>(this, [.. sections.SelectMany(s => s.Moments)], "Secção, Momento ou Música", m => $"{sectionNames[m.SectionId]} {m.Name} {m.Song}").Select("sectionId", "Secção", sections.Select(s => new AdminFilterOption(s.Id.ToString(), s.Name)), m => m.SectionId.ToString()).Select("defined", "Música Definida", YesNo, m => Flag(!string.IsNullOrWhiteSpace(m.Song)));
             var matches = filters.Results().Select(m => m.Id).ToHashSet();
-            foreach (var section in sections) section.Moments = section.Moments.Where(m => matches.Contains(m.Id)).ToList();
-            if (filters.Panel.Active) sections = sections.Where(s => s.Moments.Count > 0).ToList();
+
+            foreach (var section in sections) 
+                section.Moments = [.. section.Moments.Where(m => matches.Contains(m.Id))];
+
+            if (filters.Panel.Active) 
+                sections = [.. sections.Where(s => s.Moments.Count > 0)];
+            
             return View(Views + "Index.cshtml", sections);
         }
 

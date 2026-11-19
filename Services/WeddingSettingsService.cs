@@ -5,11 +5,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CasamentoTatianaDiogo.Services
 {
-    public class WeddingSettingsService(ApplicationDbContext db) : IWeddingSettingsService
+    public class WeddingSettingsService(ApplicationDbContext db, PublicContentCache cache) : IWeddingSettingsService
     {
         private Task<WeddingSettings>? currentSettings;
 
         public Task<WeddingSettings> GetAsync() => currentSettings ??= LoadSettingsAsync();
+
+        private Task<WeddingSettings>? presentation;
+        public Task<WeddingSettings> GetPresentationAsync() => currentSettings ??
+            (presentation ??= cache.GetAsync("wedding-presentation", LoadSettingsAsync));
 
         private async Task<WeddingSettings> LoadSettingsAsync() => await db.WeddingSettings.AsNoTracking().FirstOrDefaultAsync() ?? new WeddingSettings();
 

@@ -92,14 +92,40 @@ const conflictNotice = document.getElementById('rsvp-concurrency-conflict');
 const presenceUnavailable = document.getElementById('rsvp-presence-unavailable');
 let checkingEditor = false;
 let stoppedChecking = !conflictNotice.hidden;
+let submitting = false;
+let presencePageActive = true;
+let presenceTimer;
+const presenceInterval = 60_000;
+const presenceIdleTimeout = 3 * 60_000;
+let lastActivity = Date.now();
+let lastCheck = -Infinity;
+
+function schedulePresenceCheck() {
+    clearTimeout(presenceTimer);
+    if (stoppedChecking || submitting || !presencePageActive || document.hidden || Date.now() - lastActivity >= presenceIdleTimeout) return;
+    presenceTimer = setTimeout(checkEditors, Math.max(0, presenceInterval - (Date.now() - lastCheck)));
+}
+
+function notePresenceActivity() {
+    lastActivity = Date.now();
+    // Resume idle polling without sending a request on every keystroke.
+    if (!checkingEditor) schedulePresenceCheck();
+}
 function showConflict() {
     conflictNotice.hidden = false;
     responseForm.querySelector('[data-rsvp-submit]').disabled = true;
     stoppedChecking = true;
+    clearTimeout(presenceTimer);
 }
 async function checkEditors() {
-    if (checkingEditor || stoppedChecking || document.hidden) return;
+    clearTimeout(presenceTimer);
+    if (checkingEditor || stoppedChecking || submitting || !presencePageActive || document.hidden || Date.now() - lastActivity >= presenceIdleTimeout) return;
+    if (Date.now() - lastCheck < presenceInterval) {
+        schedulePresenceCheck();
+        return;
+    }
     checkingEditor = true;
+    lastCheck = Date.now();
     try {
         const body = new URLSearchParams();
         for (const name of ['GuestId', 'EditSessionId', '__RequestVerificationToken']) {
@@ -113,15 +139,35 @@ async function checkEditors() {
         if (status.hasChanged) showConflict();
     } catch {
         presenceUnavailable.hidden = false;
-    } finally { checkingEditor = false; }
+    } finally {
+        checkingEditor = false;
+        schedulePresenceCheck();
+    }
 }
 document.querySelector('[data-rsvp-reload]')?.addEventListener('click', () => {
     try { sessionStorage.removeItem(draftKey); } catch { }
 });
 responseForm.addEventListener('submit', event => {
     if (!conflictNotice.hidden) event.preventDefault();
+    else if (!event.defaultPrevented) {
+        submitting = true;
+        clearTimeout(presenceTimer);
+    }
 });
-document.addEventListener('visibilitychange', checkEditors);
-window.addEventListener('pageshow', checkEditors);
-setInterval(checkEditors, 30000);
+for (const eventName of ['input', 'change', 'pointerdown', 'keydown', 'focusin']) {
+    responseForm.addEventListener(eventName, notePresenceActivity, { passive: true });
+}
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) clearTimeout(presenceTimer);
+    else notePresenceActivity();
+});
+window.addEventListener('pagehide', () => {
+    presencePageActive = false;
+    clearTimeout(presenceTimer);
+});
+window.addEventListener('pageshow', () => {
+    presencePageActive = true;
+    submitting = false;
+    notePresenceActivity();
+});
 checkEditors();

@@ -1,5 +1,9 @@
-﻿using CasamentoTatianaDiogo.Models.Enums;
+﻿#region References
+
+using CasamentoTatianaDiogo.Models.Enums;
 using System.ComponentModel.DataAnnotations;
+
+#endregion
 
 namespace CasamentoTatianaDiogo.Models
 {

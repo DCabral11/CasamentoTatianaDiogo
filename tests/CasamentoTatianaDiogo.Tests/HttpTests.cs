@@ -321,9 +321,10 @@ public class HttpTests
                 services.RemoveAll<ApplicationDbContext>();
                 services.RemoveAll<DbContextOptions<ApplicationDbContext>>();
                 services.RemoveAll<IDbContextOptionsConfiguration<ApplicationDbContext>>();
-                services.AddDbContext<ApplicationDbContext>(options =>
+                services.AddDbContext<ApplicationDbContext>((provider, options) =>
                 {
                     options.UseSqlite(connection);
+                    options.AddInterceptors(provider.GetRequiredService<CasamentoTatianaDiogo.Services.PublicContentCacheInvalidationInterceptor>());
                     if (queries != null) options.AddInterceptors(queries);
                 });
                 services.RemoveAll<IGoogleDriveService>();

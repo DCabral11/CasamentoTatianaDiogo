@@ -10,7 +10,7 @@ public sealed class SiteThemeService(IWeddingSettingsService settings, IMemoryCa
 
     public async Task<SiteTheme> GetAsync()
     {
-        var theme = new SiteTheme(await settings.GetAsync());
+        var theme = new SiteTheme(await settings.GetPresentationAsync());
         cache.Set(typeof(SiteTheme), theme);
         return theme;
     }

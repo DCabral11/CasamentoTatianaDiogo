@@ -1,15 +1,15 @@
-using static CasamentoTatianaDiogo.Services.AdminFilterOptions;
-using CasamentoTatianaDiogo.ViewModels.Admin;
-using CasamentoTatianaDiogo.Services;
 #region References
 
 using CasamentoTatianaDiogo.Common.Extensions;
 using CasamentoTatianaDiogo.Data;
 using CasamentoTatianaDiogo.Models;
+using CasamentoTatianaDiogo.Services;
+using CasamentoTatianaDiogo.ViewModels.Admin;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
+using static CasamentoTatianaDiogo.Services.AdminFilterOptions;
 
 #endregion
 
@@ -19,21 +19,25 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
     [Route("Admin/Planeamento")]
     public class PlanningController(ApplicationDbContext db) : Controller
     {
+        #region Controller - GET Methods
+
+        #region Budget
+
         [HttpGet("Orcamento")]
         public async Task<IActionResult> Budget(int? categoryId, int? supplierId)
         {
-            var rows = await db.BudgetLines.AsNoTracking().Include(x => x.Category).Include(x => x.Supplier)
-                .OrderBy(x => x.Category!.Name).ThenBy(x => x.Id).ToListAsync();
+            var rows = await db.BudgetLines.AsNoTracking().Include(x => x.Category).Include(x => x.Supplier).OrderBy(x => x.Category!.Name).ThenBy(x => x.Id).ToListAsync();
             var categories = await db.PlanningCategories.OrderBy(x => x.Name).Select(x => new { x.Id, x.Name }).ToListAsync();
             var suppliers = await db.Suppliers.OrderBy(x => x.Name).Select(x => new { x.Id, x.Name }).ToListAsync();
-            var filtered = new AdminListFilters<BudgetLine>(this, rows, "Categoria, fornecedor ou notas", x => $"{x.Category!.Name} {x.Supplier?.Name} {x.Notes}")
+            var filtered = new AdminListFilters<BudgetLine>(this, rows, "Categoria, Fornecedor ou Notas", x => $"{x.Category!.Name} {x.Supplier?.Name} {x.Notes}")
                 .Select("categoryId", "Categoria", categories.Select(x => new AdminFilterOption(x.Id.ToString(), x.Name)), x => x.CategoryId.ToString())
                 .Select("supplierId", "Fornecedor", suppliers.Select(x => new AdminFilterOption(x.Id.ToString(), x.Name)), x => x.SupplierId?.ToString() ?? "")
                 .Select("status", "Estado", States(BudgetLine.States), x => x.Status)
-                .Select("payment", "Pagamento", Options(("unpriced", "Custo por definir"), ("unpaid", "Por pagar"), ("partial", "Pago parcialmente"), ("paid", "Pago na totalidade")),
-                    x => !x.RealCost.HasValue ? "unpriced" : x.Paid >= x.RealCost ? "paid" : x.Paid == 0 ? "unpaid" : "partial")
-                .Dates("Próximo pagamento", x => x.NextPayment).Results();
+                .Select("payment", "Pagamento", Options(("unpriced", "Custo por Definir"), ("unpaid", "Por Pagar"), ("partial", "Pago Parcialmente"), ("paid", "Pago na Totalidade")), x => !x.RealCost.HasValue ? "unpriced" : x.Paid >= x.RealCost ? "paid" : x.Paid == 0 ? "unpaid" : "partial")
+                .Dates("Próximo Pagamento", x => x.NextPayment).Results();
+
             ViewBag.SupplierFilter = supplierId;
+
             return await Page("Budget", filtered, categoryId);
         }
 
@@ -52,12 +56,63 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             if (supplierId.HasValue && supplier == null)
                 return NotFound();
 
-            return await LineForm(new BudgetLine 
-            { 
-                CategoryId = supplier?.CategoryId ?? categoryId ?? 0, 
-                SupplierId = supplier?.Id 
+            return await LineForm(new BudgetLine
+            {
+                CategoryId = supplier?.CategoryId ?? categoryId ?? 0,
+                SupplierId = supplier?.Id
             });
         }
+
+        #endregion
+
+        #region Suppliers
+
+        [HttpGet("Fornecedores")]
+        public async Task<IActionResult> Suppliers(int? categoryId)
+        {
+            var page = new AdminQueryPage<Supplier>(this, db.Suppliers.AsNoTracking(), "Nome, Contacto, Email ou Notas");
+            var categories = await db.PlanningCategories.OrderBy(x => x.Name).Select(x => new { x.Id, x.Name }).ToListAsync(page.Cancellation);
+
+            page.Select("categoryId", "Categoria", categories.Select(x => new AdminFilterOption(x.Id.ToString(), x.Name)), value => { var key = int.Parse(value); return x => x.CategoryId == key; });
+            page.Select("status", "Estado", States(Supplier.States), value => x => x.Status == value);
+            page.Select("linked", "Com Linhas de Orçamento", YesNo, value => x => x.Lines.Any() == (value == "yes"));
+
+            var query = await page.BuildAsync(q => q.OrderBy(x => x.Name).ThenBy(x => x.Id), x => new { x.Id, x.Name, x.Contact, x.Phone, x.Email, x.Website, x.Notes }, x => x.Id, x => $"{x.Name} {x.Contact} {x.Phone} {x.Email} {x.Website} {x.Notes}");
+            var rows = await query.Select(x => new SupplierListRow(x, x.Category!.Name, x.Lines.Count)).ToListAsync(page.Cancellation);
+
+            return await Page("Suppliers", rows, categoryId);
+        }
+
+        [HttpGet("Fornecedores/Ficha/{id:int?}")]
+        public async Task<IActionResult> SupplierForm(int? id, int? categoryId)
+        {
+            var supplier = id.HasValue ? await db.Suppliers.FindAsync(id.Value) : new Supplier
+            {
+                CategoryId = categoryId ?? 0
+            };
+
+            return supplier == null ? NotFound() : await Page("Supplier", supplier);
+        }
+
+        #endregion
+
+        #region Categories
+
+        [HttpGet("Categorias/{id:int?}")]
+        public async Task<IActionResult> Categories(int? id)
+        {
+            var category = id.HasValue ? await db.PlanningCategories.FindAsync(id.Value) : new PlanningCategory();
+
+            return category == null ? NotFound() : await Page("Categories", category);
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Controller - POST Methods
+
+        #region Budget
 
         [HttpPost("Orcamento/Guardar"), ValidateAntiForgeryToken]
         public async Task<IActionResult> SaveLine([Bind("Id,CategoryId,SupplierId,RealCost,Paid,Status,NextPayment,Notes")] BudgetLine line)
@@ -86,7 +141,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             if (!ModelState.IsValid)
                 return await LineForm(line);
 
-            if (line.Id == 0) 
+            if (line.Id == 0)
                 db.BudgetLines.Add(line);
             else
             {
@@ -98,134 +153,79 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
                 db.Entry(existing).CurrentValues.SetValues(line);
             }
 
-            if (!await SaveChanges("A categoria ou o fornecedor mudou. Revê a seleção.")) 
+            if (!await SaveChanges("A categoria ou o fornecedor mudou. Revê a seleção."))
                 return await LineForm(line);
 
             return RedirectToAction(nameof(Budget));
-        }
-
-        [HttpGet("Fornecedores")]
-        public async Task<IActionResult> Suppliers(int? categoryId)
-        {
-            var page = new AdminQueryPage<Supplier>(this, db.Suppliers.AsNoTracking(), "Nome, contacto, email ou notas");
-            var categories = await db.PlanningCategories.OrderBy(x => x.Name)
-                .Select(x => new { x.Id, x.Name }).ToListAsync(page.Cancellation);
-            page.Select("categoryId", "Categoria", categories.Select(x => new AdminFilterOption(x.Id.ToString(), x.Name)),
-                value => { var key = int.Parse(value); return x => x.CategoryId == key; });
-            page.Select("status", "Estado", States(Supplier.States), value => x => x.Status == value);
-            page.Select("linked", "Com linhas de orçamento", YesNo, value => x => x.Lines.Any() == (value == "yes"));
-            var query = await page.BuildAsync(q => q.OrderBy(x => x.Name).ThenBy(x => x.Id),
-                x => new { x.Id, x.Name, x.Contact, x.Phone, x.Email, x.Website, x.Notes }, x => x.Id,
-                x => $"{x.Name} {x.Contact} {x.Phone} {x.Email} {x.Website} {x.Notes}");
-            var rows = await query.Select(x => new SupplierListRow(x, x.Category!.Name, x.Lines.Count)).ToListAsync(page.Cancellation);
-            return await Page("Suppliers", rows, categoryId);
-        }
-
-        [HttpGet("Fornecedores/Ficha/{id:int?}")]
-        public async Task<IActionResult> SupplierForm(int? id, int? categoryId)
-        {
-            var supplier = id.HasValue ? await db.Suppliers.FindAsync(id.Value) : new Supplier { CategoryId = categoryId ?? 0 };
-
-            return supplier == null ? NotFound() : await Page("Supplier", supplier);
-        }
-
-        [HttpPost("Fornecedores/Guardar"), ValidateAntiForgeryToken]
-        public async Task<IActionResult> SaveSupplier([Bind("Id,CategoryId,Name,Contact,Phone,Email,Website,Status,Notes,Price")] Supplier supplier)
-        {
-            var settings = await db.WeddingSettings.AsNoTracking().FirstOrDefaultAsync() ?? new WeddingSettings();
-            supplier.Phone = ContactFormats.SavePhone(supplier.Phone, settings, e => ModelState.AddModelError(nameof(supplier.Phone), e));
-            supplier.Email = ContactFormats.SaveEmail(supplier.Email, settings, 254, e => ModelState.AddModelError(nameof(supplier.Email), e));
-            await ValidateCategory(supplier.CategoryId);
-            ValidateAmount(nameof(supplier.Price), supplier.Price);
-
-            if (!Supplier.States.Contains(supplier.Status)) 
-                ModelState.AddModelError("Status", "Escolhe um estado da lista.");
-            
-            if (supplier.Website != null && (!Uri.TryCreate(supplier.Website, UriKind.Absolute, out var url) || url.Scheme is not ("https" or "http")))
-                ModelState.AddModelError("Website", "Usa um endereço começado por https:// ou http://.");
-
-            if (!ModelState.IsValid) 
-                return await Page("Supplier", supplier);
-
-            supplier.Name = supplier.Name.Trim();
-            
-            if (supplier.Id == 0)
-            {
-                db.Suppliers.Add(supplier);
-            
-                if (!await SaveChanges("A categoria mudou. Revê a seleção.")) 
-                    return await Page("Supplier", supplier);
-            }
-            else
-            {
-                // The composite foreign key also protects against a concurrent budget assignment.
-                var updated = await db.Suppliers.Where(x => x.Id == supplier.Id &&
-                        (x.CategoryId == supplier.CategoryId || !x.Lines.Any()))
-                    .ExecuteUpdateAsync(s => s.SetProperty(x => x.CategoryId, supplier.CategoryId)
-                        .SetProperty(x => x.Name, supplier.Name).SetProperty(x => x.Contact, supplier.Contact)
-                        .SetProperty(x => x.Phone, supplier.Phone).SetProperty(x => x.Email, supplier.Email).SetProperty(x => x.Website, supplier.Website)
-                        .SetProperty(x => x.Status, supplier.Status).SetProperty(x => x.Price, supplier.Price)
-                        .SetProperty(x => x.Notes, supplier.Notes));
-                
-                if (updated == 0)
-                {
-                    if (!await db.Suppliers.AnyAsync(x => x.Id == supplier.Id)) 
-                        return NotFound();
-
-                    ModelState.AddModelError("CategoryId", "Desassocia primeiro as linhas do orçamento para mudar a categoria.");
-                    
-                    return await Page("Supplier", supplier);
-                }
-            }
-
-            return RedirectToAction(nameof(Suppliers));
-        }
-
-        [HttpGet("Categorias/{id:int?}")]
-        public async Task<IActionResult> Categories(int? id)
-        {
-            var category = id.HasValue ? await db.PlanningCategories.FindAsync(id.Value) : new PlanningCategory();
-         
-            return category == null ? NotFound() : await Page("Categories", category);
-        }
-
-        [HttpPost("Categorias/Guardar"), ValidateAntiForgeryToken]
-        public async Task<IActionResult> SaveCategory([Bind("Id,Name")] PlanningCategory input)
-        {
-            input.Name = Regex.Replace(input.Name?.Trim() ?? "", @"\s+", " ");
-            input.NormalizedName = input.Name.NormalizeForSearch();
-
-            if (await db.PlanningCategories.AnyAsync(x => x.Id != input.Id && x.NormalizedName == input.NormalizedName))
-                ModelState.AddModelError("Name", "Esta categoria já existe. Usa a categoria da lista.");
-            
-            if (!ModelState.IsValid) 
-                return await Page("Categories", input);
-            
-            if (input.Id == 0) 
-                db.PlanningCategories.Add(input);
-            else
-            {
-                var category = await db.PlanningCategories.FindAsync(input.Id);
-                
-                if (category == null)
-                    return NotFound();
-                
-                category.Name = input.Name;
-                category.NormalizedName = input.NormalizedName;
-            }
-            
-            if (!await SaveChanges("Não foi possível guardar. Verifica se já existe uma categoria com este nome."))
-                return await Page("Categories", input);
-            
-            return RedirectToAction(nameof(Categories), new { id = (int?)null });
         }
 
         [HttpPost("Orcamento/Eliminar/{id:int}"), ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteLine(int id)
         {
             await db.BudgetLines.Where(x => x.Id == id).ExecuteDeleteAsync();
-        
+
             return RedirectToAction(nameof(Budget));
+        }
+
+        #endregion
+
+        #region Suppliers
+
+        [HttpPost("Fornecedores/Guardar"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> SaveSupplier([Bind("Id,CategoryId,Name,Contact,Phone,Email,Website,Status,Notes,Price")] Supplier supplier)
+        {
+            var settings = await db.WeddingSettings.AsNoTracking().FirstOrDefaultAsync() ?? new WeddingSettings();
+
+            supplier.Phone = ContactFormats.SavePhone(supplier.Phone, settings, e => ModelState.AddModelError(nameof(supplier.Phone), e));
+            supplier.Email = ContactFormats.SaveEmail(supplier.Email, settings, 254, e => ModelState.AddModelError(nameof(supplier.Email), e));
+
+            await ValidateCategory(supplier.CategoryId);
+            ValidateAmount(nameof(supplier.Price), supplier.Price);
+
+            if (!Supplier.States.Contains(supplier.Status))
+                ModelState.AddModelError("Status", "Escolhe um estado da lista.");
+
+            if (supplier.Website != null && (Uri.TryCreate(supplier.Website, UriKind.Absolute, out var url) || url.Scheme is not ("https" or "http")))
+                ModelState.AddModelError("Website", "Usa um endereço começado por https:// ou http://.");
+
+            if (!ModelState.IsValid)
+                return await Page("Supplier", supplier);
+
+            supplier.Name = supplier.Name.Trim();
+
+            if (supplier.Id == 0)
+            {
+                db.Suppliers.Add(supplier);
+
+                if (!await SaveChanges("A categoria mudou. Revê a seleção."))
+                    return await Page("Supplier", supplier);
+            }
+            else
+            {
+                var updated = await db.Suppliers
+                    .Where(x => x.Id == supplier.Id && (x.CategoryId == supplier.CategoryId || !x.Lines.Any()))
+                    .ExecuteUpdateAsync(s => s.SetProperty(x => x.CategoryId, supplier.CategoryId)
+                        .SetProperty(x => x.Name, supplier.Name)
+                        .SetProperty(x => x.Contact, supplier.Contact)
+                        .SetProperty(x => x.Phone, supplier.Phone)
+                        .SetProperty(x => x.Email, supplier.Email)
+                        .SetProperty(x => x.Website, supplier.Website)
+                        .SetProperty(x => x.Status, supplier.Status)
+                        .SetProperty(x => x.Price, supplier.Price)
+                        .SetProperty(x => x.Notes, supplier.Notes));
+
+                if (updated == 0)
+                {
+                    if (!await db.Suppliers.AnyAsync(x => x.Id == supplier.Id))
+                        return NotFound();
+
+                    ModelState.AddModelError("CategoryId", "Desassocia primeiro as linhas do orçamento para mudar a categoria.");
+
+                    return await Page("Supplier", supplier);
+                }
+            }
+
+            return RedirectToAction(nameof(Suppliers));
         }
 
         [HttpPost("Fornecedores/Eliminar/{id:int}"), ValidateAntiForgeryToken]
@@ -237,16 +237,80 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             return RedirectToAction(nameof(Suppliers));
         }
 
+        #endregion
+
+        #region Categories
+
+        [HttpPost("Categorias/Guardar"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> SaveCategory([Bind("Id,Name")] PlanningCategory input)
+        {
+            input.Name = Regex.Replace(input.Name?.Trim() ?? "", @"\s+", " ");
+            input.NormalizedName = input.Name.NormalizeForSearch();
+
+            if (await db.PlanningCategories.AnyAsync(x => x.Id != input.Id && x.NormalizedName == input.NormalizedName))
+                ModelState.AddModelError("Name", "Esta categoria já existe. Usa a categoria da lista.");
+
+            if (!ModelState.IsValid)
+                return await Page("Categories", input);
+
+            if (input.Id == 0)
+                db.PlanningCategories.Add(input);
+            else
+            {
+                var category = await db.PlanningCategories.FindAsync(input.Id);
+
+                if (category == null)
+                    return NotFound();
+
+                category.Name = input.Name;
+                category.NormalizedName = input.NormalizedName;
+            }
+
+            if (!await SaveChanges("Não foi possível guardar. Verifica se já existe uma categoria com este nome."))
+                return await Page("Categories", input);
+
+            return RedirectToAction(nameof(Categories), new { id = (int?)null });
+        }
+
         [HttpPost("Categorias/Eliminar/{id:int}"), ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteCategory(int id)
         {
             if (await db.PlanningCategories.Where(x => x.Id == id && !db.Suppliers.Any(s => s.CategoryId == x.Id) && !db.BudgetLines.Any(b => b.CategoryId == x.Id)).ExecuteDeleteAsync() == 0)
                 TempData["Error"] = "Só podes eliminar uma categoria sem fornecedores nem linhas de orçamento.";
-            
+
             return RedirectToAction(nameof(Categories));
         }
 
+        #endregion
+
+        #endregion
+
         #region Private Methods
+
+        private async Task<IActionResult> LineForm(BudgetLine line)
+        {
+            ViewBag.Suppliers = await db.Suppliers.AsNoTracking().Include(x => x.Category).OrderBy(x => x.Name).ToListAsync();
+
+            return await Page("Line", line);
+        }
+
+        private async Task<IActionResult> Page(string name, object model, int? categoryId = null)
+        {
+            if (name is "Line" or "Supplier" or "Categories")
+                ViewBag.Categories = await db.PlanningCategories.AsNoTracking().OrderBy(x => x.Name).ToListAsync();
+
+            ViewBag.CategoryFilter = categoryId;
+
+            if (name == "Categories")
+            {
+                var categories = (List<PlanningCategory>)ViewBag.Categories;
+                var used = (await db.Suppliers.Select(x => x.CategoryId).Distinct().ToListAsync()).Concat(await db.BudgetLines.Select(x => x.CategoryId).Distinct().ToListAsync()).ToHashSet();
+
+                ViewBag.Categories = new AdminListFilters<PlanningCategory>(this, categories, "Nome da categoria", x => x.Name).Select("used", "Em utilização", YesNo, x => Flag(used.Contains(x.Id))).Results();
+            }
+
+            return View($"~/Views/Admin/Planning/{name}.cshtml", model);
+        }
 
         private async Task ValidateCategory(int id)
         {
@@ -262,42 +326,18 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
 
         private async Task<bool> SaveChanges(string error)
         {
-            try 
-            { 
-                await db.SaveChangesAsync(); 
-                
-                return true; 
-            } 
-            catch (DbUpdateException) 
-            { 
-                ModelState.AddModelError("", error); 
-                
-                return false; 
-            }
-        }
-
-        private async Task<IActionResult> LineForm(BudgetLine line)
-        {
-            ViewBag.Suppliers = await db.Suppliers.AsNoTracking().Include(x => x.Category).OrderBy(x => x.Name).ToListAsync();
-            
-            return await Page("Line", line);
-        }
-
-        private async Task<ViewResult> Page(string name, object model, int? categoryId = null)
-        {
-            if (name is "Line" or "Supplier" or "Categories")
-                ViewBag.Categories = await db.PlanningCategories.AsNoTracking().OrderBy(x => x.Name).ToListAsync();
-            ViewBag.CategoryFilter = categoryId;
-            if (name == "Categories")
+            try
             {
-                var categories = (List<PlanningCategory>)ViewBag.Categories;
-                var used = (await db.Suppliers.Select(x => x.CategoryId).Distinct().ToListAsync())
-                    .Concat(await db.BudgetLines.Select(x => x.CategoryId).Distinct().ToListAsync()).ToHashSet();
-                ViewBag.Categories = new AdminListFilters<PlanningCategory>(this, categories, "Nome da categoria", x => x.Name)
-                    .Select("used", "Em utilização", YesNo, x => Flag(used.Contains(x.Id))).Results();
+                await db.SaveChangesAsync();
+
+                return true;
             }
-            
-            return View($"~/Views/Admin/Planning/{name}.cshtml", model);
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", error);
+
+                return false;
+            }
         }
 
         #endregion

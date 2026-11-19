@@ -84,6 +84,12 @@ builder.Services.AddSingleton<WeddingClock>();
 
 builder.Services.AddScoped<IWeddingSettingsService, WeddingSettingsService>();
 builder.Services.AddMemoryCache();
+builder.Services.AddSingleton<PublicContentCache>();
+builder.Services.AddScoped<PublicContentCacheInvalidationInterceptor>();
+builder.Services.ConfigureDbContext<ApplicationDbContext>((services, options) =>
+    options.AddInterceptors(services.GetRequiredService<PublicContentCacheInvalidationInterceptor>()));
+builder.Services.ConfigureDbContext<PostgreSqlApplicationDbContext>((services, options) =>
+    options.AddInterceptors(services.GetRequiredService<PublicContentCacheInvalidationInterceptor>()));
 builder.Services.AddScoped<SiteThemeService>();
 builder.Services.AddScoped<IRsvpService, RsvpService>();
 builder.Services.AddScoped<IRsvpEmailNotificationService, RsvpEmailNotificationService>();
@@ -123,7 +129,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions { OnPrepareResponse = StaticAssetCache.PrepareResponse });
 app.UseStatusCodePagesWithReExecute("/Home/Status/{0}");
 app.UseRouting();
 app.UseAuthentication();

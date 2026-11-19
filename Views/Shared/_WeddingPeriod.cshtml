@@ -3,7 +3,7 @@
 @inject CasamentoTatianaDiogo.Services.Interfaces.IWeddingSettingsService Settings
 @inject CasamentoTatianaDiogo.Services.Interfaces.ISiteContentService ContentTexts
 @{
-    var period = Clock.GetPeriod(await Settings.GetAsync());
+    var period = Clock.GetPeriod(await Settings.GetPresentationAsync());
     var texts = await ContentTexts.GetAsync();
     var messages = Model.Fields.ToDictionary(f => f.Phase, f => texts.GetValueOrDefault(f.Key, f.DefaultText));
     var message = messages[period.Phase];

@@ -6,6 +6,8 @@ namespace CasamentoTatianaDiogo.Services.Interfaces
     {
         Task<WeddingSettings> GetAsync();
 
+        Task<WeddingSettings> GetPresentationAsync();
+
         Task<PhotoUploadSettings> GetPhotoSettingsAsync();
     }
 }

@@ -1,5 +1,10 @@
+#region References
+
 using CasamentoTatianaDiogo.Models;
 
-namespace CasamentoTatianaDiogo.ViewModels.Admin;
+#endregion
 
-public sealed record SupplierListRow(Supplier Supplier, string CategoryName, int BudgetLineCount);
+namespace CasamentoTatianaDiogo.ViewModels.Admin
+{
+    public sealed record SupplierListRow(Supplier Supplier, string CategoryName, int BudgetLineCount);
+}

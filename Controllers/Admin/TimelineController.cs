@@ -1,11 +1,14 @@
-using static CasamentoTatianaDiogo.Services.AdminFilterOptions;
-using CasamentoTatianaDiogo.ViewModels.Admin;
+#region References
+
 using CasamentoTatianaDiogo.Services;
 using CasamentoTatianaDiogo.Data;
 using CasamentoTatianaDiogo.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using static CasamentoTatianaDiogo.Services.AdminFilterOptions;
+
+#endregion
 
 namespace CasamentoTatianaDiogo.Controllers.Admin
 {

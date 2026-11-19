@@ -1,14 +1,25 @@
-﻿using CasamentoTatianaDiogo.Models;
+﻿#region References
+
+using CasamentoTatianaDiogo.Models;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
+
+#endregion
 
 namespace CasamentoTatianaDiogo.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IDataProtectionKeyContext
     {
+        #region Constructors
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+
         protected ApplicationDbContext(DbContextOptions options) : base(options) { }
+
+        #endregion
+
+        #region DB Sets
 
         public DbSet<DataProtectionKey> DataProtectionKeys => Set<DataProtectionKey>();
         public DbSet<PendingPhotoUpload> PendingPhotoUploads => Set<PendingPhotoUpload>();
@@ -19,7 +30,6 @@ namespace CasamentoTatianaDiogo.Data
         public DbSet<RsvpEditSession> RsvpEditSessions => Set<RsvpEditSession>();
         public DbSet<FaqItem> FaqItems => Set<FaqItem>();
         public DbSet<FaqPageSettings> FaqPageSettings => Set<FaqPageSettings>();
-
         public DbSet<WeddingSettings> WeddingSettings => Set<WeddingSettings>();
         public DbSet<TimelineEvent> TimelineEvents => Set<TimelineEvent>();
         public DbSet<Family> Families => Set<Family>();
@@ -39,9 +49,12 @@ namespace CasamentoTatianaDiogo.Data
         public DbSet<TableSeat> TableSeats => Set<TableSeat>();
         public DbSet<SeatAssignment> SeatAssignments => Set<SeatAssignment>();
 
+        #endregion
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
             builder.Entity<FaqItem>().HasIndex(x => new { x.IsPublished, x.DisplayOrder });
             builder.Entity<FaqPageSettings>().HasData(new FaqPageSettings());
             MusicProgramSchema.Configure(builder);
@@ -82,7 +95,7 @@ namespace CasamentoTatianaDiogo.Data
                     ? "([IsPlusOne] = 0 AND [MainGuestId] IS NULL) OR ([IsPlusOne] = 1 AND [MainGuestId] IS NOT NULL AND [MainGuestId] <> [Id] AND [AllowPlusOne] = 0)"
                     : "(NOT \"IsPlusOne\" AND \"MainGuestId\" IS NULL) OR (\"IsPlusOne\" AND \"MainGuestId\" IS NOT NULL AND \"MainGuestId\" <> \"Id\" AND NOT \"AllowPlusOne\")"));
             builder.Entity<Guest>().HasOne(x => x.Family).WithMany(x => x.Guests).HasForeignKey(x => x.FamilyId).OnDelete(DeleteBehavior.Restrict);
-            
+
             builder.Entity<PlusOne>().HasOne(x => x.MainGuest).WithMany(x => x.PlusOnes).HasForeignKey(x => x.MainGuestId).OnDelete(DeleteBehavior.Cascade);
             builder.Entity<PlusOne>().HasOne(x => x.CompanionGuest).WithMany().HasForeignKey(x => x.CompanionGuestId).OnDelete(DeleteBehavior.Restrict);
             builder.Entity<PlusOne>().HasIndex(x => x.CompanionGuestId).IsUnique();

@@ -1,25 +1,31 @@
+#region References
+
 using CasamentoTatianaDiogo.Services.Interfaces;
 using CasamentoTatianaDiogo.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+
+#endregion
 
 namespace CasamentoTatianaDiogo.Controllers
 {
     public class HomeController(IWeddingSettingsService settings, IWebHostEnvironment environment) : Controller
     {
-        public async Task<IActionResult> Index() => View(new HomeViewModel(await settings.GetAsync(), GetCarouselImages()));
+        public async Task<IActionResult> Index() => View(new HomeViewModel(await settings.GetPresentationAsync(), GetCarouselImages()));
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             Response.StatusCode = StatusCodes.Status500InternalServerError;
+
             return ErrorView("Algo não correu como esperado", "Estamos a tratar deste imprevisto. Podes voltar ao início ou tentar novamente dentro de instantes.", "bi-heartbreak", "Erro temporário");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Status([FromRoute] int id)
         {
-            // Re-executed POSTs retain form fields; an item ID must never replace the HTTP status.
-            if (id < 400 || id > 599) id = StatusCodes.Status404NotFound;
+            if (id < 400 || id > 599)
+                id = StatusCodes.Status404NotFound;
+
             Response.StatusCode = id;
 
             return id switch
@@ -31,15 +37,7 @@ namespace CasamentoTatianaDiogo.Controllers
             };
         }
 
-        private ViewResult ErrorView(string title, string message, string icon, string label)
-        {
-            ViewData["ErrorTitle"] = title;
-            ViewData["ErrorMessage"] = message;
-            ViewData["ErrorIcon"] = icon;
-            ViewData["ErrorLabel"] = label;
-
-            return View("Error");
-        }
+        #region Private Methods
 
         private IReadOnlyList<CarouselPhoto> GetCarouselImages()
         {
@@ -67,5 +65,17 @@ namespace CasamentoTatianaDiogo.Controllers
                 })
                 .ToList();
         }
+
+        private ViewResult ErrorView(string title, string message, string icon, string label)
+        {
+            ViewData["ErrorTitle"] = title;
+            ViewData["ErrorMessage"] = message;
+            ViewData["ErrorIcon"] = icon;
+            ViewData["ErrorLabel"] = label;
+
+            return View("Error");
+        }
+
+        #endregion
     }
 }

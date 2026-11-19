@@ -1,14 +1,24 @@
-﻿using CasamentoTatianaDiogo.Models;
+﻿#region References
+
+using CasamentoTatianaDiogo.Models;
 using CasamentoTatianaDiogo.Models.Enums;
 using System.ComponentModel.DataAnnotations;
 
+#endregion
+
 namespace CasamentoTatianaDiogo.ViewModels
 {
+    #region ViewModels Records
+
     public record HomeViewModel(WeddingSettings Settings, IReadOnlyList<CarouselPhoto> CarouselImages);
 
     public record CarouselPhoto(string Url, string? SrcSet, string ThumbnailUrl);
 
     public record InformationViewModel(WeddingSettings Settings, IReadOnlyList<TimelineEvent> TimelineEvents);
+
+    #endregion
+
+    #region RSVP View Models
 
     public class RsvpSearchViewModel
     {
@@ -29,10 +39,15 @@ namespace CasamentoTatianaDiogo.ViewModels
         public List<PlusOne> PlusOnes { get; set; } = [];
 
         public bool HasExistingResponse { get; set; }
+
         public string VerifiedContact { get; set; } = string.Empty;
+        
         public string DraftScope { get; set; } = string.Empty;
+        
         public bool HasConcurrentEditor { get; set; }
+        
         public bool HasConcurrencyConflict { get; set; }
+        
         public RsvpSubmitViewModel Input { get; set; } = new();
     }
 
@@ -91,6 +106,8 @@ namespace CasamentoTatianaDiogo.ViewModels
         public string? MusicRequest { get; set; }
     }
 
+    #endregion
+
     public class PhotoUploadViewModel
     {
         public bool IsOpen { get; set; }
@@ -122,12 +139,19 @@ namespace CasamentoTatianaDiogo.ViewModels.Admin
         public int UploadedPhotos { get; set; }
 
         public int GuestCount { get; set; }
+
         public decimal BudgetBalance { get; set; }
+        
         public int UnpricedLines { get; set; }
+        
         public int? PaymentLineId { get; set; }
+        
         public DateOnly? PaymentDate { get; set; }
+        
         public string? PaymentCategory { get; set; }
+        
         public bool IsPaymentOverdue { get; set; }
+        
         public int MissingSongs { get; set; }
     }
 }

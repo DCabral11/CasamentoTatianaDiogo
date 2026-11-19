@@ -89,6 +89,8 @@ The browser sends 2 MiB chunks to the application, which forwards them through D
 
 ## Local verification
 
+See [Reducing Vercel compute usage](performance.md) for cache lifetimes, invalidation across instances, RSVP polling and production CDN verification.
+
 ```powershell
 dotnet test tests/CasamentoTatianaDiogo.Tests/CasamentoTatianaDiogo.Tests.csproj
 dotnet publish CasamentoTatianaDiogo.csproj -c Release

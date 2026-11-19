@@ -43,8 +43,8 @@
                     <td>@g.FamilyName</td>
                     <td>@(g.CurrentStatus switch { CasamentoTatianaDiogo.Models.Enums.RsvpStatus.Attending => "Vai estar presente", CasamentoTatianaDiogo.Models.Enums.RsvpStatus.NotAttending => "Não vai estar presente", _ => "Por responder" })</td>
                     <td class="text-end">
-                        <a class="btn btn-sm btn-outline-primary" asp-action="History" asp-route-id="@(g.IsPlusOne ? g.MainGuestId : g.Id)">Histórico</a>
-                        @if (g.IsPlusOne && g.CurrentStatus != CasamentoTatianaDiogo.Models.Enums.RsvpStatus.Pending)
+                        <a class="btn btn-sm btn-outline-primary" asp-action="History" asp-route-id="@(g.isPlusOne ? g.MainGuestId : g.Id)">Histórico</a>
+                        @if (g.isPlusOne && g.CurrentStatus != CasamentoTatianaDiogo.Models.Enums.RsvpStatus.Pending)
                         {
                             <a class="btn btn-sm btn-outline-primary" href="/Admin/Rsvp/Details/@g.MainGuestId">Ver resposta principal</a>
                         }
