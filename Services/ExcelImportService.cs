@@ -24,7 +24,7 @@ public class ExcelImportService(ApplicationDbContext db, IWebHostEnvironment env
     {
         if (file == null || file.Length == 0 || file.Length > MaxBytes || !Path.GetExtension(file.FileName).Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
         {
-            errors.Add("Seleciona um ficheiro .xlsx até 5 MB.");
+            errors.Add(T("Seleciona um ficheiro .xlsx até 5 MB."));
             return [];
         }
         try
@@ -32,16 +32,16 @@ public class ExcelImportService(ApplicationDbContext db, IWebHostEnvironment env
             using var stream = file.OpenReadStream();
             using var book = new XLWorkbook(stream);
             var sheet = book.Worksheets.FirstOrDefault(x => x.Name.Equals(Sheet(type), StringComparison.OrdinalIgnoreCase));
-            if (sheet == null) { errors.Add($"Não foi encontrada a folha «{Sheet(type)}»."); return []; }
+            if (sheet == null) { errors.Add(TF($"Não foi encontrada a folha «{Sheet(type)}».")); return []; }
             var cells = sheet.Row(1).CellsUsed().ToList();
             if (cells.GroupBy(x => x.GetString().Trim(), StringComparer.OrdinalIgnoreCase).Any(x => x.Count() > 1))
-            { errors.Add("Existem títulos de colunas repetidos. Usa o modelo disponibilizado."); return []; }
+            { errors.Add(T("Existem títulos de colunas repetidos. Usa o modelo disponibilizado.")); return []; }
             var headers = cells.ToDictionary(x => x.GetString().Trim(), x => x.Address.ColumnNumber, StringComparer.OrdinalIgnoreCase);
             // ID is optional so previously downloaded templates remain usable.
             var missing = Columns(type).Where(x => x != "ID" && !headers.ContainsKey(x)).ToList();
-            if (missing.Count > 0) { errors.Add($"Faltam as colunas: {string.Join(", ", missing)}."); return []; }
+            if (missing.Count > 0) { errors.Add(TF($"Faltam as colunas: {string.Join(", ", missing)}.")); return []; }
             var last = sheet.LastRowUsed()?.RowNumber() ?? 1;
-            if (last > MaxRows + 1) { errors.Add($"O ficheiro pode ter até {MaxRows} linhas de dados."); return []; }
+            if (last > MaxRows + 1) { errors.Add(TF($"O ficheiro pode ter até {MaxRows} linhas de dados.")); return []; }
             var result = new List<ImportInputRow>();
             for (var number = 2; number <= last; number++)
             {
@@ -50,16 +50,16 @@ public class ExcelImportService(ApplicationDbContext db, IWebHostEnvironment env
                 {
                     if (!headers.TryGetValue(column, out var index)) { values[column] = ""; continue; }
                     var cell = sheet.Cell(number, index);
-                    if (cell.HasFormula) errors.Add($"Linha {number}, {column}: substitui a fórmula pelo valor antes de importar.");
+                    if (cell.HasFormula) errors.Add(TF($"Linha {number}, {column}: substitui a fórmula pelo valor antes de importar."));
                     values[column] = cell.GetString().Trim();
                 }
                 if (values.Values.Any(x => x.Length > 0)) result.Add(new() { Number = number, Values = values });
             }
-            if (result.Count == 0) errors.Add("O ficheiro não tem linhas preenchidas para importar.");
+            if (result.Count == 0) errors.Add(T("O ficheiro não tem linhas preenchidas para importar."));
             return result;
         }
         catch (Exception ex) when (ex is not OutOfMemoryException)
-        { errors.Add("Não foi possível ler este ficheiro. Usa um Excel .xlsx criado a partir do modelo."); return []; }
+        { errors.Add(T("Não foi possível ler este ficheiro. Usa um Excel .xlsx criado a partir do modelo.")); return []; }
     }
 
     public async Task<List<ImportPlanRow>> BuildPlanAsync(string type, List<ImportInputRow> rows)
@@ -79,17 +79,17 @@ public class ExcelImportService(ApplicationDbContext db, IWebHostEnvironment env
             if (Value("ID") != "")
             {
                 if (int.TryParse(Value("ID"), out var parsed) && parsed > 0) id = parsed;
-                else row.Errors.Add("O ID deve ser um número inteiro positivo ou ficar vazio para novos registos.");
+                else row.Errors.Add(T("O ID deve ser um número inteiro positivo ou ficar vazio para novos registos."));
             }
             if (type == "families")
             {
                 var reference = Value("Referência");
                 var matches = families.Where(x => reference != "" && string.Equals(x.GroupCode, reference, StringComparison.OrdinalIgnoreCase)).ToList();
                 Family? existing = id.HasValue ? families.SingleOrDefault(x => x.Id == id) : matches.Count == 1 ? matches[0] : null;
-                if (id.HasValue && existing == null) row.Errors.Add("O ID da família não existe.");
-                if (matches.Count > 1 || matches.Any(x => x.Id != existing?.Id)) row.Errors.Add("A referência já pertence a outra família ou é ambígua.");
+                if (id.HasValue && existing == null) row.Errors.Add(T("O ID da família não existe."));
+                if (matches.Count > 1 || matches.Any(x => x.Id != existing?.Id)) row.Errors.Add(T("A referência já pertence a outra família ou é ambígua."));
                 if (existing == null && families.Any(x => Key(x.Name) == Key(Value("Nome"))))
-                    row.Errors.Add("Já existe uma família com este nome. Indica o ID correto para atualizar ou distingue o nome da nova família.");
+                    row.Errors.Add(T("Já existe uma família com este nome. Indica o ID correto para atualizar ou distingue o nome da nova família."));
                 var candidate = new Family
                 {
                     Name = Value("Nome"), GroupCode = reference.NullIfWhiteSpace(), Notes = Value("Notas").NullIfWhiteSpace(),
@@ -99,22 +99,22 @@ public class ExcelImportService(ApplicationDbContext db, IWebHostEnvironment env
                 row.TargetId = existing?.Id;
                 row.Before = existing == null ? [] : FamilyValues(existing);
                 row.After = FamilyValues(candidate);
-                if (!keys.Add(reference != "" ? "ref:" + reference : "name:" + Key(candidate.Name))) row.Errors.Add("Família repetida no ficheiro.");
+                if (!keys.Add(reference != "" ? "ref:" + reference : "name:" + Key(candidate.Name))) row.Errors.Add(T("Família repetida no ficheiro."));
             }
             else
             {
                 var existing = id.HasValue ? guests.SingleOrDefault(x => x.Id == id) : null;
-                if (id.HasValue && existing == null) row.Errors.Add("O ID do convidado não existe.");
+                if (id.HasValue && existing == null) row.Errors.Add(T("O ID do convidado não existe."));
                 var matches = families.Where(x => !string.IsNullOrEmpty(x.GroupCode) && string.Equals(x.GroupCode, Value("Referência da família"), StringComparison.OrdinalIgnoreCase)).ToList();
-                if (matches.Count != 1) row.Errors.Add("A referência da família não existe ou é ambígua. Cria ou corrige primeiro a família.");
+                if (matches.Count != 1) row.Errors.Add(T("A referência da família não existe ou é ambígua. Cria ou corrige primeiro a família."));
                 row.FamilyId = matches.Count == 1 ? matches[0].Id : 0;
                 if (existing != null && existing.FamilyId != row.FamilyId)
-                    row.Errors.Add("A mudança de família deve ser feita na ficha do convidado, para rever as ligações ao convite e ao RSVP.");
+                    row.Errors.Add(T("A mudança de família deve ser feita na ficha do convidado, para rever as ligações ao convite e ao RSVP."));
                 var avatar = Value("Avatar");
                 if (avatar != "" && (avatar != Path.GetFileName(avatar) || avatar.Contains('/') || avatar.Contains('\\') ||
                     !new[] { ".jpg", ".jpeg", ".png", ".webp" }.Contains(Path.GetExtension(avatar).ToLowerInvariant()) ||
                     !File.Exists(Path.Combine(environment.WebRootPath, "images", "guests", avatar))))
-                    row.Errors.Add("O avatar deve ser o nome de uma imagem existente na pasta de avatares.");
+                    row.Errors.Add(T("O avatar deve ser o nome de uma imagem existente na pasta de avatares."));
                 var candidate = new Guest
                 {
                     FirstName = Value("Nome"), LastName = Value("Apelido"),
@@ -132,14 +132,14 @@ public class ExcelImportService(ApplicationDbContext db, IWebHostEnvironment env
                 foreach (var error in await GuestCompanions.ValidateAsync(db, candidate)) row.Errors.Add(error.Message);
                 var sameName = guests.Where(x => x.FamilyId == candidate.FamilyId && Key(x.FirstName) == Key(candidate.FirstName) && Key(x.LastName) == Key(candidate.LastName)).ToList();
                 if (existing == null && sameName.Count > 0)
-                    row.Errors.Add($"Já existe este nome nesta família (ID: {string.Join(", ", sameName.Select(x => x.Id))}). Indica o ID para atualizar; não é possível escolher apenas pelo nome.");
+                    row.Errors.Add(TF($"Já existe este nome nesta família (ID: {string.Join(", ", sameName.Select(x => x.Id))}). Indica o ID para atualizar; não é possível escolher apenas pelo nome."));
                 row.TargetId = existing?.Id;
                 row.Before = existing == null ? [] : GuestValues(existing, families.Single(x => x.Id == existing.FamilyId).GroupCode ?? "");
                 row.After = GuestValues(candidate, matches.Count == 1 ? matches[0].GroupCode! : Value("Referência da família"));
                 var key = id.HasValue ? "id:" + id : $"new:{candidate.FamilyId}:{Key(candidate.FirstName)}:{Key(candidate.LastName)}";
-                if (!keys.Add(key)) row.Errors.Add("Convidado repetido no ficheiro.");
+                if (!keys.Add(key)) row.Errors.Add(T("Convidado repetido no ficheiro."));
             }
-            if (row.TargetId.HasValue && !targets.Add(row.TargetId.Value)) row.Errors.Add("O mesmo registo está indicado em várias linhas.");
+            if (row.TargetId.HasValue && !targets.Add(row.TargetId.Value)) row.Errors.Add(T("O mesmo registo está indicado em várias linhas."));
             row.Action = row.Errors.Count > 0 ? "Erro" : row.TargetId == null ? "Criar" :
                 row.After.All(x => row.Before.GetValueOrDefault(x.Key) == x.Value) ? "Sem alterações" : "Atualizar";
         }
@@ -229,16 +229,16 @@ public class ExcelImportService(ApplicationDbContext db, IWebHostEnvironment env
         foreach (var field in results.SelectMany(x => x.MemberNames).Distinct())
             errors.Add(field switch
             {
-                "Name" => "Indica o nome da família, com até 150 caracteres.",
-                "FirstName" => "Indica o nome do convidado, com até 100 caracteres.",
-                "LastName" => "Indica o apelido, com até 100 caracteres.",
-                "DisplayName" => "O nome apresentado pode ter até 220 caracteres.",
-                "GroupCode" => "A referência pode ter até 50 caracteres.",
-                "Email" => "Indica um e-mail válido, com até 200 caracteres, ou deixa o campo vazio.",
-                "Phone" => "Indica um telefone válido, com até 50 caracteres, ou deixa o campo vazio.",
-                "Notes" => "As notas podem ter até 1000 caracteres.",
-                "AvatarFileName" => "O nome do ficheiro de avatar pode ter até 255 caracteres.",
-                _ => "Existe um campo inválido. Revê os dados desta linha."
+                "Name" => T("Indica o nome da família, com até 150 caracteres."),
+                "FirstName" => T("Indica o nome do convidado, com até 100 caracteres."),
+                "LastName" => T("Indica o apelido, com até 100 caracteres."),
+                "DisplayName" => T("O nome apresentado pode ter até 220 caracteres."),
+                "GroupCode" => T("A referência pode ter até 50 caracteres."),
+                "Email" => T("Indica um e-mail válido, com até 200 caracteres, ou deixa o campo vazio."),
+                "Phone" => T("Indica um telefone válido, com até 50 caracteres, ou deixa o campo vazio."),
+                "Notes" => T("As notas podem ter até 1000 caracteres."),
+                "AvatarFileName" => T("O nome do ficheiro de avatar pode ter até 255 caracteres."),
+                _ => T("Existe um campo inválido. Revê os dados desta linha.")
             });
     }
     public static bool IsBooleanColumn(string column) => column is "Permitir resposta familiar" or "Permitir acompanhante" or "Criança";
@@ -255,7 +255,7 @@ public class ExcelImportService(ApplicationDbContext db, IWebHostEnvironment env
     {
         var choice = BooleanChoice(value, column);
         if (choice.HasValue) return choice.Value;
-        errors.Add($"«{column}» aceita Sim ou Não.");
+        errors.Add(TF($"«{column}» aceita Sim ou Não."));
         return column == "Permitir resposta familiar";
     }
     private static Dictionary<string, string> FamilyValues(Family f) => new()

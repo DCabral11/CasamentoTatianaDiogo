@@ -1,4 +1,4 @@
-﻿#region References
+#region References
 
 using CasamentoTatianaDiogo.Services;
 using CasamentoTatianaDiogo.Services.Interfaces;
@@ -28,7 +28,7 @@ namespace CasamentoTatianaDiogo.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["Error"] = "Revê os dados das fotografias e tenta novamente.";
+                TempData["Error"] = T("Revê os dados das fotografias e tenta novamente.");
 
                 return RedirectToAction(nameof(Index));
             }
@@ -44,7 +44,7 @@ namespace CasamentoTatianaDiogo.Controllers
         public async Task<IActionResult> BeginUpload([FromBody] BeginPhotoUploadRequest request, CancellationToken ct)
         {
             if (!ModelState.IsValid)
-                return BadRequest(new { message = "Revê o nome, formato e tamanho da fotografia." });
+                return BadRequest(new { message = T("Revê o nome, formato e tamanho da fotografia.") });
 
             try 
             { 
@@ -58,7 +58,7 @@ namespace CasamentoTatianaDiogo.Controllers
             {
                 logger.LogError(ex, "Could not start a photo upload.");
             
-                return StatusCode(503, new { message = "Não foi possível iniciar o envio. Tenta novamente mais tarde." });
+                return StatusCode(503, new { message = T("Não foi possível iniciar o envio. Tenta novamente mais tarde.") });
             }
         }
 
@@ -66,7 +66,7 @@ namespace CasamentoTatianaDiogo.Controllers
         public async Task<IActionResult> UploadChunk([FromHeader(Name = "X-Upload-Token")] string token, [FromHeader(Name = "X-Upload-Offset")] long offset, CancellationToken ct)
         {
             if (!ModelState.IsValid || string.IsNullOrWhiteSpace(token) || Request.ContentLength is not > 0 or > ResumablePhotoUploadService.ChunkSize)
-                return BadRequest(new { message = "O envio da fotografia é inválido." });
+                return BadRequest(new { message = T("O envio da fotografia é inválido.") });
 
             var bytes = new byte[(int)Request.ContentLength.Value];
             
@@ -84,7 +84,7 @@ namespace CasamentoTatianaDiogo.Controllers
             {
                 logger.LogError(ex, "Could not upload a photo chunk.");
                 
-                return StatusCode(503, new { message = "O envio foi interrompido. Tenta novamente dentro de momentos." });
+                return StatusCode(503, new { message = T("O envio foi interrompido. Tenta novamente dentro de momentos.") });
             }
         }
     }

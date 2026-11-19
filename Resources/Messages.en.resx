@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <data name="RsvpSearchNoResults" xml:space="preserve">
+    <value>No guests were found. Try another name or contact the couple.</value>
+  </data>
+  <data name="RsvpStatusRequired" xml:space="preserve">
+    <value>Choose whether you will attend before continuing.</value>
+  </data>
+  <data name="RsvpGuestNotFound" xml:space="preserve">
+    <value>We could not find this guest. Return to the search and try again.</value>
+  </data>
+  <data name="RsvpExistingResponse" xml:space="preserve">
+    <value>One of the selected guests already has a response. Tick the update option to replace it.</value>
+  </data>
+  <data name="RsvpInvalidPlusOne" xml:space="preserve">
+    <value>We could not link that plus-one. Refresh the page and try again.</value>
+  </data>
+  <data name="RsvpSaved" xml:space="preserve">
+    <value>Your response was saved. Thank you for confirming your attendance!</value>
+  </data>
+  <data name="AdminLoginFailed" xml:space="preserve">
+    <value>Could not sign in. Check your email and password.</value>
+  </data>
+  <data name="GuestAvatarNotFound" xml:space="preserve">
+    <value>Select an image available in the list.</value>
+  </data>
+  <data name="UnexpectedError" xml:space="preserve">
+    <value>Something went wrong. We are looking into the issue. Return home or try again shortly.</value>
+  </data>
+  <data name="PageNotFound" xml:space="preserve">
+    <value>This page is no longer here. The address may be incomplete or the page may have moved.</value>
+  </data>
+  <data name="AccessDenied" xml:space="preserve">
+    <value>You do not have access to this page. Sign in with an authorised account and try again.</value>
+  </data>
+  <data name="InvalidRequest" xml:space="preserve">
+    <value>The request could not be completed. Check the information and try again.</value>
+  </data>
+  <data name="PageUnavailable" xml:space="preserve">
+    <value>This page could not be opened. Try again shortly.</value>
+  </data>
+</root>

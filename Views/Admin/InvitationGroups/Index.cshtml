@@ -1,20 +1,20 @@
 @model IEnumerable<Family>
 
 <div class="container py-5">
-    <h1>Famílias</h1>
+    <h1>@T("Famílias")</h1>
     <div class="admin-page-actions">
-        <a class="btn btn-primary" href="/Admin/InvitationGroups/Create"><i class="bi bi-plus-lg"></i> Adicionar família</a>
-        <a class="btn btn-outline-primary" asp-controller="ExcelImport" asp-action="Families"><i class="bi bi-file-earmark-arrow-up"></i> Importar Excel</a>
+        <a class="btn btn-primary" href="/Admin/InvitationGroups/Create"><i class="bi bi-plus-lg"></i> @T("Adicionar família")</a>
+        <a class="btn btn-outline-primary" asp-controller="ExcelImport" asp-action="Families"><i class="bi bi-file-earmark-arrow-up"></i> @T("Importar Excel")</a>
     </div>
     <partial name="_AdminFilters" />
     <div class="table-responsive">
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Nome</th>
-                <th>Nome de referência</th>
-                <th>Respostas múltiplas</th>
+                <th>@T("Id")</th>
+                <th>@T("Nome")</th>
+                <th>@T("Nome de referência")</th>
+                <th>@T("Respostas múltiplas")</th>
                 <th></th>
             </tr>
         </thead>
@@ -27,10 +27,10 @@
                     <td>@item.GroupCode</td>
                     <td>@item.AllowGroupRsvp</td>
                     <td>
-                        <a class="btn btn-sm btn-outline-primary" href="/Admin/InvitationGroups/Edit/@item.Id"><i class="bi bi-pencil-square"></i> Editar</a>
-                        <form method="post" action="/Admin/InvitationGroups/Delete/@item.Id" class="d-inline" data-delete-confirmation data-delete-message="Queres mesmo eliminar a família «@item.Name»? Esta ação não pode ser anulada.">
+                        <a class="btn btn-sm btn-outline-primary" href="/Admin/InvitationGroups/Edit/@item.Id"><i class="bi bi-pencil-square"></i> @T("Editar")</a>
+                        <form method="post" action="/Admin/InvitationGroups/Delete/@item.Id" class="d-inline" data-delete-confirmation data-delete-message="@T("Queres mesmo eliminar a família «{0}»? Esta ação não pode ser anulada.", item.Name)">
                             @Html.AntiForgeryToken()
-                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash3"></i> Remover</button>
+                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash3"></i> @T("Remover")</button>
                         </form>
                     </td>
                 </tr>

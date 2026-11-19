@@ -3,22 +3,22 @@
 @{ var formats = await ContactSettings.GetAsync(); }
 @model List<CasamentoTatianaDiogo.ViewModels.Admin.SupplierListRow>
 @{
-    ViewData["Title"] = "Fornecedores";
-    var pt = CultureInfo.GetCultureInfo("pt-PT");
+    ViewData["Title"] = T("Fornecedores");
+    var pt = CultureInfo.CurrentCulture;
 }
 <div class="container py-5">
-    <h1>Fornecedores</h1><partial name="~/Views/Admin/Planning/_PlanningNav.cshtml" />
-    <div class="admin-page-actions"><a class="btn btn-primary" asp-action="SupplierForm" asp-route-categoryId="@ViewBag.CategoryFilter">Adicionar fornecedor</a></div>
+    <h1>@T("Fornecedores")</h1><partial name="~/Views/Admin/Planning/_PlanningNav.cshtml" />
+    <div class="admin-page-actions"><a class="btn btn-primary" asp-action="SupplierForm" asp-route-categoryId="@ViewBag.CategoryFilter">@T("Adicionar fornecedor")</a></div>
     <partial name="_AdminFilters" />
     @if (Model.Count == 0)
     {
-        <p>@(ViewBag.CategoryFilter == null ? "Ainda não há fornecedores." : "Nenhum fornecedor nesta categoria.")</p>
+        <p>@(ViewBag.CategoryFilter == null ? T("Ainda não há fornecedores.") : T("Nenhum fornecedor nesta categoria."))</p>
     }
     else
     {
         <div class="table-responsive"><table class="table align-middle">
-            <caption class="visually-hidden">Fornecedores e respetivas linhas de orçamento</caption>
-            <thead><tr><th>Categoria</th><th>Nome</th><th>Contacto</th><th>Email</th><th>Site</th><th>Estado</th><th>Notas</th><th>Preço</th><th>Orçamento</th></tr></thead>
+            <caption class="visually-hidden">@T("Fornecedores e respetivas linhas de orçamento")</caption>
+            <thead><tr><th>@T("Categoria")</th><th>@T("Nome")</th><th>@T("Contacto")</th><th>@T("Email")</th><th>@T("Site")</th><th>@T("Estado")</th><th>@T("Notas")</th><th>@T("Preço")</th><th>@T("Orçamento")</th></tr></thead>
             <tbody>
             @foreach (var row in Model)
             {
@@ -27,9 +27,9 @@
                     <td>@row.CategoryName</td><th scope="row"><a asp-action="SupplierForm" asp-route-id="@supplier.Id">@supplier.Name</a></th>
                     <td>@(ContactFormats.Phone(supplier.Contact, formats)?.Display ?? supplier.Contact) @if (supplier.Phone != null) { <span class="d-block">@(ContactFormats.Phone(supplier.Phone, formats)?.Display ?? supplier.Phone)</span> }</td><td>@(ContactFormats.Email(supplier.Email, formats)?.Display ?? supplier.Email)</td>
                     <td>@if (supplier.Website != null) { <a href="@supplier.Website">@supplier.Website</a> }</td>
-                    <td>@supplier.Status</td><td>@supplier.Notes</td><td class="text-nowrap">@(supplier.Price?.ToString("C2", pt) ?? "Por definir")</td>
-                    <td>@if (row.BudgetLineCount > 0) { <a asp-action="Budget" asp-route-supplierId="@supplier.Id">Ver linhas (@row.BudgetLineCount)</a> }
-                        <a class="d-block" asp-action="Line" asp-route-supplierId="@supplier.Id">Adicionar linha</a></td>
+                    <td>@T(supplier.Status)</td><td>@supplier.Notes</td><td class="text-nowrap">@(supplier.Price?.ToString("C2", pt) ?? T("Por definir"))</td>
+                    <td>@if (row.BudgetLineCount > 0) { <a asp-action="Budget" asp-route-supplierId="@supplier.Id">@T("Ver linhas (")@row.BudgetLineCount)</a> }
+                        <a class="d-block" asp-action="Line" asp-route-supplierId="@supplier.Id">@T("Adicionar linha")</a></td>
                 </tr>
             }
             </tbody>

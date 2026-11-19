@@ -15,7 +15,7 @@ function isChoice(field) {
     return field.type === 'checkbox' || field.type === 'radio';
 }
 
-responseForm.addEventListener('submit', () => {
+function savePendingAnswers() {
     try {
         const answers = Object.fromEntries(answerFields.map(field =>
             [answerKey(field), isChoice(field) ? field.checked : field.value]));
@@ -25,7 +25,9 @@ responseForm.addEventListener('submit', () => {
     } catch {
         // The server still returns the submitted values when browser storage is unavailable.
     }
-});
+}
+responseForm.addEventListener('submit', savePendingAnswers);
+window.addEventListener('wedding:before-language-change', savePendingAnswers);
 
 function restoreSubmittedAnswers() {
     try {

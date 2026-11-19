@@ -31,7 +31,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
         {
             var rows = await db.SiteContents.AsNoTracking().Where(x => ManagedKeys.Contains(x.Key)).OrderBy(x => x.Description).ThenBy(x => x.Id).ToListAsync();
 
-            return View("~/Views/Admin/Content/Index.cshtml", new AdminListFilters<SiteContent>(this, rows, "Descrição, chave ou texto", x => $"{x.Description} {x.Key} {x.Value}").Select("html", "Conteúdo HTML", AdminFilterOptions.YesNo, x => AdminFilterOptions.Flag(x.IsHtml)).Results());
+            return View("~/Views/Admin/Content/Index.cshtml", new AdminListFilters<SiteContent>(this, rows, T("Descrição, chave ou texto"), x => $"{x.Description} {x.Key} {x.Value}").Select("html", T("Conteúdo HTML"), AdminFilterOptions.YesNo, x => AdminFilterOptions.Flag(x.IsHtml)).Results());
         }
 
         public async Task<IActionResult> Edit(int id)
@@ -50,7 +50,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             db.Update(model);
             await db.SaveChangesAsync();
 
-            TempData["Success"] = "Texto Atualizado com Sucesso!";
+            TempData["Success"] = T("Texto Atualizado com Sucesso!");
 
             return RedirectToAction(nameof(Index));
         }
@@ -99,11 +99,11 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
 
             var fields = section.Fields.ToDictionary(f => f.Key, f => $"{section.Title} · {f.Label}");
 
-            return await SaveTexts(fields, guidance, nameof(PhaseMessages), new { page }, "Mensagens guardadas.");
+            return await SaveTexts(fields, guidance, nameof(PhaseMessages), new { page }, T("Mensagens guardadas."));
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public Task<IActionResult> Travel(Dictionary<string, string?> guidance) => SaveTexts(WeddingTravel.Topics.ToDictionary(t => t.Key, t => $"Informações · {t.Title}"), guidance, nameof(Travel), null, "As informações práticas foram guardadas.");
+        public Task<IActionResult> Travel(Dictionary<string, string?> guidance) => SaveTexts(WeddingTravel.Topics.ToDictionary(t => t.Key, t => TF($"Informações · {t.Title}")), guidance, nameof(Travel), null, T("As informações práticas foram guardadas."));
 
         #endregion
 
@@ -142,7 +142,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             }
             catch (DbUpdateException)
             {
-                ModelState.AddModelError("", "Não foi possível guardar as indicações. Revê o texto e tenta novamente.");
+                ModelState.AddModelError("", T("Não foi possível guardar as indicações. Revê o texto e tenta novamente."));
 
                 return View($"~/Views/Admin/Content/{action}.cshtml", guidance);
             }

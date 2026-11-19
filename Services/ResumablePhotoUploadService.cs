@@ -23,7 +23,7 @@ public class ResumablePhotoUploadService(ApplicationDbContext db, IPhotoUploadSe
             throw new PhotoUploadValidationException(window.message);
         var settings = window.settings;
         if (string.IsNullOrWhiteSpace(settings.GoogleDriveFolderId))
-            throw new PhotoUploadValidationException("O envio de fotografias ainda está a ser preparado. Tenta novamente mais tarde.");
+            throw new PhotoUploadValidationException(T("O envio de fotografias ainda está a ser preparado. Tenta novamente mais tarde."));
 
         var name = Path.GetFileName(request.FileName.Replace('\\', '/'));
         var extension = Path.GetExtension(name).ToLowerInvariant();
@@ -37,9 +37,9 @@ public class ResumablePhotoUploadService(ApplicationDbContext db, IPhotoUploadSe
             _ => false
         };
         if (string.IsNullOrWhiteSpace(name) || !allowed.Contains(extension, StringComparer.OrdinalIgnoreCase) || !validMime)
-            throw new PhotoUploadValidationException("Escolhe uma fotografia num dos formatos permitidos.");
+            throw new PhotoUploadValidationException(T("Escolhe uma fotografia num dos formatos permitidos."));
         if (request.SizeBytes <= 0 || request.SizeBytes > settings.MaxFilesSizeMb * 1024L * 1024L)
-            throw new PhotoUploadValidationException($"A fotografia excede o limite de {settings.MaxFilesSizeMb} MB ou está vazia.");
+            throw new PhotoUploadValidationException(TF($"A fotografia excede o limite de {settings.MaxFilesSizeMb} MB ou está vazia."));
 
         var safeName = Regex.Replace(Path.GetFileNameWithoutExtension(name), "[^a-zA-Z0-9_-]", "_");
         var session = await drive.BeginUploadAsync($"{Guid.NewGuid():N}_{safeName}{extension}", request.ContentType,
@@ -66,11 +66,11 @@ public class ResumablePhotoUploadService(ApplicationDbContext db, IPhotoUploadSe
         Guid id;
         try { id = Guid.Parse(protector.Unprotect(token)); }
         catch (Exception ex) when (ex is CryptographicException or FormatException or ArgumentException)
-        { throw new PhotoUploadValidationException("O envio expirou. Seleciona novamente a fotografia."); }
+        { throw new PhotoUploadValidationException(T("O envio expirou. Seleciona novamente a fotografia.")); }
 
         var pending = await db.PendingPhotoUploads.SingleOrDefaultAsync(x => x.Id == id, ct);
         if (pending == null || pending.ExpiresAt <= time.GetUtcNow().UtcDateTime)
-            throw new PhotoUploadValidationException("O envio expirou. Seleciona novamente a fotografia.");
+            throw new PhotoUploadValidationException(T("O envio expirou. Seleciona novamente a fotografia."));
         if (pending.PhotoUploadId.HasValue)
             return new PhotoUploadProgress(pending.SizeBytes, true);
         // Returning the recorded position makes a repeated request safe after a lost response.
@@ -79,7 +79,7 @@ public class ResumablePhotoUploadService(ApplicationDbContext db, IPhotoUploadSe
         if (offset != pending.UploadedBytes || bytes.Length == 0 || bytes.Length > ChunkSize ||
             offset + bytes.Length > pending.SizeBytes ||
             (offset + bytes.Length < pending.SizeBytes && bytes.Length % (256 * 1024) != 0))
-            throw new PhotoUploadValidationException("A fotografia não foi enviada na ordem esperada. Tenta novamente.");
+            throw new PhotoUploadValidationException(T("A fotografia não foi enviada na ordem esperada. Tenta novamente."));
 
         var window = await photos.GetWindowAsync();
         if (!window.open)

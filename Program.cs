@@ -48,7 +48,19 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.SlidingExpiration = true;
 });
 
-builder.Services.AddControllersWithViews(options => options.Filters.Add<SiteMusicFilter>());
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+builder.Services.Configure<RequestLocalizationOptions>(ApplicationLanguages.Configure);
+builder.Services.AddControllersWithViews(options =>
+    {
+        options.Filters.Add<SiteMusicFilter>();
+        options.ModelMetadataDetailsProviders.Add(new LocalizedDisplayMetadataProvider());
+        options.ModelBindingMessageProvider.SetAttemptedValueIsInvalidAccessor((value, field) => T("O valor «{0}» não é válido para {1}.", value, T(field)));
+        options.ModelBindingMessageProvider.SetValueMustNotBeNullAccessor(_ => T("Este campo é obrigatório."));
+        options.ModelBindingMessageProvider.SetNonPropertyAttemptedValueIsInvalidAccessor(_ => T("Não foi possível interpretar o valor deste campo."));
+        options.ModelBindingMessageProvider.SetValueIsInvalidAccessor(value => T("O valor «{0}» não é válido.", value));
+        options.ModelBindingMessageProvider.SetValueMustBeANumberAccessor(field => T("O campo {0} deve conter um número.", T(field)));
+    })
+    .AddDataAnnotationsLocalization(options => options.DataAnnotationLocalizerProvider = (_, _) => new UiTextLocalizer());
 builder.Services.AddRazorPages();
 builder.Services.AddAntiforgery(options => options.HeaderName = "X-CSRF-TOKEN");
 builder.Services.AddHealthChecks().AddCheck<ApplicationReadinessHealthCheck>("database", timeout: TimeSpan.FromSeconds(15));
@@ -102,6 +114,7 @@ builder.Services.AddSingleton<IGoogleDriveService, GoogleDriveService>();
 builder.Services.AddScoped<IPhotoUploadService, PhotoUploadService>();
 builder.Services.AddScoped<ResumablePhotoUploadService>();
 builder.Services.AddScoped<ISiteContentService, SiteContentService>();
+builder.Services.AddScoped<SiteTranslationService>();
 builder.Services.AddSingleton<IAppMessageService, AppMessageService>();
 
 builder.Logging.ClearProviders();
@@ -131,6 +144,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles(new StaticFileOptions { OnPrepareResponse = StaticAssetCache.PrepareResponse });
+app.UseRequestLocalization();
 app.UseStatusCodePagesWithReExecute("/Home/Status/{0}");
 app.UseRouting();
 app.UseAuthentication();

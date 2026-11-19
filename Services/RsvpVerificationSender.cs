@@ -17,8 +17,8 @@ public class RsvpVerificationSender(IConfiguration config) : IRsvpVerificationSe
         if (!IsAvailable(channel)) throw new InvalidOperationException("Email verification delivery is unavailable.");
         using var message = new MailMessage(config["RsvpEmail:From"]!, contact)
         {
-            Subject = "Código de verificação — Tatiana & Diogo",
-            Body = $"O teu código de verificação é: {code}\n\nÉ válido durante 10 minutos e só pode ser utilizado uma vez.\nSe não pediste este código, ignora esta mensagem.",
+            Subject = T("Código de verificação — Tatiana & Diogo"),
+            Body = T("O teu código de verificação é: {0}\n\nÉ válido durante 10 minutos e só pode ser utilizado uma vez.\nSe não pediste este código, ignora esta mensagem.", code),
             BodyEncoding = Encoding.UTF8,
             SubjectEncoding = Encoding.UTF8
         };

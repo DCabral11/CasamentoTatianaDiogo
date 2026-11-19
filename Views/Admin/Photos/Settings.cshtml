@@ -1,20 +1,20 @@
 @model PhotoUploadSettings
 @{
-    ViewData["Title"] = "Definições da galeria";
+    ViewData["Title"] = T("Definições da galeria");
 }
 <div class="container py-5 narrow">
     <header class="mb-3">
-        <h1 class="mb-1">Definições da galeria</h1>
-        <p class="text-muted mb-0">Controla quando os convidados podem enviar fotografias e quais os ficheiros aceites.</p>
+        <h1 class="mb-1">@T("Definições da galeria")</h1>
+        <p class="text-muted mb-0">@T("Controla quando os convidados podem enviar fotografias e quais os ficheiros aceites.")</p>
     </header>
     <form method="post" class="admin-form">
         @Html.AntiForgeryToken()<input asp-for="Id" type="hidden" /><partial name="_FormErrors" />
-        <div class="form-check mb-4"><input asp-for="IsEnabled" class="form-check-input" /><label asp-for="IsEnabled" class="form-check-label">Permitir envio de fotografias</label></div>
-        <div class="row g-3"><div class="col-md-6"><label asp-for="OpensAt" class="form-label">Abre em</label><input asp-for="OpensAt" type="datetime-local" class="form-control" /></div><div class="col-md-6"><label asp-for="ClosesAt" class="form-label">Fecha em</label><input asp-for="ClosesAt" type="datetime-local" class="form-control" /></div></div>
-        <div class="mt-3"><label asp-for="GoogleDriveFolderId" class="form-label">ID da pasta Google Drive</label><input asp-for="GoogleDriveFolderId" aria-describedby="drive-folder-help" class="form-control" /><div class="form-text" id="drive-folder-help">Encontras o ID no endereço da pasta do Google Drive.</div></div>
-        <div class="row g-3 mt-1"><div class="col-md-6"><label asp-for="MaxFilesSizeMb" class="form-label">Tamanho máximo por ficheiro (MB)</label><input asp-for="MaxFilesSizeMb" type="number" min="1" max="100" class="form-control" /></div><div class="col-md-6"><label asp-for="AllowedExtensionsCsv" class="form-label">Formatos permitidos</label><input asp-for="AllowedExtensionsCsv" aria-describedby="extensions-help" class="form-control" /><div class="form-text" id="extensions-help">Separa os formatos por vírgulas.</div></div></div>
+        <div class="form-check mb-4"><input asp-for="IsEnabled" class="form-check-input" /><label asp-for="IsEnabled" class="form-check-label">@T("Permitir envio de fotografias")</label></div>
+        <div class="row g-3"><div class="col-md-6"><label asp-for="OpensAt" class="form-label">@T("Abre em")</label><input asp-for="OpensAt" type="datetime-local" class="form-control" /></div><div class="col-md-6"><label asp-for="ClosesAt" class="form-label">@T("Fecha em")</label><input asp-for="ClosesAt" type="datetime-local" class="form-control" /></div></div>
+        <div class="mt-3"><label asp-for="GoogleDriveFolderId" class="form-label">@T("ID da pasta Google Drive")</label><input asp-for="GoogleDriveFolderId" aria-describedby="drive-folder-help" class="form-control" /><div class="form-text" id="drive-folder-help">@T("Encontras o ID no endereço da pasta do Google Drive.")</div></div>
+        <div class="row g-3 mt-1"><div class="col-md-6"><label asp-for="MaxFilesSizeMb" class="form-label">@T("Tamanho máximo por ficheiro (MB)")</label><input asp-for="MaxFilesSizeMb" type="number" min="1" max="100" class="form-control" /></div><div class="col-md-6"><label asp-for="AllowedExtensionsCsv" class="form-label">@T("Formatos permitidos")</label><input asp-for="AllowedExtensionsCsv" aria-describedby="extensions-help" class="form-control" /><div class="form-text" id="extensions-help">@T("Separa os formatos por vírgulas.")</div></div></div>
         <div class="admin-form-actions">
-            <button class="btn btn-primary">Guardar definições</button>
+            <button class="btn btn-primary">@T("Guardar definições")</button>
         </div>
     </form>
 </div>

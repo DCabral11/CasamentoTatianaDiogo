@@ -4,9 +4,9 @@
 }
 <form method="get" class="d-flex flex-wrap align-items-end gap-2 mb-3">
     <div>
-        <label for="category-filter" class="form-label">Pesquisar por categoria</label>
+        <label for="category-filter" class="form-label">@T("Pesquisar por categoria")</label>
         <select id="category-filter" name="categoryId" class="form-select">
-            <option value="">Todas as categorias</option>
+            <option value="">@T("Todas as categorias")</option>
             @foreach (var category in categories)
             {
                 <option value="@category.Id" selected="@(selected == category.Id)">@category.Name</option>
@@ -17,9 +17,9 @@
     {
         <input type="hidden" name="supplierId" value="@supplierId" />
     }
-    <button class="btn btn-outline-primary">Filtrar</button>
+    <button class="btn btn-outline-primary">@T("Filtrar")</button>
     @if (selected.HasValue || ViewBag.SupplierFilter != null)
     {
-        <a class="btn btn-link" href="@Context.Request.Path">Limpar filtros</a>
+        <a class="btn btn-link" href="@Context.Request.Path">@T("Limpar filtros")</a>
     }
 </form>

@@ -18,7 +18,7 @@ namespace CasamentoTatianaDiogo.Controllers
         {
             Response.StatusCode = StatusCodes.Status500InternalServerError;
 
-            return ErrorView("Algo não correu como esperado", "Estamos a tratar deste imprevisto. Podes voltar ao início ou tentar novamente dentro de instantes.", "bi-heartbreak", "Erro temporário");
+            return ErrorView(T("Algo não correu como esperado"), T("Estamos a tratar deste imprevisto. Podes voltar ao início ou tentar novamente dentro de instantes."), "bi-heartbreak", T("Erro temporário"));
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -31,10 +31,10 @@ namespace CasamentoTatianaDiogo.Controllers
 
             return id switch
             {
-                StatusCodes.Status404NotFound => ErrorView("Esta página já não está aqui", "O endereço pode estar incompleto ou a página pode ter mudado. Vamos ajudar-te a voltar ao caminho certo.", "bi-map", "Página não encontrada"),
-                StatusCodes.Status403Forbidden => ErrorView("Não tens acesso a esta página", "Se acreditas que devias poder aceder, inicia sessão com a conta certa e volta a tentar.", "bi-shield-lock", "Acesso restrito"),
-                StatusCodes.Status400BadRequest => ErrorView("Não foi possível concluir o pedido", "Confirma a informação preenchida e tenta novamente.", "bi-exclamation-circle", "Pedido inválido"),
-                _ => ErrorView("Não foi possível abrir esta página", "Tenta novamente dentro de instantes. Se o problema continuar, fala connosco.", "bi-exclamation-circle", "Indisponível de momento")
+                StatusCodes.Status404NotFound => ErrorView(T("Esta página já não está aqui"), T("O endereço pode estar incompleto ou a página pode ter mudado. Vamos ajudar-te a voltar ao caminho certo."), "bi-map", T("Página não encontrada")),
+                StatusCodes.Status403Forbidden => ErrorView(T("Não tens acesso a esta página"), T("Se acreditas que devias poder aceder, inicia sessão com a conta certa e volta a tentar."), "bi-shield-lock", T("Acesso restrito")),
+                StatusCodes.Status400BadRequest => ErrorView(T("Não foi possível concluir o pedido"), T("Confirma a informação preenchida e tenta novamente."), "bi-exclamation-circle", T("Pedido inválido")),
+                _ => ErrorView(T("Não foi possível abrir esta página"), T("Tenta novamente dentro de instantes. Se o problema continuar, fala connosco."), "bi-exclamation-circle", T("Indisponível de momento"))
             };
         }
 

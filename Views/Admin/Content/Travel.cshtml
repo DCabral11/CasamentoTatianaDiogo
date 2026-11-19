@@ -1,21 +1,21 @@
 @model IReadOnlyDictionary<string, string>
-@{ ViewData["Title"] = "Informações práticas"; }
+@{ ViewData["Title"] = T("Informações práticas"); }
 <div class="container py-5 narrow">
-    <h1>Informações práticas</h1>
-    <p>Estas indicações aparecem em «Planear a visita» na página de informações. Deixa um campo vazio para mostrar o texto sugerido.</p>
+    <h1>@T("Informações práticas")</h1>
+    <p>@T("Estas indicações aparecem em «Planear a visita» na página de informações. Deixa um campo vazio para mostrar o texto sugerido.")</p>
     <form asp-action="Travel" method="post" class="admin-form">
         <partial name="_FormErrors" />
         @foreach (var topic in WeddingTravel.Topics)
         {
             <div class="mb-3">
-                <label class="form-label" for="@topic.Key">@topic.Title</label>
-                <textarea class="form-control" id="@topic.Key" name="guidance[@topic.Key]" rows="4" placeholder="@topic.DefaultText">@Model.GetValueOrDefault(topic.Key)</textarea>
+                <label class="form-label" for="@topic.Key">@T(topic.Title)</label>
+                <textarea class="form-control" id="@topic.Key" name="guidance[@topic.Key]" rows="4" placeholder="@T(topic.DefaultText)">@Model.GetValueOrDefault(topic.Key)</textarea>
             </div>
         }
         <div class="admin-form-actions">
-            <button class="btn btn-primary" type="submit">Guardar informações</button>
-            <a class="btn btn-link" asp-controller="Information" asp-action="Index" asp-fragment="travel-heading">Ver página de informações</a>
+            <button class="btn btn-primary" type="submit">@T("Guardar informações")</button>
+            <a class="btn btn-link" asp-controller="Information" asp-action="Index" asp-fragment="travel-heading">@T("Ver página de informações")</a>
         </div>
     </form>
-    <p class="mt-4"><a asp-controller="Settings" asp-action="Index">Editar a data, a hora e os locais usados no calendário e nos mapas</a></p>
+    <p class="mt-4"><a asp-controller="Settings" asp-action="Index">@T("Editar a data, a hora e os locais usados no calendário e nos mapas")</a></p>
 </div>

@@ -16,7 +16,7 @@
     const unavailable = submitButton.disabled;
     requestForm.addEventListener('submit', () => {
         submitButton.disabled = true;
-        submitButton.textContent = 'A enviar código…';
+        submitButton.textContent = window.weddingText("A enviar código…");
     });
     window.addEventListener('pageshow', () => {
         submitButton.disabled = unavailable;

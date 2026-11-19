@@ -37,7 +37,7 @@ public sealed class AdminListFilters<T>
         Panel.Fields.Add(new(name, label, value, choices));
         if (value.Length > 0)
         {
-            if (!choices.Any(x => x.Value == value)) Panel.Errors.Add($"Escolhe uma opção válida em «{label}».");
+            if (!choices.Any(x => x.Value == value)) Panel.Errors.Add(T("Escolhe uma opção válida em «{0}».", T(label)));
             rows = rows.Where(x => key(x) == value);
         }
         return this;
@@ -45,8 +45,8 @@ public sealed class AdminListFilters<T>
 
     public AdminListFilters<T> Dates(string label, Func<T, DateOnly?> date)
     {
-        var from = Date("from", label + " desde");
-        var until = Date("until", label + " até");
+        var from = Date("from", T("{0} desde", T(label)));
+        var until = Date("until", T("{0} até", T(label)));
         if (from > until) Panel.Errors.Add("A data inicial não pode ser posterior à data final.");
         if (from.HasValue) rows = rows.Where(x => date(x) >= from);
         if (until.HasValue) rows = rows.Where(x => date(x) <= until);
@@ -59,7 +59,7 @@ public sealed class AdminListFilters<T>
         Panel.Fields.Add(new(name, label, value, [], "date"));
         if (value.Length == 0) return null;
         if (DateOnly.TryParseExact(value, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var result)) return result;
-        Panel.Errors.Add($"Indica uma data válida em «{label}».");
+        Panel.Errors.Add(T("Indica uma data válida em «{0}».", T(label)));
         return null;
     }
 

@@ -1,47 +1,47 @@
 @model List<BudgetLine>
 @{
-    ViewData["Title"] = "Orçamento";
-    var pt = CultureInfo.GetCultureInfo("pt-PT");
+    ViewData["Title"] = T("Orçamento");
+    var pt = CultureInfo.CurrentCulture;
     var total = Model.Sum(line => line.RealCost ?? 0m);
     var paid = Model.Sum(line => line.Paid);
     var unpriced = Model.Count(line => !line.RealCost.HasValue);
     var filtered = (ViewData["AdminFilters"] as CasamentoTatianaDiogo.ViewModels.Admin.AdminFilterPanel)?.Active == true;
 }
 <div class="container py-5">
-    <h1>Orçamento</h1>
+    <h1>@T("Orçamento")</h1>
     <partial name="~/Views/Admin/Planning/_PlanningNav.cshtml" />
-    <div class="admin-page-actions"><a class="btn btn-primary" asp-action="Line" asp-route-categoryId="@ViewBag.CategoryFilter" asp-route-supplierId="@ViewBag.SupplierFilter">Adicionar linha</a></div>
+    <div class="admin-page-actions"><a class="btn btn-primary" asp-action="Line" asp-route-categoryId="@ViewBag.CategoryFilter" asp-route-supplierId="@ViewBag.SupplierFilter">@T("Adicionar linha")</a></div>
     <partial name="_AdminFilters" />
-    <h2 class="h5">@(filtered ? "Resumo das linhas filtradas" : "Resumo do orçamento")</h2>
+    <h2 class="h5">@(filtered ? T("Resumo das linhas filtradas") : T("Resumo do orçamento"))</h2>
     <div class="row row-cols-2 row-cols-lg-4 g-2 mb-4">
-        <div class="col"><div class="stat h-100">@total.ToString("C2", pt)<small>Custo total</small></div></div>
-        <div class="col"><div class="stat h-100">@paid.ToString("C2", pt)<small>Valor pago</small></div></div>
-        <div class="col"><div class="stat h-100">@((total - paid).ToString("C2", pt))<small>Valor em falta</small></div></div>
-        <div class="col"><div class="stat h-100">@((total == 0 ? 0 : paid / total).ToString("P2", pt))<small>Percentagem paga</small></div></div>
+        <div class="col"><div class="stat h-100">@total.ToString("C2", pt)<small>@T("Custo total")</small></div></div>
+        <div class="col"><div class="stat h-100">@paid.ToString("C2", pt)<small>@T("Valor pago")</small></div></div>
+        <div class="col"><div class="stat h-100">@((total - paid).ToString("C2", pt))<small>@T("Valor em falta")</small></div></div>
+        <div class="col"><div class="stat h-100">@((total == 0 ? 0 : paid / total).ToString("P2", pt))<small>@T("Percentagem paga")</small></div></div>
     </div>
     @if (unpriced > 0)
     {
-        <p class="text-muted">Linhas com custo por definir: @unpriced. Os totais consideram apenas os custos conhecidos.</p>
+        <p class="text-muted">@T("Linhas com custo por definir:") @unpriced@T(". Os totais consideram apenas os custos conhecidos.")</p>
     }
     @if (Model.Count == 0)
     {
-        <p>@(filtered ? "Nenhuma linha corresponde aos filtros." : "Ainda não há linhas de orçamento.")</p>
+        <p>@(filtered ? T("Nenhuma linha corresponde aos filtros.") : T("Ainda não há linhas de orçamento."))</p>
     }
     else
     {
         <div class="table-responsive"><table class="table align-middle">
-            <caption class="visually-hidden">Linhas de orçamento</caption>
-            <thead><tr><th>Categoria</th><th>Fornecedor</th><th>Custo real</th><th>Pago</th><th>Estado</th><th>Prazo / próximo pagamento</th><th>Notas</th><th>Ações</th></tr></thead>
+            <caption class="visually-hidden">@T("Linhas de orçamento")</caption>
+            <thead><tr><th>@T("Categoria")</th><th>@T("Fornecedor")</th><th>@T("Custo real")</th><th>@T("Pago")</th><th>@T("Estado")</th><th>@T("Prazo / próximo pagamento")</th><th>@T("Notas")</th><th>@T("Ações")</th></tr></thead>
             <tbody>
             @foreach (var line in Model)
             {
                 <tr>
                     <th scope="row">@line.Category!.Name</th>
                     <td>@if (line.Supplier != null) { <a asp-action="SupplierForm" asp-route-id="@line.SupplierId">@line.Supplier.Name</a> } else { <span>—</span> }</td>
-                    <td class="text-nowrap">@(line.RealCost?.ToString("C2", pt) ?? "Por definir")</td>
-                    <td class="text-nowrap">@line.Paid.ToString("C2", pt)</td><td>@line.Status</td>
+                    <td class="text-nowrap">@(line.RealCost?.ToString("C2", pt) ?? T("Por definir"))</td>
+                    <td class="text-nowrap">@line.Paid.ToString("C2", pt)</td><td>@T(line.Status)</td>
                     <td>@(line.NextPayment?.ToString("dd/MM/yyyy") ?? "—")</td><td>@line.Notes</td>
-                    <td><a asp-action="Line" asp-route-id="@line.Id" aria-label="Editar linha @line.Id de @line.Category.Name">Editar</a></td>
+                    <td><a asp-action="Line" asp-route-id="@line.Id" aria-label="@T("Editar linha {0} de {1}", line.Id, line.Category.Name)">@T("Editar")</a></td>
                 </tr>
             }
             </tbody>

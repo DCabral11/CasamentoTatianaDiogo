@@ -4,6 +4,7 @@ namespace CasamentoTatianaDiogo.Models
 {
     public class WeddingSettings
     {
+        public WeddingSettings CopyForPresentation() => (WeddingSettings)MemberwiseClone();
         public int Id { get; set; }
 
         #region Dealines Properties

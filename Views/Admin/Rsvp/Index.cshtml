@@ -1,12 +1,12 @@
 @model IEnumerable<CasamentoTatianaDiogo.ViewModels.Admin.RsvpAdminRow>
 
 <div class="container py-5">
-    <h1>Respostas de presença</h1>
+    <h1>@T("Respostas de presença")</h1>
     <div class="admin-page-actions">
         <a class="btn btn-outline-primary" href="@(Url.Action("ExportExcel") + Context.Request.QueryString)">
-            <i class="bi bi-file-earmark-excel" aria-hidden="true"></i> Exportar histórico em Excel (filtros atuais)
+            <i class="bi bi-file-earmark-excel" aria-hidden="true"></i> @T("Exportar histórico em Excel (filtros atuais)")
         </a>
-        <a class="btn btn-outline-primary" asp-action="History">Histórico de alterações</a>
+        <a class="btn btn-outline-primary" asp-action="History">@T("Histórico de alterações")</a>
     </div>
     <partial name="_AdminFilters" />
     @if (TempData["Success"] is string success)
@@ -23,16 +23,16 @@
     }
     @if (!Model.Any())
     {
-        <div class="feedback-card feedback-card-info mt-4 mb-0" role="status"><i class="bi bi-envelope-open-heart" aria-hidden="true"></i><span>Não há convidados nesta seleção.</span></div>
+        <div class="feedback-card feedback-card-info mt-4 mb-0" role="status"><i class="bi bi-envelope-open-heart" aria-hidden="true"></i><span>@T("Não há convidados nesta seleção.")</span></div>
     }
     <div class="table-responsive">
     <table class="table">
         <thead>
             <tr>
-                <th>Convidado</th>
-                <th>Família</th>
-                <th>Intenção de presença</th>
-                <th class="text-end">Resposta e histórico</th>
+                <th>@T("Convidado")</th>
+                <th>@T("Família")</th>
+                <th>@T("Intenção de presença")</th>
+                <th class="text-end">@T("Resposta e histórico")</th>
             </tr>
         </thead>
         <tbody>
@@ -41,21 +41,21 @@
                 <tr>
                     <td>@g.DisplayName</td>
                     <td>@g.FamilyName</td>
-                    <td>@(g.CurrentStatus switch { CasamentoTatianaDiogo.Models.Enums.RsvpStatus.Attending => "Vai estar presente", CasamentoTatianaDiogo.Models.Enums.RsvpStatus.NotAttending => "Não vai estar presente", _ => "Por responder" })</td>
+                    <td>@(g.CurrentStatus switch { CasamentoTatianaDiogo.Models.Enums.RsvpStatus.Attending => T("Vai estar presente"), CasamentoTatianaDiogo.Models.Enums.RsvpStatus.NotAttending => T("Não vai estar presente"), _ => T("Por responder") })</td>
                     <td class="text-end">
-                        <a class="btn btn-sm btn-outline-primary" asp-action="History" asp-route-id="@(g.isPlusOne ? g.MainGuestId : g.Id)">Histórico</a>
+                        <a class="btn btn-sm btn-outline-primary" asp-action="History" asp-route-id="@(g.isPlusOne ? g.MainGuestId : g.Id)">@T("Histórico")</a>
                         @if (g.isPlusOne && g.CurrentStatus != CasamentoTatianaDiogo.Models.Enums.RsvpStatus.Pending)
                         {
-                            <a class="btn btn-sm btn-outline-primary" href="/Admin/Rsvp/Details/@g.MainGuestId">Ver resposta principal</a>
+                            <a class="btn btn-sm btn-outline-primary" href="/Admin/Rsvp/Details/@g.MainGuestId">@T("Ver resposta principal")</a>
                         }
                         @if (g.HasResponse)
                         {
-                            <a class="btn btn-sm btn-outline-primary" href="/Admin/Rsvp/Details/@g.Id"><i class="bi bi-receipt"></i> Consultar</a>
-                            <form method="post" action="/Admin/Rsvp/Delete/@g.Id" class="d-inline" data-delete-confirmation data-delete-message="Queres mesmo apagar a resposta de «@g.DisplayName»? O convite voltará a ficar por responder.">
+                            <a class="btn btn-sm btn-outline-primary" href="/Admin/Rsvp/Details/@g.Id"><i class="bi bi-receipt"></i> @T("Consultar")</a>
+                            <form method="post" action="/Admin/Rsvp/Delete/@g.Id" class="d-inline" data-delete-confirmation data-delete-message="@T("Queres mesmo apagar a resposta de «{0}»? O convite voltará a ficar por responder.", g.DisplayName)">
                                 <input type="hidden" name="rsvpVersion" value="@g.FamilyVersion" />
                                 @Html.AntiForgeryToken()
                                 <button type="submit" class="btn btn-sm btn-outline-danger">
-                                    <i class="bi bi-trash3"></i> Apagar resposta
+                                    <i class="bi bi-trash3"></i> @T("Apagar resposta")
                                 </button>
                             </form>
                         }

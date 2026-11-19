@@ -1,5 +1,5 @@
 @inject CasamentoTatianaDiogo.Services.Interfaces.IWeddingSettingsService ContactSettings
 @{ var formats = await ContactSettings.GetAsync(); }
-<p class="form-text">Números locais usam o país @formats.PhoneRegion. Para outro país, inclui o indicativo (por exemplo, +44). Podes acrescentar uma extensão, como «ext. 123».
-@if (!string.IsNullOrEmpty(formats.DefaultEmailDomain)) { <span>Um email sem @@ será completado com @@<text>@formats.DefaultEmailDomain</text>.</span> }
+<p class="form-text">@T("Números locais usam o país") @formats.PhoneRegion@T(". Para outro país, inclui o indicativo (por exemplo, +44). Podes acrescentar uma extensão, como «ext. 123».")
+@if (!string.IsNullOrEmpty(formats.DefaultEmailDomain)) { <span>@T("Um email sem @ será completado com @{0}.", formats.DefaultEmailDomain)</span> }
 </p>

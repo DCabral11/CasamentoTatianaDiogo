@@ -14,9 +14,9 @@ namespace CasamentoTatianaDiogo.ViewModels.Admin
     {
         public string Response => Status switch
         {
-            RsvpStatus.Attending => "Presença Confirmada.",
-            RsvpStatus.NotAttending => "Não Vai Estar Presente.",
-            _ => "Por Responder"
+            RsvpStatus.Attending => T("Presença Confirmada."),
+            RsvpStatus.NotAttending => T("Não Vai Estar Presente."),
+            _ => T("Por Responder")
         };
     }
 
@@ -24,7 +24,7 @@ namespace CasamentoTatianaDiogo.ViewModels.Admin
     {
         public Dictionary<int, SeatingGuest> People { get; } = Guests.ToDictionary(x => x.Id);
 
-        public Dictionary<int, string> Places { get; } = Tables.SelectMany(t => t.Seats.Where(s => s.Assignment != null).Select(s => new { s.Assignment!.GuestId, Place = $"{t.Name} · Lugar {s.Number} (Fila {t.MapRow}, Coluna {t.MapColumn}" })).ToDictionary(x => x.GuestId, x => x.Place);
+        public Dictionary<int, string> Places { get; } = Tables.SelectMany(t => t.Seats.Where(s => s.Assignment != null).Select(s => new { s.Assignment!.GuestId, Place = T("{0} · Lugar {1} (Fila {2}, Coluna {3})", t.Name, s.Number, t.MapRow, t.MapColumn) })).ToDictionary(x => x.GuestId, x => x.Place);
     }
 
     public record SeatOption(int Id, string Table, int Number, int Row, int Column);

@@ -29,12 +29,12 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var page = await faqs.GetPageAsync(preview: true);
+            var page = await faqs.GetPageAsync(preview: true, localize: false);
 
             ViewData["PublishedCount"] = page.Items.Count(x => x.IsPublished);
             ViewData["DraftCount"] = page.Items.Count(x => !x.IsPublished);
 
-            var rows = new AdminListFilters<FaqItem>(this, page.Items, "Pergunta ou Resposta", x => $"{x.Question} {x.Answer}").Select("published", "Publicada", YesNo, x => Flag(x.IsPublished)).Results();
+            var rows = new AdminListFilters<FaqItem>(this, page.Items, T("Pergunta ou Resposta"), x => $"{x.Question} {x.Answer}").Select("published", "Publicada", YesNo, x => Flag(x.IsPublished)).Results();
 
             return View(Folder + "Index.cshtml", page with { Items = rows });
         }
@@ -89,7 +89,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
                 return ItemConflict(model);
             }
 
-            TempData["Success"] = item.IsPublished ? "Pergunta guardada e publicada quando o módulo estiver ativo." : "Pergunta guardada como rascunho.";
+            TempData["Success"] = item.IsPublished ? T("Pergunta guardada e publicada quando o módulo estiver ativo.") : T("Pergunta guardada como rascunho.");
 
             return RedirectToAction(nameof(Index));
         }
@@ -124,7 +124,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
                 return await SettingsConflict(model);
             }
 
-            TempData["Success"] = "Definições das perguntas frequentes guardadas.";
+            TempData["Success"] = T("Definições das perguntas frequentes guardadas.");
 
             return RedirectToAction(nameof(Index));
         }
@@ -139,7 +139,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
 
             if (item.Version != version)
             {
-                TempData["Error"] = "A pergunta foi alterada entretanto. Revê a versão atual antes de eliminar.";
+                TempData["Error"] = T("A pergunta foi alterada entretanto. Revê a versão atual antes de eliminar.");
 
                 return RedirectToAction(nameof(Index));
             }
@@ -149,11 +149,11 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             try
             {
                 await db.SaveChangesAsync();
-                TempData["Success"] = "Pergunta eliminada.";
+                TempData["Success"] = T("Pergunta eliminada.");
             }
             catch (DbUpdateConcurrencyException)
             {
-                TempData["Error"] = "A pergunta foi alterada entretanto e não foi eliminada.";
+                TempData["Error"] = T("A pergunta foi alterada entretanto e não foi eliminada.");
             }
 
             return RedirectToAction(nameof(Index));
@@ -168,7 +168,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             db.ChangeTracker.Clear();
 
             Response.StatusCode = StatusCodes.Status409Conflict;
-            ModelState.AddModelError("", "Esta pergunta foi alterada por outra pessoa. Abre a versão atual antes de guardar; os teus dados continuam abaixo.");
+            ModelState.AddModelError("", T("Esta pergunta foi alterada por outra pessoa. Abre a versão atual antes de guardar; os teus dados continuam abaixo."));
 
             return View(Folder + "Edit.cshtml", model);
         }
@@ -178,12 +178,12 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             db.ChangeTracker.Clear();
 
             Response.StatusCode = StatusCodes.Status409Conflict;
-            ModelState.AddModelError("", "As definições foram alteradas entretanto. Recarrega a página para consultar a versão atual antes de guardar.");
+            ModelState.AddModelError("", T("As definições foram alteradas entretanto. Recarrega a página para consultar a versão atual antes de guardar."));
 
             return await SettingsView(model);
         }
 
-        private async Task<IActionResult> SettingsView(FaqPageSettings model) => View(Folder + "Index.cshtml", new FaqPageViewModel(model, (await faqs.GetPageAsync(preview: true)).Items, true));
+        private async Task<IActionResult> SettingsView(FaqPageSettings model) => View(Folder + "Index.cshtml", new FaqPageViewModel(model, (await faqs.GetPageAsync(preview: true, localize: false)).Items, true));
 
         #endregion
     }

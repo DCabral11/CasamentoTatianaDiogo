@@ -1,17 +1,17 @@
 @model IEnumerable<PhotoUpload>
 
 <div class="container py-5">
-    <h1>Fotografias recebidas</h1>
+    <h1>@T("Fotografias recebidas")</h1>
     <partial name="_AdminFilters" />
     <div class="table-responsive">
     <table class="table">
         <thead>
             <tr>
-                <th>Data</th>
-                <th>Ficheiro</th>
-                <th>Convidado</th>
-                <th>Tamanho</th>
-                <th>Google Drive</th>
+                <th>@T("Data")</th>
+                <th>@T("Ficheiro")</th>
+                <th>@T("Convidado")</th>
+                <th>@T("Tamanho")</th>
+                <th>@T("Google Drive")</th>
                 <th></th>
             </tr>
         </thead>
@@ -24,12 +24,12 @@
                     <th>@p.GuestName</th>
                     <th>@p.SizeBytes</th>
                     <td>
-                        <a href="@p.GoogleDriveWebViewLink" target="_blank" rel="noopener">Abrir</a>
+                        <a href="@p.GoogleDriveWebViewLink" target="_blank" rel="noopener">@T("Abrir")</a>
                     </td>
                     <td>
-                        <form method="post" action="/Admin/Photos/Delete/@p.Id" data-delete-confirmation data-delete-message="Queres mesmo remover o registo desta fotografia? O ficheiro guardado no Drive não será apagado.">
+                        <form method="post" action="/Admin/Photos/Delete/@p.Id" data-delete-confirmation data-delete-message="@T("Queres mesmo remover o registo desta fotografia? O ficheiro guardado no Drive não será apagado.")">
                             @Html.AntiForgeryToken()
-                            <button class="btn btn-sm btn-danger"><i class="bi bi-trash3"></i> Remover registo</button>
+                            <button class="btn btn-sm btn-danger"><i class="bi bi-trash3"></i> @T("Remover registo")</button>
                         </form>
                     </td>
                 </tr>

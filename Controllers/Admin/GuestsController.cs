@@ -72,7 +72,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             {
                 if (await db.Guests.AnyAsync(g => g.MainGuestId == id) || await db.RsvpResponses.AnyAsync(r => r.GuestId == id || (x.IsPlusOne && r.GuestId == x.MainGuestId) || (r.PlusOne != null && r.PlusOne.CompanionGuestId == id)))
                 {
-                    TempData["Error"] = "Este convidado tem acompanhantes ou uma resposta RSVP associada. Revê essas ligações antes de o remover.";
+                    TempData["Error"] = T("Este convidado tem acompanhantes ou uma resposta RSVP associada. Revê essas ligações antes de o remover.");
                     
                     return RedirectToAction(nameof(Index));
                 }
@@ -195,7 +195,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
                 ModelState.AddModelError(error.Field, error.Message);
 
             if (!await db.Families.AnyAsync(x => x.Id == m.FamilyId))
-                ModelState.AddModelError(nameof(m.FamilyId), "Seleciona uma família válida.");
+                ModelState.AddModelError(nameof(m.FamilyId), T("Seleciona uma família válida."));
 
             var avatarsDirectory = Path.Combine(environment.WebRootPath, "images", "guests");
 

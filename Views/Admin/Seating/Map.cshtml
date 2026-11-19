@@ -1,37 +1,37 @@
 @model CasamentoTatianaDiogo.ViewModels.Admin.SeatingPlan
-@{ ViewData["Title"] = "Mapa da sala"; }
+@{ ViewData["Title"] = T("Mapa da sala"); }
 <div class="container py-5">
-    <h1>Mapa da sala</h1>
+    <h1>@T("Mapa da sala")</h1>
     <div class="admin-page-actions">
-        <a asp-action="Table" class="btn btn-primary">Adicionar mesa</a>
-        <a asp-action="Index" class="btn btn-outline-primary">Distribuir lugares</a>
+        <a asp-action="Table" class="btn btn-primary">@T("Adicionar mesa")</a>
+        <a asp-action="Index" class="btn btn-outline-primary">@T("Distribuir lugares")</a>
     </div>
-    @if (Model.Tables.Count == 0) { <p>Adiciona uma mesa para a posicionar no mapa.</p> }
+    @if (Model.Tables.Count == 0) { <p>@T("Adiciona uma mesa para a posicionar no mapa.")</p> }
     else
     {
-        <p>Abre uma mesa para consultar os lugares. Em «Editar mesa» podes mudar a sua posição.</p>
-        <div class="seating-scroll" tabindex="0" role="region" aria-label="Mapa das mesas, organizado por fila e coluna">
+        <p>@T("Abre uma mesa para consultar os lugares. Em «Editar mesa» podes mudar a sua posição.")</p>
+        <div class="seating-scroll" tabindex="0" role="region" aria-label="@T("Mapa das mesas, organizado por fila e coluna")">
             <div class="seating-floor">
                 @foreach (var row in Model.Tables.GroupBy(t => t.MapRow))
                 {
                     <section aria-labelledby="row-@row.Key">
-                        <h2 class="h6" id="row-@row.Key">Fila @row.Key</h2>
+                        <h2 class="h6" id="row-@row.Key">@T("Fila") @row.Key</h2>
                         <div class="seating-grid">
                             @foreach (var table in row)
                             {
                                 var free = table.Seats.Count(s => s.Assignment == null);
                                 <div class="seating-map-table" style="grid-column: @table.MapColumn">
                                     <details>
-                                        <summary><strong>@table.Name</strong><span>Coluna @table.MapColumn · @(free == 0 ? "Completa" : $"{free} livres") / @table.Seats.Count</span></summary>
+                                        <summary><strong>@table.Name</strong><span>@T("Coluna") @table.MapColumn · @(free == 0 ? "Completa" : TF($"{free} livres")) / @table.Seats.Count</span></summary>
                                         <ol class="seating-places">
                                             @foreach (var seat in table.Seats)
                                             {
                                                 var person = seat.Assignment == null ? null : Model.People.GetValueOrDefault(seat.Assignment.GuestId);
-                                                <li value="@seat.Number">@if (person != null) { <a asp-action="Guest" asp-route-id="@person.Id">@person.Name</a> } else { <span>Livre</span> }</li>
+                                                <li value="@seat.Number">@if (person != null) { <a asp-action="Guest" asp-route-id="@person.Id">@person.Name</a> } else { <span>@T("Livre")</span> }</li>
                                             }
                                         </ol>
                                     </details>
-                                    <a asp-action="Table" asp-route-id="@table.Id" aria-label="Editar mesa @table.Name">Editar mesa</a>
+                                    <a asp-action="Table" asp-route-id="@table.Id" aria-label="@T("Editar mesa {0}", table.Name)">@T("Editar mesa")</a>
                                 </div>
                             }
                         </div>

@@ -29,12 +29,12 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             var rows = await db.BudgetLines.AsNoTracking().Include(x => x.Category).Include(x => x.Supplier).OrderBy(x => x.Category!.Name).ThenBy(x => x.Id).ToListAsync();
             var categories = await db.PlanningCategories.OrderBy(x => x.Name).Select(x => new { x.Id, x.Name }).ToListAsync();
             var suppliers = await db.Suppliers.OrderBy(x => x.Name).Select(x => new { x.Id, x.Name }).ToListAsync();
-            var filtered = new AdminListFilters<BudgetLine>(this, rows, "Categoria, Fornecedor ou Notas", x => $"{x.Category!.Name} {x.Supplier?.Name} {x.Notes}")
-                .Select("categoryId", "Categoria", categories.Select(x => new AdminFilterOption(x.Id.ToString(), x.Name)), x => x.CategoryId.ToString())
-                .Select("supplierId", "Fornecedor", suppliers.Select(x => new AdminFilterOption(x.Id.ToString(), x.Name)), x => x.SupplierId?.ToString() ?? "")
-                .Select("status", "Estado", States(BudgetLine.States), x => x.Status)
-                .Select("payment", "Pagamento", Options(("unpriced", "Custo por Definir"), ("unpaid", "Por Pagar"), ("partial", "Pago Parcialmente"), ("paid", "Pago na Totalidade")), x => !x.RealCost.HasValue ? "unpriced" : x.Paid >= x.RealCost ? "paid" : x.Paid == 0 ? "unpaid" : "partial")
-                .Dates("Próximo Pagamento", x => x.NextPayment).Results();
+            var filtered = new AdminListFilters<BudgetLine>(this, rows, T("Categoria, Fornecedor ou Notas"), x => $"{x.Category!.Name} {x.Supplier?.Name} {x.Notes}")
+                .Select("categoryId", T("Categoria"), categories.Select(x => new AdminFilterOption(x.Id.ToString(), x.Name)), x => x.CategoryId.ToString())
+                .Select("supplierId", T("Fornecedor"), suppliers.Select(x => new AdminFilterOption(x.Id.ToString(), x.Name)), x => x.SupplierId?.ToString() ?? "")
+                .Select("status", T("Estado"), States(BudgetLine.States), x => x.Status)
+                .Select("payment", "Pagamento", Options(("unpriced", T("Custo por Definir")), ("unpaid", T("Por Pagar")), ("partial", T("Pago Parcialmente")), ("paid", T("Pago na Totalidade"))), x => !x.RealCost.HasValue ? "unpriced" : x.Paid >= x.RealCost ? "paid" : x.Paid == 0 ? "unpaid" : "partial")
+                .Dates(T("Próximo Pagamento"), x => x.NextPayment).Results();
 
             ViewBag.SupplierFilter = supplierId;
 
@@ -70,12 +70,12 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
         [HttpGet("Fornecedores")]
         public async Task<IActionResult> Suppliers(int? categoryId)
         {
-            var page = new AdminQueryPage<Supplier>(this, db.Suppliers.AsNoTracking(), "Nome, Contacto, Email ou Notas");
+            var page = new AdminQueryPage<Supplier>(this, db.Suppliers.AsNoTracking(), T("Nome, Contacto, Email ou Notas"));
             var categories = await db.PlanningCategories.OrderBy(x => x.Name).Select(x => new { x.Id, x.Name }).ToListAsync(page.Cancellation);
 
-            page.Select("categoryId", "Categoria", categories.Select(x => new AdminFilterOption(x.Id.ToString(), x.Name)), value => { var key = int.Parse(value); return x => x.CategoryId == key; });
-            page.Select("status", "Estado", States(Supplier.States), value => x => x.Status == value);
-            page.Select("linked", "Com Linhas de Orçamento", YesNo, value => x => x.Lines.Any() == (value == "yes"));
+            page.Select("categoryId", T("Categoria"), categories.Select(x => new AdminFilterOption(x.Id.ToString(), x.Name)), value => { var key = int.Parse(value); return x => x.CategoryId == key; });
+            page.Select("status", T("Estado"), States(Supplier.States), value => x => x.Status == value);
+            page.Select("linked", T("Com Linhas de Orçamento"), YesNo, value => x => x.Lines.Any() == (value == "yes"));
 
             var query = await page.BuildAsync(q => q.OrderBy(x => x.Name).ThenBy(x => x.Id), x => new { x.Id, x.Name, x.Contact, x.Phone, x.Email, x.Website, x.Notes }, x => x.Id, x => $"{x.Name} {x.Contact} {x.Phone} {x.Email} {x.Website} {x.Notes}");
             var rows = await query.Select(x => new SupplierListRow(x, x.Category!.Name, x.Lines.Count)).ToListAsync(page.Cancellation);
@@ -120,14 +120,14 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             await ValidateCategory(line.CategoryId);
 
             if (!BudgetLine.States.Contains(line.Status))
-                ModelState.AddModelError("Status", "Escolhe um estado da lista.");
+                ModelState.AddModelError("Status", T("Escolhe um estado da lista."));
 
             if (line.SupplierId.HasValue)
             {
                 var supplier = await db.Suppliers.AsNoTracking().SingleOrDefaultAsync(x => x.Id == line.SupplierId);
 
                 if (supplier == null || supplier.CategoryId != line.CategoryId)
-                    ModelState.AddModelError("SupplierId", "Escolhe um fornecedor da categoria selecionada.");
+                    ModelState.AddModelError("SupplierId", T("Escolhe um fornecedor da categoria selecionada."));
                 else
                     line.RealCost ??= supplier.Price;
             }
@@ -136,7 +136,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             ValidateAmount(nameof(line.Paid), line.Paid);
 
             if (line.Paid > (line.RealCost ?? 0))
-                ModelState.AddModelError("Paid", "O valor pago não pode ultrapassar o custo real. Indica primeiro o custo acordado.");
+                ModelState.AddModelError("Paid", T("O valor pago não pode ultrapassar o custo real. Indica primeiro o custo acordado."));
 
             if (!ModelState.IsValid)
                 return await LineForm(line);
@@ -153,7 +153,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
                 db.Entry(existing).CurrentValues.SetValues(line);
             }
 
-            if (!await SaveChanges("A categoria ou o fornecedor mudou. Revê a seleção."))
+            if (!await SaveChanges(T("A categoria ou o fornecedor mudou. Revê a seleção.")))
                 return await LineForm(line);
 
             return RedirectToAction(nameof(Budget));
@@ -183,10 +183,10 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             ValidateAmount(nameof(supplier.Price), supplier.Price);
 
             if (!Supplier.States.Contains(supplier.Status))
-                ModelState.AddModelError("Status", "Escolhe um estado da lista.");
+                ModelState.AddModelError("Status", T("Escolhe um estado da lista."));
 
             if (supplier.Website != null && (Uri.TryCreate(supplier.Website, UriKind.Absolute, out var url) || url.Scheme is not ("https" or "http")))
-                ModelState.AddModelError("Website", "Usa um endereço começado por https:// ou http://.");
+                ModelState.AddModelError("Website", T("Usa um endereço começado por https:// ou http://."));
 
             if (!ModelState.IsValid)
                 return await Page("Supplier", supplier);
@@ -197,7 +197,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             {
                 db.Suppliers.Add(supplier);
 
-                if (!await SaveChanges("A categoria mudou. Revê a seleção."))
+                if (!await SaveChanges(T("A categoria mudou. Revê a seleção.")))
                     return await Page("Supplier", supplier);
             }
             else
@@ -219,7 +219,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
                     if (!await db.Suppliers.AnyAsync(x => x.Id == supplier.Id))
                         return NotFound();
 
-                    ModelState.AddModelError("CategoryId", "Desassocia primeiro as linhas do orçamento para mudar a categoria.");
+                    ModelState.AddModelError("CategoryId", T("Desassocia primeiro as linhas do orçamento para mudar a categoria."));
 
                     return await Page("Supplier", supplier);
                 }
@@ -232,7 +232,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
         public async Task<IActionResult> DeleteSupplier(int id)
         {
             if (await db.Suppliers.Where(x => x.Id == id && !x.Lines.Any()).ExecuteDeleteAsync() == 0)
-                TempData["Error"] = "Só podes eliminar um fornecedor sem linhas de orçamento associadas.";
+                TempData["Error"] = T("Só podes eliminar um fornecedor sem linhas de orçamento associadas.");
 
             return RedirectToAction(nameof(Suppliers));
         }
@@ -248,7 +248,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             input.NormalizedName = input.Name.NormalizeForSearch();
 
             if (await db.PlanningCategories.AnyAsync(x => x.Id != input.Id && x.NormalizedName == input.NormalizedName))
-                ModelState.AddModelError("Name", "Esta categoria já existe. Usa a categoria da lista.");
+                ModelState.AddModelError("Name", T("Esta categoria já existe. Usa a categoria da lista."));
 
             if (!ModelState.IsValid)
                 return await Page("Categories", input);
@@ -266,7 +266,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
                 category.NormalizedName = input.NormalizedName;
             }
 
-            if (!await SaveChanges("Não foi possível guardar. Verifica se já existe uma categoria com este nome."))
+            if (!await SaveChanges(T("Não foi possível guardar. Verifica se já existe uma categoria com este nome.")))
                 return await Page("Categories", input);
 
             return RedirectToAction(nameof(Categories), new { id = (int?)null });
@@ -276,7 +276,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
         public async Task<IActionResult> DeleteCategory(int id)
         {
             if (await db.PlanningCategories.Where(x => x.Id == id && !db.Suppliers.Any(s => s.CategoryId == x.Id) && !db.BudgetLines.Any(b => b.CategoryId == x.Id)).ExecuteDeleteAsync() == 0)
-                TempData["Error"] = "Só podes eliminar uma categoria sem fornecedores nem linhas de orçamento.";
+                TempData["Error"] = T("Só podes eliminar uma categoria sem fornecedores nem linhas de orçamento.");
 
             return RedirectToAction(nameof(Categories));
         }
@@ -306,7 +306,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
                 var categories = (List<PlanningCategory>)ViewBag.Categories;
                 var used = (await db.Suppliers.Select(x => x.CategoryId).Distinct().ToListAsync()).Concat(await db.BudgetLines.Select(x => x.CategoryId).Distinct().ToListAsync()).ToHashSet();
 
-                ViewBag.Categories = new AdminListFilters<PlanningCategory>(this, categories, "Nome da categoria", x => x.Name).Select("used", "Em utilização", YesNo, x => Flag(used.Contains(x.Id))).Results();
+                ViewBag.Categories = new AdminListFilters<PlanningCategory>(this, categories, T("Nome da categoria"), x => x.Name).Select("used", T("Em utilização"), YesNo, x => Flag(used.Contains(x.Id))).Results();
             }
 
             return View($"~/Views/Admin/Planning/{name}.cshtml", model);
@@ -315,13 +315,13 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
         private async Task ValidateCategory(int id)
         {
             if (!await db.PlanningCategories.AnyAsync(x => x.Id == id))
-                ModelState.AddModelError("CategoryId", "Escolhe uma categoria da lista.");
+                ModelState.AddModelError("CategoryId", T("Escolhe uma categoria da lista."));
         }
 
         private void ValidateAmount(string field, decimal? value)
         {
             if (value.HasValue && (value < 0 || value > 999999999999.99m || decimal.Round(value.Value, 2) != value))
-                ModelState.AddModelError(field, "Indica um valor entre 0 e 999 999 999 999,99 €, com até duas casas decimais.");
+                ModelState.AddModelError(field, T("Indica um valor entre 0 e 999 999 999 999,99 €, com até duas casas decimais."));
         }
 
         private async Task<bool> SaveChanges(string error)

@@ -1,0 +1,13 @@
+@using CasamentoTatianaDiogo.Services
+@model string
+<form asp-controller="Language" asp-action="Change" method="post" class="language-selector" data-language-form>
+    <input type="hidden" name="returnUrl" value="@Model" />
+    <label for="application-language" class="visually-hidden">@T("Idioma")</label>
+    <i class="bi bi-translate" aria-hidden="true"></i>
+    <select id="application-language" name="language" aria-label="@T("Idioma")">
+        <option value="pt" selected="@(Language == "pt")" lang="pt-PT">Português</option>
+        <option value="en" selected="@(Language == "en")" lang="en-GB">English</option>
+        <option value="fr" selected="@(Language == "fr")" lang="fr-FR">Français</option>
+    </select>
+    <button type="submit" class="btn btn-sm btn-outline-primary" data-language-submit>@T("Alterar")</button>
+</form>

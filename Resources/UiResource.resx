@@ -1,0 +1,2925 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <data name="Text70C2573B127AC257832A5C34935FEF792878B674E997A0B1ED39594A78A069D6" xml:space="preserve">
+    <value> até</value>
+  </data>
+  <data name="Text3C9D487A3283AF47E139E551AD35417F3724657B675CF6EEACEF7A0B33A54F5A" xml:space="preserve">
+    <value> correspondem aos filtros.</value>
+  </data>
+  <data name="Text951DCEE3A7A4F3AAC67EC76A2CE4469CC76DF650F134BF2572BF60A65C982338" xml:space="preserve">
+    <value>&amp;</value>
+  </data>
+  <data name="TextAEAACE089E72BC23714FCA4C3017C0D0BC63EFFAEFBAB5E19EADE7DE9065C225" xml:space="preserve">
+    <value>(Google Maps, abre num novo separador)</value>
+  </data>
+  <data name="TextD536786985F28D4AF7C88A847570EB211D8A8F11E429FF480B9CC224C58BFFE9" xml:space="preserve">
+    <value>(ID {0})</value>
+  </data>
+  <data name="Text7985FBF6A98B7B885F083275AF3A3C3E890E383D701FC1F1FD6E6AE31A3ABAB8" xml:space="preserve">
+    <value>(acompanhante)</value>
+  </data>
+  <data name="Text8EC119251F3283200163A5FFDC7C45F2ABE254A525F85BB41CDA846443508B00" xml:space="preserve">
+    <value>(os campos abaixo mantêm os dados que tentaste guardar).</value>
+  </data>
+  <data name="Text6FA78B7D20D0CF4855A290B2651A4A6AB435505C67E7D7E94D2D61DA733F1FB7" xml:space="preserve">
+    <value>, até 5 MB e 500 linhas. Primeiro é apresentada uma pré-visualização; os registos só são guardados depois da tua confirmação e se todas as linhas forem válidas.</value>
+  </data>
+  <data name="Text1363EBDE76C64A407E428C313204E9512B9153639B413071933067196860DBBB" xml:space="preserve">
+    <value>- Casamento Tatiana &amp; Diogo</value>
+  </data>
+  <data name="Text944EC230EF565ED98E89976B2ADDF02CE4242A8D0479FD6D29FBB95B074E0AE3" xml:space="preserve">
+    <value>. Após a confirmação, usa este mesmo contacto para atualizar o convite.</value>
+  </data>
+  <data name="Text6952A378B45AB8A89F21FF04D8AFA534DD967896829111644B5E21A1C9AC363B" xml:space="preserve">
+    <value>. Consulta também a pasta de spam.</value>
+  </data>
+  <data name="Text5A6CF96D2E4AAE44E7D3307BFDDCF4B043E822B0095107DD4047A153B2BDF0F1" xml:space="preserve">
+    <value>. Deixa em branco para manter as confirmações abertas sem data limite.</value>
+  </data>
+  <data name="TextDAD54AC1A6FD3E7EB23376177E5E12FC512080231FA9D690140D1A593B16815F" xml:space="preserve">
+    <value>. Os totais consideram apenas os custos conhecidos.</value>
+  </data>
+  <data name="Text43240A280A545495343261402263D8EBBEE7FCAD7F2452AC4A9A37C895B1D342" xml:space="preserve">
+    <value>. Para outro país, inclui o indicativo (por exemplo, +44). Podes acrescentar uma extensão, como «ext. 123».</value>
+  </data>
+  <data name="Text52953F0FC99902AF1D7D3E2C2965F58EF877039A1B3A664B786D3A820005903C" xml:space="preserve">
+    <value>. Se deixares o fim em branco, as mensagens «Depois» começam à meia-noite seguinte ao início.</value>
+  </data>
+  <data name="Text7C7A56025933AC99AFE9D85C9945B5F2BB4DF1FEC897B164E1E65AC9587AF3B3" xml:space="preserve">
+    <value>.xlsx</value>
+  </data>
+  <data name="TextE0CA538D480F37B5AA345F95BC80EC53E15FEF3B11241123DF9C2E152D19FF25" xml:space="preserve">
+    <value>1. Descarrega o modelo</value>
+  </data>
+  <data name="TextC09E003FAE06586BEE274AD9FF8D694CB10AAE6711096077CA49221A44D9BEBA" xml:space="preserve">
+    <value>1. Pede o código no teu email.</value>
+  </data>
+  <data name="Text38711E4860BAFD3F1F2B3AA256D63EC82D70737B69E41F411DB42EFB856E39CB" xml:space="preserve">
+    <value>2. Carrega o ficheiro preenchido</value>
+  </data>
+  <data name="TextF218A7DEFAA2C14673DF7333B13BCC7B23BE075D8081DB5EC231BEE645B9815D" xml:space="preserve">
+    <value>2. Introduz o código para aceder ao convite.</value>
+  </data>
+  <data name="Text259308DFD2AE2A6EA0C6437AE6D18E6C4574864DB32354DB0152BCF757C98FAB" xml:space="preserve">
+    <value>A Nossa História</value>
+  </data>
+  <data name="Text1340ED20EB4CAB43593AD4482F47E9A3DF63077E26776F54CA893976F798A39A" xml:space="preserve">
+    <value>A aguardar orçamento</value>
+  </data>
+  <data name="Text673A2CAA67FD690B322FB2EB89AFA035EDE787348F7476D69176727A9771ED06" xml:space="preserve">
+    <value>A categoria mudou. Revê a seleção.</value>
+  </data>
+  <data name="TextCB45C2362F3C818E2A8D7CA9C999254F39CE988C8053B429C5F1168E1621C972" xml:space="preserve">
+    <value>A categoria ou o fornecedor mudou. Revê a seleção.</value>
+  </data>
+  <data name="TextAA2CBB5FDA5C076222BEE849CED7EDE9902021826F8C165731FC60D945511FE8" xml:space="preserve">
+    <value>A correção é inválida. Volta à pré-visualização e revê as linhas com erros.</value>
+  </data>
+  <data name="Text6FE66EDAE627675EC9F877575144A3B692D715F2BA66BC7B4775865B5B3989DF" xml:space="preserve">
+    <value>A data inicial não pode ser posterior à data final.</value>
+  </data>
+  <data name="Text80D84828A2C6F72A9CB2C5C7953ECE1DCCF1C469C1D7A5769E79187FDB84E43E" xml:space="preserve">
+    <value>A enviar código…</value>
+  </data>
+  <data name="TextF61EDA84D98241601B01BA5DF200A75F1384F5E66072DAB9AD1E792A12E2E927" xml:space="preserve">
+    <value>A fotografia excede o limite de {0} MB ou está vazia.</value>
+  </data>
+  <data name="Text7DC0CAF33E22300FA0DAC7B5BED834E34347AD38FF6EFAB31C89CCAFF01C7EEA" xml:space="preserve">
+    <value>A fotografia não foi enviada na ordem esperada. Tenta novamente.</value>
+  </data>
+  <data name="Text7A14C80CF8550A87B33878417C4FC69E881C5820AE1FDAA8D4E4C21B36BEB410" xml:space="preserve">
+    <value>A importação aplica todos os registos válidos em conjunto. Respostas RSVP e acompanhantes existentes são preservados.</value>
+  </data>
+  <data name="Text3C3010A7D6A7E5C71808FCCDE9A9CE45DBEDAFB32B85C6D9F6D87C00ED4192C7" xml:space="preserve">
+    <value>A importação não foi concluída. Os dados podem ter mudado desde a pré-visualização. Revê a versão atualizada e confirma novamente.</value>
+  </data>
+  <data name="Text8FCCA8BB0B276A398064275CD596EE37D66A9DC83D2E6DDF4758C6CDCFC37DC6" xml:space="preserve">
+    <value>A mesa mudou entretanto. Revê a configuração atual.</value>
+  </data>
+  <data name="TextB2372CF4BDDEB673A26D3FC23FC7D8388AA27C4EFF15B3BDAFB9C479EF844FF9" xml:space="preserve">
+    <value>A mesma lista é usada no orçamento e nos fornecedores. Ao renomear uma categoria, o nome é atualizado nos dois módulos.</value>
+  </data>
+  <data name="Text5CE9A490183B7253AC13B5D4C56C57CB9D75A9C1AC4F7547E3857B9D1A9D3E07" xml:space="preserve">
+    <value>A mudança de família deve ser feita na ficha do convidado, para rever as ligações ao convite e ao RSVP.</value>
+  </data>
+  <data name="TextA576234EE73B64D22B54F9F331D491701415B169CFF5FC5F7D571C9E9FD86DE4" xml:space="preserve">
+    <value>A nossa história</value>
+  </data>
+  <data name="Text98B523E95FAF449FF72958AC0F5F0B3B80F30FBE338F26238001557E8285E753" xml:space="preserve">
+    <value>A ordem deve estar entre 0 e 10000.</value>
+  </data>
+  <data name="TextE2F13C4C6BA7F4B61D7A3E19EE5B928E245E545314D390BDF5FF60B1284BFACA" xml:space="preserve">
+    <value>A pergunta foi alterada entretanto e não foi eliminada.</value>
+  </data>
+  <data name="TextB239B38ED4961EFBF0B1AC5A2707092F3EF10A8E2452D3E7B39F085462C7134A" xml:space="preserve">
+    <value>A pergunta foi alterada entretanto. Revê a versão atual antes de eliminar.</value>
+  </data>
+  <data name="TextD704F62BCFF980ADB3993DEE2322A663F3CC4F054E50BD834B0469F6B29D1AA9" xml:space="preserve">
+    <value>A pergunta pode ter até 300 caracteres.</value>
+  </data>
+  <data name="TextE5F4B3B2199679FB3770A902DCED22B721F5F4C76BF860EE6DC2CCB4C2489F7B" xml:space="preserve">
+    <value>A pesquisa pode ter até 200 caracteres.</value>
+  </data>
+  <data name="Text6C1FC505AD4A4F51B8D1B0C683E3963802B67B6280DD1C1330BCCC86BD5ABF2D" xml:space="preserve">
+    <value>A preparar a fotografia {0} de {1}…</value>
+  </data>
+  <data name="Text0D4D84B3CE9A8B97B7D6DF1E4393539A1360B217073777368F62C2FA0A617BFE" xml:space="preserve">
+    <value>A referência da família não existe ou é ambígua. Cria ou corrige primeiro a família.</value>
+  </data>
+  <data name="Text38B675E94B5D1B17D5B0667520269FC777A78B3669B4CE32DAE319F4579E70DE" xml:space="preserve">
+    <value>A referência já pertence a outra família ou é ambígua.</value>
+  </data>
+  <data name="TextF85D1B1901518D258D09B8F985711B68A153D30A6645A16D838D69D6A31129C2" xml:space="preserve">
+    <value>A referência pode ter até 50 caracteres.</value>
+  </data>
+  <data name="Text254F2E773C0AE41A54EDFC6F3113CEE5266048AD0FE54986F22D27AF4D0412CF" xml:space="preserve">
+    <value>A resposta de {0} foi apagada. O estado voltou a ‘Por responder’.</value>
+  </data>
+  <data name="Text5D8209FBC2D9DA01ADC1A5ED7A259547CBD2F2500109B80C297C34E36D10C32C" xml:space="preserve">
+    <value>A resposta foi alterada entretanto. Nada foi apagado; revê a versão atual antes de tentar novamente.</value>
+  </data>
+  <data name="Text6252E8EA5BBF5CAECDCB2B02DAB9BD83A9CD06D5E98A34DE3652BC68543144F1" xml:space="preserve">
+    <value>A resposta já foi guardada. Ao voltar, irás para a pesquisa de convidados e não para o formulário submetido.</value>
+  </data>
+  <data name="TextD9E8B5C5518F81A1FF6DA983F237C2ACD22599BBAB0757A033D1FA77BFF2AD88" xml:space="preserve">
+    <value>A resposta pode ter até 6000 caracteres.</value>
+  </data>
+  <data name="Text1C8951C98AD7C116DA4E4E7C6010E769D7B05FCA58289CC65D73D918540BE2EF" xml:space="preserve">
+    <value>A verificação está disponível apenas por email.</value>
+  </data>
+  <data name="Text2AC8DF39E0EFAF23D9B605D1F2EA5CB466F1A6A4C6EF12C125D90F69F68A62D2" xml:space="preserve">
+    <value>ASCII (Punycode)</value>
+  </data>
+  <data name="TextC0AD0C4E36633D4FB10816EBB62F7D833A6F22EE207C6BE747A2312EF08A3F30" xml:space="preserve">
+    <value>Abre cada linha para consultar todos os campos. Nas atualizações, os valores atuais e novos são apresentados lado a lado; «Vazio» significa que o campo ficará sem valor.</value>
+  </data>
+  <data name="TextAFB39E622BF8FF91BD22D35300C96430957C434438DD4F9775CB2044174D16E7" xml:space="preserve">
+    <value>Abre em</value>
+  </data>
+  <data name="TextA3EFB0DBE4B8B82145D3B1292AA112D3DC652F69A2ACCA0F9737315C9752FF64" xml:space="preserve">
+    <value>Abre uma mesa para consultar os lugares. Em «Editar mesa» podes mudar a sua posição.</value>
+  </data>
+  <data name="TextA01A5FCE396EDB612052DB25EBEB325A72134C8369EB9C771D47AB18D8124247" xml:space="preserve">
+    <value>Abrir</value>
+  </data>
+  <data name="Text91101FAF2533326ACBE1C867EC4A59D17F99B17BBE92EA84AF9EEC9E7CD86ED4" xml:space="preserve">
+    <value>Abrir a versão mais recente do convite</value>
+  </data>
+  <data name="TextC260D19A856120EA2D490A85FF1FD13D82A103065047993A84E40CBD433FB593" xml:space="preserve">
+    <value>Abrir galeria</value>
+  </data>
+  <data name="TextF7ADAEE46C09B7C7EC59A918EABC6EA4D997BB3C78FD34E47EACC9209F659990" xml:space="preserve">
+    <value>Acesso restrito</value>
+  </data>
+  <data name="Text4763BB84F453F0B46A57F897B488982D62D9E54E22F7C674D7BEC822371DA7D3" xml:space="preserve">
+    <value>Acompanha</value>
+  </data>
+  <data name="Text22341655EEDB8DE85F26DAF1D39720B7EE1156DE7017D195C1939033D13F4E76" xml:space="preserve">
+    <value>Acompanhante</value>
+  </data>
+  <data name="Text52AC67217528CDC45775DF2C323D074F9E4F83F20A4B32501BADC5B6BACDC312" xml:space="preserve">
+    <value>Acompanhante:</value>
+  </data>
+  <data name="TextCF48570B4C3732964FFBEADB02245644F4381C3F717004BABCBC1CD819ED78D7" xml:space="preserve">
+    <value>Adiciona a primeira mesa para começar a distribuir os lugares.</value>
+  </data>
+  <data name="Text1188FEE3AA338CDC7DA37836042E346CED9E0B0DA2ED50A4ADD52783E21D1539" xml:space="preserve">
+    <value>Adiciona uma mesa para a posicionar no mapa.</value>
+  </data>
+  <data name="TextA1A6000F6227BF3EF7FAF642E44FCC03E47CF32AEDBD743EA4F563344C52B642" xml:space="preserve">
+    <value>Adicionar ao calendário (.ics)</value>
+  </data>
+  <data name="TextAF7704AB7EEAD30EE2AB10A98564F4CF96A00BDA82B42054FB88B8C1E3BA55F7" xml:space="preserve">
+    <value>Adicionar categoria</value>
+  </data>
+  <data name="Text01BDEAF91D1CA021664D349D45051A59F46AA87838F157AD610F9F236B53805F" xml:space="preserve">
+    <value>Adicionar convidado</value>
+  </data>
+  <data name="TextBB18FBFB2663A6F6DA8816BAB4498CB1D7FF7B73BCEDE39D2BC6ADEE92FF73A6" xml:space="preserve">
+    <value>Adicionar família</value>
+  </data>
+  <data name="Text028F444A260A6FF21230E604B54FD45A74C29023A3A5FBB4C2659C4294AB2092" xml:space="preserve">
+    <value>Adicionar fornecedor</value>
+  </data>
+  <data name="Text1877689ABF19F867D2CA32D775BC0B087BFDFF53F767FB03E32FC7440EA52052" xml:space="preserve">
+    <value>Adicionar linha</value>
+  </data>
+  <data name="TextDB6C7DA550A8FC9DED363670F500D0143524E9FD7DD35012FDE7891C6843855A" xml:space="preserve">
+    <value>Adicionar linha de orçamento</value>
+  </data>
+  <data name="Text7CB87B2CE758A567568B9389CC02EEC8A1C7BD164F0559D898FA0566DD67633B" xml:space="preserve">
+    <value>Adicionar mesa</value>
+  </data>
+  <data name="Text45785ED6956C0106DC920D6B190759FBE28FD93FEE69F3E7111E111C21D38BED" xml:space="preserve">
+    <value>Adicionar momento</value>
+  </data>
+  <data name="Text9477124B42E7A06B0CAD81801BC6AE8E427F6E0F059A0D621E63F3AE803C5A58" xml:space="preserve">
+    <value>Adicionar pergunta</value>
+  </data>
+  <data name="Text962448041BBA9C9A3FC55E8FA5C6F0D48145E180914AF176944EAF2DE3126D5E" xml:space="preserve">
+    <value>Adicionar secção</value>
+  </data>
+  <data name="Text7D8098B4F7EEEA90FB7387E4A22C605EFBDFF5A7A89E56E9AD67DD737BEF95B1" xml:space="preserve">
+    <value>Administração</value>
+  </data>
+  <data name="TextDF4FD0F97C7D6956D08F510DAE672D64153594393C2FF6D2E34014F5F14E290F" xml:space="preserve">
+    <value>Administração · {0}</value>
+  </data>
+  <data name="Text122BE5B01E0E8FD25464E9263FCBD51887D5E29E3C09E7EB795E06F4189EBB74" xml:space="preserve">
+    <value>Aguarda um minuto antes de pedir outro código. Se já fizeste vários pedidos, tenta novamente dentro de uma hora.</value>
+  </data>
+  <data name="TextD4CA7290BF6ECDA58920293524348F5AAF45BBC1D6B8F0EE4B683ED90622695D" xml:space="preserve">
+    <value>Ainda não existem mesas.</value>
+  </data>
+  <data name="TextB68A68D3949ED627EF388B2DA838DCDB39449E1A8CCA5571E5B8842C357E60F0" xml:space="preserve">
+    <value>Ainda não há alojamentos recomendados pelos noivos.</value>
+  </data>
+  <data name="Text3E523795EA5DA56FBF496185F6CD8E42E1C162F6760BF8CC4EF28C38E0018FE6" xml:space="preserve">
+    <value>Ainda não há alterações registadas. O histórico começa com os envios e eliminações feitos após a ativação desta funcionalidade.</value>
+  </data>
+  <data name="Text3C700D8D7FD18FAFC43CD37C4CF5C6027F480BFB627DCA458C10F6C7862ADA16" xml:space="preserve">
+    <value>Ainda não há fornecedores.</value>
+  </data>
+  <data name="Text821131A0661DA31D037CDED3A401A276EF504243AB65889172ED973E9C374298" xml:space="preserve">
+    <value>Ainda não há indicações específicas sobre estacionamento.</value>
+  </data>
+  <data name="Text1D66BFBC57082421F50D6CDD91713111700F3977ED63C42DA554438ADD2D42B2" xml:space="preserve">
+    <value>Ainda não há linhas de orçamento.</value>
+  </data>
+  <data name="Text999D06AC33B4E3D14150EAC87FA63D856711FF82B82F37525ED48E8D36A7E7F3" xml:space="preserve">
+    <value>Ainda não há momentos nesta secção.</value>
+  </data>
+  <data name="Text3BEB95EA8EB1A3216D70D49EA31785867583987CA87108499F5ACC9E93D9947C" xml:space="preserve">
+    <value>Algo não correu como esperado</value>
+  </data>
+  <data name="Text169DB3A30BE2DCAEAC31914192C532796DA65D470D91B69510A8877BDA626D5A" xml:space="preserve">
+    <value>Alojamento</value>
+  </data>
+  <data name="TextF32880EEC03928F5BFAF0E84DFB98433C15FB3C304094D1B770998058461EC67" xml:space="preserve">
+    <value>Alojamento perto de </value>
+  </data>
+  <data name="TextDED212A14C2C867DD59B0EEA4D459E36EA20B46B65E5EBA2B301BD1A6A3C99DC" xml:space="preserve">
+    <value>Alterar</value>
+  </data>
+  <data name="Text26AF89C68989CCFD37DB72F34C0BF56AA13EB32892201EBCE0F134D8F0122B29" xml:space="preserve">
+    <value>Alterar lugar</value>
+  </data>
+  <data name="TextFDA04B8F5FE209DA881CC56FCDCBEB8277DFD254A4A74B95237D9E3A5BE45F1F" xml:space="preserve">
+    <value>Alterar resposta</value>
+  </data>
+  <data name="TextE4CE7C09D51E3B8831D3386A7DF68F29647D112969B9B31B67C2B56709BA7DC3" xml:space="preserve">
+    <value>Anterior</value>
+  </data>
+  <data name="Text8159DB18B7756A9F9478B3B59B74CAD4E50AAD6EE34FF3DA8F796D45A07EFD45" xml:space="preserve">
+    <value>Antes</value>
+  </data>
+  <data name="Text9422898FD994D6C5550C90EDACBA43BF909B6294936E28DEC6AD5600A1BB7801" xml:space="preserve">
+    <value>Antes do casamento, deixa o campo vazio para manter a página atual. Durante e depois, um campo vazio usa a mensagem sugerida.</value>
+  </data>
+  <data name="Text51D2075DBAF31D1431CA6775D86BE3B26E09E2280408EFB5A817873F378C79D1" xml:space="preserve">
+    <value>Ao abrir a versão atual, o formulário será preenchido com os dados mais recentes. Volta a aplicar apenas as alterações que pretendes manter.</value>
+  </data>
+  <data name="TextBBBBFF470F74974E7FE8F456A1B9D30DA50AF50313F28A90230A508C5F9593C9" xml:space="preserve">
+    <value>Apagar resposta</value>
+  </data>
+  <data name="Text83046340FCC9073F249F20C6ECBF2277B87A4D7EEDB5EFA386B175A244AEE2ED" xml:space="preserve">
+    <value>Apelido</value>
+  </data>
+  <data name="TextB77B9ACBD35468E2AA7E8596909A9F3869DE44825CF1EBBC2DC86944BD681837" xml:space="preserve">
+    <value>Apenas podes eliminar secções vazias.</value>
+  </data>
+  <data name="TextA41CBB8FA8EF5941394CE016A39D1BA32C1EC1595A4682071AC8099A0F2AA6EC" xml:space="preserve">
+    <value>Apresentação do domínio do email</value>
+  </data>
+  <data name="Text358761F399953F87976F6195C5119F12CD46AA49793BA81648D67CBFBFB0821D" xml:space="preserve">
+    <value>Apresentação do telefone</value>
+  </data>
+  <data name="Text78B23EE07A77A7B2339C73044439D5D08AE84097C1BB218443DE9EB6CAEF0B87" xml:space="preserve">
+    <value>As definições foram alteradas entretanto. Recarrega a página para consultar a versão atual antes de guardar.</value>
+  </data>
+  <data name="Text22358CF2357C158B970021B9683D4DCC8A1B62A0844EEE6742CDE0FA425CCBEA" xml:space="preserve">
+    <value>As definições foram guardadas.</value>
+  </data>
+  <data name="TextBE6C1277D15457FA042D6F2F8759E43B3357BF3EB313905F0B9E71957369F0DC" xml:space="preserve">
+    <value>As duas horas referem-se ao fuso</value>
+  </data>
+  <data name="TextD2B2E4FBE213862FE974B66A9730780E74F1610E22B58E9E72B3D1F9F2FE6059" xml:space="preserve">
+    <value>As imagens disponíveis são lidas da pasta</value>
+  </data>
+  <data name="TextF98A00411DBAC00511B2BFF9D6EE55C5AB393931BC6B5AB9DADA60B1318D41F6" xml:space="preserve">
+    <value>As informações práticas foram guardadas.</value>
+  </data>
+  <data name="TextF651B711E924CE56A43DEE59E6585282B89CC1BAFC1F7C520E6C0BF495B8F6BE" xml:space="preserve">
+    <value>As mensagens mudam com o início e o fim do casamento, no fuso</value>
+  </data>
+  <data name="Text01DDFB94B0C5936920411D66DFF330605D89412FF17065271929A922BCFDF6A8" xml:space="preserve">
+    <value>As notas podem ter até 1000 caracteres.</value>
+  </data>
+  <data name="Text0413910B327D255FA2F8EB577FD5625483C87CB74CD13FE8031F13909C1A33A2" xml:space="preserve">
+    <value>As perguntas são apresentadas por ordem crescente. Em caso de empate, aparece primeiro a que foi criada primeiro.</value>
+  </data>
+  <data name="Text0DD17A03C58D9AF87F2C14A301C073A762BDE9A9C88D3792AADABC93A3CA967B" xml:space="preserve">
+    <value>As tuas fotografias foram enviadas. Obrigado por partilhares este momento connosco!</value>
+  </data>
+  <data name="Text4B45571BF5BB5C49C9B3BDDD99478D4202C0808B4C3246D331F6C6C6F1393759" xml:space="preserve">
+    <value>As vossas fotografias ajudam-nos a reviver a festa. Obrigado pelas memórias!</value>
+  </data>
+  <data name="Text615BF3F17986131BC463BD440CAEA4770C244712ED16ADD7870B6376C335994E" xml:space="preserve">
+    <value>Aspeto do site</value>
+  </data>
+  <data name="Text1BA709B6C1F30036A2EAF0603646BE36A80557FE66F1207F8D7CF074469FB79C" xml:space="preserve">
+    <value>Ativa o JavaScript para enviar fotografias grandes. Sem JavaScript, o envio completo deve ter menos de 4 MB.</value>
+  </data>
+  <data name="Text31D7BCF446BDDFE4F4EA053BE9DB44AC599814D5218A1BB263E287298905978F" xml:space="preserve">
+    <value>Ativar o módulo no site</value>
+  </data>
+  <data name="Text499EE302F6884F271C02454123715953DC245991FEAD15D51EE12C5E4F405BC6" xml:space="preserve">
+    <value>Ativo</value>
+  </data>
+  <data name="Text50DD65D077EF6EADF56FC16FAD5CA7B11F093ECE6821D77AE061E7631FC24335" xml:space="preserve">
+    <value>Atribuir lugar</value>
+  </data>
+  <data name="Text55CC14ADF4ABB1E39FC4A956DAA8066E32DD465AB7CA093159E8F37CB1F7A6FA" xml:space="preserve">
+    <value>Atualiza aqui todos os dados apresentados aos convidados. As alterações ficam disponíveis de imediato no site.</value>
+  </data>
+  <data name="Text064925EA2E600B59E6DB58CE855198537975EE849AF4EC4EF59EE04375D2277F" xml:space="preserve">
+    <value>Atualizada em</value>
+  </data>
+  <data name="TextDAFB59613E1236142CFB04E696D1455CABA7233CFD0790F84A754582C0084AC2" xml:space="preserve">
+    <value>Atualizar</value>
+  </data>
+  <data name="TextA459B251A8C48EEB00C3B671E4389157FF8D4C55B81E819978F3128D9CE19678" xml:space="preserve">
+    <value>Até 500 linhas e 5 MB. Usa valores, não fórmulas. Booleanos: Sim ou Não. Não alteres os títulos nem a folha.</value>
+  </data>
+  <data name="TextCA8E826D9C2EC401E9AC82CD0AA710CF234D5CAC4E6EE967B3588C63FCE9681B" xml:space="preserve">
+    <value>Avatar</value>
+  </data>
+  <data name="Text7D3E4D6DC900B59B5D600FBC42B3F95677A8FC35DB350267B64A22648B07B00C" xml:space="preserve">
+    <value>Ações</value>
+  </data>
+  <data name="Text23DE0D0E739E3577D8588610A8487F6734177DC40CD83852E2BC0A09B9F161F5" xml:space="preserve">
+    <value>Cada email só pode confirmar um convite. Usa um endereço ao qual tenhas acesso.</value>
+  </data>
+  <data name="Text45789CC13C6B10348264EC831117353DBE5EB6DAC245A547AEDD2BFAD528CFAE" xml:space="preserve">
+    <value>Campo</value>
+  </data>
+  <data name="TextBB9DBB406DCBD5248BABC609BB3D021D384398F83DBDB8D53C9B0E32C2AAD915" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="Text59F0E6EA2EAE4A9B13316D533753CC1B1F435420F96E6FD80670DFA89C9888B1" xml:space="preserve">
+    <value>Cancelar importação</value>
+  </data>
+  <data name="TextFF1C129D071B5C881C7C560E57D97DDC076630C87F5A767F46C34665912A240D" xml:space="preserve">
+    <value>Capacidade</value>
+  </data>
+  <data name="Text853E636A16BA3E72578EDF9A9C94839B3311EBF43748BD364D27218417C15529" xml:space="preserve">
+    <value>Carrega o Excel, revê e corrige os dados, e só depois confirma as alterações.</value>
+  </data>
+  <data name="Text9D1E3BC1C8E15B41ACBE295C10D7A7ED97AF8C5CE5B29E47D469F4512A6DEAA8" xml:space="preserve">
+    <value>Casamento Tatiana &amp; Diogo</value>
+  </data>
+  <data name="Text54276AA0307F83CB079C75CFF88FD448D9180D25F3EF9B91F8B9A61D26F079D0" xml:space="preserve">
+    <value>Categoria</value>
+  </data>
+  <data name="Text3DB16E8C52E4B3B513FF95931247693297DB9A6A35152E2E72721E26836A40B4" xml:space="preserve">
+    <value>Categoria, Fornecedor ou Notas</value>
+  </data>
+  <data name="TextCBA7E08A07787029522A9A19598FDC2BB1C494F7AF057C13739205464BE0CCF7" xml:space="preserve">
+    <value>Categorias</value>
+  </data>
+  <data name="TextE82B4F318CFFB8101EECF62688A65548A86663CBEE91E8F5E16215D9DE472B35" xml:space="preserve">
+    <value>Categorias do orçamento e dos fornecedores</value>
+  </data>
+  <data name="Text9D06B5C518E8B8CCA7B943962549D6DCF69E1AD4D44D4D4770DAA21485058703" xml:space="preserve">
+    <value>Cerimónia</value>
+  </data>
+  <data name="TextF1ADC3E497A9185DA770AE65760AA274078561306A614408BE3172102C259DCD" xml:space="preserve">
+    <value>Chegada</value>
+  </data>
+  <data name="TextA0098EB0E5E25B6CB2516E9D82AA0D1E37189494095A3FB02A9D10387ADC75CA" xml:space="preserve">
+    <value>Chegou o nosso dia! Obrigado por celebrarem connosco.</value>
+  </data>
+  <data name="Text7D3378BDB8CAAF07FD19B768F2E98314FB1CFA72763C83BBBA1A8B3F3860126C" xml:space="preserve">
+    <value>Cola a ligação de incorporação ou o código &lt;iframe&gt; do Google Maps.</value>
+  </data>
+  <data name="Text754541B06C0AEF0F462948231484F3D825F8A36A65D81ABDDE4BE7ED0EFFB177" xml:space="preserve">
+    <value>Cola a ligação de uma faixa do Spotify (open.spotify.com/track/…).</value>
+  </data>
+  <data name="Text862F07361D45D0EC49901D5DD7842AF42EC11979F590FD77DEAE73632712E0E0" xml:space="preserve">
+    <value>Coluna</value>
+  </data>
+  <data name="Text6DDC624EF809603F2FF8BEC8389226B574A8D3FD9647329A7304FA66A4092A7A" xml:space="preserve">
+    <value>Colunas esperadas:</value>
+  </data>
+  <data name="TextDFCDDDDC7EAD6BCBF49304087DC7658C9774C9B6E4D3D1A32CCB1DE752D8CA68" xml:space="preserve">
+    <value>Com Linhas de Orçamento</value>
+  </data>
+  <data name="Text21CEFA66EA324C2D0749AEB781ACD4A702FC515D5609B7AC60D5ABDD01C9A72F" xml:space="preserve">
+    <value>Com Respostas em Falta</value>
+  </data>
+  <data name="Text772A8D7D7673C37F8F4CFE5292DA7908AB1858A5691B6A23A1A58AFB47A75260" xml:space="preserve">
+    <value>Com caracteres internacionais</value>
+  </data>
+  <data name="TextEFB8C430B216D2DE167A32B4E9121489CD9CE916439A7EBB90D7C0D0AB783D8C" xml:space="preserve">
+    <value>Comparação da linha {0}</value>
+  </data>
+  <data name="Text06989722DB824643E85D7BAFCDB4847801576B0056E09C5AF848176CF3FB964E" xml:space="preserve">
+    <value>Completa nomes sem domínio nos contactos da administração e nas importações. No RSVP, o convidado indica o endereço completo.</value>
+  </data>
+  <data name="TextCFA0DA03B82FC4AF9345DC7C42D58A49421D96DCCBB22F99699ACFABA1CBA1D9" xml:space="preserve">
+    <value>Confirma a informação preenchida e tenta novamente.</value>
+  </data>
+  <data name="TextF06C4826CA038CECC2DC941E58C61B9AF2DE87009AFF69D7686F596426E706D9" xml:space="preserve">
+    <value>Confirmada</value>
+  </data>
+  <data name="Text8257C43E08A954E098F34CC1FF7F09320AFF3A3BB097AF92CD3DA33B92200D2B" xml:space="preserve">
+    <value>Confirmados</value>
+  </data>
+  <data name="Text05F2EA126688F81335C77A670C1C4A0F5233C654E0D2B36FF2CE10BAEB251AA4" xml:space="preserve">
+    <value>Confirmar Presença</value>
+  </data>
+  <data name="Text7F3D9D6266B7323007A261061BD94D6D95F6E213D11C98D18356E908DD311F7B" xml:space="preserve">
+    <value>Confirmar as alterações</value>
+  </data>
+  <data name="Text0A83287B0E28DC5F8962B69FBACB84297017601E812CC857DDDCB1EB6C1397A9" xml:space="preserve">
+    <value>Confirmar eliminação?</value>
+  </data>
+  <data name="TextEE3DF0132D3C5305CAEFA1EA5EAFF8DC517AABBA9CB9A5AF654023C9A5137C86" xml:space="preserve">
+    <value>Confirmar importação</value>
+  </data>
+  <data name="Text98E138BC180FED35916A212DFEA867AC1D9EDC69EDAE2743C27934A5D2AFC8B7" xml:space="preserve">
+    <value>Confirmar presença</value>
+  </data>
+  <data name="Text3AE809E1B00F63767B7823946BBF110A11781DE28D886BC14C53E26ACC052385" xml:space="preserve">
+    <value>Confirmação</value>
+  </data>
+  <data name="Text7B33A8439EC9F45D3AEDF9E8580F89C1B2A6BF9878260F1096DE25991685A67E" xml:space="preserve">
+    <value>Confirmações de presença</value>
+  </data>
+  <data name="Text30E1C9A5B7340F3C2AB87DBA8B8009759C0760D29D826CB8F5152196C70FC90A" xml:space="preserve">
+    <value>Confirmações de presença encerradas</value>
+  </data>
+  <data name="TextB6E95712FAE49B66DA786A9220CFD87B0EF21E6C62EFFDC083B979B71CA83B63" xml:space="preserve">
+    <value>Confirmo que quero substituir uma resposta anterior, caso exista.</value>
+  </data>
+  <data name="TextDB98BEDD2E6EA4B306F55BCF4BE0E52FA1A5D774524EABA8E6FE0B5FF6C45E21" xml:space="preserve">
+    <value>Consulta os nomes em icons.getbootstrap.com.</value>
+  </data>
+  <data name="Text86016C201B9290953FECA5E3606784C45BAD84F0D3B1B5D3AA809A6D1D88A877" xml:space="preserve">
+    <value>Consultar</value>
+  </data>
+  <data name="Text1CCFAA7D512AE8D8914FB7AF2281A19693313946883C297856E8D2F1021E04AD" xml:space="preserve">
+    <value>Consultar a versão atual</value>
+  </data>
+  <data name="Text7A832CFD1782665EFFBE99AE143252E805375998AE012AB49B009ACED49FD662" xml:space="preserve">
+    <value>Consultar histórico de alterações</value>
+  </data>
+  <data name="Text4F08419984596F1ED2BA047FE0366945DA1F8B80A5F698638998219A796560CF" xml:space="preserve">
+    <value>Consultar orçamento</value>
+  </data>
+  <data name="Text1CAC6DE319826A8650C8BD0C5E399A7629A8214ECB195EE0BBE9E563EE42021A" xml:space="preserve">
+    <value>Consultar orçamento deste fornecedor</value>
+  </data>
+  <data name="TextD24A1AAC98DB8EF561696310224DC6F1C33DEFC0638836B1FCF3DA428315812A" xml:space="preserve">
+    <value>Consultar resposta</value>
+  </data>
+  <data name="Text5FA809D65647BF50F2CD8AC1F4DCC6578DBEB6C6336042EBA3A2C4DC481E896A" xml:space="preserve">
+    <value>Consultar resposta atual</value>
+  </data>
+  <data name="Text49F25D8DA5F4208882DA87F5DD03789D420AFE3B1F7EC47B3D4A8DB5BF9A39C9" xml:space="preserve">
+    <value>Consultar respostas</value>
+  </data>
+  <data name="Text62FE5C3B07C7791BCA8E0C7F8D02143D678A6885830DA3646BC20991F77D728D" xml:space="preserve">
+    <value>Conta aos convidados um pouco da vossa história.</value>
+  </data>
+  <data name="Text384619B1D3D9051141CA7D63B174DE3BAFF376786DC079A4BEAB43A5D975E3BA" xml:space="preserve">
+    <value>Contactado</value>
+  </data>
+  <data name="Text7AA50F025AD2BF7FD3B16160B8C94F9EC178CBFC1E216C7C3D6B278F90EFEE24" xml:space="preserve">
+    <value>Contactar os noivos</value>
+  </data>
+  <data name="Text771B96B0812DD393FFEAC789C2B8DA1B78C20530A7365DD8181B1E3580DB063F" xml:space="preserve">
+    <value>Contacto</value>
+  </data>
+  <data name="TextC59B7C790397DE40234114FE23EC93892F4AD61C2CA58A1475AF9150A59C66E6" xml:space="preserve">
+    <value>Contacto anterior</value>
+  </data>
+  <data name="Text1EF9DC02228DCAAC5A58CA3182DD31080EF1C1F603C9F2389C3F5A8DFEDAF698" xml:space="preserve">
+    <value>Contacto verificado:</value>
+  </data>
+  <data name="TextBAF2C13E6CE7734CD1D16A2F560A4D6A106B2ECB6791FDE94DB8DAF41BE59594" xml:space="preserve">
+    <value>Contactos</value>
+  </data>
+  <data name="TextE4409EFF8670804EFE3373D5FC5662FD876AFB438EE7C6882B8AF63B68D53E1D" xml:space="preserve">
+    <value>Conteúdo HTML</value>
+  </data>
+  <data name="TextFB677E98A0DDEE726167EF2A5B7B27BBC3F073EA4EE382B9E332D9E7E622A028" xml:space="preserve">
+    <value>Controla quando os convidados podem enviar fotografias e quais os ficheiros aceites.</value>
+  </data>
+  <data name="Text6A7C68114605D7998DB48BA8BB12F28733E0B581E7E2699F824EC8C83ACF77EB" xml:space="preserve">
+    <value>Convidado</value>
+  </data>
+  <data name="TextAF28AD6F425FF5A781198A34A0FA62EF1FC80FFB0F247175EFA439A7A9356F45" xml:space="preserve">
+    <value>Convidado da família</value>
+  </data>
+  <data name="Text1AB88507207CFDFC2C806C2C7A4EFC1D958D1888128468C696A20FDD2F95D556" xml:space="preserve">
+    <value>Convidado repetido no ficheiro.</value>
+  </data>
+  <data name="TextCDE96961B63D064EE1A13F2727F8DE3BADFB5CA4C20FE0253B3F64493E300EAE" xml:space="preserve">
+    <value>Convidado, Ficheiro ou Notas</value>
+  </data>
+  <data name="Text1B3862B80667839F8225CF452E62A530204926295D6CFAABF9D6522C8C6C5478" xml:space="preserve">
+    <value>Convidados</value>
+  </data>
+  <data name="TextE2C518015EE32628A0F2F5E366A5AEEE7F7B8386E99F99F70623E9370136AA53" xml:space="preserve">
+    <value>Convidados e convites</value>
+  </data>
+  <data name="TextB9EC5DC535BFA8CC1BF9B29FD7205742D4385BE222EF519BDF9AE0ABEF7A9477" xml:space="preserve">
+    <value>Convite de {0}</value>
+  </data>
+  <data name="Text79467597D782DB425B3E871371961F2003D24816DFD198596ADCB8C71BB096DB" xml:space="preserve">
+    <value>Copo D'Água</value>
+  </data>
+  <data name="Text4C1191F0C8BF3C81CB7B0DD628D59CF13E6B0C652CC7A908B2AECD29BDB15016" xml:space="preserve">
+    <value>Cor de fundo</value>
+  </data>
+  <data name="Text205067758B9C57265AE4B0ED727367E3D9A283092C171D98310BEB9AF77DFA26" xml:space="preserve">
+    <value>Cor principal</value>
+  </data>
+  <data name="Text634A1A5EDBA606EBDF55F74D70C4649FB628030FD870F53A8372C44232DB9694" xml:space="preserve">
+    <value>Corrige as linhas indicadas. No passo seguinte podes rever a importação completa antes de confirmar.</value>
+  </data>
+  <data name="TextD6E908D9EA21949C71BD5C20A36C13DAF541E86C68AB3BA7F4DE3C8342ACB7CB" xml:space="preserve">
+    <value>Corrigir dados da importação</value>
+  </data>
+  <data name="Text81C1BDB0643B0F620897CF12D0DFBF135568B0C4F125F9AC672BD12B55125998" xml:space="preserve">
+    <value>Corrigir linhas com erros</value>
+  </data>
+  <data name="Text0C6B88DF3CB29317D3A6245AA8D3831A3E4726573C5B5D5354CCF49FF56EC682" xml:space="preserve">
+    <value>Criança</value>
+  </data>
+  <data name="Text49BA5D18D8C4C23F4EBDAA117C2E55492424D5B22BE810FC2453238400D1BC02" xml:space="preserve">
+    <value>Criar</value>
+  </data>
+  <data name="Text728F2D70F3C7CA2D20C8B6583D7BA9580DBA76817185016218F78B587C42C138" xml:space="preserve">
+    <value>Custo estimado</value>
+  </data>
+  <data name="Text72B79F7DD4BF7494F17EAF9333D126E62E278D0A28B4EC1857CBE9F3C9DF6F47" xml:space="preserve">
+    <value>Custo por Definir</value>
+  </data>
+  <data name="Text09BEBE8741151E66BB6271EBD90B1BE2AE852BA349B5FDDEF396F564ED70F61F" xml:space="preserve">
+    <value>Custo real</value>
+  </data>
+  <data name="Text34A73D366AAD37F744E11FF7C16FAC2147FB33E58A0B7C4FCD903FB4C61C2826" xml:space="preserve">
+    <value>Custo real (€)</value>
+  </data>
+  <data name="Text9F107DAC7E700523479B26BBB26B99E31CAA74FCD941EFDB42A8D19D741BE010" xml:space="preserve">
+    <value>Custo total</value>
+  </data>
+  <data name="Text274B0A62EFF5194FA7C0B5AB0A267A67D7901DEA6172568784517057E97B7FC4" xml:space="preserve">
+    <value>Custo total menos o valor pago</value>
+  </data>
+  <data name="TextF78B926BCFDFDD92E74EE51CBEB722F76E4CAEF3F715855CD1C343E130CED1F0" xml:space="preserve">
+    <value>Código de verificação (6 algarismos)</value>
+  </data>
+  <data name="TextA1CFDF79E43956E625C94E9F83CBE90A03001B15253377F689DBF4AF0ED7EEAB" xml:space="preserve">
+    <value>Código de verificação — Tatiana &amp; Diogo</value>
+  </data>
+  <data name="TextF69E6F793870BC0F8D8EDBE73408A8CB57E5B4FAE5C34286F82E9ECC8C4C2B21" xml:space="preserve">
+    <value>Código enviado. Introduz os 6 algarismos no campo abaixo para continuar.</value>
+  </data>
+  <data name="Text7A652A789695B774226D28AE9CF7239B03D5B85EE817B8BAD6ADD5E47113DD82" xml:space="preserve">
+    <value>Dados da linha</value>
+  </data>
+  <data name="Text3FB555B31B636EE02B87364339F6F9BBF5614A341E8BDEFC10907CD096C61C46" xml:space="preserve">
+    <value>Dados do acompanhante de {0}</value>
+  </data>
+  <data name="Text353A77ED5C5BEBC7B3464CB2A8B4D364C1A423E04D26AE60BB1B413E0E089DBA" xml:space="preserve">
+    <value>Dados e conteúdos do casamento</value>
+  </data>
+  <data name="Text887BA5A412E673DEAC7A14EF46C1C1C0D9A279C442306D5FFE384A12808652FC" xml:space="preserve">
+    <value>Dados enviados</value>
+  </data>
+  <data name="TextCEC3A9B89B2E391393D0F68E4BC12A9FA6CF358B3CDF79496DC442D52B8DD528" xml:space="preserve">
+    <value>Data</value>
+  </data>
+  <data name="Text6B96B626E75D8BBB01C22407468967868BEA7E6AE12071F7F6E98F6158F6CFD3" xml:space="preserve">
+    <value>Data Limite para Confirmar Presença</value>
+  </data>
+  <data name="TextEC8E9C5F7D5378D5C743B272F8D048285AEDD6E8FD3565DBC57E106892A46B78" xml:space="preserve">
+    <value>Data do evento</value>
+  </data>
+  <data name="Text18F0093FC40B4FB558EDAA266F871FBDD14D62EFC9C1B6B80356B66AE8F1A75F" xml:space="preserve">
+    <value>Data e hora</value>
+  </data>
+  <data name="TextD56B0794BEC177C09FB28DAC7178C038D014ED803D9B34649ED144ADF03DC2B9" xml:space="preserve">
+    <value>Data e hora do envio</value>
+  </data>
+  <data name="TextFF3D9BBA9395BCED6A78C3AF7E7C1F1A6EDB3903D97DFF586FF698A089E4EE61" xml:space="preserve">
+    <value>Data e locais</value>
+  </data>
+  <data name="TextAAA82331B6460DB425DD3B5EA7F818D158C387E2AC3D7DEE5064335836BEBF37" xml:space="preserve">
+    <value>Define os dados de contacto e as opções de resposta deste convidado.</value>
+  </data>
+  <data name="TextECACA19FF833D49BEDD95D7D3F0E7EAE03D1C43C429A2C9014CEE676405E191A" xml:space="preserve">
+    <value>Definições da galeria</value>
+  </data>
+  <data name="Text9D1EEB801C88A0F6D0FEE559FB26C8376C4861DDDB3E246B6940B608DCEF9E47" xml:space="preserve">
+    <value>Definições da página</value>
+  </data>
+  <data name="TextB2B2EA905063C6075629FC3512BCF3BB5B26CA4625E2E64B59C8EFCE51D2E799" xml:space="preserve">
+    <value>Definições das perguntas frequentes guardadas.</value>
+  </data>
+  <data name="Text64E715DDDC24392D597819FD1F83686E470786AB7CAB2B00CEB5D36430D09F8D" xml:space="preserve">
+    <value>Definições do casamento</value>
+  </data>
+  <data name="TextC131D4F45894429029DE8FE484EC4A812B68C90A3F2169E21A5597DF37436F54" xml:space="preserve">
+    <value>Deixa em branco para usar o preço atual do fornecedor. Sem preço, o custo fica por definir.</value>
+  </data>
+  <data name="TextF2288C816429EC930A5E51E6B8A52344E73425BF2B12D59C456F228030D45B12" xml:space="preserve">
+    <value>Deixa em branco se a música ainda estiver por definir.</value>
+  </data>
+  <data name="TextB8DB71C3CCE7ACC540ABD11F624EED89F236D776AD8E6BB461821EEEAE197B58" xml:space="preserve">
+    <value>Depois</value>
+  </data>
+  <data name="Text69B705CF1ED056448300A127C8312DD15DA73B768394C26D9EA4995E3747D634" xml:space="preserve">
+    <value>Desassocia primeiro as linhas do orçamento para mudar a categoria.</value>
+  </data>
+  <data name="Text8413DCBE12D2ECF89084F2B410FCCA523E83B562A9752AA0B751E07195976F2D" xml:space="preserve">
+    <value>Descarregar modelo Excel</value>
+  </data>
+  <data name="Text6ACB5EC9B457AB363EFCADB4AD0EFEE2FABB96993E3C6991921AC93681DCB6D3" xml:space="preserve">
+    <value>Descartado</value>
+  </data>
+  <data name="Text46332F9D834EF8DD3A196297B8864654B0038973BE0734BA0BF27A9A6336651E" xml:space="preserve">
+    <value>Descrição</value>
+  </data>
+  <data name="TextB5BF4824D488E71019073AEDF1F83A2B3D08E971DF5D4B84099DE0BB963FFD88" xml:space="preserve">
+    <value>Descrição, chave ou texto</value>
+  </data>
+  <data name="Text92CE018E7706CC3ECA1AB79EF35E36F2C5FAAB9EC3EDE5E50D584F8119D83CD5" xml:space="preserve">
+    <value>Dias</value>
+  </data>
+  <data name="Text1B4743A0E4B008908523072404815D8EA74FFF0B6E328EE657D0279C4CB78B52" xml:space="preserve">
+    <value>Distribuir lugares</value>
+  </data>
+  <data name="Text5355CBD3F56F737FBF40B1102D95E1F91E9CD19DB89AD6459676DB50D584AE4F" xml:space="preserve">
+    <value>Domínio de email predefinido (opcional)</value>
+  </data>
+  <data name="TextC9EA6CB2239520AA7AD2672D7C0865FBCA9B255B57A51C14EF7C46F3A881C76B" xml:space="preserve">
+    <value>Durante</value>
+  </data>
+  <data name="Text2550D962E536E7C0889F563A957C5389C97AA7507881EFE2B754769B814D8256" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="TextA32AEC4B460A6AD7366DD28D12587B40DB4C875A4FF315196E7A7D22A86EE739" xml:space="preserve">
+    <value>E-mail da noiva</value>
+  </data>
+  <data name="Text230C8F3938CC7A336D0B76EB1A71913420DFADC67D12289A61F45622FE653C97" xml:space="preserve">
+    <value>E-mail do noivo</value>
+  </data>
+  <data name="Text5A9B5C2EF8523FD77CA85A9B5C53260BC37FDB11C77910203CB69BFAE5CDEAA3" xml:space="preserve">
+    <value>Edita os textos do design sem alterar código.</value>
+  </data>
+  <data name="Text2EBA946B2E1EE4B62A8D1047F9AF2977662E3CCCF11606AD62B9A868DC17E0A4" xml:space="preserve">
+    <value>Editar</value>
+  </data>
+  <data name="Text91B0B35FA5C39B9AF0A107798B15C64E3A664FC2B550029D72E72B84D4E1FFE5" xml:space="preserve">
+    <value>Editar a data, a hora e os locais usados no calendário e nos mapas</value>
+  </data>
+  <data name="Text2C029DF1E6AE64343465A5F081A5964A4427828BE8DB99FD72C0AF5A7C69C20A" xml:space="preserve">
+    <value>Editar as mensagens por página</value>
+  </data>
+  <data name="Text8D94F82DF74A6011DE1666386373D563B4EEC7711F9D6E06F269CE222E8FD724" xml:space="preserve">
+    <value>Editar convidado</value>
+  </data>
+  <data name="TextE13DD3E963194D1341456852778E976A37C1B7FB1D16B7AC6EA909D0D633BF66" xml:space="preserve">
+    <value>Editar família</value>
+  </data>
+  <data name="Text2150CEC2FEC720DBC0531DCC5FB4AF14A5F1989BAFFD0AB3DD8A372A064F40C6" xml:space="preserve">
+    <value>Editar fornecedor</value>
+  </data>
+  <data name="TextBD756FBEBB1E5A10E10767389A1AD14D9EC979166FDC4BDA69CD0297D2353903" xml:space="preserve">
+    <value>Editar horários</value>
+  </data>
+  <data name="Text791B8A7D53DF996A3D1D2B61E541975E93DF75359909FB82FA64E1795ACBF9AB" xml:space="preserve">
+    <value>Editar linha de orçamento</value>
+  </data>
+  <data name="TextEA2983DEED08EC00E4A8752F2AD060478E061E8BC05E3D28C1A852FC2B819AFE" xml:space="preserve">
+    <value>Editar linha {0} de {1}</value>
+  </data>
+  <data name="TextDC47094A9AB427D8D2FE312ED13828E625D8291316463A7B258B0700A1AFDAE4" xml:space="preserve">
+    <value>Editar mesa</value>
+  </data>
+  <data name="Text78C9C2FB7088B6249D17CF453D115F6BA534728E5CC863ACFDBC285B06F689F7" xml:space="preserve">
+    <value>Editar mesa {0}</value>
+  </data>
+  <data name="Text436DBECEC25445D7B3936F49C20647096E63F11B9E67897E8E556A40EF8285AF" xml:space="preserve">
+    <value>Editar momento</value>
+  </data>
+  <data name="Text413BDC3133FB4EAD73E8E6B60B44CE25ED229307B8EC0CF4DB368FFB19A444DE" xml:space="preserve">
+    <value>Editar pergunta</value>
+  </data>
+  <data name="Text21E60F76DD0FF8DD4D97BE25E647CC4153B830EF791A3C18553EBE55E6B8665B" xml:space="preserve">
+    <value>Editar secção</value>
+  </data>
+  <data name="Text47076B850D057C4CBDB018E88CAA6AB1DD812197DF221BCC59085EE330C2DF87" xml:space="preserve">
+    <value>Editar texto</value>
+  </data>
+  <data name="Text6016ABD40A0085B457AD9D71BDCCF26A38EE315E1769A58FDC42360C727BE676" xml:space="preserve">
+    <value>Editar: {0}</value>
+  </data>
+  <data name="TextC9894CF002F90BD0BE9020B50E743B226FF5D54EC8FFC87BF7D7A675D47561A9" xml:space="preserve">
+    <value>Eliminar</value>
+  </data>
+  <data name="TextB2FD298F4093B3B5526C6556B33C57980004FD0ACDB3E6B4739B914C285B1051" xml:space="preserve">
+    <value>Eliminar a categoria «{0}»?</value>
+  </data>
+  <data name="TextD92460F18B2F25510A94C979592633AFB9BAB3344E1DD460B7DAFD8730A833C7" xml:space="preserve">
+    <value>Eliminar a mesa {0}?</value>
+  </data>
+  <data name="TextCC65054ED9611A6A8D74F49810E98D18AE0682A62845F1CE69102EF1481A36B0" xml:space="preserve">
+    <value>Eliminar a pergunta «{0}»?</value>
+  </data>
+  <data name="TextB99A4A06D9E911FCC24371CDC6A33A2DF723819018447A70E7EA011FCA21BCD3" xml:space="preserve">
+    <value>Eliminar a secção «{0}»?</value>
+  </data>
+  <data name="TextB09A69B11C68BB7689D88ED55C41DBE9DFB06A0D5EC819133D5C663E0C7C742D" xml:space="preserve">
+    <value>Eliminar esta linha do orçamento?</value>
+  </data>
+  <data name="Text19D0864A88179C0AE4A528A7E9E42747154DFBF6D3D6E470F7E869243B58D7DC" xml:space="preserve">
+    <value>Eliminar este fornecedor?</value>
+  </data>
+  <data name="Text45C73E478B39DC11485C3B6FC9F9EE3812AF68B09F68D64C5D8B6E292FF3C21D" xml:space="preserve">
+    <value>Eliminar fornecedor</value>
+  </data>
+  <data name="Text372D5128E0FBCCD0BA9D3E50B7DB7240453282032C51C1B0C934C7926C9ADADC" xml:space="preserve">
+    <value>Eliminar linha</value>
+  </data>
+  <data name="TextA958CA6C73F761C57012F0FD0BAF2EFD276DD7E381A6D9282F08D8385C2CE4E9" xml:space="preserve">
+    <value>Eliminar mesa</value>
+  </data>
+  <data name="Text791640EA372375755286D05ED8656C7E56EEAB89053761491E408E5E14134311" xml:space="preserve">
+    <value>Eliminar momento</value>
+  </data>
+  <data name="TextFF484162C226BF986B9A3C9A9E547C9B3162427F4D3D99B3D26E95517AD278AB" xml:space="preserve">
+    <value>Eliminar o momento «{0}» do programa?</value>
+  </data>
+  <data name="Text81FE576A54C780ED996AE238672E07F396A66C2FB7F9CD637372C9137C5DD868" xml:space="preserve">
+    <value>Eliminar registo</value>
+  </data>
+  <data name="TextD3FC55522F3857F956BB8525CD5E36738A763C43B8730B864E6544262AE2857D" xml:space="preserve">
+    <value>Eliminar secção</value>
+  </data>
+  <data name="Text7A35747E4E3628DB0D560F5C505D538399DE7609A12D1D8C94C4DAA4852AE6C8" xml:space="preserve">
+    <value>Eliminar {0}</value>
+  </data>
+  <data name="Text468ECDB5C483F3AB0F1AFF8BE05EBB3B3F96822B896DF6747BC53531FF22DDAC" xml:space="preserve">
+    <value>Eliminar: {0}</value>
+  </data>
+  <data name="Text46C62754318C8699E81D619E7D6CA2562E24C26A7345DBA425B7EB460B01F9B2" xml:space="preserve">
+    <value>Em utilização</value>
+  </data>
+  <data name="Text969CCBD3CF6300ECD5C880459D81AE9027DF7517563184A1B8B15282DB230621" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Text22D93BF74969285BCA46058F10EA4A1E8CDC4DDDA557837A466A7B39DA5D664C" xml:space="preserve">
+    <value>Email verificado</value>
+  </data>
+  <data name="Text5328034DB5C58E6D24C52ABBA7E592FE4A6CDA22DC79739C37C955B4FB577371" xml:space="preserve">
+    <value>Encontra aqui as respostas às dúvidas sobre o nosso dia.</value>
+  </data>
+  <data name="TextB1A48C7308F10C2E8072920635CE70E8492C456E644D51D519141ABE56D4A66D" xml:space="preserve">
+    <value>Encontras o ID no endereço da pasta do Google Drive.</value>
+  </data>
+  <data name="TextCEA1B3E689CA75981B021859035C859E734A06297070F8D51FB5A1139407F2CF" xml:space="preserve">
+    <value>Enquadramento do avatar</value>
+  </data>
+  <data name="Text4105811890AEE724C93366822EDE0D3CA55FFF4D3EE80E569326F359502EC586" xml:space="preserve">
+    <value>Entrar</value>
+  </data>
+  <data name="Text4647B3D0E3F888FDA8B84CF67AD57107349A4CCD4C0AE9F170182635CC7BC327" xml:space="preserve">
+    <value>Enviada em</value>
+  </data>
+  <data name="Text4207B84A95F0659265B80477D0B8D60455736422AFE3C50713E7A68847F915D8" xml:space="preserve">
+    <value>Enviar fotografias</value>
+  </data>
+  <data name="Text6173F8D01C884B2DD89E40CBB02502227ED2BE671C48CA328EA159987DAE0E7A" xml:space="preserve">
+    <value>Envio (Hora de Lisboa) Até</value>
+  </data>
+  <data name="Text68C9D7A518A1E2D90CB64946CC8B3CB59BBBA7DE1F2B58D77B583B72653AB3CA" xml:space="preserve">
+    <value>Envio (Hora de Lisboa) Desde</value>
+  </data>
+  <data name="TextE86C2962853908902AFE53F534A223BF7FE71B0DCB3B9D291F239B3A6DCC084D" xml:space="preserve">
+    <value>Enviámos um código por email para</value>
+  </data>
+  <data name="Text6DBA8EC2689FBC05E9B5548223639F5401B865D30DD92B95CF6286453FA22A3E" xml:space="preserve">
+    <value>Erro</value>
+  </data>
+  <data name="Text1EC475DB1FADEEA15D283B707241EE5D90B59928923DE26293DFF6467356983A" xml:space="preserve">
+    <value>Erro temporário</value>
+  </data>
+  <data name="Text67643FC279536C069A3097A6A2CDCC1C7A9782A6BFE6B50A511DA7DEDB47809B" xml:space="preserve">
+    <value>Erros no formulário</value>
+  </data>
+  <data name="Text72C23B968CAB4D0BF807702C321E1AE77BAC0BC10C334B86EA0670F0DF7F9C8E" xml:space="preserve">
+    <value>Escolhe entre 1 e 200 lugares.</value>
+  </data>
+  <data name="Text94244565A274B3CD1A4FB780D78BD6EC21990619A22177008D1F5CC4121C32C9" xml:space="preserve">
+    <value>Escolhe pelo menos uma fotografia.</value>
+  </data>
+  <data name="TextF80FACBDC3BA0C573A72059C3D058C0665A1A27BB71A68F51DF8E21626A168C9" xml:space="preserve">
+    <value>Escolhe se este familiar vai estar presente.</value>
+  </data>
+  <data name="Text7A0665B4CEC21FA779D29327CB2BA0DC434045F8C6375881463BF529BAE16D8E" xml:space="preserve">
+    <value>Escolhe se vais estar presente.</value>
+  </data>
+  <data name="TextF2BA98E8E3CBFDACFB5BDD3B0EB6ACD427E64B4EA5B58E6DB69CBDF3BF07C619" xml:space="preserve">
+    <value>Escolhe um estado da lista.</value>
+  </data>
+  <data name="TextB8E5B63891D8E749356E2C89B35CDB14EDD5BCE3A8B91533C04B1CD39F4133C2" xml:space="preserve">
+    <value>Escolhe um fornecedor da categoria selecionada.</value>
+  </data>
+  <data name="Text8C9537650484D63B79572F4FD4C8B84E7BDD8AC6979FE55EAD090262C966C0F6" xml:space="preserve">
+    <value>Escolhe um país da lista.</value>
+  </data>
+  <data name="TextAE13C640086CDB9F951A0EC86A6F73F36ABC8F924DA542BA947DD281AE009A7A" xml:space="preserve">
+    <value>Escolhe uma categoria</value>
+  </data>
+  <data name="Text66E5C9465412929CFF7AEA874495A1BDCB6C3D4F8552D9A188C1C91A5012415D" xml:space="preserve">
+    <value>Escolhe uma categoria da lista.</value>
+  </data>
+  <data name="TextC94A1FD538BBDD5B41E7B8E0FA681982C23D7B2B10A95067356DD73240834B0D" xml:space="preserve">
+    <value>Escolhe uma coluna entre 1 e 4.</value>
+  </data>
+  <data name="Text0BC2DEAC2F10B6E3D35B301BA25E3EEC55A00FA7C7086A79F4116885F33C8E9E" xml:space="preserve">
+    <value>Escolhe uma cor de fundo válida.</value>
+  </data>
+  <data name="TextF8BCA0DE4A79764BCD491B8A2985BE4DF533ABB9AE604CC852593623C7FC8136" xml:space="preserve">
+    <value>Escolhe uma cor principal válida.</value>
+  </data>
+  <data name="Text3A833AC0DE9B9912C46AEFC5CE497634E166A8EBF14C5490A6BDA3A2DEFD3254" xml:space="preserve">
+    <value>Escolhe uma fila entre 1 e 1000.</value>
+  </data>
+  <data name="Text1407ED6F8EED48FE507F0D2CEEC67AB7C4D400206FA4C3816B0810E79953A565" xml:space="preserve">
+    <value>Escolhe uma fotografia num dos formatos permitidos.</value>
+  </data>
+  <data name="Text4EE76EAC8A835E695FCFDF1EAE40AF701296E95B5303F5E863FB81A8C529EA49" xml:space="preserve">
+    <value>Escolhe uma opção válida em «{0}».</value>
+  </data>
+  <data name="Text4912EC834CB8F877E68DCD22C99AB8D19E5C699695AE4861B57C96904D5C430F" xml:space="preserve">
+    <value>Escolhe uma resposta de presença válida.</value>
+  </data>
+  <data name="Text438452D7F53FCA1BDF84264C7A658F7EE08284BBE4B74B81617DBC63E6F73456" xml:space="preserve">
+    <value>Escolhe uma secção existente.</value>
+  </data>
+  <data name="Text450B7D1112E0D6009ED820461328F8DC0EE7D42F72B763AF2727D4F85ACED7DC" xml:space="preserve">
+    <value>Escolhe...</value>
+  </data>
+  <data name="Text9513BCDB93BC719C9A8254E95D3CA09E57B3698958549BD0AAD43F36AA30B50A" xml:space="preserve">
+    <value>Escolher fotografia</value>
+  </data>
+  <data name="TextC9F30698A39D8C5929F87CE987816ED066B7EE1C3B8E6DE0AA7A8D60D5FC5A81" xml:space="preserve">
+    <value>Escolher o ficheiro corrigido</value>
+  </data>
+  <data name="TextB6682BE9DF8982C628AFED296916C34A00712BFCF0C03F987D0CC7358AD239AF" xml:space="preserve">
+    <value>Escolher outro convidado</value>
+  </data>
+  <data name="TextA8D43EE2A5982D1ED2571B3646B392DF38B32B1073476DC40A44104C00E927BD" xml:space="preserve">
+    <value>Escreve a pergunta.</value>
+  </data>
+  <data name="Text0FD34AE10175B0C8F2965F68A0EE1CFE45522051964EB656E8B42350A1424BA7" xml:space="preserve">
+    <value>Escreve a resposta.</value>
+  </data>
+  <data name="Text20A16221D3FB6D2F708622FE106D35BDF4E8D9F14704879D1384BA4021D22ADF" xml:space="preserve">
+    <value>Escreve o teu nome para começarmos a pesquisa.</value>
+  </data>
+  <data name="Text34A4B4EFBC3E83427839C3BCD748CB80E0EF8082DC9A897E65A41BFCCA00C8F7" xml:space="preserve">
+    <value>Esta ação não pode ser anulada.</value>
+  </data>
+  <data name="Text77550CE9596695BCEEC6E2C2FC15C5CC8DC8AA7CFF93D521A0A50437AE274AB9" xml:space="preserve">
+    <value>Esta categoria já existe. Usa a categoria da lista.</value>
+  </data>
+  <data name="TextFB40A5E5610124744BB930B726CDFB5C5CBD4DE82A70164A04A9D90F425938A4" xml:space="preserve">
+    <value>Esta hora de início não existe no fuso {0} devido à mudança da hora.</value>
+  </data>
+  <data name="Text4CFD3ED0F1738155834D849E0F156ADBC6C3425D7803841C6C26A2F3FD412FCB" xml:space="preserve">
+    <value>Esta pergunta foi alterada por outra pessoa. Abre a versão atual antes de guardar; os teus dados continuam abaixo.</value>
+  </data>
+  <data name="Text628583242D2DF2690ED1EB54D0CE37B2204AD70A01C3556C9605F6B4BFE2F936" xml:space="preserve">
+    <value>Esta pré-visualização expirou, já foi concluída ou cancelada, ou não pertence à tua sessão de administração. Consulta a lista antes de iniciar uma nova importação.</value>
+  </data>
+  <data name="Text8DB3CF1DCD83CCBFB21A44B66FE1D337C4E82DA70DF94FE247A23508FF122555" xml:space="preserve">
+    <value>Esta pré-visualização foi alterada ou contém erros. Revê a versão atual antes de continuar.</value>
+  </data>
+  <data name="Text2983D0EE05947CBD8050C001256EE2D19E267A9D3C488652EFE4DFB6582323A1" xml:space="preserve">
+    <value>Esta página já não está aqui</value>
+  </data>
+  <data name="Text7C1CA5F1E56FBEC148A11233109DB810F0C15BB72182CE609FEF13A764D839FD" xml:space="preserve">
+    <value>Esta área é só para a equipa do casamento</value>
+  </data>
+  <data name="TextA144D34915183505A6201033A20D8A593AA0C3503BBCE1FBDA4D01216DC601F9" xml:space="preserve">
+    <value>Estacionamento</value>
+  </data>
+  <data name="Text35BA945460CDFF11EEA2520E3C0EAAED554508900FD09249E202014D1BCE2308" xml:space="preserve">
+    <value>Estacionamento perto de </value>
+  </data>
+  <data name="Text98E5ACDDB6C46A248F96E8A549B4103A91F47299E1DBF508E436D738912C5CBD" xml:space="preserve">
+    <value>Estado</value>
+  </data>
+  <data name="TextB0402BD9B6EA937484C6C1463B6614521F992A7A815F4FB84C142116E443167D" xml:space="preserve">
+    <value>Estado do módulo</value>
+  </data>
+  <data name="Text61FEC0842C879DAD6EDB7A8310A247C31E9CA8673F051A0334EFB3F933FF9AB0" xml:space="preserve">
+    <value>Estamos a casar!</value>
+  </data>
+  <data name="Text42C66252148B359A31AB9FE192CAE12FB8A53F65AB6C7759300CB6D23F8505B6" xml:space="preserve">
+    <value>Estamos a preparar as respostas às vossas dúvidas. Volta em breve!</value>
+  </data>
+  <data name="TextA2077E8CBDCF2E995A7AEF667F06F73B830A14D69F978BA913F6D37002754D1F" xml:space="preserve">
+    <value>Estamos a tratar deste imprevisto. Podes voltar ao início ou tentar novamente dentro de instantes.</value>
+  </data>
+  <data name="TextA11C6E4553893466E7A2CABED894B45CBA3CE306CE310DA5110A7C2497206F23" xml:space="preserve">
+    <value>Estas indicações aparecem em «Planear a visita» na página de informações. Deixa um campo vazio para mostrar o texto sugerido.</value>
+  </data>
+  <data name="Text160B12A862D8933FCA281BC5BA50C7E037024FBC4B918C53E174EAC5AB643CDB" xml:space="preserve">
+    <value>Este campo é obrigatório.</value>
+  </data>
+  <data name="Text1BE70C7A2B7835E75F4437E2F0E1F6012D0B913E394D8CDA37C2D4FFD994A6A8" xml:space="preserve">
+    <value>Este convidado tem acompanhantes associados. Revê essas associações antes de alterar a permissão, a família ou de o marcar como Plus-One.</value>
+  </data>
+  <data name="Text2ACA01EFC06B2BEC181FDA361C4D99484E8859ACF8F5A27089C100EB800F5893" xml:space="preserve">
+    <value>Este convidado tem acompanhantes ou uma resposta RSVP associada. Revê essas ligações antes de o remover.</value>
+  </data>
+  <data name="Text8FAA88658E7ED24281FB64108C00B08DEA452498CFFFE024A89BB6172D0DBE6E" xml:space="preserve">
+    <value>Este convite foi alterado desde que abriste a lista. Nada foi apagado; revê a resposta mais recente.</value>
+  </data>
+  <data name="Text7065842C802EACB501A047E157256054D38F11BE180F5689E03C3CB8776E6ACC" xml:space="preserve">
+    <value>Este convite foi alterado entretanto ou este formulário já não é válido. A tua resposta não foi guardada. Revê a resposta mais recente antes de voltar a enviar.</value>
+  </data>
+  <data name="Text2289761CF00FA4116D5075B7904A76A4C05BD45EA07863AD09DA665FBB34AFC1" xml:space="preserve">
+    <value>Este convite foi alterado por outra pessoa. Os teus dados não foram guardados. Abre a versão mais recente antes de continuar.</value>
+  </data>
+  <data name="TextC2F386FFC2D7BEDF94A2F23C4064FCF0DB4DFF5A904A63A02B2AC529AF92E6CB" xml:space="preserve">
+    <value>Este convite já tem uma resposta. Usa o mesmo email da primeira confirmação para o consultar ou atualizar.</value>
+  </data>
+  <data name="Text59A8DC1B0AC89B9E6BABA87269AB379B3C7F7534666A8317EFBAD040FFD43249" xml:space="preserve">
+    <value>Este meio de envio está indisponível de momento. Tenta mais tarde ou contacta os noivos.</value>
+  </data>
+  <data name="Text5872A36AED9CE89226754CB04C40B3A353E9451758DF4B04C28D4F8C3C819B33" xml:space="preserve">
+    <value>Este momento será apresentado no horário visível aos convidados.</value>
+  </data>
+  <data name="Text17CFC414B604CC945D7C7B2983C44A7B74D025FA44E354A8E0747530BA14BB52" xml:space="preserve">
+    <value>Este recibo inclui apenas as pessoas selecionadas neste envio. As respostas dos restantes convidados não foram alteradas.</value>
+  </data>
+  <data name="Text0519D6841B62ABB00A8AF7D3C8B3A917A8398B12A7AAF1BBD7D7922582FA7104" xml:space="preserve">
+    <value>Etiqueta da extensão</value>
+  </data>
+  <data name="Text7B70F73065073E0279F3578424C5043BD53C918E9FBD33EFD7BB37F63165CF42" xml:space="preserve">
+    <value>Ex.: Cerimónia</value>
+  </data>
+  <data name="Text8D02F288DEFA56861A71037AD9AEB109B3F7E92C13BA399890690F777341691C" xml:space="preserve">
+    <value>Ex.: Colegas do trabalho</value>
+  </data>
+  <data name="Text3111F647A343EBB3E5C5BA1E87BCF2B32071BFB314769A3530AA6A8A6409118C" xml:space="preserve">
+    <value>Ex.: Estamos a casar!</value>
+  </data>
+  <data name="TextEA94EB0845EDF7E82B10C4500C1C6FA914F05971E048D01D9A46F3B5539170A1" xml:space="preserve">
+    <value>Ex.: Família Silva</value>
+  </data>
+  <data name="Text0B58D5E44FCBF4DD511DB29A9E7B23334AAB65E3EE3831982D9E78BFA9822949" xml:space="preserve">
+    <value>Ex.: bi-heart</value>
+  </data>
+  <data name="Text4FBC3038A6DAE1A46419C181E4A2FA9FC77B4A25032C92BA73D77A11BC65ACB4" xml:space="preserve">
+    <value>Existe um campo inválido. Revê os dados desta linha.</value>
+  </data>
+  <data name="TextF319A0BE02DE309F6183335C62098C21373892A5D9431969DDB2E10CF2A35E02" xml:space="preserve">
+    <value>Existem erros. Corrige as linhas indicadas antes de confirmar; nenhuma linha será importada enquanto houver erros.</value>
+  </data>
+  <data name="Text21BC482AE9A1B916970985C70E5DC6C316C2FA17B56CE3855C032F31D9C43D28" xml:space="preserve">
+    <value>Existem títulos de colunas repetidos. Usa o modelo disponibilizado.</value>
+  </data>
+  <data name="TextC87B41C7FF0665285AE40906D0A4FC11582E129CAA050E631EC0C9B0138694D0" xml:space="preserve">
+    <value>Exportar CSV (filtros atuais)</value>
+  </data>
+  <data name="Text7D6CFD5982F66AD1BFA5B023E541910B68C8DBE46452913F420AD9965E031C04" xml:space="preserve">
+    <value>Exportar histórico em Excel (filtros atuais)</value>
+  </data>
+  <data name="Text3E72A53066CFB2FF2329DF8B532902245D035CA789D1029E87B4FCF0C0EFE025" xml:space="preserve">
+    <value>Falta um passo para aceder ao teu convite.</value>
+  </data>
+  <data name="Text45A4B3A4F4A3921EC8F4A24450398884041B940971589ED3E25C62296292E0C8" xml:space="preserve">
+    <value>Faltam as colunas: {0}.</value>
+  </data>
+  <data name="Text2210FFA668072074A88AD340D507A024E2CC68DEB6CB792D6EAD0EC2F7F3E52C" xml:space="preserve">
+    <value>Família</value>
+  </data>
+  <data name="Text9A49F940493EC3B7137C1EFB908576D483798E82FCD35F812FE1B10EC3DA6A86" xml:space="preserve">
+    <value>Família repetida no ficheiro.</value>
+  </data>
+  <data name="TextCD3B7F7765BF5481D6D68BF5B5417051195E63EDF52242CBEE306877178C7E42" xml:space="preserve">
+    <value>Família, Referência ou Nome de Convidado</value>
+  </data>
+  <data name="TextB0FF8A75A7FCC3D7FB735816B9DC6FC0543BC25D070E456B631B62BCDD9921A7" xml:space="preserve">
+    <value>Famílias</value>
+  </data>
+  <data name="Text1C2A3DFDA9DDC8F411D1E8752060221E16A846C2CB57B5C6E54793F8B3B8D64D" xml:space="preserve">
+    <value>Fecha em</value>
+  </data>
+  <data name="TextDEE988A2B6B333AD6532962701AC9A9E9CE3AF76FD3089F55D9D3AF46B04C3AC" xml:space="preserve">
+    <value>Fechado</value>
+  </data>
+  <data name="Text03A2ADC510504B64976D04AB38159BBC01946940E31FE5554B4E8D49D3D5DBDD" xml:space="preserve">
+    <value>Feito com Amor por Diogo</value>
+  </data>
+  <data name="TextA21B588CF3752204A822F8737DE592BD810BDF65930C4982334F428E4FADEAB3" xml:space="preserve">
+    <value>Feito com amor por Diogo</value>
+  </data>
+  <data name="Text985EF26823C846FFFCC543712FF0599D6127889B46559D8893B8B9F1E1C75E4F" xml:space="preserve">
+    <value>Ficar nesta página</value>
+  </data>
+  <data name="Text69A2AE3A22B0C34A9749BB7C1A83DC483A3EDA5183F5493CDEFBEB9DAB92D8E8" xml:space="preserve">
+    <value>Ficheiro</value>
+  </data>
+  <data name="Text5E94C19C7D556C6E39254B2684B298990B8845049551D76348755A6F9D7B2FB9" xml:space="preserve">
+    <value>Ficheiro Excel</value>
+  </data>
+  <data name="TextF9FF10CED16D7FE5F035A10AE51F8F26FF785FF0E1A1CEF3456EE4ACACEF6815" xml:space="preserve">
+    <value>Ficheiros</value>
+  </data>
+  <data name="Text56CB74625225ADB98573D8BDE867390C04EFEF0AAE4AE09A27F1269552FDAC95" xml:space="preserve">
+    <value>Fila</value>
+  </data>
+  <data name="Text06B52C36446A620AAFA068B2DFBAA75F4842900096871175B97C7CFB2F261D12" xml:space="preserve">
+    <value>Filtrar</value>
+  </data>
+  <data name="Text03B0D381B6F9C116E5726815CA1EA3774F5BFD4F47D73B5FA92EA702597C60AD" xml:space="preserve">
+    <value>Fim do casamento (opcional)</value>
+  </data>
+  <data name="TextD76B34BBE4B2C3E916B9C33142634330D3F55181782A63BA52F5CDB00DECBBB0" xml:space="preserve">
+    <value>Formato dos contactos</value>
+  </data>
+  <data name="TextAA5407D4D2C9F2E86F15C9A3FB7221E1C9A2D6A0E7C48E43813E3DB0028C3A9F" xml:space="preserve">
+    <value>Formatos permitidos</value>
+  </data>
+  <data name="TextC1FD02F3909E4C60B4C63C81A058C8589835BA29D86ED756526DFB39FF391068" xml:space="preserve">
+    <value>Fornecedor</value>
+  </data>
+  <data name="Text39618EF0926C00585D852558507955C028649A0BC6B986BB7F6E72629968DAF0" xml:space="preserve">
+    <value>Fornecedor (opcional)</value>
+  </data>
+  <data name="Text9ACDE80705BA894131BC278600008A50386CA61A9B4902B996626878BD12B006" xml:space="preserve">
+    <value>Fornecedores</value>
+  </data>
+  <data name="TextB560461084CE3EC55F35003154FFE34F66395164F840AF305BCDE86D1A4C2CA9" xml:space="preserve">
+    <value>Fornecedores e respetivas linhas de orçamento</value>
+  </data>
+  <data name="Text2AAE96A7909550CAA335BC594E3C8C301BA961A293403E0CBEA7DFF33F899DF1" xml:space="preserve">
+    <value>Fotografia 1 de</value>
+  </data>
+  <data name="TextB72977CA0936FDC3ABDD9D84A03961894411060C7CFB98ED82FFE9237B64D302" xml:space="preserve">
+    <value>Fotografia anterior</value>
+  </data>
+  <data name="TextD2C3FB19F79F765FE7B656362FF5A0484D3D045753EEA9A16C88A3BB4A568B47" xml:space="preserve">
+    <value>Fotografia seguinte</value>
+  </data>
+  <data name="Text2CE813BAD24F1C212AB8C8A0E8D0BE348582AB8014D7BCD28869350D8675C221" xml:space="preserve">
+    <value>Fotografia {0} da nossa história</value>
+  </data>
+  <data name="TextD8E011F3A6CB52D630457DEDBB96DE341C452A8AFACE8ADCB49C617351920A0F" xml:space="preserve">
+    <value>Fotografia {0} de {1}</value>
+  </data>
+  <data name="TextD0F0EA566E07F62642EE60654BFA3AE9839A94DAAC085F245B07530CA5A224B5" xml:space="preserve">
+    <value>Fotografia {0} de {1} — {2}%</value>
+  </data>
+  <data name="TextC929C71C9E54E0906CE89F053A5AA52CBB01983D600D6F2923D0D077E4205B68" xml:space="preserve">
+    <value>Fotografias (obrigatório)</value>
+  </data>
+  <data name="TextC70A32CB296FB4585DAE77355AA5B4103B307B033EDE28C7FB127B51A410AD21" xml:space="preserve">
+    <value>Fotografias da nossa história</value>
+  </data>
+  <data name="Text9D3D2158A43787436CB499076C02500F370AEC372C8B5F327A808E7279C5E1FB" xml:space="preserve">
+    <value>Fotografias recebidas</value>
+  </data>
+  <data name="Text9F3778580818B4A9387426320ECD31046956302500E96B9B16326E9AC71CD23C" xml:space="preserve">
+    <value>Gerir categorias</value>
+  </data>
+  <data name="Text0C660FA4777C8A6DE98BF47EEEF44D3C84D749495FE0886DB0331C0E436CFD71" xml:space="preserve">
+    <value>Gerir estacionamento, transportes e alojamento</value>
+  </data>
+  <data name="Text6D763F602245F4289914DAFB2C87E52B776454715BD7177ADC513862C9B4E084" xml:space="preserve">
+    <value>Gerir lugar de {0}</value>
+  </data>
+  <data name="TextEB088CCD74140DF933A5A1CF7A8080853E7D2B51C8EE7A05D5627794BF5D86C6" xml:space="preserve">
+    <value>Gerir perguntas frequentes</value>
+  </data>
+  <data name="Text915EF4BAD59A1329E2B742F2DC86CB9EE60A906FB8BDE81CEEB9D16F63EA4CBD" xml:space="preserve">
+    <value>Google Drive</value>
+  </data>
+  <data name="Text2A55E8CE7852FD568016D5C666E51774F2163DC23F1B7CCADC23103142FC0341" xml:space="preserve">
+    <value>Guarda a tua confirmação</value>
+  </data>
+  <data name="Text4BD6EE6EB2257E3C9C33A73FC6072E29303A1BE7E42E2BC2C515C5FFD60DE45F" xml:space="preserve">
+    <value>Guardamos com carinho os lugares onde celebrámos convosco.</value>
+  </data>
+  <data name="TextFDC83A1F4DAC7CB070479F9460C8B78442B54799C0FB363448C68264165BBA58" xml:space="preserve">
+    <value>Guardar alterações</value>
+  </data>
+  <data name="Text47B910E97E085132A592A947E0FB5DF5793E20DA1D3CDCEF3741357CA32A9E50" xml:space="preserve">
+    <value>Guardar categoria</value>
+  </data>
+  <data name="Text4DE20790BBAD8CD67D61D93807A48E3AA501674E32C2EEC96C340BF67CCB05F5" xml:space="preserve">
+    <value>Guardar convidado</value>
+  </data>
+  <data name="Text6D6F33F9CB694424D416137C3A4DD0C0590671A821CE168C674F3AE5AB23579F" xml:space="preserve">
+    <value>Guardar definições</value>
+  </data>
+  <data name="TextA4E92BE58779664FFE02D29A26CA8C6F6A53BC04363EB2C64C607B012B91AB73" xml:space="preserve">
+    <value>Guardar família</value>
+  </data>
+  <data name="TextE3F2CF6FA5DE9DAA41F720CF57CEC87AF188A63DCE13A205F808125FEA717512" xml:space="preserve">
+    <value>Guardar fornecedor</value>
+  </data>
+  <data name="Text4E982E0094DDFBA04076F651C278864496606CC2D8A4EB9E94D86EE7EBFA8A70" xml:space="preserve">
+    <value>Guardar informações</value>
+  </data>
+  <data name="TextCD8083C69AF7505F05E50C9E2F837DB304B2C6AC4F4E80450A355BB2BB1B8F04" xml:space="preserve">
+    <value>Guardar linha</value>
+  </data>
+  <data name="Text1D1E2931104BBEE14E70898FA16B678DEB88BEEF5B8C375A247628B35B81333D" xml:space="preserve">
+    <value>Guardar lugar</value>
+  </data>
+  <data name="TextCF5880FCA4EB1434BCF109EDB2D089B9E358FA55F3618BFD664AF3A036046E3C" xml:space="preserve">
+    <value>Guardar mensagens</value>
+  </data>
+  <data name="Text1777A94C5BA279975A64EFCA85070C6D3B7417617DEF8385A3A6549780FB2191" xml:space="preserve">
+    <value>Guardar mesa</value>
+  </data>
+  <data name="Text7175F5D58DBA29324485C20C4BE2482C596A5B0ED712A4300110F8FE99BA6BE0" xml:space="preserve">
+    <value>Guardar momento</value>
+  </data>
+  <data name="Text564170F05E44381BFA74BBAEDB58FBE42F5F32980ADD169AA91F70E6CFB85186" xml:space="preserve">
+    <value>Guardar pergunta</value>
+  </data>
+  <data name="Text3540CA41A836222FA6E942990164B07AEF3BB76F2D11A8BFFEBA8A64F1B718EC" xml:space="preserve">
+    <value>Guardar secção</value>
+  </data>
+  <data name="Text0E9D6D901806657597CB5B25CD655DF7C9A46B9668218AFE7EFD325FFCA8808A" xml:space="preserve">
+    <value>Guardar texto</value>
+  </data>
+  <data name="Text50804805782EB1465C0733C7791DED7966B93A32E665253C88865332070B7357" xml:space="preserve">
+    <value>Guardar traduções</value>
+  </data>
+  <data name="TextC0C8DDACAC7FE957FAE6A7EBF85248CCA1723FA97D70254550EAC5CB41EEB222" xml:space="preserve">
+    <value>HH:mm 'de' dd/MM/yyyy</value>
+  </data>
+  <data name="TextA80DE96D9716C999724EDC4569A9EF25E532BF6475219F1FC654718BC58AF431" xml:space="preserve">
+    <value>Histórico</value>
+  </data>
+  <data name="Text6AFBB42036ED5FEFDE4CD335142A93B92EBE5855EEA3C77431F9487B710D3C1D" xml:space="preserve">
+    <value>Histórico de alterações</value>
+  </data>
+  <data name="TextA4FCBDA5B191E54819A7C6DCD7865FFAAD785C82A38ECD631C6ACFFBC61A2296" xml:space="preserve">
+    <value>Histórico de alterações do RSVP</value>
+  </data>
+  <data name="Text5CE6803C6E8F5B840A6E3B273F9DC10DB1BE2A465DEFC5C9DCA574979B284184" xml:space="preserve">
+    <value>Hoje celebramos juntos. Encontrem aqui o programa e as moradas da cerimónia e da festa.</value>
+  </data>
+  <data name="TextD32A4A5670AC9C01DC876D66B300C6B2689C0D1CA6B769AD2459F714A7F06EE2" xml:space="preserve">
+    <value>Hoje é dia de celebrar! Se precisarem de falar connosco, os nossos contactos estão na página de informações.</value>
+  </data>
+  <data name="Text22354061CAAC66E745B5E3D1419331620A302035A03FF6A16DE9A8307B166F7F" xml:space="preserve">
+    <value>Hora local do casamento (</value>
+  </data>
+  <data name="Text8FC4927B9751A406195B53496533C118FD3C61DA94AF369C336D3F1C3E2EA324" xml:space="preserve">
+    <value>Horas</value>
+  </data>
+  <data name="Text9349AD5FABD19731A1A02C6A42303B49ACEC6A30223653278A782EAC6310C55F" xml:space="preserve">
+    <value>Horário do dia</value>
+  </data>
+  <data name="Text3843971DCFDEE5083E6289E1BBDBB003E538B5A8A668FC43AE4F19D415AC18A2" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="Text5C4AB44BB22ACFD3E8802284164461CEBB7D8FED5661EA23576CC3EF0FB9DE15" xml:space="preserve">
+    <value>ID da pasta Google Drive</value>
+  </data>
+  <data name="Text69617220418CE077C07898ACDB0D7AD96BCD6409BBE3EC42D313275905C27377" xml:space="preserve">
+    <value>ID vazio: novo registo. ID existente: atualizar esse registo. Consulta o ID na lista da administração.</value>
+  </data>
+  <data name="Text12156E921BDB6085CCC2F0109B8FF8EA8F0B17E8B4FB0741F63B6708B930B380" xml:space="preserve">
+    <value>Id</value>
+  </data>
+  <data name="TextEF9ED8873173C4659F7C3AC69E4607A290BB33A02B010994AB54F6834383FDB9" xml:space="preserve">
+    <value>Idade</value>
+  </data>
+  <data name="Text7AE9D418353B399FA1D9404C5187943C0BE487FFA9C952B6DBB7DEE8D17610D5" xml:space="preserve">
+    <value>Idioma</value>
+  </data>
+  <data name="Text4D37DCCC3B53FA0613BA11E11E51A34E83D07D93CD1FD9E9897BDA1235DF44EF" xml:space="preserve">
+    <value>Idioma da tradução</value>
+  </data>
+  <data name="TextC826ABD76E49F96DF274B4833032800E082790B3B1D3984CB51E9A0DD5952E42" xml:space="preserve">
+    <value>Importar </value>
+  </data>
+  <data name="Text7CBBE3AC4B582CBCD51A78823282747DB4D1BAFDF350720DD326144EDDEC1277" xml:space="preserve">
+    <value>Importar Excel</value>
+  </data>
+  <data name="Text6252BF23F3CE4AD4B070EB562A1F02FB2CB990E8FD174E40A24753D896800914" xml:space="preserve">
+    <value>Importação cancelada. Nenhum registo foi alterado.</value>
+  </data>
+  <data name="Text92EE2BDC6549117B02736370102F540AB8D32403D835BB51DB508D696CC7301E" xml:space="preserve">
+    <value>Importação com Pré-Visualização e Confirmação</value>
+  </data>
+  <data name="TextC0B34F24405FEB14893646EB2D50D289DE7E76D3018CF4E01847CF0FE037C1A6" xml:space="preserve">
+    <value>Importação concluída: {0} criados, {1} atualizados e {2} sem alterações.</value>
+  </data>
+  <data name="Text17FDF46542FCCF8055FA2AA2231209E7B3B4E159265F52C26E6DEF2277A708C1" xml:space="preserve">
+    <value>Importação indisponível</value>
+  </data>
+  <data name="TextDF16B2D90E2FADC112F726316D8443FD4A2836F4B1955AE3DC6CEF9680622008" xml:space="preserve">
+    <value>Imprimir / guardar PDF</value>
+  </data>
+  <data name="Text9259E3F3E5078D6673C27A6B09593BFD568F360C8DC9AE27E8C8D7EC294290F4" xml:space="preserve">
+    <value>Imprimir lista</value>
+  </data>
+  <data name="TextD24A581CD70654E5A0DCF618640639455A4DC9C7D18A9EBFA8D247CC3769AE48" xml:space="preserve">
+    <value>Inclui acompanhantes</value>
+  </data>
+  <data name="TextA08ECF0BDE22C5698221544A179F93285C9D02E6130F8BF6C6A0B70A215BCA22" xml:space="preserve">
+    <value>Inclui rascunhos. O módulo está</value>
+  </data>
+  <data name="Text78AC66FF86DB225BE60429805EE1C42BB486778FA1C354BBE6BCF2E52CD3B66B" xml:space="preserve">
+    <value>Indica a mensagem para quando não houver perguntas.</value>
+  </data>
+  <data name="Text0DD10E3D08B7AD1A5D6A13BCBDE30B22BCD5CA4A32FEDFBBAA55F01B03925969" xml:space="preserve">
+    <value>Indica apenas o domínio, por exemplo exemplo.pt.</value>
+  </data>
+  <data name="Text38F60BA2AF54FF6189FDB75B63AF7E0F7F6104BA44FAD15A9546A300F7CB4C61" xml:space="preserve">
+    <value>Indica o apelido, com até 100 caracteres.</value>
+  </data>
+  <data name="TextC1FBC5992EAA08F97AE9DA55090D48C911D2F695F14558103EF1859E021713C1" xml:space="preserve">
+    <value>Indica o caminho da imagem no site (por exemplo, /images/navbar.png) ou o endereço completo da imagem.</value>
+  </data>
+  <data name="Text0463FE6E4632CBC4A6E6666C512EA55C41A1BCEC01654DDE6467FDECB51ADC00" xml:space="preserve">
+    <value>Indica o email para receber o código.</value>
+  </data>
+  <data name="TextA3E4BF1C6DE4222B6860C29134B99A03F01503DF660DA25F942FD361505D621A" xml:space="preserve">
+    <value>Indica o email que queres associar a este convite. Depois de guardares a resposta, as atualizações serão feitas através desse mesmo email.</value>
+  </data>
+  <data name="Text3F7BD1F9660EB0B826C236C09FC42D33BC439BEC8D147CB036C343F3F7ACEB4E" xml:space="preserve">
+    <value>Indica o endereço completo do site.</value>
+  </data>
+  <data name="TextD472A361CFD6B8428968B0FAA937EE169E02B19AD4DEE7D5D88A3204FE338A91" xml:space="preserve">
+    <value>Indica o momento.</value>
+  </data>
+  <data name="Text6FAE5E36281411479109CBDA7A71A3D2EDDB2F4EE5C9B440A046EFD02652131E" xml:space="preserve">
+    <value>Indica o nome da família, com até 150 caracteres.</value>
+  </data>
+  <data name="TextA264D9750BDC3E4E9B540C0AD193CE9FE85DD0529BD7EE77359F3F69EA25680F" xml:space="preserve">
+    <value>Indica o nome da mesa.</value>
+  </data>
+  <data name="TextDEB795192AD80ED452C43A03D6FBDD6992E03191309B8DC10F8888F84B7893FC" xml:space="preserve">
+    <value>Indica o nome da secção.</value>
+  </data>
+  <data name="Text79422982E1387A6ED96088D64B30BE1FBB96058D696CF0144D9E28760C593114" xml:space="preserve">
+    <value>Indica o nome do convidado, com até 100 caracteres.</value>
+  </data>
+  <data name="TextC2F8E8224FBDC9020AD8C05E2140105808E81B3C9CC34CB011263A4F9ABCB4BC" xml:space="preserve">
+    <value>Indica o nome do fornecedor.</value>
+  </data>
+  <data name="Text58A0F9E9C1B1EF01C097E0C741886A833DD3AC116FB92305797BBFB9C83BEBE3" xml:space="preserve">
+    <value>Indica o nome no menu.</value>
+  </data>
+  <data name="Text563F980149D752DAB21E5687FE166940D50E53C5058B379E21378276432C1045" xml:space="preserve">
+    <value>Indica o título da página.</value>
+  </data>
+  <data name="TextE417E386D0AA83452BE19BFEC3B5F0E92DF0F44315FD6877606788266F28032A" xml:space="preserve">
+    <value>Indica um caminho de imagem ou um endereço HTTP ou HTTPS.</value>
+  </data>
+  <data name="Text5107B7000A6DB11F5A875C1D5AF735CA01A88953F0DA72F83AA6B69ABB95A445" xml:space="preserve">
+    <value>Indica um e-mail válido, com até 200 caracteres, ou deixa o campo vazio.</value>
+  </data>
+  <data name="Text21F654B8E13351CA89CE2CC725BE4674D990356A898D990F8B90B77DD99FF526" xml:space="preserve">
+    <value>Indica um email válido dentro do limite do campo.</value>
+  </data>
+  <data name="Text7297B720F92DC3FA0CE1C85563987582F552CDDD49F0608AF161CD1C539D68F1" xml:space="preserve">
+    <value>Indica um endereço de email válido.</value>
+  </data>
+  <data name="Text5D0F5264FA45A01EE3E013420CBC226A76064235B2BEEDE1D60CD6050F588D98" xml:space="preserve">
+    <value>Indica um telefone válido, com até 50 caracteres, ou deixa o campo vazio.</value>
+  </data>
+  <data name="TextBA96F6BD22541DDC724942EF4D0ED535246586D85B9DBC0CE89449559897D602" xml:space="preserve">
+    <value>Indica um telefone válido, com o indicativo para números estrangeiros. Para uma extensão usa, por exemplo, «ext. 123».</value>
+  </data>
+  <data name="Text7F7780C90F693B93D14463D25ED069DB81C1A5359B77E1D54812437F5778FB5C" xml:space="preserve">
+    <value>Indica um valor entre 0 e 999 999 999 999,99 €, com até duas casas decimais.</value>
+  </data>
+  <data name="Text0A83225F80AC9E1159DDDD49F7EE0E5A89947DA5385ED209A4FC4CC9F464D18C" xml:space="preserve">
+    <value>Indica uma data válida em «{0}».</value>
+  </data>
+  <data name="TextC01BB344752591544820025241ADCDA27619AD347BF3C4BAF350B3B29B6A0707" xml:space="preserve">
+    <value>Indica uma hora de fim válida no fuso {0}, posterior ao início.</value>
+  </data>
+  <data name="Text3D299A0BE66AE7BAA2EA4D1EF2635B4FC1F86910FD137D87647FAE8D91E2AF79" xml:space="preserve">
+    <value>Indica uma ordem entre 1 e 9999.</value>
+  </data>
+  <data name="TextCC44D3CAD1E4B3CE952E57DAD9916F61355A634D76D6729B8621E6D4D82FC392" xml:space="preserve">
+    <value>Indica-nos quem poderá celebrar connosco.</value>
+  </data>
+  <data name="TextDC983FD6DF402406E773E852398028028B52B8C74D6ECAC9296EF3F526984696" xml:space="preserve">
+    <value>Indiquem a vossa presença e eventuais restrições alimentares com antecedência.</value>
+  </data>
+  <data name="TextD63AC7B00488B18A8D75EE92CDB9C1F34024CABA49026D3F37045EECE8788207" xml:space="preserve">
+    <value>Indisponível de momento</value>
+  </data>
+  <data name="Text74020B8270B0F125A320DEEAB96D042CD3FB102476F8C7F889EF56F6DC1561D9" xml:space="preserve">
+    <value>Informação útil para os convidados.</value>
+  </data>
+  <data name="Text07156DA5279B23CEE2DF4A0CA6CEBF11AA452268C3D960C07640EC8353636165" xml:space="preserve">
+    <value>Informações</value>
+  </data>
+  <data name="TextA305EFBD54AFF7C0F1DC8267CCA3DD17E88BDDCA6A90CEF3A0CA42BBC958E543" xml:space="preserve">
+    <value>Informações práticas</value>
+  </data>
+  <data name="Text6C1A650C8E64757E7695C8D66556809703723E0933B4DFF568EB1678DC59560D" xml:space="preserve">
+    <value>Informações · {0}</value>
+  </data>
+  <data name="TextC2F43B7BB011CDCD5DBF5FDB2EDE6BD7C2405E8C2DE9887D20C7D0699EEB7338" xml:space="preserve">
+    <value>Inicia sessão com uma conta autorizada para gerir o conteúdo do site.</value>
+  </data>
+  <data name="Text4266599CD29CDE7BD7B1CEE8D9D3C234C727D012F868DE30A44EF0B6EA35CE8C" xml:space="preserve">
+    <value>Inicia sessão para gerir o site do casamento.</value>
+  </data>
+  <data name="Text6C65ACC30FA907544E21993E4F7F91A2AB59641E1D927229E634CD8D1672BCB7" xml:space="preserve">
+    <value>Iniciar apresentação</value>
+  </data>
+  <data name="Text095F43426E52CC662C13DDCFB8299245E9BC6799C59D930FEE28D3E6441C267F" xml:space="preserve">
+    <value>Iniciar sessão</value>
+  </data>
+  <data name="Text509D1F6E5B3A92C371D65774E806B29D5D01309BD202F3CFF4E2E59092C9E13C" xml:space="preserve">
+    <value>Instruções</value>
+  </data>
+  <data name="Text6400B151D6DFAACE5CC275DD7FF85EDCEDA5173C001E973AF37ADBBE40D1C8A1" xml:space="preserve">
+    <value>Intenção de presença</value>
+  </data>
+  <data name="Text60A682FF5E93ABE9CE22E951160FAD5BF3D9D007DB8E537197072450D0B29A53" xml:space="preserve">
+    <value>Internacional, com espaços</value>
+  </data>
+  <data name="TextE0ADA8BA8E6013660336A46ECF2213A1686F8C0197817E9BF8E90398349C48A3" xml:space="preserve">
+    <value>Internacional, compacto</value>
+  </data>
+  <data name="TextC6D2197DFCC296EA9B85CB82DCB1F0D2AEBD580FD9BDE902ECF7B96599180E3A" xml:space="preserve">
+    <value>Introduz o código de verificação.</value>
+  </data>
+  <data name="TextBB2BA1C7C46822B1838B950612B83B31C52D5F3599FF36CBF862F79D035DA37A" xml:space="preserve">
+    <value>Introduz um endereço de email válido.</value>
+  </data>
+  <data name="TextDB2CF02B83B74686098D517E9AA520118919AA095480DE3C5789B7EC525AF655" xml:space="preserve">
+    <value>Introduz um número válido.</value>
+  </data>
+  <data name="TextF0AD6580AC5BEB2DCBA9BA1E12919ABDEFEE91B718215D07D2F4BAC89E740F71" xml:space="preserve">
+    <value>Introduzir código</value>
+  </data>
+  <data name="TextE49DA224161E9D379A414366D4C5F9A9E9CDABDC1E58ED1B19DCAB79378361C1" xml:space="preserve">
+    <value>Introdução (opcional)</value>
+  </data>
+  <data name="Text325DFC37C9BA0AAA454E4142B4BFE68797CB61D2A8E0DEBE5DEF2BF33F0ED8EF" xml:space="preserve">
+    <value>Início</value>
+  </data>
+  <data name="Text4C69A7FDF985F26903D3B7F7224AAF1A15D1D5D734A5751B400DC98C64CC67C3" xml:space="preserve">
+    <value>Início do casamento</value>
+  </data>
+  <data name="Text7905EF7CC334E43F290F25EF95ABD10ED246156FEFB7EA7684E9412C37D596CF" xml:space="preserve">
+    <value>Ir para os controlos de música</value>
+  </data>
+  <data name="TextD0A37E82ECD8163708268CD40C46BE249F045F43D5CC13DDD1753FA6EB61088A" xml:space="preserve">
+    <value>Junta-te a nós para celebrar este dia especial.</value>
+  </data>
+  <data name="Text4EE5C470266CFD105B9E1829351692E24D27B83970747720077E2B65414B060C" xml:space="preserve">
+    <value>Já existe este nome nesta família (ID: {0}). Indica o ID para atualizar; não é possível escolher apenas pelo nome.</value>
+  </data>
+  <data name="Text43E25EFCC678127FBDB130DF8D534E5A1EDD639D03DA665D538B90733BF96BB5" xml:space="preserve">
+    <value>Já existe uma família com este nome. Indica o ID correto para atualizar ou distingue o nome da nova família.</value>
+  </data>
+  <data name="TextE7A31BB009B97F027DA0795DE290DA4827900FCB86427AE071F0982CDD475EC0" xml:space="preserve">
+    <value>Já existe uma mesa nesta posição do mapa.</value>
+  </data>
+  <data name="Text6367E35B6616DB37A0EB780F633AC89F32B7DF87C30D64EE70952193F929B4C0" xml:space="preserve">
+    <value>Já existe uma resposta RSVP para este convidado. Remove primeiro essa resposta na gestão de RSVP antes de alterar a associação ou a família.</value>
+  </data>
+  <data name="TextB6385D51FA93CDBB7A5C46FA68307AAC86B695EDA26B5081950B2AA6F1E15996" xml:space="preserve">
+    <value>Já existe uma resposta para este convidado. Seleciona a opção no fim do formulário para a atualizar.</value>
+  </data>
+  <data name="TextEA9CCFB5D178B33E07C461102629224E14ECF45B6935DE5B97CED69F6E52C351" xml:space="preserve">
+    <value>Ligação Google Maps da cerimónia</value>
+  </data>
+  <data name="TextFB88BA99A4E9DB06CC8B0393331A5E100F1D160B950B5C5BB0C785C018ED3C32" xml:space="preserve">
+    <value>Ligação Google Maps do copo d'água</value>
+  </data>
+  <data name="TextFE13A5CDF2F530C625CF193C596D8B8CDD7C7A4411D69FEBD7B8491AAD4EBCB9" xml:space="preserve">
+    <value>Ligação da música no Spotify</value>
+  </data>
+  <data name="TextFADE927F9C6169BDB5F43AED96CCC6760E24725D410C74C076D33D2D64D79732" xml:space="preserve">
+    <value>Limpar filtros</value>
+  </data>
+  <data name="TextC6D3C6E05F730785494E0A06CDFDEE71E81E8CAC35298D51DC925A92DD0E3720" xml:space="preserve">
+    <value>Linha</value>
+  </data>
+  <data name="TextCF3F820581042E55806F4113FD5AA745B1934413B266256BDE19DF96B3640E40" xml:space="preserve">
+    <value>Linha {0}, {1}: substitui a fórmula pelo valor antes de importar.</value>
+  </data>
+  <data name="Text4E193DD98DFDA6823DE8450D5E78A08D103D18434BB8303EC7FBFBC82C9ADE81" xml:space="preserve">
+    <value>Linhas com custo por definir:</value>
+  </data>
+  <data name="TextF6D6B2E3AF8B262F134FBB854DE5D131E99D38346F43BDD3229E2569A8825870" xml:space="preserve">
+    <value>Linhas com custo por definir: {0}</value>
+  </data>
+  <data name="TextA3E408D069986D8618338C1C2F9D3E3CEDF11403B3F9B0DF4B6FC75D5C18BBFB" xml:space="preserve">
+    <value>Linhas de orçamento</value>
+  </data>
+  <data name="Text251B8F80B0F91EBCA0C6A9C884D278FF343E6641A6D1ED725C4C0A76AAF98006" xml:space="preserve">
+    <value>Lista alfabética</value>
+  </data>
+  <data name="Text30E97FA1CE414C18B0A2C81BF561B29402DB2884862B7DBAFA9EBFAB8E0FCC3C" xml:space="preserve">
+    <value>Lista alfabética de convidados</value>
+  </data>
+  <data name="TextDDCB736D8364EADA81A8BB5F5BF8F3DC72D497C6B487FFC84A91F1B2A76E6ED2" xml:space="preserve">
+    <value>Lista de lugares por mesa</value>
+  </data>
+  <data name="Text085CF34A2AAA577A4E04B27B6B4217B4CA8C01C039F24F73D238172303303AA6" xml:space="preserve">
+    <value>Lista de perguntas frequentes</value>
+  </data>
+  <data name="Text77EA3A123702EBC0AAB1E593CB23B82849B98537D4DEB3C885397557D70A29EE" xml:space="preserve">
+    <value>Lista por mesa</value>
+  </data>
+  <data name="Text81411148DC9CB207FA30F655CD94E6A0A9EF7BC7D1575053523554C93FB58A52" xml:space="preserve">
+    <value>Livre</value>
+  </data>
+  <data name="TextC86043FA5223223D9E8413E5642446AC4EB4A1DEDCE8A25013C43DADE6627337" xml:space="preserve">
+    <value>Livres</value>
+  </data>
+  <data name="Text2EE97D56C63882AF0B854E4332E37964E39B73B60D2E9EA24E23AC86BEE40FE9" xml:space="preserve">
+    <value>Local da cerimónia</value>
+  </data>
+  <data name="TextE9342366DE427F42166357A205D2990DD91F5DFD5811222697BFED8ACFBC59D0" xml:space="preserve">
+    <value>Local do copo d'água</value>
+  </data>
+  <data name="Text9ED629768BDA12C5EAB1BC78B88C26AF5125B6F4A2F49000D3D13F7B794B710D" xml:space="preserve">
+    <value>Localizações</value>
+  </data>
+  <data name="Text66FAC79D214028BED7389AAD1B9710D806E480B89F46E1144DD1F80B8A3FA7A8" xml:space="preserve">
+    <value>Logótipo</value>
+  </data>
+  <data name="Text750D2F83769A4050804F1C347AC53D0CB6F61AE0CDC9ED431A74D8B2F35F6CC5" xml:space="preserve">
+    <value>Lugar</value>
+  </data>
+  <data name="TextDBD1710F2A5827EE2D2EDC41DC60727550037DEE6BD8A77052731420244ADB8E" xml:space="preserve">
+    <value>Lugar de</value>
+  </data>
+  <data name="TextF81CF90416C1F176396393952CF381B9112929302F30ECC14CD9893717FE86E5" xml:space="preserve">
+    <value>Lugar do convidado</value>
+  </data>
+  <data name="TextB3704F4ABD71B86CE656EE5252BDC3D14073845EEDC28B351ACD2439D3B655C2" xml:space="preserve">
+    <value>MB. Formatos permitidos:</value>
+  </data>
+  <data name="Text3195D52B7F810E89D9D6A16009E0BF3A5F3034513227E42190966FA4F674E797" xml:space="preserve">
+    <value>Manter registo</value>
+  </data>
+  <data name="TextE377EA726C8081BA073182E1DFE7E81F43819DAB90805E2A850DF3DDF31AEB51" xml:space="preserve">
+    <value>Mapa da cerimónia</value>
+  </data>
+  <data name="Text6C84FB1F68B3D22DACD6E7F8DBD91769E85441233AF6B3D8119D9BEA875660F0" xml:space="preserve">
+    <value>Mapa da receção</value>
+  </data>
+  <data name="Text1CC110566189DB81BB771D767FF19EAA885375D2660BE962B5085883CE343EC8" xml:space="preserve">
+    <value>Mapa da sala</value>
+  </data>
+  <data name="TextA9618654E80A8D3A38D5A90214CFB8E4EC34F6F2E3341092582F5C57DAC49C2B" xml:space="preserve">
+    <value>Mapa das mesas, organizado por fila e coluna</value>
+  </data>
+  <data name="Text15C0367F9498721006D9A5C34B695329C4E340A067920FF98A8EEC5F246BD0AE" xml:space="preserve">
+    <value>Marca «É Plus-One» para associar o convidado que acompanha.</value>
+  </data>
+  <data name="Text3220858983103F4B7701B7D10F33EA655E513EE78E9AFDDABB72680DF92E1593" xml:space="preserve">
+    <value>Mensagem</value>
+  </data>
+  <data name="TextA210BB96C40AD46FAA747EC4492952D487B5F06A758A436FF0617D2D55C5E32E" xml:space="preserve">
+    <value>Mensagem (Opcional)</value>
+  </data>
+  <data name="Text13D29F1B25C05238EDCAC3F30342FA037CE2E0A13CE56CC135DA215541ED6DE4" xml:space="preserve">
+    <value>Mensagem (opcional)</value>
+  </data>
+  <data name="TextD602ECFCF13B78B8724BD11D2803CD7E82A8E1ECE07786891FB26CF8D890480E" xml:space="preserve">
+    <value>Mensagem aos noivos</value>
+  </data>
+  <data name="Text8862E7033B01510CA9AAF8971A84A5C4957CD200BF68AD861546EC043A1EC1C5" xml:space="preserve">
+    <value>Mensagem de apoio</value>
+  </data>
+  <data name="TextEBBDAFD2715D387BBAAD5967B6DC98B5B18FAF47E7E80EFEB000FA7AE7582861" xml:space="preserve">
+    <value>Mensagem do acompanhante</value>
+  </data>
+  <data name="TextB9380E8CCAB9E74B71637FE360C05E45CC8DCD0E10A01448A83E4F2329CB5152" xml:space="preserve">
+    <value>Mensagem do/a acompanhante para os noivos (opcional)</value>
+  </data>
+  <data name="TextB3AF2465F971CB7761A185F5A6E9AF622202B4D36A79FFD940117C730614FCB3" xml:space="preserve">
+    <value>Mensagem para os noivos (opcional)</value>
+  </data>
+  <data name="TextD22F8590268F8B34E79C1CFE7CE6A444A8BF70BA2E05C58F8A393B48EBC86629" xml:space="preserve">
+    <value>Mensagem principal</value>
+  </data>
+  <data name="TextA8C59CCD0EEFC75CA62E2853B8DA95EE362A62A85D4C9454EA6371CB7FF64667" xml:space="preserve">
+    <value>Mensagem quando não há perguntas publicadas (obrigatório)</value>
+  </data>
+  <data name="Text7806F9AD87F5F8BBB86883B9E1C9E3CCD4FD7BF3E035F0C5EC8E151E1873D7FD" xml:space="preserve">
+    <value>Mensagens guardadas.</value>
+  </data>
+  <data name="Text91AC6D8C180954A13CE9E385AED078B11B8C009DC3E572D8956F61F434DF9C23" xml:space="preserve">
+    <value>Mensagens por fase</value>
+  </data>
+  <data name="Text4546AE0B013232B5B2796928A92CB096EDC93C20498337F6C3EE4EB060E57CD9" xml:space="preserve">
+    <value>Menu principal</value>
+  </data>
+  <data name="TextE465CE78240880092094F6EAB951FF736F44F35B23690648D4D134B3CC67D8DA" xml:space="preserve">
+    <value>Mesa</value>
+  </data>
+  <data name="Text36253D1BF13317C2BA86AF61B1A6E13F92F2BC067D3BF86202F0E18AABBC1840" xml:space="preserve">
+    <value>Mesa e lugar</value>
+  </data>
+  <data name="Text67775426A95BC0923BB28ECA169D91D737BC41AA8C887E5CD6BEE7173DB42AE1" xml:space="preserve">
+    <value>Mesas e capacidade</value>
+  </data>
+  <data name="TextA97DE97C9E269140D308599B4104AE54C4ABC43325BB62C68B7E1E316AE169EE" xml:space="preserve">
+    <value>Mini-mapa da cerimónia</value>
+  </data>
+  <data name="Text78AAC7923A19B5C3D930538F6E075C6755EB64DE63C056CDD58EF20A3569504B" xml:space="preserve">
+    <value>Mini-mapa do copo d'água</value>
+  </data>
+  <data name="Text2E4306C0732189DA0028394AEE08F9B10AA901DFD4E84EA67497D95FC7FE04E1" xml:space="preserve">
+    <value>Mins.</value>
+  </data>
+  <data name="Text34B8B7DBDD0F67FEBDDD13E41DB0696479496C84D2F9E305A4FD191433267B2B" xml:space="preserve">
+    <value>Momento</value>
+  </data>
+  <data name="Text1416A89231F188E81CEBDF4FB6822E62BE7606BAC6FC32D3B00807811EBC69CC" xml:space="preserve">
+    <value>Momentos e músicas:</value>
+  </data>
+  <data name="Text6096736F2C2FAAEBECD56254BCC9DA01451001E7CCC1C5B16AD602005018AF7F" xml:space="preserve">
+    <value>Momentos sem música atribuída</value>
+  </data>
+  <data name="TextFDF92BF7AF620FFA06B5BB10C6301037DEA1EAEE3CF4825DE1059AC423EA72FF" xml:space="preserve">
+    <value>Morada da cerimónia</value>
+  </data>
+  <data name="TextC9BEBEF970915678030D8EFD0FF89C494C722ACEEBA91DC69809F442C1D52A72" xml:space="preserve">
+    <value>Morada do copo d'água</value>
+  </data>
+  <data name="Text86DCD653D7C138F75798FFCDB77AA2F96519FB139B37EADDE65EC6FC6B64D3B6" xml:space="preserve">
+    <value>Mostrar este momento aos convidados</value>
+  </data>
+  <data name="TextCFFAB3F01DF62B4F5D75F75984D523DFB39CD58B701F0AA9369CCE815BC69A5C" xml:space="preserve">
+    <value>Move os convidados dos lugares que pretendes retirar antes de reduzir a capacidade.</value>
+  </data>
+  <data name="Text8C2228862095094632351CDB240BBA02BE3291AFE3B66AB3293C8432320030E7" xml:space="preserve">
+    <value>Move ou elimina os momentos antes de eliminar esta secção.</value>
+  </data>
+  <data name="Text87611D077167829FB874AECD7D7EBC6656B577DA898490F061A23209D7756837" xml:space="preserve">
+    <value>Move ou liberta os lugares ocupados antes de eliminar esta mesa.</value>
+  </data>
+  <data name="Text050059F7570AF228F2A2DC26A90E34AD5EF41EA35F75DF363BFD0F7374B5A4D6" xml:space="preserve">
+    <value>Módulos de administração</value>
+  </data>
+  <data name="Text0E0CC1A93FE567A4935C582CB5BB54C2EE942DFF9E635E861F3339B636F83087" xml:space="preserve">
+    <value>Música</value>
+  </data>
+  <data name="TextFDD85F55DAF60719D8BF16A53A02A95184FCE23BD9683C6D4D1BEF66B2A6605F" xml:space="preserve">
+    <value>Música (opcional)</value>
+  </data>
+  <data name="Text0DA1814C6C255FD774307CF2E7892DAF1456578C5FC4E1BA3D3B517291360585" xml:space="preserve">
+    <value>Música Definida</value>
+  </data>
+  <data name="Text944027DA54087539C9A4BC0D7BD5F0F333835599B1311FE4902EE9C5AAB296F0" xml:space="preserve">
+    <value>Música do casamento</value>
+  </data>
+  <data name="TextD4695A17D88D05362A7BB06D2333A48A9752A0BC48F5835AB08DB41F5766E7B8" xml:space="preserve">
+    <value>Música do site</value>
+  </data>
+  <data name="Text58B2B53FEEACC1CFE68440EFF42F53320992FF6BC45F0AB871064513ABC4557F" xml:space="preserve">
+    <value>Músicas por escolher</value>
+  </data>
+  <data name="Text449839AA01BCFB7880D1DBB3DDD2FEEB119F882900E6708C6571DD6AA27FE460" xml:space="preserve">
+    <value>Nacional para o país escolhido</value>
+  </data>
+  <data name="TextEE8B805FB7E89CA77ECDD9BA5FB739192E28A83FE638D9236794456EA20A0BCE" xml:space="preserve">
+    <value>Nas atualizações, os campos opcionais vazios apagam o valor anterior. A comparação mostra exatamente o que vai mudar.</value>
+  </data>
+  <data name="Text895F0739F1B48B53E828B9FAD57E25B329DF46D34662971A3AE8C2E6C7CFCABC" xml:space="preserve">
+    <value>Navegação principal</value>
+  </data>
+  <data name="Text4FD7ACB2DC88E0A061840F3BF422C9C693F2644E2452C0A294483E8F0B961B76" xml:space="preserve">
+    <value>Nenhum convidado corresponde à pesquisa.</value>
+  </data>
+  <data name="Text0BCAF287408A88A1AD05E03C577782D9AE7C704D2A2309D24C2AEFB7E1024011" xml:space="preserve">
+    <value>Nenhum fornecedor nesta categoria.</value>
+  </data>
+  <data name="TextF728124CF9B70E517438344A8ED19738D7A6C8DC07C05203E990B9D88A6939C0" xml:space="preserve">
+    <value>Nenhum registo foi alterado. Confere os dados e as diferenças antes de confirmar.</value>
+  </data>
+  <data name="Text51375DC72647F994BE97DF758975B54A10E8B62C7460A1BB19001F8AC5CB153E" xml:space="preserve">
+    <value>Nenhum resultado encontrado. Altera a pesquisa ou limpa os filtros.</value>
+  </data>
+  <data name="TextFDB6F87B64C63461AC8D3A953F97CF9565B83B1B98C35ED03ED773620B406A83" xml:space="preserve">
+    <value>Nenhuma linha corresponde aos filtros.</value>
+  </data>
+  <data name="Text22BAE0E56FBB079489179193CA639118863A0341885AE72A48E39700458A47EA" xml:space="preserve">
+    <value>No Spotify, abre a faixa e escolhe Partilhar → Copiar ligação. Para desativar a música, deixa o campo vazio.</value>
+  </data>
+  <data name="Text5086900635FEC3EFDF730450A45B60A3F56059CF37E68369AC7C4B8EEECA3DB5" xml:space="preserve">
+    <value>Nome</value>
+  </data>
+  <data name="Text693AE3E271138AF30B88CE6C7FC913085C58C0CECACD82B69B5E86DB9C340077" xml:space="preserve">
+    <value>Nome a apresentar</value>
+  </data>
+  <data name="Text592D53F0422553E31FE5D0EBBC98449CF01A2F3CCA7BAB5CE69945CFDAB7262C" xml:space="preserve">
+    <value>Nome apresentado</value>
+  </data>
+  <data name="TextF7A63D4C5676FEA0ADEB3A29DABF75F1662947287BC1028C9FE7B2AECA05A6AC" xml:space="preserve">
+    <value>Nome da Secção</value>
+  </data>
+  <data name="TextC8B5C0593BB527D9C08269BB5B4EA0DE417064582A6B9EABFEB8881CBFCA497A" xml:space="preserve">
+    <value>Nome da categoria</value>
+  </data>
+  <data name="Text21F62318A5D87F5E86BD6300E2DBF88695DFEAD3D1AD1B80EA7F0E7289254C05" xml:space="preserve">
+    <value>Nome da família</value>
+  </data>
+  <data name="Text526A2339CE3F75697FDB1F75A9369E73DD43135E079AFC07DEEA325457531C22" xml:space="preserve">
+    <value>Nome da mesa</value>
+  </data>
+  <data name="Text5633069F3E2F633E8C9F039B5930F3517B19C7318BEA4415F571519DEC9E75BB" xml:space="preserve">
+    <value>Nome da noiva</value>
+  </data>
+  <data name="Text439D9B4A6C823AA676020D93631C3265555741FF642BB5F1DB09A5943D78C601" xml:space="preserve">
+    <value>Nome de referência</value>
+  </data>
+  <data name="Text6BF3D1CBD592D3DA593AC21DD87FADEC1029DFB9F1412CDC0E0EC8AFE85E06B6" xml:space="preserve">
+    <value>Nome do convidado (obrigatório)</value>
+  </data>
+  <data name="Text802DC39AFDC07C21046EE5CD93016719AB17BCB59BAE79C12B40D284CE423393" xml:space="preserve">
+    <value>Nome do noivo</value>
+  </data>
+  <data name="TextF9BB48D1D7483FAB4971F5709AC49123623125732A8C018C8E678732AF65FA3D" xml:space="preserve">
+    <value>Nome no menu (obrigatório)</value>
+  </data>
+  <data name="TextB199987061017AA1BF28AC2DB722B0C513E9DE33A180CEE8AA8D015FEED79763" xml:space="preserve">
+    <value>Nome, Contacto, Email ou Notas</value>
+  </data>
+  <data name="Text4C9815992BD287E9F5E64B7708DA509511E04A905DFC0C9338244410CFBB5D3E" xml:space="preserve">
+    <value>Nome, email, telefone ou família</value>
+  </data>
+  <data name="Text8A6172E21A8758F7768BC353FFDBDB0B4DAA4180EE5C82077DE9EAD26980EE61" xml:space="preserve">
+    <value>Notas</value>
+  </data>
+  <data name="Text74CDAFAA67ED0E092E382B7D16544336201C3E6D950173C365ABECD6C4F5A41C" xml:space="preserve">
+    <value>Notas internas</value>
+  </data>
+  <data name="Text0EBC6FC68FD7DF97E197187D002477511611EC453572EF5728E293445411F16E" xml:space="preserve">
+    <value>Novo registo</value>
+  </data>
+  <data name="Text9BC947E58B62B2FEF2954DC2813F3BFE458455FEA1BB40B2D7A33E010DFE9AB6" xml:space="preserve">
+    <value>Não</value>
+  </data>
+  <data name="Text12C3E1E8082E488902E9775EEF088A807482F1809A2A28953062A36C93848BA5" xml:space="preserve">
+    <value>Não Vai Estar Presente.</value>
+  </data>
+  <data name="TextB4F3AE212ADE0F0005D00C9CE703AA081D3BE770DF44D4F7CB00D3F1553B9B4F" xml:space="preserve">
+    <value>Não confirmada</value>
+  </data>
+  <data name="Text7DD790DD9C90F4466C1FAFE017925F3C0E226246B3C0616E70E0E0FE9E7C7B1C" xml:space="preserve">
+    <value>Não encontrámos a resposta que pretendia apagar.</value>
+  </data>
+  <data name="TextE3A21EC38E05B6429C499022D20E75165A12B24EF33403758025EEC47AAD8FD3" xml:space="preserve">
+    <value>Não foi encontrada a folha «{0}».</value>
+  </data>
+  <data name="Text40B8085AAEFC83F8F6F521FF679FE415109349726AC9FC7B9A925E92B96F9C52" xml:space="preserve">
+    <value>Não foi possível abrir esta página</value>
+  </data>
+  <data name="TextB2C0C134AF33B9D2235D9747B58DB7D11499F4E7F366C260758B140B6F7DA9C7" xml:space="preserve">
+    <value>Não foi possível concluir o pedido</value>
+  </data>
+  <data name="Text4BB20B502D414BDA413C72BFF2BB2C1BC05EA55A24BF46E8EB53FA11B8558B5A" xml:space="preserve">
+    <value>Não foi possível enviar a fotografia. Atualiza a página e tenta novamente.</value>
+  </data>
+  <data name="Text3752E8B09E62CAD04574DAF11FABBDFC1CFC67DC301D71299E4301495E761D5A" xml:space="preserve">
+    <value>Não foi possível enviar o código. Aguarda um minuto e tenta novamente ou contacta os noivos.</value>
+  </data>
+  <data name="Text4F2135F8ED2C592A6446B704B902E6C8FFBD6214E8B18E39BAACEFFD438A53C3" xml:space="preserve">
+    <value>Não foi possível guardar a alteração. Revê o plano e a disponibilidade dos lugares.</value>
+  </data>
+  <data name="Text99646A8DEC39E836D661B430D57ABB28889048606F68571B9C5E364BF4B076CB" xml:space="preserve">
+    <value>Não foi possível guardar as indicações. Revê o texto e tenta novamente.</value>
+  </data>
+  <data name="Text74E6E1DF2D4C3A9B587C0430D7BFE8FCB27DCB48CAF05527E0AE610719126B4B" xml:space="preserve">
+    <value>Não foi possível guardar. Verifica se já existe uma categoria com este nome.</value>
+  </data>
+  <data name="TextC0CA4F35D0196F4ACF9C32FC8DD02A74E31F9E94E8C0789EA758F25B007E3DBE" xml:space="preserve">
+    <value>Não foi possível iniciar o envio. Tenta novamente mais tarde.</value>
+  </data>
+  <data name="TextBCC3093334750742AB85B10740C57154A9A166FC8AB3329A283D5E6A081F006D" xml:space="preserve">
+    <value>Não foi possível interpretar o valor deste campo.</value>
+  </data>
+  <data name="TextECCDAEB8AB04E891B80FAC64B15CAC4FEBF89D90E02708130B7EE16A5F791D3B" xml:space="preserve">
+    <value>Não foi possível ler este ficheiro. Usa um Excel .xlsx criado a partir do modelo.</value>
+  </data>
+  <data name="TextA35C67739452B1CA54813DC8554FA2671B6EBF45D199558D114F312648E85B27" xml:space="preserve">
+    <value>Não foi possível verificar quem está a editar. A proteção contra substituição continua ativa ao guardar.</value>
+  </data>
+  <data name="Text11BC7CF8F2D28B64B25D86402EA5E3958B41765B6CA3C7DE2A3BEEA4B145E2A7" xml:space="preserve">
+    <value>Não há categorias nesta seleção.</value>
+  </data>
+  <data name="Text3652F7BB5C1757664A39BE53482915E96008492FD4FE43C8D94E0D0A166A3798" xml:space="preserve">
+    <value>Não há convidados nesta seleção.</value>
+  </data>
+  <data name="Text2E62C695E0FECA1AF71519A2C8A491975F7CB612D177EF3F2325D1515F0D77CC" xml:space="preserve">
+    <value>Não há outros lugares livres. Podes</value>
+  </data>
+  <data name="Text8ACDC9CD35131A034A4A0AF8D7666F274A02FEB507996A817ED12F51E5FFA45B" xml:space="preserve">
+    <value>Não há perguntas nesta seleção. Podes limpar os filtros ou adicionar uma pergunta.</value>
+  </data>
+  <data name="TextE580D18FB5AA0D3248649DF51061A2EDCDF515B7E768B5D0282753F97E2D4246" xml:space="preserve">
+    <value>Não há secções ou momentos nesta seleção. Limpa os filtros para ver o programa completo.</value>
+  </data>
+  <data name="TextB64E6B263A1DE57862A5A2776F31C5F5EAFA203941CBD15767E250ADA84D1EDF" xml:space="preserve">
+    <value>Não indicada</value>
+  </data>
+  <data name="Text7064A0BEBAEAF1F37FC942B98FEC91EB6CDE74388189168F3CFACBADCD67B6BD" xml:space="preserve">
+    <value>Não indicadas</value>
+  </data>
+  <data name="TextB0E77270E102D4F94C3A9EF001132264EEE210DC522C08838C23AF98A9884795" xml:space="preserve">
+    <value>Não poderei estar presente</value>
+  </data>
+  <data name="Text8880ADA3A5ECEB8B94C1204A79CA43764B08A5DD2A5D1BA1803028181D664B8B" xml:space="preserve">
+    <value>Não poderá estar presente</value>
+  </data>
+  <data name="Text432168917D4651F776B2871D5F74BE326BCAF1FF721A945CF014282EC77060AA" xml:space="preserve">
+    <value>Não tens acesso a esta página</value>
+  </data>
+  <data name="TextA5F9B101D9B1F0CC3F5858B2D16086D7AC3B89B0AF493205841B94B9C1287489" xml:space="preserve">
+    <value>Não vai comparecer</value>
+  </data>
+  <data name="Text3391020842E716804B7FB90B6C106878E2EABA17F03BBDC039D73B16920B70A1" xml:space="preserve">
+    <value>Não vai estar presente</value>
+  </data>
+  <data name="Text80CE570432A9A9D263A38CDA311D49925100034C5A21CD4A23124D91A9DEFC18" xml:space="preserve">
+    <value>Não vão</value>
+  </data>
+  <data name="Text9352F0604444DF57919DB9FCAC81BEF841ED37B45AFA40C0B4484919DB41BD5D" xml:space="preserve">
+    <value>Não vão comparecer</value>
+  </data>
+  <data name="TextE0944D407694D54909394E061D4B0534A7C1A45A1292BF6FD6AA28877E3ABB64" xml:space="preserve">
+    <value>Não é possível usar este contacto para este convite. Usa o contacto da primeira confirmação ou fala com os noivos.</value>
+  </data>
+  <data name="TextD3C9B278F33B090BA9B7314BA26D3C78567058513CB32CC0A95240C252B6D19B" xml:space="preserve">
+    <value>Número de lugares</value>
+  </data>
+  <data name="TextE58D5D7ACDC0DB6D6DEE8CF2F0EC35AD3571740DC090EED39F5A4752DEF3D354" xml:space="preserve">
+    <value>Números locais usam o país</value>
+  </data>
+  <data name="Text9A11E5B516F4F9D2F09A4006E6244D9EEAA72D796033D65EBA477D17C965DE0A" xml:space="preserve">
+    <value>O ID da família não existe.</value>
+  </data>
+  <data name="TextAB909D75566748334D7F81419BBB8BCB028EDA4798614A7F6AFF7F133663D9FD" xml:space="preserve">
+    <value>O ID deve ser um número inteiro positivo ou ficar vazio para novos registos.</value>
+  </data>
+  <data name="Text37E0F7BB8027156D8530FB414B504CAE81750A2A69D0D537D17B14BA27C19C40" xml:space="preserve">
+    <value>O ID do convidado não existe.</value>
+  </data>
+  <data name="Text5CCF7B48613C712FEF688B774F0F9F9E9F0091A6AEDBC7FFA47D130D7CB59F29" xml:space="preserve">
+    <value>O Plus-One deve pertencer à mesma família/convite da pessoa que acompanha. Quem é Plus-One não pode levar outro acompanhante. A presença é confirmada no RSVP do convidado principal.</value>
+  </data>
+  <data name="Text1A298C2B016E7900958D702DA88FD59433C66DFD8C6CD765D6BABA214D99B74E" xml:space="preserve">
+    <value>O Plus-One deve pertencer à mesma família/convite do convidado que acompanha.</value>
+  </data>
+  <data name="TextFD811D9D8408B98B7A0E1B84444FD71277F2C30A7BBB2F81AF1E3070BC8F8933" xml:space="preserve">
+    <value>O acesso ao recibo expirou ou não existe uma confirmação recente neste navegador. Isto não elimina uma resposta já guardada.</value>
+  </data>
+  <data name="TextC126FB09FEA5FF5845A8D0F3820151EA491717483815B956C04905A3B93782BB" xml:space="preserve">
+    <value>O acompanhante também vai estar presente?</value>
+  </data>
+  <data name="Text68E4DFDE9323F601C9B3238CEC08C6B4E6A22BCE941E252296944BA74D5EC379" xml:space="preserve">
+    <value>O avatar deve ser o nome de uma imagem existente na pasta de avatares.</value>
+  </data>
+  <data name="Text8C586CF644F41152DA08C7DD6874F4A234AF776731C110A82B4C6F60CC8B9135" xml:space="preserve">
+    <value>O campo {0} deve conter um número.</value>
+  </data>
+  <data name="TextA0B8B4E016B307C044D2CF473832C868D46125D62F8D1DDE27E42F376B659C2F" xml:space="preserve">
+    <value>O casal e a página inicial</value>
+  </data>
+  <data name="Text8F445EA2B7B00244E579AD713B7471DE595F57D077DDB73F48F897E0F8AD4240" xml:space="preserve">
+    <value>O convite foi alterado entretanto ou este formulário já não é válido. Os dados que preencheste continuam abaixo para consulta e cópia; não serão guardados sobre uma resposta mais recente.</value>
+  </data>
+  <data name="TextF9B16DDB404EAE6C34150F678557D4273DE98EB7C3F5AE364D0A1625DEDD38EB" xml:space="preserve">
+    <value>O convite não foi encontrado.</value>
+  </data>
+  <data name="TextFC4C03D19F7A53763EE139A671FCFE5E7714C78DD16CC40A294672797D21F6E7" xml:space="preserve">
+    <value>O código deve ter 6 algarismos.</value>
+  </data>
+  <data name="Text36D566344A3316DB6F33B02FFE29CCE046644A7845C37972DF219626F5E41C14" xml:space="preserve">
+    <value>O código é inválido, expirou ou atingiu o limite de tentativas. Pede um novo código se necessário.</value>
+  </data>
+  <data name="TextE87CFCA4A10A8613DB2120229ABCC9325F2C6C585F23AE2942D5FB77B9355B9F" xml:space="preserve">
+    <value>O código é válido durante 10 minutos. Se pedires outro para este convite e email, usa o mais recente.</value>
+  </data>
+  <data name="Text20FB36F05F7470E45F6A1F9680943532A416953A5C73080CD98E56CF5B98278D" xml:space="preserve">
+    <value>O endereço pode estar incompleto ou a página pode ter mudado. Vamos ajudar-te a voltar ao caminho certo.</value>
+  </data>
+  <data name="Text8F0F818760DFEEC7A54CD61C4CDC2C9CDDC4E6BB1EA98EA1AE67A56454408997" xml:space="preserve">
+    <value>O envio da fotografia é inválido.</value>
+  </data>
+  <data name="TextD99B202C89923D21B1C0D5BF7ABEA03CD623E86DA88D44844D2C57B6CC652D75" xml:space="preserve">
+    <value>O envio de códigos para este convite está indisponível de momento. Tenta mais tarde ou contacta os noivos.</value>
+  </data>
+  <data name="Text2EFCAEEB3D798F48CD06AC39658921F5D412BFE505783196B2CA912D46C13835" xml:space="preserve">
+    <value>O envio de fotografias abre em {0:dd/MM/yyyy 'às' HH:mm}.</value>
+  </data>
+  <data name="Text6482F3750DFFB853ACC9DA33FDF6D42791901D4FD144F38EE247DE9207CE5801" xml:space="preserve">
+    <value>O envio de fotografias ainda está a ser preparado. Tenta novamente mais tarde.</value>
+  </data>
+  <data name="Text73667898F3495B9C437B3F1FA34BC2F917173A14180F0413F976C206B154CBE6" xml:space="preserve">
+    <value>O envio de fotografias encerrou em {0:dd/MM/yyyy 'às' HH:mm}.</value>
+  </data>
+  <data name="Text4D669875FD9C80A0D8AB68DC4A232A678C971B34657DD5883A1CF07B733E6F1B" xml:space="preserve">
+    <value>O envio de fotografias não está disponível neste momento.</value>
+  </data>
+  <data name="TextD5CFAD3A0B031234537DBBC3F1A742ED1DB3688391E4B0B1D5BA3CEB1021338D" xml:space="preserve">
+    <value>O envio expirou. Seleciona novamente a fotografia.</value>
+  </data>
+  <data name="Text7B9DAD7D97A0BEBF7B339C32E447B996CBBCD842CA1767F73EDA0A9EA07CB093" xml:space="preserve">
+    <value>O envio foi interrompido. Tenta novamente dentro de momentos.</value>
+  </data>
+  <data name="Text97FBB77F63AFD01A611DEA7EFFA9E82C5967779B67C2A8083363706F5BBA1817" xml:space="preserve">
+    <value>O envio não avançou. Tenta novamente dentro de momentos.</value>
+  </data>
+  <data name="Text7A7D82B95438299585E047EF7018E7DA2993F096246F5FEAE69EDCE74CED100F" xml:space="preserve">
+    <value>O evento ficará disponível no calendário quando a data e a hora estiverem definidas.</value>
+  </data>
+  <data name="TextA46F99A964C1087B9D1D34AEA38EF987F8570030878D0A25828B41C0E0086B77" xml:space="preserve">
+    <value>O ficheiro não foi importado</value>
+  </data>
+  <data name="Text40A81558921C8EDC17F619496059825B888015B093B854D05980C7311B990CC6" xml:space="preserve">
+    <value>O ficheiro não tem linhas preenchidas para importar.</value>
+  </data>
+  <data name="TextC13B8C48A9AEF063112494A9823154DCAD31A5E4CB65FD0FD970E7F994BA61F1" xml:space="preserve">
+    <value>O ficheiro pode ter até {0} linhas de dados.</value>
+  </data>
+  <data name="TextDAD2F07A88A79AEA55660B28BD7DF6720F9339B27D55621DE7467F701EB676D2" xml:space="preserve">
+    <value>O ficheiro {0} excede o limite de {1} MB.</value>
+  </data>
+  <data name="Text4D58A79599E94DF82DF86D68FEF0D5D2161611EAF0DCC9C2349AB77DD9BC913E" xml:space="preserve">
+    <value>O ficheiro {0} não pode ser enviado.</value>
+  </data>
+  <data name="Text17861050F440EA879CA357576B364BA64467947315DC4692427D24F786DCB5C3" xml:space="preserve">
+    <value>O ficheiro {0} não tem um formato permitido.</value>
+  </data>
+  <data name="Text031483040E953535475C32347EEE0B48B40C3D64C004DF8C9816C969C7BBF608" xml:space="preserve">
+    <value>O lugar deste convidado mudou entretanto. Revê a distribuição.</value>
+  </data>
+  <data name="Text0E8D30C74FBF10DD9562CC1804A6F5A34AE7140D989DD74312CF813722A36DB8" xml:space="preserve">
+    <value>O lugar escolhido já não está disponível. Escolhe outro lugar.</value>
+  </data>
+  <data name="TextE74ECEA3CA16432B1772777DF8DCA370C9A6E610787E33517091FAF248EBC5DB" xml:space="preserve">
+    <value>O mesmo registo está indicado em várias linhas.</value>
+  </data>
+  <data name="TextB7FAF6B459A31DB6DFA4CC38CAFCC6474FB0CFFFA4C167AFC82CF890B4393638" xml:space="preserve">
+    <value>O nome apresentado pode ter até 220 caracteres.</value>
+  </data>
+  <data name="Text4B1AEF4DEF60966F0DC4340683077232210E23092070416CFD14356BE10CF811" xml:space="preserve">
+    <value>O nome do ficheiro de avatar pode ter até 255 caracteres.</value>
+  </data>
+  <data name="TextD76659A97D64DC8EF79EFDEBEE2CCEA2E425AEE202FD87108C7CB5BE099746F2" xml:space="preserve">
+    <value>O prazo para confirmar ou alterar a presença terminou em</value>
+  </data>
+  <data name="Text8FA3D92283E6F904589D10111FFEF20B73585A6B76592C5D2745AFC162C556CD" xml:space="preserve">
+    <value>O recibo fica disponível neste navegador durante 24 horas. Podes imprimi-lo ou escolher «Guardar como PDF» na janela de impressão.</value>
+  </data>
+  <data name="Text949887F5E190AD5619CCAA7BDB93F3980071C38E17F3365764A07309E5B62729" xml:space="preserve">
+    <value>O teu Nome (Opcional)</value>
+  </data>
+  <data name="TextF03A05020E012A3118BCCAFA5FF1501E98163416D4CCD7ACA2242567EF97A520" xml:space="preserve">
+    <value>O teu código de verificação é: {0}
+
+É válido durante 10 minutos e só pode ser utilizado uma vez.
+Se não pediste este código, ignora esta mensagem.</value>
+  </data>
+  <data name="Text213ECB9B7D7C7DA0991100D5788E9552659904019D43EC210FD0080F0D97F12F" xml:space="preserve">
+    <value>O teu email</value>
+  </data>
+  <data name="TextA3AFE7C7AD2EC5FF8640EDB221C1F3C1B3F5101916D16CDF2B6AB54A96A7D2CE" xml:space="preserve">
+    <value>O teu nome (opcional)</value>
+  </data>
+  <data name="Text4AC66029EDBD5128664630B490314A78894FD662681BD25091C7A8A0319F25F5" xml:space="preserve">
+    <value>O teu recibo RSVP</value>
+  </data>
+  <data name="Text0FDF3560612C46C2D471C6281A3F5BBF734270C617583F7B90A53E0ADD056D48" xml:space="preserve">
+    <value>O valor pago não pode ultrapassar o custo real. Indica primeiro o custo acordado.</value>
+  </data>
+  <data name="Text05F8F144363C318F63B80C8C62DA62B4489623FF49E92CF48525F079F290AA2D" xml:space="preserve">
+    <value>O valor «{0}» não é válido para {1}.</value>
+  </data>
+  <data name="TextDC35A591D4B796375BDDBFEB2F789A0A6E04748F4D6C344A77A391A45F6486A0" xml:space="preserve">
+    <value>O valor «{0}» não é válido.</value>
+  </data>
+  <data name="Text6A37C51F603AF4317E78BE990C7CA8AC8193742892FA0FC2281BEA900478D63A" xml:space="preserve">
+    <value>Obrigado pela resposta! Revê abaixo os dados que ficaram registados neste envio.</value>
+  </data>
+  <data name="TextB4C397426465479678E07BF45C2D93F3F041C84ADA9FF551456A6E44E92671C9" xml:space="preserve">
+    <value>Obrigado por fazerem parte do nosso casamento.</value>
+  </data>
+  <data name="TextAB782108263C42306225BB0036516D703814BE80390FD3C05A2BC5DC7045A52E" xml:space="preserve">
+    <value>Ocorreu um imprevisto</value>
+  </data>
+  <data name="TextD6BBAE3D6D9F09C7997B20C68CDD47DD2CE021476AB6E6849EFE56E9A523D107" xml:space="preserve">
+    <value>Ocupados</value>
+  </data>
+  <data name="TextFB670E9B432794C1D99799775A4ADBB809F3B06DB2567CBC8727BC99FBBB6766" xml:space="preserve">
+    <value>Opção inválida — revê a seleção</value>
+  </data>
+  <data name="Text8183F5A5540185321C82B9C8B858EB1DDCBEB26D54EEFBFD19D9E2C1EAC4C104" xml:space="preserve">
+    <value>Ordem</value>
+  </data>
+  <data name="Text30FEA3E82255C40CCF58F0373B51ECC3E68BFD6F83B8182A5D85C49FB84059CF" xml:space="preserve">
+    <value>Ordem de apresentação</value>
+  </data>
+  <data name="TextFE10842084563A91D6FD7C72917A18CD5A5CBB6EC7905B55EC8D09D31E56985F" xml:space="preserve">
+    <value>Ordem nesta secção</value>
+  </data>
+  <data name="TextFBB9BAA9E010666DFF2F4E8FC4E1816F16B9444E248120EE6CCFC53A41B7FE17" xml:space="preserve">
+    <value>Ordem no programa</value>
+  </data>
+  <data name="Text75202EABC5E6058843AD496FFF57A8A32D08A3DF9A888E910E2FD6ED861E106C" xml:space="preserve">
+    <value>Organiza as músicas pela ordem em que vão tocar. Podes reservar um momento antes de escolher a música.</value>
+  </data>
+  <data name="TextCA632909F215D866BA1036D544D34101FF92F6EF4E6121CAD5DD91B3CA065AFC" xml:space="preserve">
+    <value>Organiza convidados que pertencem ao mesmo agregado.</value>
+  </data>
+  <data name="Text56EDDFE3D6EDC06C26966C8420D479F228202DBC9EB92CA986DABF3785F7AF23" xml:space="preserve">
+    <value>Orçamento</value>
+  </data>
+  <data name="Text5A90F58198D40AED32877C23BD51FB7A44E315C668C4D8FDA88CBB4CCCD09AE3" xml:space="preserve">
+    <value>Orçamento e fornecedores</value>
+  </data>
+  <data name="Text1D9F6ABF94C54234DC50682B2304BA4000F72BF696BDF18EF7D3D268C4E87111" xml:space="preserve">
+    <value>Os campos opcionais vazios apagam o valor anterior nas atualizações. Revê a comparação antes de confirmar.</value>
+  </data>
+  <data name="Text1CAA05534942B18F634F633D0DDC8230B32E2A6D5066AA72DDE439DCAC9BF61B" xml:space="preserve">
+    <value>Os conteúdos foram alterados entretanto. Recarrega a página antes de guardar as traduções.</value>
+  </data>
+  <data name="TextD20CF43DDD282868431820C5E90F43B1B75D3D5A3483A038F8E9BC0C72BE926F" xml:space="preserve">
+    <value>Os conteúdos originais são escritos em português. Podes traduzir a história, as perguntas frequentes, o programa e os textos do site. Um campo vazio mantém o texto original ou a tradução predefinida.</value>
+  </data>
+  <data name="TextD218260F4CA9CC2306FDEAEF959EB35CC1709391A7BAA4F0BEE9813708D6B27B" xml:space="preserve">
+    <value>Os convidados podem enviar e atualizar respostas até ao fim do dia escolhido, no fuso</value>
+  </data>
+  <data name="Text751625303B6A7157810EDBCDE88D161CC232A4A16B0BD371E08591193796FE72" xml:space="preserve">
+    <value>Os filtros são combinados. A pesquisa ignora maiúsculas e acentos.</value>
+  </data>
+  <data name="Text37E906D21AE0F090FA3E4FD9F48D257A490D827ED3FBB37EA677AF5FB6DE1EF6" xml:space="preserve">
+    <value>Os noivos ainda não publicaram indicações sobre transportes.</value>
+  </data>
+  <data name="Text7D85E0F6036D54B46C3547447EF06356161482C28FEA2E64EE936DA4B2CAC796" xml:space="preserve">
+    <value>Os números mais baixos aparecem primeiro.</value>
+  </data>
+  <data name="Text4372AA6670AA8A45FB577941052380C2B60DF7A4C51AB13E93E644E4871B4EDF" xml:space="preserve">
+    <value>Os números menores aparecem primeiro. Podes usar 10, 20, 30 para deixar espaço entre perguntas.</value>
+  </data>
+  <data name="Text8724C19D9F57A6A28F27A3793A9A18B0C9202248113023CF6749B09F6AB5BD97" xml:space="preserve">
+    <value>Os parágrafos e quebras de linha serão mantidos. Usa texto simples, sem HTML.</value>
+  </data>
+  <data name="TextD8B7F7EE0B7BC3B95A6CF1E7C3004A670BF779B0C3790BA734AC880E918D9334" xml:space="preserve">
+    <value>Outra pessoa ou outro separador está a editar este convite. Combina quem vai responder para evitar alterações em simultâneo.</value>
+  </data>
+  <data name="Text51B51E1FABBFDFCCE19F77338EBD543427D2E71863C5BD2E4211AE2588EF4F4E" xml:space="preserve">
+    <value>Ouvir no Spotify</value>
+  </data>
+  <data name="TextDE58DA2B5FD7C769E9498B6F4F76B0A24E5FB160079D114DD171ED91020BE2B2" xml:space="preserve">
+    <value>Pagamento</value>
+  </data>
+  <data name="Text94A22A6DCC078B9A7CAD3FB68674056A403D0FE5AF6EC7AB699CC8D7A114923A" xml:space="preserve">
+    <value>Pago</value>
+  </data>
+  <data name="TextC06E17F639DCEDA34BC61688688C2F04D55D9625240B91DB2D4949ED7D9145E6" xml:space="preserve">
+    <value>Pago Parcialmente</value>
+  </data>
+  <data name="TextCF0F05D59ADE0B49CEBE4C060E46981EE32721A02107A0E7E09DAF43FAD53516" xml:space="preserve">
+    <value>Pago na Totalidade</value>
+  </data>
+  <data name="TextADA5FDFE7FDDE27FCDBBABEEC39DE9095FDFCCE55AB42E42C5B933F5CD3065F6" xml:space="preserve">
+    <value>Painel de administração</value>
+  </data>
+  <data name="TextAE1E5DF5F3973B3769AA2864DCB0297744BA2FB11FA9B845BD3B48DDE9904160" xml:space="preserve">
+    <value>Palavra-passe</value>
+  </data>
+  <data name="Text712ED2B838A812A89D14168EB0BD51781889AD1EF4F3159DDCA7754140DC98F8" xml:space="preserve">
+    <value>Para atualizar convidados, indica o ID. Não são associados apenas pelo nome. A referência da família tem de existir.</value>
+  </data>
+  <data name="Text32764D8B56156C8C2C01F6214DFA7AF8791BFE859842914EDAF8E1001C6FF814" xml:space="preserve">
+    <value>Para atualizar este convite, contacta os noivos.</value>
+  </data>
+  <data name="Text996467DA2E83B3AF52C015807C52CBCDCE7F207631D62C3BE56B636B070B383A" xml:space="preserve">
+    <value>Para atualizar, indica o</value>
+  </data>
+  <data name="Text3C37CCA2BD181AAA2AAA47E197670A316A77AB90FB73B69B7CB148E3209EF653" xml:space="preserve">
+    <value>Para corrigir uma resposta, volta a verificar o mesmo email. As alterações estão disponíveis até ao fim do prazo de RSVP.</value>
+  </data>
+  <data name="Text5F17164B0C939CC229012D41222A8DA4ADD6414E9B306A636B1C0A8996AB7C79" xml:space="preserve">
+    <value>Partilha as tuas melhores fotografias connosco!</value>
+  </data>
+  <data name="Text176D5B80B2A8B7FE807713C592123238A8E6E1996E75EB19279ACF0881817749" xml:space="preserve">
+    <value>Pausar apresentação</value>
+  </data>
+  <data name="Text6A20905B68CC8B89CFD0F3AFEC86ED206B992F8A874A27DED6F53E165EC10491" xml:space="preserve">
+    <value>País dos números sem indicativo</value>
+  </data>
+  <data name="Text902666494364E72928F929DD29E4078AE01E7869973309869678986357455ACA" xml:space="preserve">
+    <value>Pedido inválido</value>
+  </data>
+  <data name="Text5C04952EA345374586236E0DCE578540DB9FFB5972124A9086112A216AD3BAF5" xml:space="preserve">
+    <value>Pedimos que cheguem até às</value>
+  </data>
+  <data name="Text621A683BA733DE08D0843C00B09BF7A01C01B497C80AE811C0082403045079E2" xml:space="preserve">
+    <value>Pedir novo código ou corrigir email</value>
+  </data>
+  <data name="TextA734275CD54C2D917A3436753A0A22413581306332F999DF0AE716374EB44E97" xml:space="preserve">
+    <value>Percentagem de convidados que responderam</value>
+  </data>
+  <data name="TextE40BE12C5D37F06261A206641603DF09C28FEA8227841958817A2FEF52ACF1DE" xml:space="preserve">
+    <value>Percentagem paga</value>
+  </data>
+  <data name="Text82E83592A1711989BAD73EC8F9E38C5708142F58636D947D3C345413DDB802C2" xml:space="preserve">
+    <value>Pergunta</value>
+  </data>
+  <data name="Text9499AB6268361A61983DCDCDABB0665238788B2D8CA24EFC5924751794EC2302" xml:space="preserve">
+    <value>Pergunta (obrigatório)</value>
+  </data>
+  <data name="Text1BA47413BDC85C517F18F090426D207B01237845D000D76B8F6D2C4F6F4313AE" xml:space="preserve">
+    <value>Pergunta eliminada.</value>
+  </data>
+  <data name="Text01A7E560767A9CFDD135F00A4DC263D00FD4ADDDBD02E9D391987894AC4D0576" xml:space="preserve">
+    <value>Pergunta guardada como rascunho.</value>
+  </data>
+  <data name="Text404DF38F94B104FA98C750A711A4D4EA224B2860D5063405CE908B8164877281" xml:space="preserve">
+    <value>Pergunta guardada e publicada quando o módulo estiver ativo.</value>
+  </data>
+  <data name="Text8AB2BCF61EC35194B421E5232E4EED9B77BDE649EE80D408F0BB9E59B69DBB28" xml:space="preserve">
+    <value>Pergunta ou Resposta</value>
+  </data>
+  <data name="Text4B26E202AC9A5C86AD2CE1F02A4372E501DE495AD0CEC9B0FFD02CE3824F4271" xml:space="preserve">
+    <value>Perguntas Frequentes</value>
+  </data>
+  <data name="TextB84ECC76DEAFD97D21808DAFAFA0CA52C78E5BB6A8856AD7744E7166DDA6C101" xml:space="preserve">
+    <value>Perguntas frequentes</value>
+  </data>
+  <data name="Text6808291B92B28D00B4E7F36F16E4CD1FF4AF0DC2F82BEBC68547BB4F38AFB93A" xml:space="preserve">
+    <value>Perguntas publicadas</value>
+  </data>
+  <data name="Text910CE6A0EF62FE527C1016E4F723348ECE3F9394A69544CB5604959BA25F9C5A" xml:space="preserve">
+    <value>Permite resposta familiar</value>
+  </data>
+  <data name="Text0518C8DE2AC626EB5DFECB68338E80CC2DE90AE32DEE77879AAB00E0A69B3189" xml:space="preserve">
+    <value>Permitir acompanhante</value>
+  </data>
+  <data name="TextAF450EE7FD4671DF88C69F5B117181C682933E85161243D5CE679976FCCF7D19" xml:space="preserve">
+    <value>Permitir envio de fotografias</value>
+  </data>
+  <data name="Text2CE4708DDE751311C09DB3449C9F21742C064958DAE834D3C11B572364A17B16" xml:space="preserve">
+    <value>Permitir resposta familiar</value>
+  </data>
+  <data name="Text9CA05DBE80B52B9568E09E736791E282CF55EFF45EF6DE908E7C8D3D127CAF3F" xml:space="preserve">
+    <value>Permitir respostas por vários membros da família</value>
+  </data>
+  <data name="TextA2CC7401ED74AF3F5461AEC31C029892EC71B41F95698C76C3ECA3C3980CC807" xml:space="preserve">
+    <value>Pesquisa e filtros</value>
+  </data>
+  <data name="Text9F6E85DE56F9DA7A67FAF6E6EAB97FCC37B63908DE9F11657859B9EBBBCC2120" xml:space="preserve">
+    <value>Pesquisa o teu nome e verifica o teu email para responder.</value>
+  </data>
+  <data name="TextB893109D2A2C4D165B8018B0EB430D7DD760C07CEC2E362E13C9F781A5655C63" xml:space="preserve">
+    <value>Pesquisar</value>
+  </data>
+  <data name="Text1175F2B83392CAAD7100BADB18DEF3E2B1C16CF43C96F33C82A9C556D847CAE5" xml:space="preserve">
+    <value>Pesquisar e filtrar</value>
+  </data>
+  <data name="TextF38D531E55DB3A4D7DD8E275A643E47D617752555DDDBA9FBAFD2160FDA101BF" xml:space="preserve">
+    <value>Pesquisar nesta listagem</value>
+  </data>
+  <data name="TextCDD5026BE6415C736E7D66F82AC56D4B05A74D827FDEAABF20A8BFAAE449D3B5" xml:space="preserve">
+    <value>Pesquisar por categoria</value>
+  </data>
+  <data name="Text1F03E8F963EF42B42F69CA82E138F43D710AF3D332FADA746B2B564607EE2C46" xml:space="preserve">
+    <value>Pesquisar por convidado ou família</value>
+  </data>
+  <data name="Text4AAC3D46C7DDE0A0137C1C2E2B22E6F27D6ED35AB304C3292E47C8434333C3FF" xml:space="preserve">
+    <value>Planeamento do casamento</value>
+  </data>
+  <data name="TextCFC82CA696AD17D1127E084D8B1F3EFAFE1E1E88DCFB575CB5991425BFE92384" xml:space="preserve">
+    <value>Planear a visita</value>
+  </data>
+  <data name="Text834664C91ECD0ECBD86BD9A00E4BB9F790B9019BCA30E5087EFB7A4F7D93B1A3" xml:space="preserve">
+    <value>Plano de mesas</value>
+  </data>
+  <data name="Text75C81147C160D45DAF6AA03303F0B661E8B773BCFB5568BB2068804DDEF4597E" xml:space="preserve">
+    <value>Plano de mesas atualizado.</value>
+  </data>
+  <data name="Text63CF6B2AC3AC5B70B9968EB824CF59F7FF12B080A817AD19D893512B5C7EE881" xml:space="preserve">
+    <value>Plus-One de</value>
+  </data>
+  <data name="Text998532BEF951CC1568F1BCDC9CD14D51AA94E068DF62F716DF6EB819D9B87105" xml:space="preserve">
+    <value>Pode levar acompanhante</value>
+  </data>
+  <data name="TextA59842AD93BB4FA20241546D47661157FB3B36E217FE3A481C219EE3A3761C6D" xml:space="preserve">
+    <value>Podes consultar a tua resposta através da pesquisa de convidados e da verificação do mesmo email, enquanto o prazo de RSVP estiver aberto. Depois do prazo, contacta os noivos.</value>
+  </data>
+  <data name="Text0E43196D7E4FB067CA56A90D8D0DD3321DDED7D7980C7C08D7AFC0FE37C9D513" xml:space="preserve">
+    <value>Por Pagar</value>
+  </data>
+  <data name="TextB6B0FD216A68174CB22B578544AEB3F7739B013466437A7FB6AE18840ED4D9E6" xml:space="preserve">
+    <value>Por Responder</value>
+  </data>
+  <data name="Text33CFE74E3FFACCCB2D06CAE39439EA2E9A65F20999928F9FEBE43396AABCCF5D" xml:space="preserve">
+    <value>Por contactar</value>
+  </data>
+  <data name="Text20317191B53CD442F0123A6E83359C5FB0759E23D3134B65693E51DF263C55F0" xml:space="preserve">
+    <value>Por definir</value>
+  </data>
+  <data name="Text868C5F4C403E88FD17FFE9AC1EBE84C99E6020829D8F39D76E196F9BDA3A9264" xml:space="preserve">
+    <value>Por fechar</value>
+  </data>
+  <data name="Text6F0F554308211F6914E43CCDEC85B5D1DA69D6562EDB94FE1B33DEB6083A107A" xml:space="preserve">
+    <value>Por marcar</value>
+  </data>
+  <data name="Text223A5571ADA3C6F79E7C64FFAAEC9B2FD6BDCD576E0A0FD16CC0E9A4C42D7407" xml:space="preserve">
+    <value>Por responder</value>
+  </data>
+  <data name="Text3F5191D78005745B884BAC54DCE316C142EA6638D2723D1A10EDFA69181646F8" xml:space="preserve">
+    <value>Posição horizontal</value>
+  </data>
+  <data name="Text10523BD4136E7D39D91EEE139B623237013DEAE80DD633641DCF6E0AD1747DDB" xml:space="preserve">
+    <value>Posição no mapa</value>
+  </data>
+  <data name="TextF11D24CDCEDD9C64023C778E9F5E59166994AFFD55701A81C64723B811B3B6BB" xml:space="preserve">
+    <value>Posição vertical</value>
+  </data>
+  <data name="TextF367581DBB699C5F8DB64B930EA333C5E1B988FF8118BF9017B0E8D0883189BB" xml:space="preserve">
+    <value>Prazo</value>
+  </data>
+  <data name="Text08E8D02857A256660B033DE9D508126E74A93256EBDC46CA89ABB973FFE3A45C" xml:space="preserve">
+    <value>Prazo / próximo pagamento</value>
+  </data>
+  <data name="Text3DE9AFC8E11A4E4D0CD7FE9FECC8B87CD3551DAE3464E8F5BB8269D883BA9772" xml:space="preserve">
+    <value>Prazo em atraso</value>
+  </data>
+  <data name="Text03EB91757F4F77184822F069CBAA8BD8CF390F520A0F311AED99D881C9D290B6" xml:space="preserve">
+    <value>Preenche o ficheiro sem alterar o nome da folha</value>
+  </data>
+  <data name="Text3D56267B4EBC837223FF6C6BCBE56B236CF1071A56FC3DF2EE33402AD8377201" xml:space="preserve">
+    <value>Preenchido automaticamente se ficar vazio</value>
+  </data>
+  <data name="Text965058C9A14BF2E1A8D324611F868DDC71B5C145CA04DD81D6C305E04907F6EE" xml:space="preserve">
+    <value>Prepara as respostas, define a ordem e escolhe o que os convidados podem consultar.</value>
+  </data>
+  <data name="Text06B4245F9333C18363FBD9E9508533C0FC5EA073F24F7F15353943C71C48C6CF" xml:space="preserve">
+    <value>Presença</value>
+  </data>
+  <data name="Text7C525256B90030A130A31FF5F8AFE84C0B0D9F00BB8BFD7DE710A52C1F39A3C9" xml:space="preserve">
+    <value>Presença Confirmada.</value>
+  </data>
+  <data name="Text274AFBA70299A5F9CCE4EEA58822FC7A4C1103F360A8DDCACC7C8F03148553C3" xml:space="preserve">
+    <value>Presença de acompanhante</value>
+  </data>
+  <data name="Text2678DE2797172AF05A12D7610FBCF29A34EB7E2B400C4FC5768D18CE408A71E8" xml:space="preserve">
+    <value>Presenças confirmadas</value>
+  </data>
+  <data name="Text9586221ED35B578F9622DEEB57522C2E10C5058A6D9CE06FA780799341B58784" xml:space="preserve">
+    <value>Preço</value>
+  </data>
+  <data name="TextE12630D11DDC83AEE96325542EFCAC6D298A4D00EBD202377821777B21031C84" xml:space="preserve">
+    <value>Preço proposto (€)</value>
+  </data>
+  <data name="Text99E850B32BE0F131CBF4C4E6FB2BB82F83AC949344E77A121DD40D9ABA1CE7AC" xml:space="preserve">
+    <value>Primeiro nome</value>
+  </data>
+  <data name="Text8F1683C7444AEE91CD8E763AF9385FF7B9A3CF8CA6573CFC0F0B84E3538646FD" xml:space="preserve">
+    <value>Primeiro ou Último Nome</value>
+  </data>
+  <data name="TextD253B0C27A9B156B36D4DFAC8CE0CEF720341694C06AE690508392CB4ED588BA" xml:space="preserve">
+    <value>Procurar alojamento perto da receção</value>
+  </data>
+  <data name="TextCE558D8255B768D7EB6D752CEBCB71FC890A4DC17622EC9AB6BB575EBF909F27" xml:space="preserve">
+    <value>Procurar parques perto da cerimónia</value>
+  </data>
+  <data name="Text62E1BF4B56029AA6C95F84225501B2B76B40A4A3D6EC8F1BA5E4E685DADD8AD2" xml:space="preserve">
+    <value>Programa do dia</value>
+  </data>
+  <data name="Text8E5E4F4DE6DC8022CDD1FF2197BEFD7A486021BE60A050704E726BBB551A367E" xml:space="preserve">
+    <value>Programa musical</value>
+  </data>
+  <data name="TextFEA52E0D0F7ED9AABA58BE846D6B3C22FF22E72AFC3D3706CEED7439DF96AA17" xml:space="preserve">
+    <value>Proposta recebida</value>
+  </data>
+  <data name="Text5A7F75FF9465CBBE37770624AA3E0131BD500A744CE9EF60D9F8AB30DF965F37" xml:space="preserve">
+    <value>Pré-visualizar importação</value>
+  </data>
+  <data name="TextC02F37C017BBC0ABC55F4DD47B638724C913D43038F86FA6FDF82AF0DB0AEC07" xml:space="preserve">
+    <value>Pré-visualizar perguntas</value>
+  </data>
+  <data name="Text1C2A70AF4D02D584731D16EB595BCF1BEF8EBBC6B2ED33DE99DD191BDEC389AE" xml:space="preserve">
+    <value>Pré-visualização atualizada. Revê as diferenças antes de confirmar a importação.</value>
+  </data>
+  <data name="TextC252A6CA38634F3888CA23A81259F20623E89518487E23B4217F9FF7F1625674" xml:space="preserve">
+    <value>Pré-visualização da administração</value>
+  </data>
+  <data name="TextCD7E92A9B170CCD07DCD8ABBA353AAC48CA20DF6A28B8712488C54E55D262021" xml:space="preserve">
+    <value>Pré-visualização válida até</value>
+  </data>
+  <data name="Text68B9B8165AC9B792BD18FF01A85B71AD28A588AA0137CB0287EBF469E9298CD7" xml:space="preserve">
+    <value>Próximo Pagamento</value>
+  </data>
+  <data name="TextD982F18104A51D77A68C6957A03E2BE5045A718ADEF59A60176A20CA71410322" xml:space="preserve">
+    <value>Próximo prazo</value>
+  </data>
+  <data name="TextB7A1256A4E5E2CB89B5D838B2A8FEE1EC6EC81A324A294AE0F7D01DCB76D3F23" xml:space="preserve">
+    <value>Publicar esta pergunta (visível quando o módulo estiver ativo)</value>
+  </data>
+  <data name="Text8F63F4D7594A823E92C77E35602358799D5DA6E7DE7A461A31EDF28AECD49B3D" xml:space="preserve">
+    <value>Página</value>
+  </data>
+  <data name="TextF3ECC5A677864A3F956EE8ACBBFA838803D0A297CEFF677FC380738D795303D7" xml:space="preserve">
+    <value>Página a editar</value>
+  </data>
+  <data name="Text9BCAD734827A849A17F488BDC58928DE76C0E89785A20EEFF88535DC4D5DE3C2" xml:space="preserve">
+    <value>Página anterior</value>
+  </data>
+  <data name="TextE455B80EC4B862987A0B102F8BD2C2AAEC0C144EBD57EEA522D1BB85AF0EB2ED" xml:space="preserve">
+    <value>Página inicial</value>
+  </data>
+  <data name="Text829C38BBFE6258D5350FDB6EF148AB36A48C0366DCF446E728EB911515ACD308" xml:space="preserve">
+    <value>Página não encontrada</value>
+  </data>
+  <data name="TextEFFC4374F321A8023CD1D861B90357E9358B9F799EAB2DB3576B3B2088259AF8" xml:space="preserve">
+    <value>Páginas de resultados</value>
+  </data>
+  <data name="TextFDA32CBE2F7F0224CC780EEFD3B4400181998856F0DF938C0285401542A3CAB8" xml:space="preserve">
+    <value>Páginas do histórico</value>
+  </data>
+  <data name="TextA59FA10A6E434D960C8E66F4D6E8D2ECA51048A1F80D56A6D857491409908DB7" xml:space="preserve">
+    <value>Quando desativado, o acesso público e o link no menu ficam indisponíveis. As perguntas continuam guardadas.</value>
+  </data>
+  <data name="Text917B54F0F81B8A56124161CDCC4C103A760A7F4B8DFBA4611B5BC2E337AC7CBF" xml:space="preserve">
+    <value>Quantidade</value>
+  </data>
+  <data name="Text61F0CD955B77926D478DBEB8951D1731FC1A7034F54075F0614F0367F50A3F9F" xml:space="preserve">
+    <value>Quem te acompanha</value>
+  </data>
+  <data name="Text0820A48BAC86A2E4C355806C6122D522F370FB2FAD62281194F3E9A29FCD2390" xml:space="preserve">
+    <value>Queremos recordar o dia também pelo vosso olhar.</value>
+  </data>
+  <data name="Text346107AAB2FE8A44BE066C89A3EEE22DF2048760CB01F801557BA0FF05674FA1" xml:space="preserve">
+    <value>Queres mesmo apagar a resposta de «{0}»? O convite voltará a ficar por responder.</value>
+  </data>
+  <data name="TextEEC7A2F0A11D95C6B2BAF0193F6CDE955FF9D8645BE68411B6E09764C7BB82A0" xml:space="preserve">
+    <value>Queres mesmo eliminar a família «{0}»? Esta ação não pode ser anulada.</value>
+  </data>
+  <data name="TextF6825B7AB8FDD650DEA60F2139AC41D730A9B38F84E415F478C2A2B2121C30D2" xml:space="preserve">
+    <value>Queres mesmo eliminar o convidado «{0}»? Esta ação não pode ser anulada.</value>
+  </data>
+  <data name="Text47D2C2C01AA78D461304B8B09125E76D37BFFDEC7E6992FEC1FEEE3C6B6C5987" xml:space="preserve">
+    <value>Queres mesmo eliminar o momento «{0}»? Esta ação não pode ser anulada.</value>
+  </data>
+  <data name="Text7D68036F31BF11027E3318922FED2B8EB3B30539165E220618F965DEA8FF6672" xml:space="preserve">
+    <value>Queres mesmo remover o registo desta fotografia? O ficheiro guardado no Drive não será apagado.</value>
+  </data>
+  <data name="Text8C9BB3A81F357D4872F03FDAD638E8790AE6FB07E7B2092F9EA2A4BAEE3EE820" xml:space="preserve">
+    <value>Queres voltar à pesquisa?</value>
+  </data>
+  <data name="Text1DFE8A8E0CB2D1DA6C0A7A00C01E84E72C60B29D19565877B39512F54F551750" xml:space="preserve">
+    <value>RSVP</value>
+  </data>
+  <data name="TextAD0DD9E97538B5440078F5CF4011F5D718A34090C9E57E9FEE9E56E4CC8281F8" xml:space="preserve">
+    <value>Rascunho — não visível aos convidados</value>
+  </data>
+  <data name="TextB13933764AF6531FC2A2541927B45B0A55145FA5CF46FAFFD264B26E348D6818" xml:space="preserve">
+    <value>Rascunhos</value>
+  </data>
+  <data name="Text1A089B72300C23EEA7DB7C1FC9C09E3A25A3892916EC8EB33B3EA5F8097F7069" xml:space="preserve">
+    <value>Recarregar as definições atuais</value>
+  </data>
+  <data name="TextCE3B6E2D09092EB1A642D9BDA4BDCA9E47EC009B9CE4DC3B930FD6984287B25E" xml:space="preserve">
+    <value>Receber código por email</value>
+  </data>
+  <data name="Text0F0947A49F596CE56C031FCE301AE407A683D71E1562F0F463DC0EA22E7CB539" xml:space="preserve">
+    <value>Recibo da resposta RSVP</value>
+  </data>
+  <data name="Text9903DB8EC77CBEF71BBC1D59D5776B3AE530D0DD11C3FDC33ACC812C881E7B0F" xml:space="preserve">
+    <value>Recibo de resposta</value>
+  </data>
+  <data name="Text839D4AE3074DF5EA5A4A198DC81ACD59BC9060B8B794484D7783070BB96A1DFF" xml:space="preserve">
+    <value>Recibo indisponível</value>
+  </data>
+  <data name="TextBD3627A14C276984A887D9C1064144EC86131A28314ABED7419F9F855131E853" xml:space="preserve">
+    <value>Recibo indisponível neste navegador</value>
+  </data>
+  <data name="TextDC7FC9D8F8B904D1473FC35688F66B3D1FAFB95BBA59164157E643539BD866D7" xml:space="preserve">
+    <value>Recuperámos os dados que preencheste. Podes revê-los antes de voltar a enviar.</value>
+  </data>
+  <data name="Text6FAC4AD8493D989676C1F35F3D7D0D8D273B1DA14549AB19F90D911419EE502E" xml:space="preserve">
+    <value>Referência</value>
+  </data>
+  <data name="Text01B6757D7EDBABC449F92FD65CF8EF2187AFD66725960BC556D8F175B4FA5D59" xml:space="preserve">
+    <value>Referência da família</value>
+  </data>
+  <data name="Text769D86B1E09A36AC5B7E5D07D1274C38417DE6D765E010B488303160853C5E2A" xml:space="preserve">
+    <value>Referência do recibo</value>
+  </data>
+  <data name="TextF71F4710C6F55D09E4F819C5FF91B69031CB6B7E00D5E71743A9F8411071F0F7" xml:space="preserve">
+    <value>Referência:</value>
+  </data>
+  <data name="TextA3037DC71A43FA40BB1E03B5844B83474819CAEFFA882D2E7793E31DAF092939" xml:space="preserve">
+    <value>Remover</value>
+  </data>
+  <data name="Text876A0227F52658A806E4739C812860A8DD4E3421700E65DC0E6B80BE7F9E5253" xml:space="preserve">
+    <value>Remover registo</value>
+  </data>
+  <data name="Text48EADFC22613DE84A9BF220B2CBFECF23DA5D9B29217CDFA7DF9BDDCBC8DA762" xml:space="preserve">
+    <value>Renomear</value>
+  </data>
+  <data name="TextD3F772DCA5E251843D1AEA9660AAFD0772C6E140B3EF9B38743937F159DE3BE7" xml:space="preserve">
+    <value>Renomear categoria</value>
+  </data>
+  <data name="TextB3149C64D36ADEE50136CD44CEFCC125D011FC9A165D930853193F7D68111159" xml:space="preserve">
+    <value>Renomear {0}</value>
+  </data>
+  <data name="Text5CEECBCFD21071996969870641FC9719BD0B3A336819A3734EADA06EE369B616" xml:space="preserve">
+    <value>Repor</value>
+  </data>
+  <data name="TextE209FB3BB6985FE0F44F218EBE9D682C9547E3A16A06E3B1CA05CD00F7A50C23" xml:space="preserve">
+    <value>Resposta</value>
+  </data>
+  <data name="TextC12DB13868589D6A4A37181DBB5488AAF3FAD18286F2689E5E25C38CC1B4E791" xml:space="preserve">
+    <value>Resposta (obrigatório)</value>
+  </data>
+  <data name="TextC135702AFFCDEA7A8102776B1D889CCF86A89E503935CFFD63EE02C71B8B30C1" xml:space="preserve">
+    <value>Resposta alterada</value>
+  </data>
+  <data name="Text8D3E764B1073C698829F65E747BE6D19615686BA383C91286D9947F66A26ACF3" xml:space="preserve">
+    <value>Resposta apagada</value>
+  </data>
+  <data name="Text95208239F0516375838F160F0B9B773E15CB78FA0815F02361780856DFCE61F3" xml:space="preserve">
+    <value>Resposta criada</value>
+  </data>
+  <data name="Text28A122141A42E1E3DFD8C9F7182CD97CEB8DD992DBF3D30349CAA08381774254" xml:space="preserve">
+    <value>Resposta e histórico</value>
+  </data>
+  <data name="Text1EA47177D03D4B6FEE4F76424A08547774EFCA5E7C99973693ECFEEF78E63167" xml:space="preserve">
+    <value>Resposta enviada</value>
+  </data>
+  <data name="Text44EDF6C4566BFE08FE5E2DD7B757BC3E6852A07943B468F7024CC77153F30452" xml:space="preserve">
+    <value>Resposta guardada com sucesso</value>
+  </data>
+  <data name="Text12CDE3BCC333E2607EDD78570470A65DDE1124081AE446D4BB5BCFB3B8F6BC59" xml:space="preserve">
+    <value>Respostas da família</value>
+  </data>
+  <data name="Text579AF9800A8F09E55EBB937B4A4AB5A34C65825FCDAE222A746A7B9E109FCAEE" xml:space="preserve">
+    <value>Respostas de presença</value>
+  </data>
+  <data name="Text687C898238A7489F929A60608858AB3700E570601859BE1478C93B5D1E71D3BE" xml:space="preserve">
+    <value>Respostas múltiplas</value>
+  </data>
+  <data name="Text0E94E4DF8BFB964D8B824A5A7DDAD7C55F6A9D998C80D0F5CEE8872B61AAEEA7" xml:space="preserve">
+    <value>Restrições alimentares</value>
+  </data>
+  <data name="Text26C14D5DEE5AEBD7EF00E503C427A33A6D2E5723C78C7BA461431C3FF7F3EB85" xml:space="preserve">
+    <value>Restrições alimentares (opcional)</value>
+  </data>
+  <data name="Text77DD6461E54AC57FF66465D23AC4F66BCA2B001B15233350313655D882B75503" xml:space="preserve">
+    <value>Restrições alimentares do acompanhante</value>
+  </data>
+  <data name="Text4F3455E5EDD9D73431D7FA3D9F2C0A5F5598EC81C21FB0E5BA89383BA6013207" xml:space="preserve">
+    <value>Restrições alimentares do/a acompanhante (opcional)</value>
+  </data>
+  <data name="TextA039CDD692A9D17290C7116F2E59F15E88DA5CD3FBB113390694E765424351AC" xml:space="preserve">
+    <value>Resumo da confirmação</value>
+  </data>
+  <data name="TextB839F8683C32C41A6F8B30C35CAB13EE734DA560F1958EAE0B5BF549A75273B0" xml:space="preserve">
+    <value>Resumo das linhas filtradas</value>
+  </data>
+  <data name="TextCFCD7EDFEE4E4E558C3418AF5F2BB9D4E9D6349AA0A73865116531723048EB21" xml:space="preserve">
+    <value>Resumo do orçamento</value>
+  </data>
+  <data name="Text30F01A7C4136E6450ABDA516A3E3A87F0CBDAAC753D4F7C8E7BAF89EF48B93EB" xml:space="preserve">
+    <value>Reunimos aqui as respostas para as dúvidas que possam surgir hoje.</value>
+  </data>
+  <data name="Text90E7DC026C7AA37B23CB4579C0F6216BCCC84C9A5C1517A1B4453A468FADB3B5" xml:space="preserve">
+    <value>Rever importação</value>
+  </data>
+  <data name="TextF39D881F7021AA386067CF353EE528436AA1C16A5FA9FE4876B8B28D787401E9" xml:space="preserve">
+    <value>Rever importação de</value>
+  </data>
+  <data name="Text7AB5E44ACC325BD20C495BE6218C07A1DDB6560F7A0674AAC6DAB78F90D54B9E" xml:space="preserve">
+    <value>Rever resposta mais recente</value>
+  </data>
+  <data name="Text88B8A5BE9B2B8FEA11B538B95807F3BF2DD8D8F5EAC3C53338ADC111D7CD2258" xml:space="preserve">
+    <value>Revê a fotografia «{0}»: usa um formato permitido e um tamanho até {1} MB.</value>
+  </data>
+  <data name="TextB72ECA5E606A7C5698244F80DDE409F8EE163834C55D9915EAB9DA3FAF6FCA82" xml:space="preserve">
+    <value>Revê o nome, formato e tamanho da fotografia.</value>
+  </data>
+  <data name="TextDE2CF5231A61589D342F1548494645035CA025F92298844782E6BADA89CBF863" xml:space="preserve">
+    <value>Revê os dados das fotografias e tenta novamente.</value>
+  </data>
+  <data name="Text5CAA5A5A524A4589A3F46D6DE8278CB3F2C4A911657D9F54A98EAC4FB8B16FED" xml:space="preserve">
+    <value>Revê os seguintes dados</value>
+  </data>
+  <data name="Text8D82BE62715EC268226DA4AADFB64F683637F515E7A4FF4F33358410593B0633" xml:space="preserve">
+    <value>Saltar para o conteúdo</value>
+  </data>
+  <data name="TextF7EB178F1B8B54AE8CCD85407A41C6E146517D5B8B7BDD5CB918E3804BE33C3F" xml:space="preserve">
+    <value>Se acreditas que devias poder aceder, inicia sessão com a conta certa e volta a tentar.</value>
+  </data>
+  <data name="Text469EA11AA6B446F8247036C7FD72D59E511CAF16ABFFE1CAD864DE277D404FCD" xml:space="preserve">
+    <value>Se ficou alguma dúvida depois da festa, consultem as respostas abaixo.</value>
+  </data>
+  <data name="Text3DAB9103FCEE852044F561910DEEA5EDE64E0AE30FBF225DF42EFFEB774C32F7" xml:space="preserve">
+    <value>Se precisas de falar connosco sobre a tua resposta, contacta os noivos. Obrigado pela compreensão!</value>
+  </data>
+  <data name="Text36E236E331A33DAE5C3F6D5625DED1EDBEF34FCFD957F2B6A5F74CBE1F37B948" xml:space="preserve">
+    <value>Secção</value>
+  </data>
+  <data name="Text9B181A6C95828B480DCF1A61804068D0B96C7851A57F984D2BFF910A68567A57" xml:space="preserve">
+    <value>Secção, Momento ou Música</value>
+  </data>
+  <data name="TextECA15655C35D8E1CBE0CD51E8797E48E6B3B09BEA24288D6E5932453AD8B5881" xml:space="preserve">
+    <value>Segs.</value>
+  </data>
+  <data name="TextAE53628AB8848169CF94DEAFCF043C580746970F3A3245B5506BFCAC76485087" xml:space="preserve">
+    <value>Seguinte</value>
+  </data>
+  <data name="TextC7F3A96EF47F2087CB2F780EF21A4895214CA7A11C7CDBD472424DFBF4C2E15F" xml:space="preserve">
+    <value>Seleciona as pessoas para quem queres responder.</value>
+  </data>
+  <data name="Text4D579EAC6F624482CBEE380FF2F76EC6A45FBCA59576400207D75159125E03BE" xml:space="preserve">
+    <value>Seleciona o acompanhante</value>
+  </data>
+  <data name="Text541214F824D8E6FFA25DD2E0C04ADBB9C7F953E954E3CB44DDE8AEFA6DE35DB4" xml:space="preserve">
+    <value>Seleciona o convidado que acompanha</value>
+  </data>
+  <data name="TextB18D2D8DB298D510E75E2EDB9979D966621DF62DDD228E29573A375EDE89AF35" xml:space="preserve">
+    <value>Seleciona o teu Nome</value>
+  </data>
+  <data name="TextB12B915B6042E65ABD16999B983431F148445E686CDED603B6BD4BD9859D01F9" xml:space="preserve">
+    <value>Seleciona um convidado que possa levar acompanhante e que não seja Plus-One.</value>
+  </data>
+  <data name="TextF6EBE17714D9E0E013113A22376E4FAC6015399ABCD2D01737BAFDA987C36275" xml:space="preserve">
+    <value>Seleciona um ficheiro .xlsx até 5 MB.</value>
+  </data>
+  <data name="Text68BF1667CAB1280D1BD408B02CCA072ECEC16FCC596E1D861461F5F93CDBA469" xml:space="preserve">
+    <value>Seleciona uma família</value>
+  </data>
+  <data name="Text69A0F0E8E9BA65E29F6B7DC9A20C11A87637A51793E0AF56A58D68EF58BB1589" xml:space="preserve">
+    <value>Seleciona uma família válida.</value>
+  </data>
+  <data name="TextF9E51F43473C9525B1EC8B2A67512F938864D860FF2C56B07B5B9D83606558BF" xml:space="preserve">
+    <value>Selecionado</value>
+  </data>
+  <data name="Text8AB14264776AFBBCCA990D6CE16B77B67F42382A3ACD2DC089755DAA9C5ED3FF" xml:space="preserve">
+    <value>Sem Convidados</value>
+  </data>
+  <data name="Text3A72FD7F6E83C6EC4852DD4B3CB4C32F9C366BE172E8CAEE4EF0C84F017AE7F9" xml:space="preserve">
+    <value>Sem acompanhante confirmado neste envio</value>
+  </data>
+  <data name="TextEC60E347EF1DBFED942CFFE0024EF894DC7DCD9191B464BA0870296EABE7B10D" xml:space="preserve">
+    <value>Sem alterações</value>
+  </data>
+  <data name="Text43E7E2B37FFF903BF9FFF13E50B5CF69BF490A589C71ECC80F37836234BC8354" xml:space="preserve">
+    <value>Sem avatar</value>
+  </data>
+  <data name="TextD25A4A74DACC8D0F144D9B4BE687A13FB45997A024BE68D7B0E95492AE0C7211" xml:space="preserve">
+    <value>Sem fornecedor</value>
+  </data>
+  <data name="Text3FE9976C855679488BF26AD84D82CCB786C02A988E5E27E024E2F4442E6BFF46" xml:space="preserve">
+    <value>Sem lugar</value>
+  </data>
+  <data name="Text20901C1460C0C52441177E13B38933FB505026DF044DADF1BDD8B61ADD502EB6" xml:space="preserve">
+    <value>Sem lugar atribuído</value>
+  </data>
+  <data name="TextE542462649882BEBA8CE919529DB42D82EBA7FF62979F237C953D97E2D4393C5" xml:space="preserve">
+    <value>Sem prazo</value>
+  </data>
+  <data name="TextF765B4D1608506107CDCC0C9342F72C33B0F7CF5488DC83C78A416FC4FA60AF4" xml:space="preserve">
+    <value>Separa os formatos por vírgulas.</value>
+  </data>
+  <data name="Text25C96F6D09667B93C8FD220D56324ACAFB1D0E46C80703E5D0ED2353180392A8" xml:space="preserve">
+    <value>Será alterado</value>
+  </data>
+  <data name="Text9313455E45AA22430A92FDDBB70F21312D3C944AB590DFB1DA845C1A96B664FE" xml:space="preserve">
+    <value>Sim</value>
+  </data>
+  <data name="Text19A12DE1F069664576FF107B677DE3FA40172A5AF60A2E169B85381E9B5B72BE" xml:space="preserve">
+    <value>Sim, estarei presente</value>
+  </data>
+  <data name="Text15D5241FBF8568DB282A94A979F491F1FAB375C67913F60CCA031422ED50E129" xml:space="preserve">
+    <value>Sim, estará presente</value>
+  </data>
+  <data name="TextFA7955814E32AED3A240EE46FCD053DD48F320D4E6E18D2B2774E491C5F75834" xml:space="preserve">
+    <value>Site</value>
+  </data>
+  <data name="Text5D9E53E9480B2C355638ABFCB3A31A188E5194948D364963B1AB93C38252B102" xml:space="preserve">
+    <value>Site do casamento</value>
+  </data>
+  <data name="TextB980EEA6155A72D61CE33E4FB6527B1453501433AAD4DAB2C36CD3DBCDFCD5EC" xml:space="preserve">
+    <value>Site e fotografias</value>
+  </data>
+  <data name="Text68F61FF11FD8778A3AA81BF2922749AB679CE2082EDDF3E0FAAD7584F2883A94" xml:space="preserve">
+    <value>Situação das Respostas</value>
+  </data>
+  <data name="Text1EF299EE46E5AA57830E1211FAA69C57E3E97925DB2E1FBAAE0EFD8022FA1BA7" xml:space="preserve">
+    <value>Submeter respostas</value>
+  </data>
+  <data name="Text9A603540C011868F9910375FAB763E4C55277D240228619021EEDEEB877E4C14" xml:space="preserve">
+    <value>Sugestão musical</value>
+  </data>
+  <data name="TextF6B2E3026BF86E552B6A3344A88DF629B2ABFB45B0C52850A3E3D54428818883" xml:space="preserve">
+    <value>Sugestão musical do acompanhante</value>
+  </data>
+  <data name="TextFC223E7D004C3FE0D6CF395EA6EA50E384BFA12E28AF7F0E412076ECB4D8D376" xml:space="preserve">
+    <value>Só podes eliminar um fornecedor sem linhas de orçamento associadas.</value>
+  </data>
+  <data name="TextF4B836D1115127D415CC629D11B958088ACAB37635A4313DACF4CC8B433D7B58" xml:space="preserve">
+    <value>Só podes eliminar uma categoria sem fornecedores nem linhas de orçamento.</value>
+  </data>
+  <data name="TextDF31AA97013D4689F674104E30FD637CD2EE56573CFB5A6EF0A9D5ACB5BEC480" xml:space="preserve">
+    <value>Só podes responder pelos convidados autorizados deste convite.</value>
+  </data>
+  <data name="Text21BED0EAF1E59C19211152DAD7D20C6CD175D416722439025136E67B7D1B5A8A" xml:space="preserve">
+    <value>Tamanho</value>
+  </data>
+  <data name="TextF11659CBA9D5F8A13E5C3F63DC03B8D54A6690BC30A2540C12DEB3A5BD948097" xml:space="preserve">
+    <value>Tamanho máximo por ficheiro (MB)</value>
+  </data>
+  <data name="TextC90D1B633E037B904E79C25856444DA57FA061336B251DCCEAA81837D2C5D40E" xml:space="preserve">
+    <value>Tamanho máximo por fotografia:</value>
+  </data>
+  <data name="Text2F151735CCE73AD3B9E35C7DA9467C84E8DB5D616940856DAB056ADF1CC237EE" xml:space="preserve">
+    <value>Telefone</value>
+  </data>
+  <data name="TextABD5C9878CCD935765021F814C4D826D4434F52226A9A55EEFE34EB9B4660B1C" xml:space="preserve">
+    <value>Telefone da noiva</value>
+  </data>
+  <data name="Text66D2227DE9EFDB2B50B51B44B96EE01B1B800A88BD4859886976F3D9604210CA" xml:space="preserve">
+    <value>Telefone do noivo</value>
+  </data>
+  <data name="TextB116F8B926E4B3671CC6B5D8D00EB9360FE7A082FB8EA4CA3FAFBB50C9A1B3F2" xml:space="preserve">
+    <value>Tempo até ao casamento</value>
+  </data>
+  <data name="TextD3D090002FAF8FE2A0203C55C6EF42A24868D53E8BD2DAE38A1DC129DCF7EB57" xml:space="preserve">
+    <value>Tenta novamente dentro de instantes. Se o problema continuar, fala connosco.</value>
+  </data>
+  <data name="Text6DF3D6661C095CE7546B9E84888F335A1C55208CD3C9E4686747E7B318F348B0" xml:space="preserve">
+    <value>Texto</value>
+  </data>
+  <data name="Text9DB1DDF5283CA391DF558A310A9381C2DA5402DCA430BAD3E4622F32E9A66558" xml:space="preserve">
+    <value>Texto Atualizado com Sucesso!</value>
+  </data>
+  <data name="Text6CB86C32EB2B657CA691F8BEC9DC07E0421996A02C9315FFC03FA695F180B679" xml:space="preserve">
+    <value>Texto atual</value>
+  </data>
+  <data name="Text71CF2A8391743207B0EAB04657EE77BF7BBEE8E51BC77632E72C4F1B4101CBE5" xml:space="preserve">
+    <value>Textos do site</value>
+  </data>
+  <data name="Text638E19C762DBE1146672B6333DDBC112EA51DC88CB79F19CCFBF9410A7706AE6" xml:space="preserve">
+    <value>O campo {0} pode ter até {1} caracteres.</value>
+  </data>
+  <data name="TextE2DC24037566E3FAB4BE483C504C28E777440E2029FB829EA5EAC9BAB63EDF61" xml:space="preserve">
+    <value>O campo {0} deve ter entre {2} e {1} caracteres.</value>
+  </data>
+  <data name="Text3F1DA3DC53F94DAF4270DD3C9FF528975A4E4CA8540FAE74706DCDBD9E92A01D" xml:space="preserve">
+    <value>O campo {0} deve estar entre {1} e {2}.</value>
+  </data>
+  <data name="TextD06557C6CF8D686E1B34A02763895C4B34C84BA0962311EC3B8385CE4ABF9699" xml:space="preserve">
+    <value>O campo {0} tem um formato inválido.</value>
+  </data>
+  <data name="TextDFE5825D4F1BC22DFCD58872F5A03A8F63E9E5C2B92A6E8AA64DB9409B5127C2" xml:space="preserve">
+    <value>O valor «{0}» não é válido.</value>
+  </data>
+  <data name="Text39F003964282BC5CA895C6E77C871380AD9C2DFCD64415B8DCE557DA688BA2CF" xml:space="preserve">
+    <value>O campo {0} deve conter um email válido.</value>
+  </data>
+  <data name="Text83A260F14FFEFF34EC381306822070BEDD2DCB76E9DD5E22843F0032075AC675" xml:space="preserve">
+    <value>O campo {0} é obrigatório.</value>
+  </data>
+  <data name="Text9E753333692C9ACFD702114E57AE2AF873B6ADD99D2E2D16DEDEA40A8D40114F" xml:space="preserve">
+    <value>Todas as categorias</value>
+  </data>
+  <data name="TextBD02B9A7D71DAC67A21B2758F11975BC491CC834C22EDD9FA598FED97405AAA9" xml:space="preserve">
+    <value>Todos</value>
+  </data>
+  <data name="Text97E68D431B3C65FA2430191155071835CFE25305DB0EA5D55963240969E2350F" xml:space="preserve">
+    <value>Todos Responderam</value>
+  </data>
+  <data name="Text440444A5C3C7B1906EF0F3583E8853A5605830BF2BF63DBE75E66B6D5DC4A00D" xml:space="preserve">
+    <value>Traduções</value>
+  </data>
+  <data name="Text83BA7799B719E08876027B722DC8A50551005B6701920738C009AE2C6AC18C11" xml:space="preserve">
+    <value>Traduções dos conteúdos</value>
+  </data>
+  <data name="Text86521135B901AC70260ACB78CACF679327CD073E13E1812152639147DB06EF76" xml:space="preserve">
+    <value>Traduções guardadas.</value>
+  </data>
+  <data name="Text524F7ECB7B468EBCF64BC591B1DFD259AC9DADD866F941C70D155A843CF99B7E" xml:space="preserve">
+    <value>Transportes</value>
+  </data>
+  <data name="Text7C5F40741D5CEB304DF46409E6E54568C927D16B361A3886EB6D4F85DCFC189A" xml:space="preserve">
+    <value>Tudo o que precisam de saber para o dia do casamento.</value>
+  </data>
+  <data name="Text4C08A5D5FEB22CE293C0FD693F6E99AD2FFB1D6BD03CE1625D1E9E9DFF93C672" xml:space="preserve">
+    <value>Título</value>
+  </data>
+  <data name="TextABFA5532D50D3149114E5F6D51456729CC32D79B3A656367922B42897EB16650" xml:space="preserve">
+    <value>Título da página (obrigatório)</value>
+  </data>
+  <data name="TextEAF6F36CAA0305FE1F562283956409D8B00F8FFC4C2DEF12244339492E5674A2" xml:space="preserve">
+    <value>Título ou descrição</value>
+  </data>
+  <data name="TextEA9BC5286CA857ADD2AC146414E0CD0EEC67A26DBFF8251E555D83149D31C2AF" xml:space="preserve">
+    <value>Um Plus-One não pode levar outro acompanhante.</value>
+  </data>
+  <data name="Text469A4E45E2DF1B1DAD0715E13D53F6B0F9B674F5C5AB9A50C689351E638703DD" xml:space="preserve">
+    <value>Um email sem</value>
+  </data>
+  <data name="Text58EB42C94041EDB47F97D8319AFB1C5F88FCBD7A782C1FCA8B7F737768C21D07" xml:space="preserve">
+    <value>Um email sem @ será completado com @{0}.</value>
+  </data>
+  <data name="TextAA2EFCCA59279F51859F834385A21B5D7E754624C15539EB150EC483F0FED755" xml:space="preserve">
+    <value>Uma música que gostasses de ouvir (opcional)</value>
+  </data>
+  <data name="Text79E7795941D5053324AEDEE8515BEA771BEF8DC8464B08CB8088B99A1B3EE381" xml:space="preserve">
+    <value>Uma música que o/a acompanhante gostasse de ouvir (opcional)</value>
+  </data>
+  <data name="TextD00C1F55FD872F41F22E8AC461D3674E6A8C56EE9D0CD7EE84B2267AB144E5C9" xml:space="preserve">
+    <value>Uma referência existente também identifica a família a atualizar. Não repitas a referência ou o ID.</value>
+  </data>
+  <data name="Text3AEACD154B12D568E9C42C7E16067D2E0E82D0C7B2D7406F527DDCE2E89B3C26" xml:space="preserve">
+    <value>Usa um endereço começado por https:// ou http://.</value>
+  </data>
+  <data name="Text2B6D8DA6A4F96C574979F4FE8652BB8DA348356157AC691498E8F3BAF21B44E7" xml:space="preserve">
+    <value>Uso interno para distinguir famílias com o mesmo nome. Este nome aparece ao escolher a família de um convidado.</value>
+  </data>
+  <data name="Text57A46B79EBAB8F4461709A87CC332550E5AFF5AE57BB86D9D26C6581306D3A86" xml:space="preserve">
+    <value>Vai comparecer</value>
+  </data>
+  <data name="Text51BF67C699DE628AD03A919634DD4696D8A7D6A28F360553B8CADE3781A87C14" xml:space="preserve">
+    <value>Vai estar presente</value>
+  </data>
+  <data name="Text6C13F4D630BB76C89E56549631A8B6CE20879C651DA920B57469C33564FC2CC1" xml:space="preserve">
+    <value>Vai estar presente? (obrigatório)</value>
+  </data>
+  <data name="TextACDA9F84FE1A7E4772A21D9753D25E3DCF2CAE5AC7963737DABB3781008D3F24" xml:space="preserve">
+    <value>Vais estar presente? (obrigatório)</value>
+  </data>
+  <data name="Text456F0E9B0F2D000651FA0156CB7039BF3142B5B19AF7997D2BC7AFD2337091FF" xml:space="preserve">
+    <value>Validar e rever pré-visualização</value>
+  </data>
+  <data name="Text34A9953CDC07B0500DA8DB946B709F1E40FB2ABCEA50B1C99F3D44519EE413D6" xml:space="preserve">
+    <value>Valor após importar</value>
+  </data>
+  <data name="TextC0FD1188D14CAAA545E58CF16FC0FF4D70E7792B658B9D17B36D0961663815E5" xml:space="preserve">
+    <value>Valor atual</value>
+  </data>
+  <data name="Text567201FD6906CEEA4996AE08A563C494E723D7B6DB2EEE2733A864426CDE7FAD" xml:space="preserve">
+    <value>Valor em falta</value>
+  </data>
+  <data name="TextD913F69B1F38904FF3158ADE03CD6DD59B498371AE2FFD50405DD0BD31ABA2D3" xml:space="preserve">
+    <value>Valor pago</value>
+  </data>
+  <data name="Text26682A1F199D755053304D830D924C8C93009AECADA8CB43378FB71E96E255D3" xml:space="preserve">
+    <value>Valor pago (€)</value>
+  </data>
+  <data name="Text36633314AEE3B4AED3406BDFBA9CFD7B0D79A3FA1F6277ECF443861D76EA3029" xml:space="preserve">
+    <value>Valor por pagar</value>
+  </data>
+  <data name="Text86D77436C31A50CEA671BE9A2FE36C25B38C77DC730F8BC63FAA591D0BED8C88" xml:space="preserve">
+    <value>Vazio</value>
+  </data>
+  <data name="Text1B82C1BE82B602C0C796FA76A2DAE799C38183E1C210156B318EE872C799B0CB" xml:space="preserve">
+    <value>Ver convidados</value>
+  </data>
+  <data name="Text6DE416A9D7B02A25A72996F3991CA555ACF0DE976DFE5EAA5B69386DDA3F4D02" xml:space="preserve">
+    <value>Ver famílias</value>
+  </data>
+  <data name="TextBF4A433C3219DBFE8902DBE22195181981D572A8DF84CB1C93A38FA99A70BADA" xml:space="preserve">
+    <value>Ver fotografia {0}</value>
+  </data>
+  <data name="TextD1706687A0D0CF36D94A21FDE58C38039264490130DBB8D1DA2AAEA71AD17154" xml:space="preserve">
+    <value>Ver linhas (</value>
+  </data>
+  <data name="TextF363D9D9FC6F50DCA5E8287B2C0A0DCC1345631F4A86F4CC4518A8D24A2F082D" xml:space="preserve">
+    <value>Ver percurso em transportes públicos</value>
+  </data>
+  <data name="TextA5A8C8F154E7C60062704F1727524DECA78DFC5275950367A43F3CE3CF7ABE95" xml:space="preserve">
+    <value>Ver página de informações</value>
+  </data>
+  <data name="TextDE712993606BF70BE9933BE208B5C54E77487B0E94E88D5C8B6E47D0C9A1EA28" xml:space="preserve">
+    <value>Ver página pública</value>
+  </data>
+  <data name="Text5CADFC1C37E649E40FFBADFB5183651C2BF0C3B782F4D3B0F313D3A9E66C9F58" xml:space="preserve">
+    <value>Ver resposta principal</value>
+  </data>
+  <data name="TextA5C57367C59CEC49799695730E6DD23371E442ED17273EE340454D3D46443D36" xml:space="preserve">
+    <value>Ver todos os convidados</value>
+  </data>
+  <data name="Text813AF0683C7BC301C6CFFC221594D46B031B93701BD7D2CEF3716F529EFE30CF" xml:space="preserve">
+    <value>Verifica o teu contacto antes de confirmar ou alterar a resposta.</value>
+  </data>
+  <data name="Text5AF12FD9A1F15A5D8A9618A5F036785A6FB9ECC64143216D101CF4AC13D1BE3C" xml:space="preserve">
+    <value>Verifica o valor introduzido.</value>
+  </data>
+  <data name="Text1724B43A88E309F9B14223B7CF651C3331A13B49AB9887C8B3FB0E881F9A5187" xml:space="preserve">
+    <value>Verificar e continuar</value>
+  </data>
+  <data name="Text28EF1D9700C91FA0FADA0C813072BB74167DBAFBCB962B90B2C1AF5FD90B56FE" xml:space="preserve">
+    <value>Verificar email</value>
+  </data>
+  <data name="Text7448F13EE4ADF4E4A76D9EB3234074A1208AB7FDCEDFD198346C20A8B6B8F5EF" xml:space="preserve">
+    <value>Visível</value>
+  </data>
+  <data name="Text22102F183D17C34C40D26C93E845A051AE059E74541341FF46D3EBEB602C9E86" xml:space="preserve">
+    <value>Visível no site</value>
+  </data>
+  <data name="Text37278736F8F27AE3F90C29FAB6F0BF4D72B1A64C7835BF3783E1B1C48EF575C5" xml:space="preserve">
+    <value>Voltar ao início</value>
+  </data>
+  <data name="Text68064809295A4DC95757C825DE85A052EC1172C3271F8E5F2C2352CE6AD9627A" xml:space="preserve">
+    <value>Voltar ao painel</value>
+  </data>
+  <data name="Text75472236CC1ADA889F064A3AB25BE40215C36D0797E4908B157EF901572D3895" xml:space="preserve">
+    <value>Voltar ao plano</value>
+  </data>
+  <data name="Text7645A987D96DA91217C6EF4DE0A5ECFCE74699BBA799963B694127B080FB5795" xml:space="preserve">
+    <value>Voltar ao programa musical</value>
+  </data>
+  <data name="Text1415C23ECACE979FFE22B47EF27C3409E9B96A440C32949B9631DA8569C83133" xml:space="preserve">
+    <value>Voltar ao site</value>
+  </data>
+  <data name="TextE9AD9A07C314D16B1F0D4D30FA30C9B031301F477325DFC7DF5E7DCF9264D48C" xml:space="preserve">
+    <value>Voltar sem guardar correções</value>
+  </data>
+  <data name="TextE58BCADD3BB087032BAEB5002C8951D860E243E7D955FC87D9081547F7D17DC7" xml:space="preserve">
+    <value>Voltar à gestão das perguntas</value>
+  </data>
+  <data name="Text8CEF7C9A4D059B46ED4F7B685CA0266081A62B1C695E413EB022936577A7A7E2" xml:space="preserve">
+    <value>Voltar à lista</value>
+  </data>
+  <data name="Text97B9D0A1B682CEB1680D883CA134A4F3732F940257528202EAC5BBD1CF8CB780" xml:space="preserve">
+    <value>Voltar à pesquisa</value>
+  </data>
+  <data name="Text53435CD512E32C9B0DB54DA5F20D4207485A8F6E8070F4F07DFF2B8ED687A522" xml:space="preserve">
+    <value>Voltar às respostas</value>
+  </data>
+  <data name="TextCA978112CA1BBDCAFAC231B39A23DC4DA786EFF8147C4E72B9807785AFEE48BB" xml:space="preserve">
+    <value>a</value>
+  </data>
+  <data name="Text8A283855D7144572BC8F553EC41CDF3869B398B0F0C1B4A9E2965905109AB8CB" xml:space="preserve">
+    <value>adicionar uma mesa</value>
+  </data>
+  <data name="TextEC34A9DFFF9CD9DA5F7A6679FE8AE50C4E7C804142EBA8C79E0082F2251C12E6" xml:space="preserve">
+    <value>apresentado na lista de administração. Nas famílias, uma referência existente também permite identificar o registo. Os modelos antigos sem coluna ID continuam a ser aceites.</value>
+  </data>
+  <data name="Text0EB1B0FEADD0874A7CC7855E0BCEF1032F81B9498F5247D1130E0BD643CB66F1" xml:space="preserve">
+    <value>carrossel</value>
+  </data>
+  <data name="Text47D274F6E483A204D129F30E8959CFF9B32DC65987F3420FEFAD1FACE32D5089" xml:space="preserve">
+    <value>convidados</value>
+  </data>
+  <data name="Text5103CDF0B9AE1021358C6052320AF6377254BCCA47692948C88AB1EE6FD35C29" xml:space="preserve">
+    <value>convidados com presença confirmada ainda sem lugar.</value>
+  </data>
+  <data name="TextDCB8F7CEAB45CE7ADF212D6DABB9F49646938FCCEA2F1F6E413AFDB70ADB9081" xml:space="preserve">
+    <value>convidados responderam</value>
+  </data>
+  <data name="TextE5755786A9679AB0149A54DDB1EAA524C39956D2756AC7064CFB22416C112BBB" xml:space="preserve">
+    <value>dd/MM/yyyy 'às' HH:mm</value>
+  </data>
+  <data name="Text62212B313A4A462CCFDE3BF7DA5788426EBDCF762F1A35142813AE38D9F96720" xml:space="preserve">
+    <value>dd/MM/yyyy 'às' HH:mm:ss</value>
+  </data>
+  <data name="Text959A45D44E6FCF58361ED004681556FE50129F2109E817DEC098C00C9E5D2578" xml:space="preserve">
+    <value>de</value>
+  </data>
+  <data name="TextF2497F84D4FBDF298B2A602313AB7E5B985514E80DF2454CC2ECA8A9AA7B9D86" xml:space="preserve">
+    <value>de respostas</value>
+  </data>
+  <data name="Text8DDF15DEB231FA6C028023A27E706862BE49CCDA1152F166A39DE719F0B0A7EC" xml:space="preserve">
+    <value>diapositivo</value>
+  </data>
+  <data name="Text7A748746461FFF9DCCC67250FEA385A948D17672E97DCCFC26BE5EBDFA96ED65" xml:space="preserve">
+    <value>exemplo.pt</value>
+  </data>
+  <data name="TextF9522C09503A4E120D66912B31180E5F55199EE7B6C5CA9C2D7098B15F25FD09" xml:space="preserve">
+    <value>ext.</value>
+  </data>
+  <data name="Text38099CF6B67FE49B6653D4CA624A52E2F577F53B19E05509200B959115E6D12A" xml:space="preserve">
+    <value>famílias</value>
+  </data>
+  <data name="Text9FE01313CD0A78E698CC77C7D12E5CF3E8F4ED4E6AA2D9612697985D39BFEA59" xml:space="preserve">
+    <value>horas indicadas</value>
+  </data>
+  <data name="Text66DFEEEDABF1F022D223BD6B9F464D1CA241D6DA54AB7ADE5B2C7758B4E08FA8" xml:space="preserve">
+    <value>https://</value>
+  </data>
+  <data name="Text7414BEAFD927D54AAC405DC5D6EA84A9B959704C669F88B08A778E42F6CF4931" xml:space="preserve">
+    <value>livres</value>
+  </data>
+  <data name="TextDCFCC6EF060164332557C55C5E1E6F5A7AE729C288C61622A52E570485BF3CB3" xml:space="preserve">
+    <value>lugares ocupados</value>
+  </data>
+  <data name="Text942D7A4CEAB3CB8867206D3A58FA759E45B4A66AA83C3F0CABDFBCEDBF436899" xml:space="preserve">
+    <value>lugares ocupados ·</value>
+  </data>
+  <data name="TextA9E5B5A03A679F8BFB48B501CED944634B04C1E1C9F8FD302D360FFC54673D93" xml:space="preserve">
+    <value>nem os títulos das colunas.</value>
+  </data>
+  <data name="Text68FBF78BEA5BE39241BB743523FC15233D8DEFEB807C22ABEF3A25A6ECD1D99A" xml:space="preserve">
+    <value>ou aumentar a capacidade de uma mesa existente.</value>
+  </data>
+  <data name="TextCDA10DC13CD21E48071E95403839BCB25D5B1EA2D67F70780303F93AC2DE33D0" xml:space="preserve">
+    <value>para aproveitarem o início da celebração.</value>
+  </data>
+  <data name="Text62189ED539712243ACA98736EA84DE613E0B635C407208152FAB01E65DC0B6AD" xml:space="preserve">
+    <value>para os convidados.</value>
+  </data>
+  <data name="Text2CD6E37BDE565D48646D53BFD3C8F76EED3CCDB2EF72FDAD07DEB99EAA3FEF38" xml:space="preserve">
+    <value>ramal</value>
+  </data>
+  <data name="Text7C412DC100F686E9823548816F3937E62DB8464E3D63897B12B0E857F476E55C" xml:space="preserve">
+    <value>registos</value>
+  </data>
+  <data name="TextAA804B8B97472121EAEE11303EC75659A03F67ED188DDBFF7743B06A804FC0F7" xml:space="preserve">
+    <value>wwwroot/images/guests</value>
+  </data>
+  <data name="Text2D711642B726B04401627CA9FBAC32F5C8530FB1903CC4DB02258717921A4881" xml:space="preserve">
+    <value>x</value>
+  </data>
+  <data name="TextD014A42C1406C81C6B3CF30EE122E19F0005D2C4A2895324F0BF2B7013A5FD2F" xml:space="preserve">
+    <value>{0} ainda não tinha uma resposta enviada.</value>
+  </data>
+  <data name="TextA3AC665FD8E55669B37319B408C6AC0E641F0A68057A7F6E1C78ED5E3431FC4B" xml:space="preserve">
+    <value>{0} até</value>
+  </data>
+  <data name="Text92F7DA5A90883E7B8AC1110CF8D0BC6D73A58CEAFFEAAB314FEB38C493993FC3" xml:space="preserve">
+    <value>{0} de {1}</value>
+  </data>
+  <data name="Text20E6142A88E48AF3F350B5F2BD43EC564335E8F726CAE2D342AB468468E7AE7F" xml:space="preserve">
+    <value>{0} desde</value>
+  </data>
+  <data name="Text0D3F1EAF6A039F74A321FC4B6ED4A5062F876D3FD95CFFD5AE6E2BB445A9729C" xml:space="preserve">
+    <value>{0} livres</value>
+  </data>
+  <data name="TextDE49780EF74674C58B10B03E3B455640E245EF4FF3BE9CAC5AF057F8B85AD5D2" xml:space="preserve">
+    <value>{0} · Fila {1}, coluna {2}</value>
+  </data>
+  <data name="TextEE29C5DE9CBE2443207400AC64FED60F05658AC24DE751CEFE157DDA6B7611BC" xml:space="preserve">
+    <value>{0} · Lugar {1} (Fila {2}, Coluna {3})</value>
+  </data>
+  <data name="Text8447E27EBA9953D99D282E8BD808D17E1F8C302606F6F8AC48C759FCA0E509EB" xml:space="preserve">
+    <value>«{0}» aceita Sim ou Não.</value>
+  </data>
+  <data name="Text090E5A048C4561D25A0F2154ED6233A9FDD2127B9F92D088017EAD12EC9359A1" xml:space="preserve">
+    <value>· Coluna</value>
+  </data>
+  <data name="TextE6BE5F7313DA9C7B45EF30926C831046A677C9A458AEB1411292CC62C7FA0F34" xml:space="preserve">
+    <value>· Família</value>
+  </data>
+  <data name="TextC7909009B049F494CBF12B6038D4FD1BA4C483373840AB596BBD0C7B888BDDAB" xml:space="preserve">
+    <value>· Hora local</value>
+  </data>
+  <data name="TextC1DEF930A306B12D7C2E7C459891E0B9C4AC06079E77C487BCDC6C6D2C2E09A9" xml:space="preserve">
+    <value>· Lugar</value>
+  </data>
+  <data name="Text7C6CBC5826D446740F0BE1EFD19209573D81BC48D0CD9669A98CBE207A7052F3" xml:space="preserve">
+    <value>Área</value>
+  </data>
+  <data name="Text38C24F4FE1C9F841B69844790EC2AEA0A149A8FE747A1842EE677058040FE9E9" xml:space="preserve">
+    <value>Área de administração</value>
+  </data>
+  <data name="Text54FC4303EF1AEEB3FFDD75A1122B1E22531C5FA9C5BB55EC438896F5CE479EC8" xml:space="preserve">
+    <value>É Plus-One</value>
+  </data>
+  <data name="Text54C760130A41284C63F8ED888CC52D8AA7B7AC67FDA8FFD7AC9C191070246F9A" xml:space="preserve">
+    <value>É criança</value>
+  </data>
+  <data name="Text0DE03FC750C1A774C8523871378566701A47BB7716C88578D11C28E4E4AC4AF3" xml:space="preserve">
+    <value>É necessário rever a resposta atual.</value>
+  </data>
+  <data name="Text665BA1908FBC76BFAB89E858A668D5259A7ADE6C3C8C3ACC4764334676E6E419" xml:space="preserve">
+    <value>Ícone</value>
+  </data>
+  <data name="TextCF4DD7046C0AA2AB172E19F47B5070D1F0F288E0DE294B6849DE15002F8EC557" xml:space="preserve">
+    <value>Ícone Bootstrap</value>
+  </data>
+</root>

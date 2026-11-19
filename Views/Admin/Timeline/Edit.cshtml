@@ -1,19 +1,19 @@
 @model TimelineEvent
 @{
-    ViewData["Title"] = Model.Id == 0 ? "Adicionar momento" : "Editar momento";
+    ViewData["Title"] = Model.Id == 0 ? T("Adicionar momento") : T("Editar momento");
 }
 <div class="container py-5 narrow">
-    <h1>@ViewData["Title"]</h1><p class="text-muted">Este momento será apresentado no horário visível aos convidados.</p>
+    <h1>@ViewData["Title"]</h1><p class="text-muted">@T("Este momento será apresentado no horário visível aos convidados.")</p>
     <form method="post" action="/Admin/Timeline/Save" class="admin-form">
         @Html.AntiForgeryToken()<input asp-for="Id" type="hidden" /><partial name="_FormErrors" />
-        <div class="mb-3"><label asp-for="Title" class="form-label">Título</label><input asp-for="Title" class="form-control" placeholder="Ex.: Cerimónia" /></div>
-        <div class="mb-3"><label asp-for="Description" class="form-label">Descrição</label><textarea asp-for="Description" class="form-control" rows="3" placeholder="Informação útil para os convidados."></textarea></div>
-        <div class="row g-3"><div class="col-md-6"><label asp-for="EventDateTime" class="form-label">Data e hora</label><input asp-for="EventDateTime" asp-format="{0:yyyy-MM-ddTHH:mm}" type="datetime-local" class="form-control" /></div><div class="col-md-6"><label asp-for="DisplayOrder" class="form-label">Ordem de apresentação</label><input asp-for="DisplayOrder" type="number" min="1" class="form-control" /></div></div>
-        <div class="mt-3"><label asp-for="IconName" class="form-label">Ícone Bootstrap</label><input asp-for="IconName" aria-describedby="timeline-icon-help" class="form-control" placeholder="Ex.: bi-heart" /><div class="form-text" id="timeline-icon-help">Consulta os nomes em icons.getbootstrap.com.</div></div>
-        <div class="form-check mt-3"><input asp-for="IsActive" class="form-check-input" /><label asp-for="IsActive" class="form-check-label">Mostrar este momento aos convidados</label></div>
+        <div class="mb-3"><label asp-for="Title" class="form-label">@T("Título")</label><input asp-for="Title" class="form-control" placeholder="@T("Ex.: Cerimónia")" /></div>
+        <div class="mb-3"><label asp-for="Description" class="form-label">@T("Descrição")</label><textarea asp-for="Description" class="form-control" rows="3" placeholder="@T("Informação útil para os convidados.")"></textarea></div>
+        <div class="row g-3"><div class="col-md-6"><label asp-for="EventDateTime" class="form-label">@T("Data e hora")</label><input asp-for="EventDateTime" asp-format="{0:yyyy-MM-ddTHH:mm}" type="datetime-local" class="form-control" /></div><div class="col-md-6"><label asp-for="DisplayOrder" class="form-label">@T("Ordem de apresentação")</label><input asp-for="DisplayOrder" type="number" min="1" class="form-control" /></div></div>
+        <div class="mt-3"><label asp-for="IconName" class="form-label">@T("Ícone Bootstrap")</label><input asp-for="IconName" aria-describedby="timeline-icon-help" class="form-control" placeholder="@T("Ex.: bi-heart")" /><div class="form-text" id="timeline-icon-help">@T("Consulta os nomes em icons.getbootstrap.com.")</div></div>
+        <div class="form-check mt-3"><input asp-for="IsActive" class="form-check-input" /><label asp-for="IsActive" class="form-check-label">@T("Mostrar este momento aos convidados")</label></div>
         <div class="admin-form-actions">
-            <button class="btn btn-primary">Guardar momento</button>
-            <a class="btn btn-link" href="/Admin/Timeline/Index">Cancelar</a>
+            <button class="btn btn-primary">@T("Guardar momento")</button>
+            <a class="btn btn-link" href="/Admin/Timeline/Index">@T("Cancelar")</a>
         </div>
     </form>
 </div>

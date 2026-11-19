@@ -86,17 +86,17 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             var guest = await db.Guests.Include(g => g.Family).Include(g => g.RsvpResponses).ThenInclude(r => r.PlusOne).FirstOrDefaultAsync(g => g.Id == id);
 
             if (guest == null)
-                TempData["Error"] = "Não encontrámos a resposta que pretendia apagar.";
+                TempData["Error"] = T("Não encontrámos a resposta que pretendia apagar.");
             else if (guest.Family!.RsvpVersion != rsvpVersion)
-                TempData["Error"] = "Este convite foi alterado desde que abriste a lista. Nada foi apagado; revê a resposta mais recente.";
+                TempData["Error"] = T("Este convite foi alterado desde que abriste a lista. Nada foi apagado; revê a resposta mais recente.");
             else if (guest.RsvpResponses.Count == 0)
-                TempData["Info"] = $"{guest.DisplayName} ainda não tinha uma resposta enviada.";
+                TempData["Info"] = TF($"{guest.DisplayName} ainda não tinha uma resposta enviada.");
             else
             {
                 var at = time.GetUtcNow().UtcDateTime;
 
                 foreach (var response in guest.RsvpResponses)
-                    RsvpHistory.Record(db, guest, guest.Family.Name, at, $"Administração · {User.Identity?.Name}", RsvpHistory.Snapshot(response, guest.PlusOnes), []);
+                    RsvpHistory.Record(db, guest, guest.Family.Name, at, TF($"Administração · {User.Identity?.Name}"), RsvpHistory.Snapshot(response, guest.PlusOnes), []);
 
                 db.RsvpResponses.RemoveRange(guest.RsvpResponses);
                 guest.CurrentStatus = RsvpStatus.Pending;
@@ -114,12 +114,12 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
                 {
                     db.ChangeTracker.Clear();
 
-                    TempData["Error"] = "A resposta foi alterada entretanto. Nada foi apagado; revê a versão atual antes de tentar novamente.";
+                    TempData["Error"] = T("A resposta foi alterada entretanto. Nada foi apagado; revê a versão atual antes de tentar novamente.");
 
                     return RedirectToAction(nameof(Index), new { familyId });
                 }
 
-                TempData["Success"] = $"A resposta de {guest.DisplayName} foi apagada. O estado voltou a ‘Por responder’.";
+                TempData["Success"] = TF($"A resposta de {guest.DisplayName} foi apagada. O estado voltou a ‘Por responder’.");
             }
 
             return RedirectToAction(nameof(Index), new { familyId });

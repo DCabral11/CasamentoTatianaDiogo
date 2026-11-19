@@ -32,7 +32,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
         {
             var sections = await db.MusicSections.AsNoTracking().OrderBy(s => s.DisplayOrder).ThenBy(s => s.Id).Include(s => s.Moments.OrderBy(m => m.DisplayOrder).ThenBy(m => m.Id)).ToListAsync();
             var sectionNames = sections.ToDictionary(s => s.Id, s => s.Name);
-            var filters = new AdminListFilters<MusicMoment>(this, [.. sections.SelectMany(s => s.Moments)], "Secção, Momento ou Música", m => $"{sectionNames[m.SectionId]} {m.Name} {m.Song}").Select("sectionId", "Secção", sections.Select(s => new AdminFilterOption(s.Id.ToString(), s.Name)), m => m.SectionId.ToString()).Select("defined", "Música Definida", YesNo, m => Flag(!string.IsNullOrWhiteSpace(m.Song)));
+            var filters = new AdminListFilters<MusicMoment>(this, [.. sections.SelectMany(s => s.Moments)], T("Secção, Momento ou Música"), m => $"{sectionNames[m.SectionId]} {m.Name} {m.Song}").Select("sectionId", T("Secção"), sections.Select(s => new AdminFilterOption(s.Id.ToString(), s.Name)), m => m.SectionId.ToString()).Select("defined", T("Música Definida"), YesNo, m => Flag(!string.IsNullOrWhiteSpace(m.Song)));
             var matches = filters.Results().Select(m => m.Id).ToHashSet();
 
             foreach (var section in sections) 
@@ -93,7 +93,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             // Keep the empty-section check and deletion atomic if another admin adds a moment.
             if (await db.MusicSections.Where(s => s.Id == id && !s.Moments.Any()).ExecuteDeleteAsync() == 0)
             {
-                TempData["Error"] = "Move ou elimina os momentos antes de eliminar esta secção.";
+                TempData["Error"] = T("Move ou elimina os momentos antes de eliminar esta secção.");
 
                 return BackToSection(id);
             }
@@ -135,7 +135,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
         public async Task<IActionResult> SaveMoment([Bind("Id,SectionId,Name,Song,DisplayOrder")] MusicMoment input)
         {
             if (!await db.MusicSections.AnyAsync(s => s.Id == input.SectionId))
-                ModelState.AddModelError(nameof(input.SectionId), "Escolhe uma secção existente.");
+                ModelState.AddModelError(nameof(input.SectionId), T("Escolhe uma secção existente."));
 
             if (!ModelState.IsValid) 
                 return await MomentForm(input);

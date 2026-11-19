@@ -165,9 +165,9 @@ namespace CasamentoTatianaDiogo.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Select(int id)
+        public async Task<IActionResult> Select(int id, Guid? editSessionId = null)
         {
-            var model = await rsvp.GetSelectionAsync(id, AccessToken);
+            var model = await rsvp.GetSelectionAsync(id, AccessToken, editSessionId);
 
             return model == null ? RedirectToAction(nameof(Contact), new { id }) : View(model);
         }
@@ -177,7 +177,7 @@ namespace CasamentoTatianaDiogo.Controllers
         {
             if (await verification.GetAccessAsync(AccessToken, model.GuestId) == null)
             {
-                TempData["Error"] = "Verifica o teu contacto antes de confirmar ou alterar a resposta.";
+                TempData["Error"] = T("Verifica o teu contacto antes de confirmar ou alterar a resposta.");
              
                 return RedirectToAction(nameof(Contact), new { id = model.GuestId });
             }

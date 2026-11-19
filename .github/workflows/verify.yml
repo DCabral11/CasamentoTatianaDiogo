@@ -17,7 +17,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: node --test tests/rsvp-presence.Tests.cjs
+      - run: node --test tests/rsvp-presence.Tests.cjs tests/localization.Tests.cjs
       - run: npm ci --prefix tests/vercel --ignore-scripts --no-audit --no-fund
       - run: npm test --prefix tests/vercel
       - run: dotnet test tests/CasamentoTatianaDiogo.Tests/CasamentoTatianaDiogo.Tests.csproj --configuration Release

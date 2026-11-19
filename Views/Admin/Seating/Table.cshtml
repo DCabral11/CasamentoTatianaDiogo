@@ -1,30 +1,30 @@
 @model CasamentoTatianaDiogo.ViewModels.Admin.SeatingTableForm
-@{ ViewData["Title"] = Model.Id == 0 ? "Adicionar mesa" : "Editar mesa"; }
+@{ ViewData["Title"] = Model.Id == 0 ? T("Adicionar mesa") : T("Editar mesa"); }
 <div class="container py-5 narrow">
     <h1>@ViewData["Title"]</h1>
     <form asp-action="SaveTable" method="post" class="admin-form">
         <partial name="_FormErrors" />
         <input type="hidden" asp-for="Id" /><input type="hidden" asp-for="Revision" />
-        <div class="mb-3"><label asp-for="Name" class="form-label">Nome da mesa</label><input asp-for="Name" class="form-control" required maxlength="100" /></div>
-        <div class="mb-3"><label asp-for="Capacity" class="form-label">Número de lugares</label><input asp-for="Capacity" class="form-control" min="1" max="200" required /></div>
+        <div class="mb-3"><label asp-for="Name" class="form-label">@T("Nome da mesa")</label><input asp-for="Name" class="form-control" required maxlength="100" /></div>
+        <div class="mb-3"><label asp-for="Capacity" class="form-label">@T("Número de lugares")</label><input asp-for="Capacity" class="form-control" min="1" max="200" required /></div>
         <fieldset class="mb-4">
-            <legend class="h5">Posição no mapa</legend>
+            <legend class="h5">@T("Posição no mapa")</legend>
             <div class="row g-3">
-                <div class="col"><label asp-for="MapRow" class="form-label">Fila</label><input asp-for="MapRow" class="form-control" min="1" max="1000" required /></div>
-                <div class="col"><label asp-for="MapColumn" class="form-label">Coluna</label>
+                <div class="col"><label asp-for="MapRow" class="form-label">@T("Fila")</label><input asp-for="MapRow" class="form-control" min="1" max="1000" required /></div>
+                <div class="col"><label asp-for="MapColumn" class="form-label">@T("Coluna")</label>
                     <select asp-for="MapColumn" class="form-select">@for (var c = 1; c <= 4; c++) { <option value="@c">@c</option> }</select></div>
             </div>
         </fieldset>
         <div class="admin-form-actions">
-            <button class="btn btn-primary" type="submit">Guardar mesa</button>
-            <a asp-action="Index" class="btn btn-link">Voltar ao plano</a>
+            <button class="btn btn-primary" type="submit">@T("Guardar mesa")</button>
+            <a asp-action="Index" class="btn btn-link">@T("Voltar ao plano")</a>
         </div>
     </form>
     @if (Model.Id != 0)
     {
-        <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="mt-4" data-delete-confirmation data-delete-message="Eliminar a mesa @Model.Name?">
+        <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="mt-4" data-delete-confirmation data-delete-message="@T("Eliminar a mesa {0}?", Model.Name)">
             <input name="revision" type="hidden" value="@Model.Revision" />
-            <button class="btn btn-outline-danger" type="submit">Eliminar mesa</button>
+            <button class="btn btn-outline-danger" type="submit">@T("Eliminar mesa")</button>
         </form>
     }
 </div>

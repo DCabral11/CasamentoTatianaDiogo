@@ -3,41 +3,41 @@
 @using CasamentoTatianaDiogo.Models.Enums
 @using Microsoft.AspNetCore.Mvc.Rendering
 @{
-    ViewData["Title"] = "Confirmar Presença";
+    ViewData["Title"] = T("Confirmar Presença");
     bool IsSelected(FamilyGuestRsvpInput? response) =>
         response != null && (response.Status.HasValue || !ViewData.ModelState.IsValid);
 }
 
 <section class="page-header rsvp-header">
     <div class="container narrow">
-        <h1><i class="bi bi-envelope-heart"></i> Confirmar Presença</h1>
-        <p>Indica-nos quem poderá celebrar connosco.</p>
+        <h1><i class="bi bi-envelope-heart"></i> @T("Confirmar Presença")</h1>
+        <p>@T("Indica-nos quem poderá celebrar connosco.")</p>
     </div>
 </section>
 
 <div class="container py-4 narrow rsvp-selection">
-    <div class="feedback-card feedback-card-success mb-3" role="status"><i class="bi bi-shield-check" aria-hidden="true"></i><span>Contacto verificado: @(CasamentoTatianaDiogo.Services.ContactFormats.Email(Model.VerifiedContact, await ContactSettings.GetAsync())?.Display ?? Model.VerifiedContact). Após a confirmação, usa este mesmo contacto para atualizar o convite.</span></div>
+    <div class="feedback-card feedback-card-success mb-3" role="status"><i class="bi bi-shield-check" aria-hidden="true"></i><span>@T("Contacto verificado:") @(CasamentoTatianaDiogo.Services.ContactFormats.Email(Model.VerifiedContact, await ContactSettings.GetAsync())?.Display ?? Model.VerifiedContact)@T(". Após a confirmação, usa este mesmo contacto para atualizar o convite.")</span></div>
     @if (Model.HasExistingResponse)
     {
-        <div class="feedback-card feedback-card-warning mb-3" role="status"><i class="bi bi-info-circle" aria-hidden="true"></i><span>Já existe uma resposta para este convidado. Seleciona a opção no fim do formulário para a atualizar.</span></div>
+        <div class="feedback-card feedback-card-warning mb-3" role="status"><i class="bi bi-info-circle" aria-hidden="true"></i><span>@T("Já existe uma resposta para este convidado. Seleciona a opção no fim do formulário para a atualizar.")</span></div>
     }
 
     <div id="rsvp-other-editor" class="feedback-card feedback-card-warning mb-3" role="status" hidden="@(!Model.HasConcurrentEditor)">
-        Outra pessoa ou outro separador está a editar este convite. Combina quem vai responder para evitar alterações em simultâneo.
+        @T("Outra pessoa ou outro separador está a editar este convite. Combina quem vai responder para evitar alterações em simultâneo.")
     </div>
     <div id="rsvp-concurrency-conflict" class="feedback-card feedback-card-warning mb-3" role="alert" hidden="@(!Model.HasConcurrencyConflict)">
-        <div><strong>É necessário rever a resposta atual.</strong>
-        <p>O convite foi alterado entretanto ou este formulário já não é válido. Os dados que preencheste continuam abaixo para consulta e cópia; não serão guardados sobre uma resposta mais recente.</p>
-        <p>Ao abrir a versão atual, o formulário será preenchido com os dados mais recentes. Volta a aplicar apenas as alterações que pretendes manter.</p>
-        <a asp-action="Select" asp-route-id="@Model.Guest.Id" class="btn btn-outline-primary" data-rsvp-reload>Rever resposta mais recente</a></div>
+        <div><strong>@T("É necessário rever a resposta atual.")</strong>
+        <p>@T("O convite foi alterado entretanto ou este formulário já não é válido. Os dados que preencheste continuam abaixo para consulta e cópia; não serão guardados sobre uma resposta mais recente.")</p>
+        <p>@T("Ao abrir a versão atual, o formulário será preenchido com os dados mais recentes. Volta a aplicar apenas as alterações que pretendes manter.")</p>
+        <a asp-action="Select" asp-route-id="@Model.Guest.Id" class="btn btn-outline-primary" data-rsvp-reload>@T("Rever resposta mais recente")</a></div>
     </div>
-    <p id="rsvp-presence-unavailable" class="text-muted" role="status" hidden>Não foi possível verificar quem está a editar. A proteção contra substituição continua ativa ao guardar.</p>
+    <p id="rsvp-presence-unavailable" class="text-muted" role="status" hidden>@T("Não foi possível verificar quem está a editar. A proteção contra substituição continua ativa ao guardar.")</p>
     <form asp-action="Submit" method="post" data-rsvp-draft="@Model.DraftScope" data-edit-status-url="@Url.Action("EditStatus")">
         @Html.AntiForgeryToken()
         <input type="hidden" name="GuestId" value="@Model.Guest.Id" />
         <input type="hidden" name="EditSessionId" value="@Model.Input.EditSessionId" />
         <partial name="_FormErrors" />
-        <p id="rsvp-draft-restored" class="text-muted" role="status" hidden>Recuperámos os dados que preencheste. Podes revê-los antes de voltar a enviar.</p>
+        <p id="rsvp-draft-restored" class="text-muted" role="status" hidden>@T("Recuperámos os dados que preencheste. Podes revê-los antes de voltar a enviar.")</p>
 
         <article class="rsvp-response-card">
             <div class="rsvp-card-heading">
@@ -52,25 +52,25 @@
                     }
                 </span>
                 <div>
-                    <p class="rsvp-card-label">Convidado</p>
+                    <p class="rsvp-card-label">@T("Convidado")</p>
                     <h2>@Model.Guest.DisplayName</h2>
                     <p class="mb-0">@Model.Guest.Family?.Name</p>
                 </div>
             </div>
 
             <div class="mb-3">
-                <label class="form-label" for="guest-status">Vais estar presente? (obrigatório)</label>
-                @Html.DropDownList("Status", new[] { new SelectListItem("Sim, estarei presente", "Attending", Model.Input.Status == RsvpStatus.Attending), new SelectListItem("Não poderei estar presente", "NotAttending", Model.Input.Status == RsvpStatus.NotAttending) }, "Escolhe...", new { id = "guest-status", @class = "form-select", required = "required" })
+                <label class="form-label" for="guest-status">@T("Vais estar presente? (obrigatório)")</label>
+                @Html.DropDownList("Status", new[] { new SelectListItem(T("Sim, estarei presente"), "Attending", Model.Input.Status == RsvpStatus.Attending), new SelectListItem(T("Não poderei estar presente"), "NotAttending", Model.Input.Status == RsvpStatus.NotAttending) }, T("Escolhe..."), new { id = "guest-status", @class = "form-select", required = "required" })
             </div>
 
             <div data-rsvp-attendance-dependent>
-                <label for="DietaryRestrictions" class="form-label">Restrições alimentares (opcional)</label>
+                <label for="DietaryRestrictions" class="form-label">@T("Restrições alimentares (opcional)")</label>
                 @Html.TextArea("DietaryRestrictions", Model.Input.DietaryRestrictions, new { @class = "form-control mb-3" })
             </div>
-            <label for="Message" class="form-label">Mensagem para os noivos (opcional)</label>
+            <label for="Message" class="form-label">@T("Mensagem para os noivos (opcional)")</label>
             @Html.TextArea("Message", Model.Input.Message, new { @class = "form-control mb-3" })
             <div data-rsvp-attendance-dependent>
-                <label for="MusicRequest" class="form-label">Uma música que gostasses de ouvir (opcional)</label>
+                <label for="MusicRequest" class="form-label">@T("Uma música que gostasses de ouvir (opcional)")</label>
                 @Html.TextBox("MusicRequest", Model.Input.MusicRequest, new { @class = "form-control" })
             </div>
         </article>
@@ -78,8 +78,8 @@
         @if (Model.Guest.Family?.AllowGroupRsvp == true && Model.RelatedGuests.Any())
         {
             <section class="rsvp-family-cards" data-rsvp-family-section>
-                <h2>Respostas da família</h2>
-                <p class="text-muted mb-0">Seleciona as pessoas para quem queres responder.</p>
+                <h2>@T("Respostas da família")</h2>
+                <p class="text-muted mb-0">@T("Seleciona as pessoas para quem queres responder.")</p>
                 <div class="rsvp-family-selectors">
                     @foreach (var familyGuest in Model.RelatedGuests)
                     {
@@ -122,18 +122,18 @@
                                 }
                             </span>
                             <div>
-                                <p class="rsvp-card-label">Convidado da família</p>
+                                <p class="rsvp-card-label">@T("Convidado da família")</p>
                                 <h3 id="family-name-@i">@familyGuest.DisplayName</h3>
                             </div>
                         </div>
                         <input type="hidden" name="FamilyResponses[@i].GuestId" value="@familyGuest.Id" />
-                        <label class="form-label" for="family-status-@i">Vai estar presente? (obrigatório)</label>
-                        @Html.DropDownList($"FamilyResponses[{i}].Status", new[] { new SelectListItem("Sim, estará presente", "Attending", response?.Status == RsvpStatus.Attending), new SelectListItem("Não poderá estar presente", "NotAttending", response?.Status == RsvpStatus.NotAttending) }, "Escolhe...", new { id = $"family-status-{i}", @class = "form-select", data_family_status = "" })
-                        <label for="family-DietaryRestrictions-@i" class="form-label mt-3">Restrições alimentares (opcional)</label>
+                        <label class="form-label" for="family-status-@i">@T("Vai estar presente? (obrigatório)")</label>
+                        @Html.DropDownList($"FamilyResponses[{i}].Status", new[] { new SelectListItem(T("Sim, estará presente"), "Attending", response?.Status == RsvpStatus.Attending), new SelectListItem(T("Não poderá estar presente"), "NotAttending", response?.Status == RsvpStatus.NotAttending) }, T("Escolhe..."), new { id = $"family-status-{i}", @class = "form-select", data_family_status = "" })
+                        <label for="family-DietaryRestrictions-@i" class="form-label mt-3">@T("Restrições alimentares (opcional)")</label>
                         @Html.TextArea($"FamilyResponses[{i}].DietaryRestrictions", response?.DietaryRestrictions, new { id = $"family-DietaryRestrictions-{i}", @class = "form-control" })
-                        <label for="family-Message-@i" class="form-label mt-3">Mensagem para os noivos (opcional)</label>
+                        <label for="family-Message-@i" class="form-label mt-3">@T("Mensagem para os noivos (opcional)")</label>
                         @Html.TextArea($"FamilyResponses[{i}].Message", response?.Message, new { id = $"family-Message-{i}", @class = "form-control" })
-                        <label for="family-MusicRequest-@i" class="form-label mt-3">Uma música que gostasses de ouvir (opcional)</label>
+                        <label for="family-MusicRequest-@i" class="form-label mt-3">@T("Uma música que gostasses de ouvir (opcional)")</label>
                         @Html.TextBox($"FamilyResponses[{i}].MusicRequest", response?.MusicRequest, new { id = $"family-MusicRequest-{i}", @class = "form-control" })
                     </article>
                 }
@@ -147,34 +147,34 @@
                 <div class="rsvp-card-heading">
                     <i class="bi bi-person-plus"></i>
                     <div>
-                        <p class="rsvp-card-label">Acompanhante</p>
-                        <h2>@(Model.PlusOnes.Count == 1 ? plusOne.PlusOneDisplayName : "Quem te acompanha")</h2>
+                        <p class="rsvp-card-label">@T("Acompanhante")</p>
+                        <h2>@(Model.PlusOnes.Count == 1 ? plusOne.PlusOneDisplayName : T("Quem te acompanha"))</h2>
                     </div>
                 </div>
                 @if (Model.PlusOnes.Count == 1) { <input type="hidden" name="PlusOneId" value="@plusOne.Id" /> }
                 else
                 {
-                    <label for="PlusOneId" class="form-label">Acompanhante</label>
-                    @Html.DropDownList("PlusOneId", new Microsoft.AspNetCore.Mvc.Rendering.SelectList(Model.PlusOnes, "Id", "PlusOneDisplayName", Model.Input.PlusOneId), "Seleciona o acompanhante", new { @class = "form-select mb-3" })
+                    <label for="PlusOneId" class="form-label">@T("Acompanhante")</label>
+                    @Html.DropDownList("PlusOneId", new Microsoft.AspNetCore.Mvc.Rendering.SelectList(Model.PlusOnes, "Id", "PlusOneDisplayName", Model.Input.PlusOneId), T("Seleciona o acompanhante"), new { @class = "form-select mb-3" })
                 }
-                <fieldset><legend class="h6">O acompanhante também vai estar presente?</legend>
+                <fieldset><legend class="h6">@T("O acompanhante também vai estar presente?")</legend>
                 <div class="d-flex gap-3">
                     <div class="form-check">
                         @Html.RadioButton("PlusOneAttending", "true", Model.Input.PlusOneAttending, new { @class = "form-check-input", id = "plus-one-yes" })
-                        <label class="form-check-label" for="plus-one-yes">Sim</label>
+                        <label class="form-check-label" for="plus-one-yes">@T("Sim")</label>
                     </div>
                     <div class="form-check">
                         @Html.RadioButton("PlusOneAttending", "false", !Model.Input.PlusOneAttending, new { @class = "form-check-input", id = "plus-one-no" })
-                        <label class="form-check-label" for="plus-one-no">Não</label>
+                        <label class="form-check-label" for="plus-one-no">@T("Não")</label>
                     </div>
                 </div>
                 </fieldset>
                 <div class="mt-3">
-                    <label for="PlusOneDietaryRestrictions" class="form-label">Restrições alimentares do/a acompanhante (opcional)</label>
+                    <label for="PlusOneDietaryRestrictions" class="form-label">@T("Restrições alimentares do/a acompanhante (opcional)")</label>
                     @Html.TextArea("PlusOneDietaryRestrictions", Model.Input.PlusOneDietaryRestrictions, new { @class = "form-control mb-3", rows = "3" })
-                    <label for="PlusOneMessage" class="form-label">Mensagem do/a acompanhante para os noivos (opcional)</label>
+                    <label for="PlusOneMessage" class="form-label">@T("Mensagem do/a acompanhante para os noivos (opcional)")</label>
                     @Html.TextArea("PlusOneMessage", Model.Input.PlusOneMessage, new { @class = "form-control mb-3", rows = "3" })
-                    <label for="PlusOneMusicRequest" class="form-label">Uma música que o/a acompanhante gostasse de ouvir (opcional)</label>
+                    <label for="PlusOneMusicRequest" class="form-label">@T("Uma música que o/a acompanhante gostasse de ouvir (opcional)")</label>
                     @Html.TextBox("PlusOneMusicRequest", Model.Input.PlusOneMusicRequest, new { @class = "form-control" })
                 </div>
             </article>
@@ -182,10 +182,10 @@
 
         <div class="form-check rsvp-overwrite">
             <input type="checkbox" class="form-check-input" name="ConfirmOverwrite" id="overwrite-rsvp" value="true" checked="@Model.Input.ConfirmOverwrite" />
-            <label class="form-check-label" for="overwrite-rsvp">Confirmo que quero substituir uma resposta anterior, caso exista.</label>
+            <label class="form-check-label" for="overwrite-rsvp">@T("Confirmo que quero substituir uma resposta anterior, caso exista.")</label>
         </div>
 
-        <button class="btn btn-primary btn-lg rounded-pill" data-rsvp-submit disabled="@Model.HasConcurrencyConflict">Submeter respostas</button>
+        <button class="btn btn-primary btn-lg rounded-pill" data-rsvp-submit disabled="@Model.HasConcurrencyConflict">@T("Submeter respostas")</button>
     </form>
 </div>
 

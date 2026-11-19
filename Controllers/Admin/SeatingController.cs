@@ -96,15 +96,15 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
                 return NotFound();
 
             if (table.Revision != form.Revision)
-                return Back("A mesa mudou entretanto. Revê a configuração atual.");
+                return Back(T("A mesa mudou entretanto. Revê a configuração atual."));
 
             if (await db.ReceptionTables.AnyAsync(t => t.Id != form.Id && t.MapRow == form.MapRow && t.MapColumn == form.MapColumn))
-                ModelState.AddModelError(nameof(form.MapColumn), "Já existe uma mesa nesta posição do mapa.");
+                ModelState.AddModelError(nameof(form.MapColumn), T("Já existe uma mesa nesta posição do mapa."));
 
             var excess = table.Seats.Where(s => s.Number > form.Capacity).ToList();
 
             if (excess.Any(s => s.Assignment != null))
-                ModelState.AddModelError(nameof(form.Capacity), "Move os convidados dos lugares que pretendes retirar antes de reduzir a capacidade.");
+                ModelState.AddModelError(nameof(form.Capacity), T("Move os convidados dos lugares que pretendes retirar antes de reduzir a capacidade."));
 
             if (!ModelState.IsValid)
                 return View(Views + "Table.cshtml", form);
@@ -134,10 +134,10 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
                 return NotFound();
 
             if (table.Revision != revision)
-                return Back("A mesa mudou entretanto. Revê a configuração atual.");
+                return Back(T("A mesa mudou entretanto. Revê a configuração atual."));
 
             if (await db.TableSeats.AnyAsync(s => s.TableId == id && s.Assignment != null))
-                return Back("Move ou liberta os lugares ocupados antes de eliminar esta mesa.");
+                return Back(T("Move ou liberta os lugares ocupados antes de eliminar esta mesa."));
 
             db.ReceptionTables.Remove(table);
 
@@ -156,7 +156,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             var assignment = await db.SeatAssignments.FindAsync(id);
 
             if ((assignment?.SeatId ?? 0) != originalSeatId) 
-                return Back("O lugar deste convidado mudou entretanto. Revê a distribuição.");
+                return Back(T("O lugar deste convidado mudou entretanto. Revê a distribuição."));
 
             if (seatId == originalSeatId) 
                 return RedirectToAction(nameof(Index));
@@ -166,7 +166,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             else
             {
                 if (!await db.TableSeats.AnyAsync(s => s.Id == seatId && s.Assignment == null))
-                    return Back("O lugar escolhido já não está disponível. Escolhe outro lugar.");
+                    return Back(T("O lugar escolhido já não está disponível. Escolhe outro lugar."));
                 
                 if (assignment == null) 
                     db.SeatAssignments.Add(new SeatAssignment { GuestId = id, SeatId = seatId.Value });
@@ -198,10 +198,10 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             }
             catch (DbUpdateException)
             {
-                return Back("Não foi possível guardar a alteração. Revê o plano e a disponibilidade dos lugares.");
+                return Back(T("Não foi possível guardar a alteração. Revê o plano e a disponibilidade dos lugares."));
             }
 
-            TempData["Success"] = "Plano de mesas atualizado.";
+            TempData["Success"] = T("Plano de mesas atualizado.");
 
             return RedirectToAction(nameof(Index));
         }

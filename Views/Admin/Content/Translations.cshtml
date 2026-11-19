@@ -1,0 +1,28 @@
+@model CasamentoTatianaDiogo.ViewModels.Admin.TranslationsViewModel
+@using CasamentoTatianaDiogo.Services
+@{ ViewData["Title"] = T("Traduções"); }
+<div class="container py-5">
+    <h1>@T("Traduções dos conteúdos")</h1>
+    <p>@T("Os conteúdos originais são escritos em português. Podes traduzir a história, as perguntas frequentes, o programa e os textos do site. Um campo vazio mantém o texto original ou a tradução predefinida.")</p>
+    <nav class="d-flex gap-2 mb-4" aria-label="@T("Idioma da tradução")">
+        <a asp-action="Index" asp-route-language="en" class="btn btn-outline-primary" aria-current="@(Model.Language == "en" ? "page" : null)">English</a>
+        <a asp-action="Index" asp-route-language="fr" class="btn btn-outline-primary" aria-current="@(Model.Language == "fr" ? "page" : null)">Français</a>
+    </nav>
+    <form asp-action="Save" method="post">
+        <input type="hidden" name="Language" value="@Model.Language" />
+        <input asp-for="Version" type="hidden" />
+        <partial name="_FormErrors" />
+        @for (var i = 0; i < Model.Sources.Count; i++)
+        {
+            var source = Model.Sources[i];
+            var key = SiteTranslationService.Key(Model.Language, source.Key);
+            <section class="elegant-card p-3 mb-3">
+                <p class="small text-muted mb-2">@source.Key</p>
+                <p lang="pt-PT" class="text-break" style="white-space:pre-line">@source.Original</p>
+                <label class="form-label" for="translation-@i">@(Model.Language == "en" ? "English" : "Français")</label>
+                <textarea id="translation-@i" name="Values[@key]" class="form-control" rows="3" maxlength="30000" lang="@(Model.Language == "en" ? "en-GB" : "fr-FR")">@Model.Values.GetValueOrDefault(key)</textarea>
+            </section>
+        }
+        <button type="submit" class="btn btn-primary">@T("Guardar traduções")</button>
+    </form>
+</div>

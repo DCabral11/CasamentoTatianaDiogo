@@ -2,7 +2,7 @@
 @inject CasamentoTatianaDiogo.Services.Interfaces.ISiteContentService ContentTexts
 @inject CasamentoTatianaDiogo.Services.WeddingClock Clock
 @{
-    ViewData["Title"] = "Informações";
+    ViewData["Title"] = T("Informações");
 
     var settings = Model.Settings;
     var calendarAvailable = Clock.EventStartUtc(settings.WeddingDateTime).HasValue;
@@ -10,12 +10,12 @@
     var receptionQuery = WeddingTravel.Address(settings.ReceptionLocationName, settings.ReceptionAddress);
     var texts = await ContentTexts.GetAsync();
     var travelLinks = new[] {
-        (Topic: WeddingTravel.Parking, Label: "Procurar parques perto da cerimónia", Url: ceremonyQuery.Length == 0 ? null :
-            "https://www.google.com/maps/search/?api=1&query=" + Uri.EscapeDataString("Estacionamento perto de " + ceremonyQuery)),
-        (Topic: WeddingTravel.Transport, Label: "Ver percurso em transportes públicos", Url: ceremonyQuery.Length == 0 ? null :
+        (Topic: WeddingTravel.Parking, Label: T("Procurar parques perto da cerimónia"), Url: ceremonyQuery.Length == 0 ? null :
+            "https://www.google.com/maps/search/?api=1&query=" + Uri.EscapeDataString(T("Estacionamento perto de ") + ceremonyQuery)),
+        (Topic: WeddingTravel.Transport, Label: T("Ver percurso em transportes públicos"), Url: ceremonyQuery.Length == 0 ? null :
             "https://www.google.com/maps/dir/?api=1&travelmode=transit&destination=" + Uri.EscapeDataString(ceremonyQuery)),
-        (Topic: WeddingTravel.Lodging, Label: "Procurar alojamento perto da receção", Url: receptionQuery.Length == 0 ? null :
-            "https://www.google.com/maps/search/?api=1&query=" + Uri.EscapeDataString("Alojamento perto de " + receptionQuery))
+        (Topic: WeddingTravel.Lodging, Label: T("Procurar alojamento perto da receção"), Url: receptionQuery.Length == 0 ? null :
+            "https://www.google.com/maps/search/?api=1&query=" + Uri.EscapeDataString(T("Alojamento perto de ") + receptionQuery))
     };
     var ceremonyEmbedUrl = GetEmbedUrl(settings.CeremonyGoogleMapsEmbedUrl, $"https://www.google.com/maps?q={Uri.EscapeDataString(ceremonyQuery)}&output=embed");
     var receptionEmbedUrl = GetEmbedUrl(settings.ReceptionGoogleMapsEmbedUrl, $"https://www.google.com/maps?q={Uri.EscapeDataString(receptionQuery)}&output=embed");
@@ -37,10 +37,10 @@
 <section class="page-header">
     <div class="container">
         <h1>
-            <i class="bi bi-calendar-heart"></i> Informações
+            <i class="bi bi-calendar-heart"></i> @T("Informações")
         </h1>
 
-        <p>Tudo o que precisam de saber para o dia do casamento.</p>
+        <p>@T("Tudo o que precisam de saber para o dia do casamento.")</p>
     </div>
 </section>
 
@@ -50,8 +50,8 @@
             <div class="information-tip h-100">
                 <i class="bi bi-clock-history"></i>
                 <div>
-                    <h3>Chegada</h3>
-                    <p>Pedimos que cheguem até às @(arrival?.EventDateTime.ToString("HH:mm") ?? "horas indicadas") para aproveitarem o início da celebração.</p>
+                    <h3>@T("Chegada")</h3>
+                    <p>@T("Pedimos que cheguem até às") @(arrival?.EventDateTime.ToString("HH:mm") ?? T("horas indicadas")) @T("para aproveitarem o início da celebração.")</p>
                 </div>
             </div>
         </div>
@@ -59,9 +59,9 @@
             <div class="information-tip h-100">
                 <i class="bi bi-envelope-check"></i>
                 <div>
-                    <h3>Confirmação</h3>
-                    <p>Indiquem a vossa presença e eventuais restrições alimentares com antecedência.</p>
-                    <a asp-controller="Rsvp" asp-action="Index">Confirmar presença <i class="bi bi-arrow-right"></i></a>
+                    <h3>@T("Confirmação")</h3>
+                    <p>@T("Indiquem a vossa presença e eventuais restrições alimentares com antecedência.")</p>
+                    <a asp-controller="Rsvp" asp-action="Index">@T("Confirmar presença") <i class="bi bi-arrow-right"></i></a>
                 </div>
             </div>
         </div>
@@ -71,19 +71,19 @@
 <section class="container pt-5" aria-labelledby="travel-heading">
     <div class="d-flex flex-wrap gap-3 align-items-center justify-content-between mb-4">
         <div>
-            <h2 id="travel-heading">Planear a visita</h2>
+            <h2 id="travel-heading">@T("Planear a visita")</h2>
             @if (calendarAvailable && settings.WeddingDateTime is DateTime date)
             {
-                <p class="mb-0"><time datetime="@date.ToString("yyyy-MM-ddTHH:mm")">@date.ToString("d 'de' MMMM 'de' yyyy 'às' HH:mm", System.Globalization.CultureInfo.GetCultureInfo("pt-PT"))</time> · Hora local</p>
+                <p class="mb-0"><time datetime="@date.ToString("yyyy-MM-ddTHH:mm")">@date.ToString(DatePattern + " HH:mm", System.Globalization.CultureInfo.CurrentCulture)</time> @T("· Hora local")</p>
             }
             else
             {
-                <p class="mb-0">O evento ficará disponível no calendário quando a data e a hora estiverem definidas.</p>
+                <p class="mb-0">@T("O evento ficará disponível no calendário quando a data e a hora estiverem definidas.")</p>
             }
         </div>
         @if (calendarAvailable)
         {
-            <a class="btn btn-primary" asp-action="Calendar" download="casamento.ics"><i class="bi bi-calendar-plus" aria-hidden="true"></i> Adicionar ao calendário (.ics)</a>
+            <a class="btn btn-primary" asp-action="Calendar" download="casamento.ics"><i class="bi bi-calendar-plus" aria-hidden="true"></i> @T("Adicionar ao calendário (.ics)")</a>
         }
     </div>
     <div class="row g-3">
@@ -93,12 +93,12 @@
                 <div class="elegant-card p-4 h-100">
                     <div class="location-card-heading">
                         <span class="location-marker" aria-hidden="true"><i class="bi @link.Topic.Icon"></i></span>
-                        <h3 class="h5 mb-0">@link.Topic.Title</h3>
+                        <h3 class="h5 mb-0">@T(link.Topic.Title)</h3>
                     </div>
-                    <p class="travel-guidance">@texts.GetValueOrDefault(link.Topic.Key, link.Topic.DefaultText)</p>
+                    <p class="travel-guidance">@texts.GetValueOrDefault(link.Topic.Key, T(link.Topic.DefaultText))</p>
                     @if (link.Url != null)
                     {
-                        <a href="@link.Url" target="_blank" rel="noopener">@link.Label <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i><span class="visually-hidden"> (Google Maps, abre num novo separador)</span></a>
+                        <a href="@link.Url" target="_blank" rel="noopener">@link.Label <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i><span class="visually-hidden"> @T("(Google Maps, abre num novo separador)")</span></a>
                     }
                 </div>
             </div>
@@ -128,36 +128,36 @@
 </section>
 
 <section class="container py-5 information-locations">
-    <h2>Localizações</h2>
+    <h2>@T("Localizações")</h2>
     <div class="row g-4">
         <div class="col-md-6">
             <div class="elegant-card location-card p-4 h-100">
-                <div class="location-card-heading"><span class="location-marker"><i class="bi bi-heart-fill"></i></span><h3>Cerimónia</h3></div>
+                <div class="location-card-heading"><span class="location-marker"><i class="bi bi-heart-fill"></i></span><h3>@T("Cerimónia")</h3></div>
                 <p>
                     <strong>@settings.CeremonyLocationName</strong>
                     <br/> @settings.CeremonyAddress
                 </p>
 
-                <iframe class="map" src="@ceremonyEmbedUrl" title="Mapa da cerimónia" loading="lazy"></iframe>
+                <iframe class="map" src="@ceremonyEmbedUrl" title="@T("Mapa da cerimónia")" loading="lazy"></iframe>
             </div>
         </div>
 
         <div class="col-md-6">
             <div class="elegant-card location-card p-4 h-100">
-                <div class="location-card-heading"><span class="location-marker"><i class="bi bi-fork-knife"></i></span><h3>Copo D'Água</h3></div>
+                <div class="location-card-heading"><span class="location-marker"><i class="bi bi-fork-knife"></i></span><h3>@T("Copo D'Água")</h3></div>
                 <p>
                     <strong>@settings.ReceptionLocationName</strong>
                     <br /> @settings.ReceptionAddress
                 </p>
 
-                <iframe class="map" src="@receptionEmbedUrl" title="Mapa da receção" loading="lazy"></iframe>
+                <iframe class="map" src="@receptionEmbedUrl" title="@T("Mapa da receção")" loading="lazy"></iframe>
             </div>
         </div>
     </div>
 </section>
 
 <section class="container py-4 information-contacts">
-    <h2>Contactos</h2>
+    <h2>@T("Contactos")</h2>
 
     <div class="row g-3">
         <div class="col-md-6">

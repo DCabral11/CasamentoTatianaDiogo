@@ -33,7 +33,7 @@ internal sealed class AdminQueryPage<T> where T : class
         var value = Value(name);
         panel.Fields.Add(new(name, label, value, options));
         if (value.Length == 0) return;
-        if (!options.Any(o => o.Value == value)) panel.Errors.Add($"Escolhe uma opção válida em «{label}».");
+        if (!options.Any(o => o.Value == value)) panel.Errors.Add(T("Escolhe uma opção válida em «{0}».", T(label)));
         else Where(predicate(value));
     }
 
@@ -44,7 +44,7 @@ internal sealed class AdminQueryPage<T> where T : class
         if (value.Length == 0) return null;
         if (DateOnly.TryParseExact(value, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture,
             System.Globalization.DateTimeStyles.None, out var date)) return date;
-        panel.Errors.Add($"Indica uma data válida em «{label}».");
+        panel.Errors.Add(T("Indica uma data válida em «{0}».", T(label)));
         return null;
     }
 

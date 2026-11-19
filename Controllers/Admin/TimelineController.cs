@@ -19,9 +19,9 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
         public async Task<IActionResult> Index()
         {
             var rows = await db.TimelineEvents.AsNoTracking().OrderBy(x => x.DisplayOrder).ThenBy(x => x.Id).ToListAsync();
-            return View("~/Views/Admin/Timeline/Index.cshtml", new AdminListFilters<TimelineEvent>(this, rows, "Título ou descrição", x => $"{x.Title} {x.Description}")
-                .Select("active", "Visível no site", YesNo, x => Flag(x.IsActive))
-                .Dates("Data do evento", x => DateOnly.FromDateTime(x.EventDateTime)).Results());
+            return View("~/Views/Admin/Timeline/Index.cshtml", new AdminListFilters<TimelineEvent>(this, rows, T("Título ou descrição"), x => $"{x.Title} {x.Description}")
+                .Select("active", T("Visível no site"), YesNo, x => Flag(x.IsActive))
+                .Dates(T("Data do evento"), x => DateOnly.FromDateTime(x.EventDateTime)).Results());
         }
 
         public IActionResult Create() => View("~/Views/Admin/Timeline/Edit.cshtml", new TimelineEvent

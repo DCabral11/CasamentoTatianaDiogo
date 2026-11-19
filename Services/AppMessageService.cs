@@ -10,8 +10,8 @@ namespace CasamentoTatianaDiogo.Services
         private static readonly ResourceManager ResourceManager = new("CasamentoTatianaDiogo.Resources.Messages", typeof(AppMessageService).Assembly);
         public string Get(ErrorCode code, params object?[] arguments)
         {
-            var template = ResourceManager.GetString(code.ToString(), CultureInfo.GetCultureInfo("pt-PT")) ?? code.ToString();
-            return arguments.Length == 0 ? template : string.Format(CultureInfo.GetCultureInfo("pt-PT"), template, arguments);
+            var template = ResourceManager.GetString(code.ToString(), CultureInfo.CurrentUICulture) ?? code.ToString();
+            return arguments.Length == 0 ? template : string.Format(CultureInfo.CurrentCulture, template, arguments);
         }
     }
 }

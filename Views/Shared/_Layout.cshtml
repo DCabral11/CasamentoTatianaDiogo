@@ -1,4 +1,4 @@
-﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity
 @using CasamentoTatianaDiogo.Models
 
 @inject SignInManager<ApplicationUser> SignInManager
@@ -19,12 +19,12 @@
 }
 
 <!DOCTYPE html>
-<html lang="pt-PT" data-bs-theme="@theme.Mode" style="@theme.Variables">
+<html lang="@System.Globalization.CultureInfo.CurrentUICulture.Name" data-bs-theme="@theme.Mode" style="@theme.Variables">
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width = device-width, initial-scale = 1" />
 
-        <title>@ViewData["Title"] - Casamento Tatiana & Diogo</title>
+        <title>@ViewData["Title"] @T("- Casamento Tatiana & Diogo")</title>
 
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet" />
@@ -37,33 +37,34 @@
     </head>
 
     <body class="@(isAdminScreen ? "admin-screen" : "")" data-post-result="@(HttpMethods.IsPost(Context.Request.Method) ? "true" : null)">
-        <a class="skip-link" href="#main-content">Saltar para o conteúdo</a>
-        <nav class="navbar @(showAdminReturn ? "admin-navbar navbar-expand-xl" : "navbar-expand-lg") navbar-light navbar-logo-bg shadow-sm sticky-top" aria-label="Navegação principal">
+        <a class="skip-link" href="#main-content">@T("Saltar para o conteúdo")</a>
+        <nav class="navbar @(showAdminReturn ? "admin-navbar navbar-expand-xl" : "navbar-expand-lg") navbar-light navbar-logo-bg shadow-sm sticky-top" aria-label="@T("Navegação principal")">
             <div class="container">
-                <a class="navbar-brand" asp-controller="Home" asp-action="Index" aria-label="@siteText.GetValueOrDefault("NavHome", "Início")" aria-current="@(currentController == "Home" && Equals(ViewContext.RouteData.Values["action"], "Index") ? "page" : null)">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index" aria-label="@siteText.GetValueOrDefault("NavHome", T("Início"))" aria-current="@(currentController == "Home" && Equals(ViewContext.RouteData.Values["action"], "Index") ? "page" : null)">
                     <img src="@theme.Logo" class="nav-logo" alt="" onerror="this.onerror=null;this.src='/images/navbar.png'" />
                 </a>
                 @if (showAdminReturn)
                 {
                     <a class="btn btn-outline-primary admin-return" asp-controller="@(isAdminDashboard ? "Home" : "Dashboard")" asp-action="Index">
                         <i class="bi bi-arrow-left" aria-hidden="true"></i>
-                        @(isAdminDashboard ? "Voltar ao site" : "Voltar ao painel")
+                        @(isAdminDashboard ? T("Voltar ao site") : T("Voltar ao painel"))
                     </a>
                 }
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Menu principal">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="@T("Menu principal")">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
+                <partial name="_LanguageSelector" model="CasamentoTatianaDiogo.Services.LanguageNavigation.ReturnUrl(ViewContext, Url)" />
                 <div id="nav" class="collapse navbar-collapse">
                     <ul class="navbar-nav ms-auto align-items-lg-center">
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Rsvp" asp-action="Index" aria-current="@(currentController == "Rsvp" ? "location" : null)">@siteText.GetValueOrDefault("NavRsvp", "Confirmar presença")</a>
+                            <a class="nav-link" asp-controller="Rsvp" asp-action="Index" aria-current="@(currentController == "Rsvp" ? "location" : null)">@siteText.GetValueOrDefault("NavRsvp", T("Confirmar presença"))</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Information" asp-action="Index" aria-current="@(currentController == "Information" ? "location" : null)">@siteText.GetValueOrDefault("NavInformation", "Informações")</a>
+                            <a class="nav-link" asp-controller="Information" asp-action="Index" aria-current="@(currentController == "Information" ? "location" : null)">@siteText.GetValueOrDefault("NavInformation", T("Informações"))</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Photos" asp-action="Index" aria-current="@(currentController == "Photos" ? "location" : null)">@siteText.GetValueOrDefault("NavPhotos", "Enviar fotografias")</a>
+                            <a class="nav-link" asp-controller="Photos" asp-action="Index" aria-current="@(currentController == "Photos" ? "location" : null)">@siteText.GetValueOrDefault("NavPhotos", T("Enviar fotografias"))</a>
                         </li>
                         @if (faqSettings.IsEnabled)
                         {
@@ -103,10 +104,10 @@
         </main>
 
         <footer class="py-5 text-center text-muted">
-            @siteText.GetValueOrDefault("FooterText", "Feito com amor por Diogo") <i class="bi bi-heart-fill text-danger"></i>
+            @siteText.GetValueOrDefault("FooterText", T("Feito com amor por Diogo")) <i class="bi bi-heart-fill text-danger"></i>
             @if (!showAdminReturn)
             {
-                <div class="mt-2"><a class="small text-muted" href="/Admin/Dashboard/Index" target="_top">Administração</a></div>
+                <div class="mt-2"><a class="small text-muted" href="/Admin/Dashboard/Index" target="_top">@T("Administração")</a></div>
             }
         </footer> 
 
@@ -117,13 +118,13 @@
                     <div class="modal-content delete-confirmation-card">
                         <div class="modal-body text-center p-4 p-md-5">
                             <span class="delete-confirmation-icon" aria-hidden="true"><i class="bi bi-trash3"></i></span>
-                            <p class="delete-confirmation-label">Eliminar registo</p>
-                            <h2 id="delete-confirmation-title">Confirmar eliminação?</h2>
-                            <p class="delete-confirmation-message mb-0" data-delete-confirmation-message>Esta ação não pode ser anulada.</p>
+                            <p class="delete-confirmation-label">@T("Eliminar registo")</p>
+                            <h2 id="delete-confirmation-title">@T("Confirmar eliminação?")</h2>
+                            <p class="delete-confirmation-message mb-0" data-delete-confirmation-message>@T("Esta ação não pode ser anulada.")</p>
                         </div>
                         <div class="modal-footer justify-content-center border-0 pt-0 pb-4 px-4 px-md-5 gap-2">
-                            <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Manter registo</button>
-                            <button type="button" class="btn btn-danger" data-delete-confirmation-accept><i class="bi bi-trash3 me-1"></i> Eliminar</button>
+                            <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">@T("Manter registo")</button>
+                            <button type="button" class="btn btn-danger" data-delete-confirmation-accept><i class="bi bi-trash3 me-1"></i> @T("Eliminar")</button>
                         </div>
                     </div>
                 </div>
@@ -131,6 +132,7 @@
         }
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+        <partial name="_LocalizationScripts" />
         <script src="~/js/site.js" asp-append-version="true"></script>
         @if (messagePage != null)
         {

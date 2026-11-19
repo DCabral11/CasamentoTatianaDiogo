@@ -13,9 +13,9 @@
     @if (Model.IsPreview)
     {
         <div class="feedback-card feedback-card-warning mb-4" role="status">
-            <div><strong>Pré-visualização da administração</strong>
-            <p>Inclui rascunhos. O módulo está @(Model.Settings.IsEnabled ? "ativo" : "desativado") para os convidados.</p>
-            <a asp-controller="FaqAdmin" asp-action="Index">Voltar à gestão das perguntas</a></div>
+            <div><strong>@T("Pré-visualização da administração")</strong>
+            <p>@T("Inclui rascunhos. O módulo está") @(Model.Settings.IsEnabled ? "ativo" : "desativado") @T("para os convidados.")</p>
+            <a asp-controller="FaqAdmin" asp-action="Index">@T("Voltar à gestão das perguntas")</a></div>
         </div>
     }
     @if (Model.Items.Count == 0)
@@ -29,7 +29,7 @@
             <div class="faq-answer">
                 @if (Model.IsPreview && !item.IsPublished)
                 {
-                    <p class="small"><strong>Rascunho — não visível aos convidados</strong></p>
+                    <p class="small"><strong>@T("Rascunho — não visível aos convidados")</strong></p>
                 }
                 <div class="faq-text">@item.Answer</div>
             </div>

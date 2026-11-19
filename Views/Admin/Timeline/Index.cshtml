@@ -1,21 +1,21 @@
 @model IEnumerable<TimelineEvent>
 
 <div class="container py-5">
-    <h1>Horário do dia</h1>
+    <h1>@T("Horário do dia")</h1>
     <div class="admin-page-actions">
-        <a class="btn btn-primary" href="/Admin/Timeline/Create">Adicionar momento</a>
+        <a class="btn btn-primary" href="/Admin/Timeline/Create">@T("Adicionar momento")</a>
     </div>
     <partial name="_AdminFilters" />
     <div class="table-responsive">
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Título</th>
-                <th>Data e hora</th>
-                <th>Ordem</th>
-                <th>Ícone</th>
-                <th>Visível</th>
+                <th>@T("Id")</th>
+                <th>@T("Título")</th>
+                <th>@T("Data e hora")</th>
+                <th>@T("Ordem")</th>
+                <th>@T("Ícone")</th>
+                <th>@T("Visível")</th>
                 <th></th>
             </tr>
         </thead>
@@ -30,10 +30,10 @@
                     <td>@item.IconName</td>
                     <td>@item.IsActive</td>
                     <td>
-                        <a class="btn btn-sm btn-outline-primary" href="/Admin/Timeline/Edit/@item.Id"><i class="bi bi-pencil-square"></i> Editar</a>
-                        <form method="post" action="/Admin/Timeline/Delete/@item.Id" class="d-inline" data-delete-confirmation data-delete-message="Queres mesmo eliminar o momento «@item.Title»? Esta ação não pode ser anulada.">
+                        <a class="btn btn-sm btn-outline-primary" href="/Admin/Timeline/Edit/@item.Id"><i class="bi bi-pencil-square"></i> @T("Editar")</a>
+                        <form method="post" action="/Admin/Timeline/Delete/@item.Id" class="d-inline" data-delete-confirmation data-delete-message="@T("Queres mesmo eliminar o momento «{0}»? Esta ação não pode ser anulada.", item.Title)">
                             @Html.AntiForgeryToken()
-                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash3"></i> Remover</button>
+                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash3"></i> @T("Remover")</button>
                         </form>
                     </td>
                 </tr>

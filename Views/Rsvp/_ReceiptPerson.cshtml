@@ -1,8 +1,8 @@
 @model RsvpReceiptPerson
 @using CasamentoTatianaDiogo.Models.Enums
 <dl class="receipt-details">
-    <dt>Presença</dt><dd><strong>@(Model.Status == RsvpStatus.Attending ? "Vai comparecer" : "Não vai comparecer")</strong></dd>
-    <dt>Restrições alimentares</dt><dd class="receipt-text">@(string.IsNullOrWhiteSpace(Model.DietaryRestrictions) ? "Não indicadas" : Model.DietaryRestrictions)</dd>
-    <dt>Mensagem aos noivos</dt><dd class="receipt-text">@(string.IsNullOrWhiteSpace(Model.Message) ? "Não indicada" : Model.Message)</dd>
-    <dt>Sugestão musical</dt><dd class="receipt-text">@(string.IsNullOrWhiteSpace(Model.MusicRequest) ? "Não indicada" : Model.MusicRequest)</dd>
+    <dt>@T("Presença")</dt><dd><strong>@(Model.Status == RsvpStatus.Attending ? T("Vai comparecer") : T("Não vai comparecer"))</strong></dd>
+    <dt>@T("Restrições alimentares")</dt><dd class="receipt-text">@(string.IsNullOrWhiteSpace(Model.DietaryRestrictions) ? T("Não indicadas") : Model.DietaryRestrictions)</dd>
+    <dt>@T("Mensagem aos noivos")</dt><dd class="receipt-text">@(string.IsNullOrWhiteSpace(Model.Message) ? T("Não indicada") : Model.Message)</dd>
+    <dt>@T("Sugestão musical")</dt><dd class="receipt-text">@(string.IsNullOrWhiteSpace(Model.MusicRequest) ? T("Não indicada") : Model.MusicRequest)</dd>
 </dl>

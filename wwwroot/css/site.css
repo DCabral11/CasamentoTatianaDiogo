@@ -1623,3 +1623,8 @@ footer,
         margin-top: 0.5rem;
     }
 }
+
+.language-selector { display: flex; align-items: center; gap: .35rem; margin-inline: .75rem; }
+.language-selector select { color: inherit; background: transparent; border: 1px solid currentColor; border-radius: .4rem; padding: .35rem .4rem; font: inherit; max-width: 7.5rem; }
+.language-selector select:focus-visible { outline: 3px solid var(--bs-primary); outline-offset: 3px; }
+@media (max-width: 575px) { .language-selector { margin-inline: .25rem; font-size: .85rem; } .language-selector > i { display: none; } }

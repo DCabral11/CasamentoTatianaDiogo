@@ -21,10 +21,10 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
 
         public async Task<IActionResult> Index()
         {
-            var page = new AdminQueryPage<Family>(this, db.Families.AsNoTracking(), "Família, Referência ou Nome de Convidado");
+            var page = new AdminQueryPage<Family>(this, db.Families.AsNoTracking(), T("Família, Referência ou Nome de Convidado"));
 
-            page.Select("groupRsvp", "Permite resposta familiar", YesNo, value => f => f.AllowGroupRsvp == (value == "yes"));
-            page.Select("status", "Situação das Respostas", Options(("empty", "Sem Convidados"), ("pending", "Com Respostas em Falta"), ("complete", "Todos Responderam")),
+            page.Select("groupRsvp", T("Permite resposta familiar"), YesNo, value => f => f.AllowGroupRsvp == (value == "yes"));
+            page.Select("status", T("Situação das Respostas"), Options(("empty", T("Sem Convidados")), ("pending", T("Com Respostas em Falta")), ("complete", T("Todos Responderam"))),
                 value => value switch
                 {
                     "empty" => f => !f.Guests.Any(),
@@ -70,7 +70,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             {
                 db.ChangeTracker.Clear();
 
-                ModelState.AddModelError(string.Empty, "Este convite foi alterado por outra pessoa. Os teus dados não foram guardados. Abre a versão mais recente antes de continuar.");
+                ModelState.AddModelError(string.Empty, T("Este convite foi alterado por outra pessoa. Os teus dados não foram guardados. Abre a versão mais recente antes de continuar."));
                 Response.StatusCode = StatusCodes.Status409Conflict;
 
                 return View("~/Views/Admin/InvitationGroups/Edit.cshtml", m);

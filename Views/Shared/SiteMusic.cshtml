@@ -7,21 +7,22 @@
     var guestUrl = QueryHelpers.AddQueryString(Context.Request.QueryString.Value ?? "", "sitePage", "1");
 }
 <!doctype html>
-<html lang="pt-PT" data-bs-theme="@theme.Mode" style="@theme.Variables">
+<html lang="@System.Globalization.CultureInfo.CurrentUICulture.Name" data-bs-theme="@theme.Mode" style="@theme.Variables">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Casamento Tatiana &amp; Diogo</title>
+    <title>@T("Casamento Tatiana & Diogo")</title>
     <link rel="stylesheet" href="~/css/pages/site-music.css" asp-append-version="true" />
 </head>
 <body>
-    <a class="music-skip" href="#music-controls">Ir para os controlos de música</a>
-    <iframe id="guest-page" title="Site do casamento" src="@guestUrl"></iframe>
-    <aside id="music-controls" aria-label="Música do casamento" tabindex="-1">
+    <a class="music-skip" data-i18n-text="Ir para os controlos de música" href="#music-controls">@T("Ir para os controlos de música")</a>
+    <iframe id="guest-page" data-i18n-title="Site do casamento" title="@T("Site do casamento")" src="@guestUrl"></iframe>
+    <aside id="music-controls" data-i18n-aria-label="Música do casamento" aria-label="@T("Música do casamento")" tabindex="-1">
         <div id="music-player" data-track="@track">
-            <a href="@track" target="_blank" rel="noopener">Ouvir no Spotify</a>
+            <a data-i18n-text="Ouvir no Spotify" href="@track" target="_blank" rel="noopener">@T("Ouvir no Spotify")</a>
         </div>
     </aside>
+    <partial name="_LocalizationScripts" />
     <script src="~/js/site-music.js" asp-append-version="true"></script>
 </body>
 </html>

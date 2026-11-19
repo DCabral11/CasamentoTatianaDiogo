@@ -2,10 +2,10 @@
 @model HomeViewModel
 @inject CasamentoTatianaDiogo.Services.Interfaces.ISiteContentService SiteContent
 @{
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = T("Página inicial");
 
     var settings = Model.Settings;
-    var portugueseCulture = new CultureInfo("pt-PT");
+    var portugueseCulture = CultureInfo.CurrentCulture;
     var siteText = await SiteContent.GetAsync();
 }
 
@@ -18,7 +18,7 @@
         <div class="hero-intro">
             <h1 class="couple-names">
                 <span class="couple-name">@settings.BrideName</span>
-                <span class="couple-name couple-name-second"><span class="couple-ampersand">&amp;</span> @settings.GroomName</span>
+                <span class="couple-name couple-name-second"><span class="couple-ampersand">@T("&")</span> @settings.GroomName</span>
             </h1>
 
             <partial name="_WeddingPeriod" model='WeddingPageMessages.Find("Home")' />
@@ -30,7 +30,7 @@
             {
                 var weddingDay = settings.WeddingDateTime.Value.ToString("dddd", portugueseCulture);
                 var monthName = settings.WeddingDateTime.Value.ToString("MMMM", portugueseCulture);
-                var weddingDate = settings.WeddingDateTime.Value.ToString("dd 'de' MMMM 'de' yyyy", portugueseCulture)
+                var weddingDate = settings.WeddingDateTime.Value.ToString(DatePattern, portugueseCulture)
                     .Replace(monthName, $"{char.ToUpper(monthName[0], portugueseCulture)}{monthName[1..]}");
 
                 <div class="event-card">
@@ -53,48 +53,48 @@
 {
     <section class="home-story-section" aria-labelledby="story-title">
         <div class="story-page">
-            <h2 id="story-title">@siteText.GetValueOrDefault("HomeStoryTitle", "A Nossa História")</h2>
+            <h2 id="story-title">@siteText.GetValueOrDefault("HomeStoryTitle", T("A Nossa História"))</h2>
 
             @if (Model.CarouselImages.Count > 0)
             {
                 <div id="storyCarousel" class="carousel slide carousel-fade story-album @(string.IsNullOrWhiteSpace(settings.CoupleStory) ? "story-album-only" : null)"
-                     role="region" aria-roledescription="carrossel" aria-label="Fotografias da nossa história">
+                     role="region" aria-roledescription="@T("carrossel")" aria-label="@T("Fotografias da nossa história")">
                     @if (Model.CarouselImages.Count > 1)
                     {
                         <div class="story-album-playback">
-                            <button type="button" class="btn btn-outline-primary rounded-circle" data-rotation aria-label="Iniciar apresentação" hidden>
+                            <button type="button" class="btn btn-outline-primary rounded-circle" data-rotation aria-label="@T("Iniciar apresentação")" hidden>
                                 <i class="bi bi-play-fill" aria-hidden="true"></i>
                             </button>
-                            <span data-position aria-live="off" aria-atomic="true">Fotografia 1 de @Model.CarouselImages.Count</span>
+                            <span data-position aria-live="off" aria-atomic="true">@T("Fotografia 1 de") @Model.CarouselImages.Count</span>
                         </div>
                     }
                     <div class="carousel-inner">
                         @for (var i = 0; i < Model.CarouselImages.Count; i++)
                         {
                             var photo = Model.CarouselImages[i];
-                            <div class="carousel-item @(i == 0 ? "active" : null)" role="group" aria-roledescription="diapositivo" aria-label="@(i + 1) de @Model.CarouselImages.Count">
+                            <div class="carousel-item @(i == 0 ? "active" : null)" role="group" aria-roledescription="@T("diapositivo")" aria-label="@(i + 1) de @Model.CarouselImages.Count">
                                 <img src="@(i == 0 ? photo.Url : null)" srcset="@(i == 0 ? photo.SrcSet : null)"
                                      data-src="@(i > 0 ? photo.Url : null)" data-srcset="@(i > 0 ? photo.SrcSet : null)"
                                      sizes="(max-width: 767px) 90vw, (max-width: 1450px) 40vw, 640px"
-                                     loading="@(i == 0 ? "lazy" : "eager")" decoding="async" alt="Fotografia @(i + 1) da nossa história" />
+                                     loading="@(i == 0 ? "lazy" : "eager")" decoding="async" alt="@T("Fotografia {0} da nossa história", i + 1)" />
                             </div>
                         }
                     </div>
                     @if (Model.CarouselImages.Count > 1)
                     {
                         <div class="story-album-nav">
-                            <button class="carousel-control-prev" type="button" data-bs-target="#storyCarousel" data-bs-slide="prev" aria-label="Fotografia anterior">
+                            <button class="carousel-control-prev" type="button" data-bs-target="#storyCarousel" data-bs-slide="prev" aria-label="@T("Fotografia anterior")">
                                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             </button>
-                            <div class="carousel-indicators" role="group" aria-label="Escolher fotografia">
+                            <div class="carousel-indicators" role="group" aria-label="@T("Escolher fotografia")">
                                 @for (var i = 0; i < Model.CarouselImages.Count; i++)
                                 {
-                                    <button type="button" data-bs-target="#storyCarousel" data-bs-slide-to="@i" class="@(i == 0 ? "active" : null)" aria-current="@(i == 0 ? "true" : null)" aria-label="Ver fotografia @(i + 1)">
+                                    <button type="button" data-bs-target="#storyCarousel" data-bs-slide-to="@i" class="@(i == 0 ? "active" : null)" aria-current="@(i == 0 ? "true" : null)" aria-label="@T("Ver fotografia {0}", i + 1)">
                                         <img src="@Model.CarouselImages[i].ThumbnailUrl" width="80" height="80" loading="lazy" decoding="async" alt="" />
                                     </button>
                                 }
                             </div>
-                            <button class="carousel-control-next" type="button" data-bs-target="#storyCarousel" data-bs-slide="next" aria-label="Fotografia seguinte">
+                            <button class="carousel-control-next" type="button" data-bs-target="#storyCarousel" data-bs-slide="next" aria-label="@T("Fotografia seguinte")">
                                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                             </button>
                         </div>

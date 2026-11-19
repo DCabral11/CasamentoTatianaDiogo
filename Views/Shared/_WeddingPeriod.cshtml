@@ -16,11 +16,11 @@
      data-before="@messages["Before"]" data-during="@messages["During"]" data-after="@messages["After"]">
     @if (home && period.Phase == "Before" && period.StartUtc.HasValue)
     {
-        <div id="countdown" class="countdown" role="timer" aria-label="Tempo até ao casamento">
-            <div><strong data-days>@((seconds / 86400).ToString("D2"))</strong><span>Dias</span></div>
-            <div><strong data-hours>@((seconds / 3600 % 24).ToString("D2"))</strong><span>Horas</span></div>
-            <div><strong data-minutes>@((seconds / 60 % 60).ToString("D2"))</strong><span>Mins.</span></div>
-            <div><strong data-seconds>@((seconds % 60).ToString("D2"))</strong><span>Segs.</span></div>
+        <div id="countdown" class="countdown" role="timer" aria-label="@T("Tempo até ao casamento")">
+            <div><strong data-days>@((seconds / 86400).ToString("D2"))</strong><span>@T("Dias")</span></div>
+            <div><strong data-hours>@((seconds / 3600 % 24).ToString("D2"))</strong><span>@T("Horas")</span></div>
+            <div><strong data-minutes>@((seconds / 60 % 60).ToString("D2"))</strong><span>@T("Mins.")</span></div>
+            <div><strong data-seconds>@((seconds % 60).ToString("D2"))</strong><span>@T("Segs.")</span></div>
         </div>
     }
     <p class="wedding-phase-message @(home ? "" : "container py-3 mb-0")" data-phase-message aria-live="polite" hidden="@(message.Length == 0)">@message</p>

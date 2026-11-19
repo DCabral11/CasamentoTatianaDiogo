@@ -25,7 +25,7 @@
                 const response = await fetch(url, options);
                 const data = await response.json().catch(() => ({}));
                 if (!response.ok) {
-                    const failure = new Error(data.message || "Não foi possível enviar a fotografia. Atualiza a página e tenta novamente.");
+                    const failure = new Error(data.message || window.weddingText("Não foi possível enviar a fotografia. Atualiza a página e tenta novamente."));
                     failure.retryable = response.status >= 500 || response.status === 429;
                     throw failure;
                 }
@@ -43,13 +43,13 @@
         error.hidden = true;
         const files = Array.from(input.files);
         if (!files.length) {
-            error.textContent = "Escolhe pelo menos uma fotografia.";
+            error.textContent = window.weddingText("Escolhe pelo menos uma fotografia.");
             error.hidden = false;
             return;
         }
         const invalid = files.find(file => file.size <= 0 || file.size > maxBytes || !extensions.includes(file.name.slice(file.name.lastIndexOf(".")).toLowerCase()));
         if (invalid) {
-            error.textContent = `Revê a fotografia «${invalid.name}»: usa um formato permitido e um tamanho até ${form.dataset.maxFileMb} MB.`;
+            error.textContent = window.weddingText("Revê a fotografia «{0}»: usa um formato permitido e um tamanho até {1} MB.", invalid.name, form.dataset.maxFileMb);
             error.hidden = false;
             input.setAttribute("aria-invalid", "true");
             input.setAttribute("aria-describedby", "photo-help photo-error");
@@ -68,7 +68,7 @@
             for (let i = 0; i < queue.length; i++) {
                 const item = queue[i];
                 if (item.completed) continue;
-                status.textContent = `A preparar a fotografia ${i + 1} de ${queue.length}…`;
+                status.textContent = window.weddingText("A preparar a fotografia {0} de {1}…", i + 1, queue.length);
                 if (!item.ticket) {
                     const ext = item.file.name.slice(item.file.name.lastIndexOf(".")).toLowerCase();
                     item.ticket = await request(form.dataset.beginUrl, {
@@ -87,13 +87,13 @@
                         body: item.file.slice(item.uploaded, end)
                     }, true);
                     if (!progress.completed && progress.uploadedBytes <= item.uploaded)
-                        throw new Error("O envio não avançou. Tenta novamente dentro de momentos.");
+                        throw new Error(window.weddingText("O envio não avançou. Tenta novamente dentro de momentos."));
                     item.uploaded = progress.uploadedBytes;
                     item.completed = progress.completed;
-                    status.textContent = `Fotografia ${i + 1} de ${queue.length} — ${Math.round(item.uploaded / item.file.size * 100)}%`;
+                    status.textContent = window.weddingText("Fotografia {0} de {1} — {2}%", i + 1, queue.length, Math.round(item.uploaded / item.file.size * 100));
                 }
             }
-            status.textContent = "As tuas fotografias foram enviadas. Obrigado por partilhares este momento connosco!";
+            status.textContent = window.weddingText("As tuas fotografias foram enviadas. Obrigado por partilhares este momento connosco!");
             form.reset();
             queue = [];
         } catch (failure) {

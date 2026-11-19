@@ -1,9 +1,9 @@
 @model MusicMoment
 @{
-    ViewData["Title"] = Model.Id == 0 ? "Adicionar momento" : "Editar momento";
+    ViewData["Title"] = Model.Id == 0 ? T("Adicionar momento") : T("Editar momento");
 }
 <div class="container py-5 narrow">
-    <a asp-action="Index" asp-fragment="seccao-@Model.SectionId">Voltar ao programa musical</a>
+    <a asp-action="Index" asp-fragment="seccao-@Model.SectionId">@T("Voltar ao programa musical")</a>
     <h1 class="mt-3">@ViewData["Title"]</h1>
     <form asp-action="SaveMoment" method="post" class="admin-form">
         <input asp-for="Id" type="hidden" /><partial name="_FormErrors" />
@@ -11,22 +11,22 @@
             <select asp-for="SectionId" asp-items="ViewBag.Sections" class="form-select" required></select></div>
         <div class="mb-3"><label asp-for="Name" class="form-label"></label>
             <input asp-for="Name" class="form-control" maxlength="150" required /></div>
-        <div class="mb-3"><label asp-for="Song" class="form-label">Música (opcional)</label>
+        <div class="mb-3"><label asp-for="Song" class="form-label">@T("Música (opcional)")</label>
             <input asp-for="Song" class="form-control" maxlength="250" aria-describedby="song-help" />
-            <small id="song-help">Deixa em branco se a música ainda estiver por definir.</small></div>
-        <div class="mb-3"><label asp-for="DisplayOrder" class="form-label">Ordem nesta secção</label>
+            <small id="song-help">@T("Deixa em branco se a música ainda estiver por definir.")</small></div>
+        <div class="mb-3"><label asp-for="DisplayOrder" class="form-label">@T("Ordem nesta secção")</label>
             <input asp-for="DisplayOrder" class="form-control" min="1" max="9999" required aria-describedby="order-help" />
-            <small id="order-help">Os números mais baixos aparecem primeiro.</small></div>
+            <small id="order-help">@T("Os números mais baixos aparecem primeiro.")</small></div>
         <div class="admin-form-actions">
-            <button class="btn btn-primary">Guardar momento</button>
-            <a class="btn btn-link" asp-action="Index" asp-fragment="seccao-@Model.SectionId">Cancelar</a>
+            <button class="btn btn-primary">@T("Guardar momento")</button>
+            <a class="btn btn-link" asp-action="Index" asp-fragment="seccao-@Model.SectionId">@T("Cancelar")</a>
         </div>
     </form>
     @if (Model.Id != 0)
     {
         <form method="post" asp-action="DeleteMoment" asp-route-id="@Model.Id" class="mt-4"
-              data-delete-confirmation data-delete-message="Eliminar o momento «@Model.Name» do programa?">
-            <button class="btn btn-outline-danger">Eliminar momento</button>
+              data-delete-confirmation data-delete-message="@T("Eliminar o momento «{0}» do programa?", Model.Name)">
+            <button class="btn btn-outline-danger">@T("Eliminar momento")</button>
         </form>
     }
 </div>

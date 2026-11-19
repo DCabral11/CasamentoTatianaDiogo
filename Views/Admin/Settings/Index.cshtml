@@ -1,13 +1,13 @@
 @model WeddingSettings
 @inject CasamentoTatianaDiogo.Services.WeddingClock WeddingClock
 @{
-    ViewData["Title"] = "Definições do casamento";
+    ViewData["Title"] = T("Definições do casamento");
 }
 
 <div class="container py-5 narrow">
     <header class="mb-3">
-        <h1 class="mb-1">Definições do casamento</h1>
-        <p class="text-muted mb-0">Atualiza aqui todos os dados apresentados aos convidados. As alterações ficam disponíveis de imediato no site.</p>
+        <h1 class="mb-1">@T("Definições do casamento")</h1>
+        <p class="text-muted mb-0">@T("Atualiza aqui todos os dados apresentados aos convidados. As alterações ficam disponíveis de imediato no site.")</p>
     </header>
 
     <form method="post" class="admin-form">
@@ -16,81 +16,81 @@
         <partial name="_FormErrors" />
 
         <fieldset class="admin-fieldset">
-            <legend>O casal e a página inicial</legend>
+            <legend>@T("O casal e a página inicial")</legend>
             <div class="row g-3">
-                <div class="col-md-6"><label asp-for="BrideName" class="form-label">Nome da noiva</label><input asp-for="BrideName" class="form-control" /></div>
-                <div class="col-md-6"><label asp-for="GroomName" class="form-label">Nome do noivo</label><input asp-for="GroomName" class="form-control" /></div>
-                <div class="col-12"><label asp-for="HomeHeroTitle" class="form-label">Mensagem principal</label><input asp-for="HomeHeroTitle" class="form-control" placeholder="Ex.: Estamos a casar!" /></div>
-                <div class="col-12"><label asp-for="HomeHeroSubtitle" class="form-label">Mensagem de apoio</label><textarea asp-for="HomeHeroSubtitle" class="form-control" rows="2"></textarea></div>
-                <div class="col-12"><label asp-for="CoupleStory" class="form-label">A nossa história</label><textarea asp-for="CoupleStory" class="form-control" rows="5" placeholder="Conta aos convidados um pouco da vossa história."></textarea></div>
+                <div class="col-md-6"><label asp-for="BrideName" class="form-label">@T("Nome da noiva")</label><input asp-for="BrideName" class="form-control" /></div>
+                <div class="col-md-6"><label asp-for="GroomName" class="form-label">@T("Nome do noivo")</label><input asp-for="GroomName" class="form-control" /></div>
+                <div class="col-12"><label asp-for="HomeHeroTitle" class="form-label">@T("Mensagem principal")</label><input asp-for="HomeHeroTitle" class="form-control" placeholder="@T("Ex.: Estamos a casar!")" /></div>
+                <div class="col-12"><label asp-for="HomeHeroSubtitle" class="form-label">@T("Mensagem de apoio")</label><textarea asp-for="HomeHeroSubtitle" class="form-control" rows="2"></textarea></div>
+                <div class="col-12"><label asp-for="CoupleStory" class="form-label">@T("A nossa história")</label><textarea asp-for="CoupleStory" class="form-control" rows="5" placeholder="@T("Conta aos convidados um pouco da vossa história.")"></textarea></div>
             </div>
         </fieldset>
 
         <fieldset class="admin-fieldset">
-            <legend>Data e locais</legend>
+            <legend>@T("Data e locais")</legend>
             <div class="row g-3">
-                <div class="col-md-6"><label asp-for="WeddingDateTime" class="form-label">Início do casamento</label><input asp-for="WeddingDateTime" type="datetime-local" class="form-control" aria-describedby="wedding-zone" /></div>
-                <div class="col-md-6"><label asp-for="WeddingEndDateTime" class="form-label">Fim do casamento (opcional)</label><input asp-for="WeddingEndDateTime" type="datetime-local" class="form-control" aria-describedby="wedding-zone" /></div>
-                <div class="col-12 form-text" id="wedding-zone">As duas horas referem-se ao fuso @WeddingClock.TimeZoneId. Se deixares o fim em branco, as mensagens «Depois» começam à meia-noite seguinte ao início. <a asp-controller="Content" asp-action="PhaseMessages">Editar as mensagens por página</a></div>
-                <div class="col-md-6"><label asp-for="CeremonyLocationName" class="form-label">Local da cerimónia</label><input asp-for="CeremonyLocationName" class="form-control" /></div>
-                <div class="col-md-6"><label asp-for="CeremonyAddress" class="form-label">Morada da cerimónia</label><input asp-for="CeremonyAddress" class="form-control" /></div>
-                <div class="col-12"><label asp-for="CeremonyGoogleMapsUrl" class="form-label">Ligação Google Maps da cerimónia</label><input asp-for="CeremonyGoogleMapsUrl" type="url" class="form-control" /></div>
-                <div class="col-12"><label asp-for="CeremonyGoogleMapsEmbedUrl" class="form-label">Mini-mapa da cerimónia</label><textarea asp-for="CeremonyGoogleMapsEmbedUrl" class="form-control" rows="3" placeholder="Cola a ligação de incorporação ou o código &lt;iframe&gt; do Google Maps."></textarea></div>
-                <div class="col-md-6"><label asp-for="ReceptionLocationName" class="form-label">Local do copo d'água</label><input asp-for="ReceptionLocationName" class="form-control" /></div>
-                <div class="col-md-6"><label asp-for="ReceptionAddress" class="form-label">Morada do copo d'água</label><input asp-for="ReceptionAddress" class="form-control" /></div>
-                <div class="col-12"><label asp-for="ReceptionGoogleMapsUrl" class="form-label">Ligação Google Maps do copo d'água</label><input asp-for="ReceptionGoogleMapsUrl" type="url" class="form-control" /></div>
-                <div class="col-12"><label asp-for="ReceptionGoogleMapsEmbedUrl" class="form-label">Mini-mapa do copo d'água</label><textarea asp-for="ReceptionGoogleMapsEmbedUrl" class="form-control" rows="3" placeholder="Cola a ligação de incorporação ou o código &lt;iframe&gt; do Google Maps."></textarea></div>
+                <div class="col-md-6"><label asp-for="WeddingDateTime" class="form-label">@T("Início do casamento")</label><input asp-for="WeddingDateTime" type="datetime-local" class="form-control" aria-describedby="wedding-zone" /></div>
+                <div class="col-md-6"><label asp-for="WeddingEndDateTime" class="form-label">@T("Fim do casamento (opcional)")</label><input asp-for="WeddingEndDateTime" type="datetime-local" class="form-control" aria-describedby="wedding-zone" /></div>
+                <div class="col-12 form-text" id="wedding-zone">@T("As duas horas referem-se ao fuso") @WeddingClock.TimeZoneId@T(". Se deixares o fim em branco, as mensagens «Depois» começam à meia-noite seguinte ao início.") <a asp-controller="Content" asp-action="PhaseMessages">@T("Editar as mensagens por página")</a></div>
+                <div class="col-md-6"><label asp-for="CeremonyLocationName" class="form-label">@T("Local da cerimónia")</label><input asp-for="CeremonyLocationName" class="form-control" /></div>
+                <div class="col-md-6"><label asp-for="CeremonyAddress" class="form-label">@T("Morada da cerimónia")</label><input asp-for="CeremonyAddress" class="form-control" /></div>
+                <div class="col-12"><label asp-for="CeremonyGoogleMapsUrl" class="form-label">@T("Ligação Google Maps da cerimónia")</label><input asp-for="CeremonyGoogleMapsUrl" type="url" class="form-control" /></div>
+                <div class="col-12"><label asp-for="CeremonyGoogleMapsEmbedUrl" class="form-label">@T("Mini-mapa da cerimónia")</label><textarea asp-for="CeremonyGoogleMapsEmbedUrl" class="form-control" rows="3" placeholder="@T("Cola a ligação de incorporação ou o código <iframe> do Google Maps.")"></textarea></div>
+                <div class="col-md-6"><label asp-for="ReceptionLocationName" class="form-label">@T("Local do copo d'água")</label><input asp-for="ReceptionLocationName" class="form-control" /></div>
+                <div class="col-md-6"><label asp-for="ReceptionAddress" class="form-label">@T("Morada do copo d'água")</label><input asp-for="ReceptionAddress" class="form-control" /></div>
+                <div class="col-12"><label asp-for="ReceptionGoogleMapsUrl" class="form-label">@T("Ligação Google Maps do copo d'água")</label><input asp-for="ReceptionGoogleMapsUrl" type="url" class="form-control" /></div>
+                <div class="col-12"><label asp-for="ReceptionGoogleMapsEmbedUrl" class="form-label">@T("Mini-mapa do copo d'água")</label><textarea asp-for="ReceptionGoogleMapsEmbedUrl" class="form-control" rows="3" placeholder="@T("Cola a ligação de incorporação ou o código <iframe> do Google Maps.")"></textarea></div>
             </div>
         </fieldset>
 
         <fieldset class="admin-fieldset">
-            <legend>Confirmações de presença</legend>
+            <legend>@T("Confirmações de presença")</legend>
             <label asp-for="RsvpDeadline" class="form-label"></label>
             <input asp-for="RsvpDeadline" type="date" class="form-control" aria-describedby="rsvp-deadline-help" />
-            <div id="rsvp-deadline-help" class="form-text">Os convidados podem enviar e atualizar respostas até ao fim do dia escolhido, no fuso @WeddingClock.TimeZoneId. Deixa em branco para manter as confirmações abertas sem data limite.</div>
+            <div id="rsvp-deadline-help" class="form-text">@T("Os convidados podem enviar e atualizar respostas até ao fim do dia escolhido, no fuso") @WeddingClock.TimeZoneId@T(". Deixa em branco para manter as confirmações abertas sem data limite.")</div>
         </fieldset>
 
         <fieldset class="admin-fieldset">
-            <legend>Formato dos contactos</legend>
+            <legend>@T("Formato dos contactos")</legend>
             <div class="row g-3">
-                <div class="col-md-6"><label asp-for="PhoneRegion" class="form-label">País dos números sem indicativo</label><select asp-for="PhoneRegion" class="form-select">
+                <div class="col-md-6"><label asp-for="PhoneRegion" class="form-label">@T("País dos números sem indicativo")</label><select asp-for="PhoneRegion" class="form-select">
                     @foreach (var region in CasamentoTatianaDiogo.Services.ContactFormats.Regions()) { <option value="@region.Code">@region.Label</option> }
                 </select></div>
-                <div class="col-md-6"><label asp-for="PhoneDisplay" class="form-label">Apresentação do telefone</label><select asp-for="PhoneDisplay" class="form-select"><option value="international">Internacional, com espaços</option><option value="compact">Internacional, compacto</option><option value="national">Nacional para o país escolhido</option></select></div>
-                <div class="col-md-6"><label asp-for="ExtensionLabel" class="form-label">Etiqueta da extensão</label><select asp-for="ExtensionLabel" class="form-select"><option>ext.</option><option>ramal</option><option>x</option></select></div>
-                <div class="col-md-6"><label asp-for="EmailDomainDisplay" class="form-label">Apresentação do domínio do email</label><select asp-for="EmailDomainDisplay" class="form-select"><option value="unicode">Com caracteres internacionais</option><option value="ascii">ASCII (Punycode)</option></select></div>
-                <div class="col-md-6"><label asp-for="DefaultEmailDomain" class="form-label">Domínio de email predefinido (opcional)</label><input asp-for="DefaultEmailDomain" class="form-control" aria-describedby="email-domain-help" placeholder="exemplo.pt" /><div id="email-domain-help" class="form-text">Completa nomes sem domínio nos contactos da administração e nas importações. No RSVP, o convidado indica o endereço completo.</div></div>
+                <div class="col-md-6"><label asp-for="PhoneDisplay" class="form-label">@T("Apresentação do telefone")</label><select asp-for="PhoneDisplay" class="form-select"><option value="international">@T("Internacional, com espaços")</option><option value="compact">@T("Internacional, compacto")</option><option value="national">@T("Nacional para o país escolhido")</option></select></div>
+                <div class="col-md-6"><label asp-for="ExtensionLabel" class="form-label">@T("Etiqueta da extensão")</label><select asp-for="ExtensionLabel" class="form-select"><option value="ext.">@T("ext.")</option><option value="ramal">@T("ramal")</option><option value="x">@T("x")</option></select></div>
+                <div class="col-md-6"><label asp-for="EmailDomainDisplay" class="form-label">@T("Apresentação do domínio do email")</label><select asp-for="EmailDomainDisplay" class="form-select"><option value="unicode">@T("Com caracteres internacionais")</option><option value="ascii">@T("ASCII (Punycode)")</option></select></div>
+                <div class="col-md-6"><label asp-for="DefaultEmailDomain" class="form-label">@T("Domínio de email predefinido (opcional)")</label><input asp-for="DefaultEmailDomain" class="form-control" aria-describedby="email-domain-help" placeholder="@T("exemplo.pt")" /><div id="email-domain-help" class="form-text">@T("Completa nomes sem domínio nos contactos da administração e nas importações. No RSVP, o convidado indica o endereço completo.")</div></div>
             </div>
         </fieldset>
         <fieldset class="admin-fieldset">
-            <legend>Contactos</legend>
+            <legend>@T("Contactos")</legend>
             <partial name="_ContactFormatHelp" />
             <div class="row g-3">
-                <div class="col-md-6"><label asp-for="BridePhone" class="form-label">Telefone da noiva</label><input asp-for="BridePhone" type="tel" class="form-control" /></div>
-                <div class="col-md-6"><label asp-for="GroomPhone" class="form-label">Telefone do noivo</label><input asp-for="GroomPhone" type="tel" class="form-control" /></div>
-                <div class="col-md-6"><label asp-for="BrideEmail" class="form-label">E-mail da noiva</label><input asp-for="BrideEmail" type="text" inputmode="email" spellcheck="false" class="form-control" /></div>
-                <div class="col-md-6"><label asp-for="GroomEmail" class="form-label">E-mail do noivo</label><input asp-for="GroomEmail" type="text" inputmode="email" spellcheck="false" class="form-control" /></div>
+                <div class="col-md-6"><label asp-for="BridePhone" class="form-label">@T("Telefone da noiva")</label><input asp-for="BridePhone" type="tel" class="form-control" /></div>
+                <div class="col-md-6"><label asp-for="GroomPhone" class="form-label">@T("Telefone do noivo")</label><input asp-for="GroomPhone" type="tel" class="form-control" /></div>
+                <div class="col-md-6"><label asp-for="BrideEmail" class="form-label">@T("E-mail da noiva")</label><input asp-for="BrideEmail" type="text" inputmode="email" spellcheck="false" class="form-control" /></div>
+                <div class="col-md-6"><label asp-for="GroomEmail" class="form-label">@T("E-mail do noivo")</label><input asp-for="GroomEmail" type="text" inputmode="email" spellcheck="false" class="form-control" /></div>
             </div>
         </fieldset>
 
         <fieldset class="admin-fieldset">
-            <legend>Aspeto do site</legend>
+            <legend>@T("Aspeto do site")</legend>
             <div class="row g-3">
-                <div class="col-12"><label asp-for="LogoPath" class="form-label">Logótipo</label><input asp-for="LogoPath" class="form-control" aria-describedby="logo-help" /><div id="logo-help" class="form-text">Indica o caminho da imagem no site (por exemplo, /images/navbar.png) ou o endereço completo da imagem.</div></div>
-                <div class="col-md-6"><label asp-for="PrimaryColor" class="form-label">Cor principal</label><input asp-for="PrimaryColor" type="color" class="form-control form-control-color" /></div>
-                <div class="col-md-6"><label asp-for="SecondaryColor" class="form-label">Cor de fundo</label><input asp-for="SecondaryColor" type="color" class="form-control form-control-color" /></div>
+                <div class="col-12"><label asp-for="LogoPath" class="form-label">@T("Logótipo")</label><input asp-for="LogoPath" class="form-control" aria-describedby="logo-help" /><div id="logo-help" class="form-text">@T("Indica o caminho da imagem no site (por exemplo, /images/navbar.png) ou o endereço completo da imagem.")</div></div>
+                <div class="col-md-6"><label asp-for="PrimaryColor" class="form-label">@T("Cor principal")</label><input asp-for="PrimaryColor" type="color" class="form-control form-control-color" /></div>
+                <div class="col-md-6"><label asp-for="SecondaryColor" class="form-label">@T("Cor de fundo")</label><input asp-for="SecondaryColor" type="color" class="form-control form-control-color" /></div>
             </div>
         </fieldset>
 
         <fieldset class="admin-fieldset">
-            <legend>Música do site</legend>
-            <label asp-for="SpotifyTrackUrl" class="form-label">Ligação da música no Spotify</label>
+            <legend>@T("Música do site")</legend>
+            <label asp-for="SpotifyTrackUrl" class="form-label">@T("Ligação da música no Spotify")</label>
             <input asp-for="SpotifyTrackUrl" type="url" class="form-control" aria-describedby="spotify-help" />
-            <div id="spotify-help" class="form-text">No Spotify, abre a faixa e escolhe Partilhar → Copiar ligação. Para desativar a música, deixa o campo vazio.</div>
+            <div id="spotify-help" class="form-text">@T("No Spotify, abre a faixa e escolhe Partilhar → Copiar ligação. Para desativar a música, deixa o campo vazio.")</div>
         </fieldset>
 
         <div class="admin-form-actions">
-            <button class="btn btn-primary btn-lg"><i class="bi bi-check2-circle"></i> Guardar alterações</button>
+            <button class="btn btn-primary btn-lg"><i class="bi bi-check2-circle"></i> @T("Guardar alterações")</button>
         </div>
     </form>
 </div>

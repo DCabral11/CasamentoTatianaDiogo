@@ -1,43 +1,43 @@
 @model List<MusicSection>
 @{
-    ViewData["Title"] = "Programa musical";
+    ViewData["Title"] = T("Programa musical");
 }
 <div class="container py-5">
-    <h1>Programa musical</h1>
-    <p>Organiza as músicas pela ordem em que vão tocar. Podes reservar um momento antes de escolher a música.</p>
+    <h1>@T("Programa musical")</h1>
+    <p>@T("Organiza as músicas pela ordem em que vão tocar. Podes reservar um momento antes de escolher a música.")</p>
     <div class="admin-page-actions">
-        <a class="btn btn-primary" asp-action="Section">Adicionar secção</a>
+        <a class="btn btn-primary" asp-action="Section">@T("Adicionar secção")</a>
     </div>
     <partial name="_AdminFilters" />
     @if (Model.Count == 0)
     {
-        <p class="mt-4">Não há secções ou momentos nesta seleção. Limpa os filtros para ver o programa completo.</p>
+        <p class="mt-4">@T("Não há secções ou momentos nesta seleção. Limpa os filtros para ver o programa completo.")</p>
     }
     @foreach (var group in Model)
     {
         <section id="seccao-@group.Id" aria-labelledby="titulo-@group.Id" class="mt-5">
             <h2 id="titulo-@group.Id">@group.Name</h2>
             <div class="d-flex flex-wrap gap-2 mb-3">
-                <a class="btn btn-outline-primary" asp-action="Moment" asp-route-sectionId="@group.Id">Adicionar momento<span class="visually-hidden"> a @group.Name</span></a>
-                <a class="btn btn-link" asp-action="Section" asp-route-id="@group.Id">Editar secção<span class="visually-hidden"> @group.Name</span></a>
+                <a class="btn btn-outline-primary" asp-action="Moment" asp-route-sectionId="@group.Id">@T("Adicionar momento")<span class="visually-hidden"> @T("a") @group.Name</span></a>
+                <a class="btn btn-link" asp-action="Section" asp-route-id="@group.Id">@T("Editar secção")<span class="visually-hidden"> @group.Name</span></a>
             </div>
             @if (group.Moments.Count == 0)
             {
-                <p class="text-muted">Ainda não há momentos nesta secção.</p>
+                <p class="text-muted">@T("Ainda não há momentos nesta secção.")</p>
             }
             else
             {
                 <div class="table-responsive">
                     <table class="table align-middle">
-                        <caption class="visually-hidden">Momentos e músicas: @group.Name</caption>
-                        <thead><tr><th scope="col">Ordem</th><th scope="col">Momento</th><th scope="col">Música</th><th scope="col">Ações</th></tr></thead>
+                        <caption class="visually-hidden">@T("Momentos e músicas:") @group.Name</caption>
+                        <thead><tr><th scope="col">@T("Ordem")</th><th scope="col">@T("Momento")</th><th scope="col">@T("Música")</th><th scope="col">@T("Ações")</th></tr></thead>
                         <tbody>
                         @foreach (var moment in group.Moments)
                         {
                             <tr>
                                 <td>@moment.DisplayOrder</td><th scope="row">@moment.Name</th>
-                                <td>@(moment.Song ?? "Por definir")</td>
-                                <td><a asp-action="Moment" asp-route-id="@moment.Id">Editar<span class="visually-hidden"> @moment.Name</span></a></td>
+                                <td>@(moment.Song ?? T("Por definir"))</td>
+                                <td><a asp-action="Moment" asp-route-id="@moment.Id">@T("Editar")<span class="visually-hidden"> @moment.Name</span></a></td>
                             </tr>
                         }
                         </tbody>

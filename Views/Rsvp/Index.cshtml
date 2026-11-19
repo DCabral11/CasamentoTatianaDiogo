@@ -1,4 +1,4 @@
-﻿@model RsvpSearchViewModel
+@model RsvpSearchViewModel
 @{
     ViewData["Title"] = "RSVP";
 }
@@ -6,9 +6,9 @@
 <section class="page-header">
     <div class="container">
         <h1>
-            <i class="bi bi-envelope-heart"></i> Confirmar Presença
+            <i class="bi bi-envelope-heart"></i> @T("Confirmar Presença")
         </h1>
-        <p>Pesquisa o teu nome e verifica o teu email para responder.</p>
+        <p>@T("Pesquisa o teu nome e verifica o teu email para responder.")</p>
     </div>
 </section>
 
@@ -17,12 +17,12 @@
         @Html.AntiForgeryToken()
         <partial name="_FormErrors" />
 
-        <label class="form-label" for="guest-search">Nome do convidado (obrigatório)</label>
+        <label class="form-label" for="guest-search">@T("Nome do convidado (obrigatório)")</label>
 
         <div class="input-group">
-            <input asp-for="Query" id="guest-search" required class="form-control" placeholder="Primeiro ou Último Nome" autocomplete="off" spellcheck="false" />
+            <input asp-for="Query" id="guest-search" required class="form-control" placeholder="@T("Primeiro ou Último Nome")" autocomplete="off" spellcheck="false" />
             <button class="btn btn-primary">
-                <i class="bi bi-search"></i> Pesquisar
+                <i class="bi bi-search"></i> @T("Pesquisar")
             </button>
         </div>
         <span asp-validation-for="Query" class="text-danger"></span>
@@ -39,7 +39,7 @@
     @if (Model.Results?.Any() == true)
     {
         <div class="mt-4">
-            <h3 class="rsvp-results-title">Seleciona o teu Nome</h3>
+            <h3 class="rsvp-results-title">@T("Seleciona o teu Nome")</h3>
 
             @foreach(var guest in Model.Results)
             {
@@ -69,13 +69,13 @@
             <div class="modal-content rsvp-back-navigation-card">
                 <div class="modal-body text-center p-4 p-md-5">
                     <span class="rsvp-back-navigation-icon" aria-hidden="true"><i class="bi bi-arrow-left-circle"></i></span>
-                    <p class="rsvp-back-navigation-label">Resposta enviada</p>
-                    <h2 id="rsvp-back-navigation-title">Queres voltar à pesquisa?</h2>
-                    <p class="rsvp-back-navigation-message mb-0">A resposta já foi guardada. Ao voltar, irás para a pesquisa de convidados e não para o formulário submetido.</p>
+                    <p class="rsvp-back-navigation-label">@T("Resposta enviada")</p>
+                    <h2 id="rsvp-back-navigation-title">@T("Queres voltar à pesquisa?")</h2>
+                    <p class="rsvp-back-navigation-message mb-0">@T("A resposta já foi guardada. Ao voltar, irás para a pesquisa de convidados e não para o formulário submetido.")</p>
                 </div>
                 <div class="modal-footer justify-content-center border-0 pt-0 pb-4 px-4 px-md-5 gap-2">
-                    <button type="button" class="btn btn-outline-primary" data-rsvp-back-stay>Ficar nesta página</button>
-                    <button type="button" class="btn btn-primary" data-rsvp-back-search><i class="bi bi-search me-1"></i> Voltar à pesquisa</button>
+                    <button type="button" class="btn btn-outline-primary" data-rsvp-back-stay>@T("Ficar nesta página")</button>
+                    <button type="button" class="btn btn-primary" data-rsvp-back-search><i class="bi bi-search me-1"></i> @T("Voltar à pesquisa")</button>
                 </div>
             </div>
         </div>

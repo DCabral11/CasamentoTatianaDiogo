@@ -20,13 +20,13 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
 
         public async Task<IActionResult> Index()
         {
-            var page = new AdminQueryPage<PhotoUpload>(this, db.PhotoUploads.AsNoTracking(), "Convidado, Ficheiro ou Notas");
+            var page = new AdminQueryPage<PhotoUpload>(this, db.PhotoUploads.AsNoTracking(), T("Convidado, Ficheiro ou Notas"));
             var types = await db.PhotoUploads.Select(x => x.ContentType).Distinct().OrderBy(x => x).ToListAsync(page.Cancellation);
 
             page.Select("type", "Formato", States(types), value => p => p.ContentType == value);
 
-            var from = page.Date("from", "Envio (Hora de Lisboa) Desde");
-            var until = page.Date("until", "Envio (Hora de Lisboa) Até");
+            var from = page.Date("from", T("Envio (Hora de Lisboa) Desde"));
+            var until = page.Date("until", T("Envio (Hora de Lisboa) Até"));
 
             if (from > until)
                 page.InvalidDates();

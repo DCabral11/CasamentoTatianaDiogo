@@ -1,32 +1,32 @@
 @model IReadOnlyDictionary<string, string>
 @inject CasamentoTatianaDiogo.Services.WeddingClock Clock
 @{
-    ViewData["Title"] = "Mensagens por fase";
+    ViewData["Title"] = T("Mensagens por fase");
     var messagePage = (WeddingPageMessages)ViewData["MessagePage"]!;
 }
 <div class="container py-5 narrow">
-    <h1>Mensagens por fase</h1>
-    <p>As mensagens mudam com o início e o fim do casamento, no fuso @Clock.TimeZoneId. <a asp-controller="Settings" asp-action="Index">Editar horários</a></p>
-    <nav class="d-flex flex-wrap gap-2 mb-4" aria-label="Página a editar">
+    <h1>@T("Mensagens por fase")</h1>
+    <p>@T("As mensagens mudam com o início e o fim do casamento, no fuso") @Clock.TimeZoneId. <a asp-controller="Settings" asp-action="Index">@T("Editar horários")</a></p>
+    <nav class="d-flex flex-wrap gap-2 mb-4" aria-label="@T("Página a editar")">
         @foreach (var item in WeddingPageMessages.Pages)
         {
-            <a class="btn @(item == messagePage ? "btn-primary" : "btn-outline-primary")" aria-current="@(item == messagePage ? "page" : null)" asp-action="PhaseMessages" asp-route-page="@item.Controller">@item.Title</a>
+            <a class="btn @(item == messagePage ? "btn-primary" : "btn-outline-primary")" aria-current="@(item == messagePage ? "page" : null)" asp-action="PhaseMessages" asp-route-page="@item.Controller">@T(item.Title)</a>
         }
     </nav>
     <form method="post" asp-action="PhaseMessages" class="admin-form">
-        <h2 class="h4">@messagePage.Title</h2>
-        <p>Antes do casamento, deixa o campo vazio para manter a página atual. Durante e depois, um campo vazio usa a mensagem sugerida.</p>
+        <h2 class="h4">@T(messagePage.Title)</h2>
+        <p>@T("Antes do casamento, deixa o campo vazio para manter a página atual. Durante e depois, um campo vazio usa a mensagem sugerida.")</p>
         <input type="hidden" name="page" value="@messagePage.Controller" />
         <partial name="_FormErrors" />
         @foreach (var field in messagePage.Fields)
         {
             <div class="mb-3">
-                <label class="form-label" for="@field.Phase">@field.Label</label>
-                <textarea id="@field.Phase" name="guidance[@field.Key]" class="form-control" rows="3" placeholder="@field.DefaultText">@Model.GetValueOrDefault(field.Key)</textarea>
+                <label class="form-label" for="@field.Phase">@T(field.Label)</label>
+                <textarea id="@field.Phase" name="guidance[@field.Key]" class="form-control" rows="3" placeholder="@T(field.DefaultText)">@Model.GetValueOrDefault(field.Key)</textarea>
             </div>
         }
         <div class="admin-form-actions">
-            <button type="submit" class="btn btn-primary">Guardar mensagens</button>
+            <button type="submit" class="btn btn-primary">@T("Guardar mensagens")</button>
         </div>
     </form>
 </div>

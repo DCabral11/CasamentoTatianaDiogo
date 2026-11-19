@@ -14,7 +14,7 @@ namespace CasamentoTatianaDiogo.Services
 {
     public class RsvpService(ApplicationDbContext db, IRsvpEmailNotificationService emailNotifications, IWebHostEnvironment environment, IAppMessageService messages, RsvpVerificationService verification, TimeProvider time) : IRsvpService
     {
-        public const string ConcurrentChange = "Este convite foi alterado entretanto ou este formulário já não é válido. A tua resposta não foi guardada. Revê a resposta mais recente antes de voltar a enviar.";
+        public static string ConcurrentChange => T("Este convite foi alterado entretanto ou este formulário já não é válido. A tua resposta não foi guardada. Revê a resposta mais recente antes de voltar a enviar.");
         private AppResult Conflict() => AppResult.Failure(ErrorCode.RsvpConcurrencyConflict, ConcurrentChange);
 
         public async Task<RsvpEditStatus?> HeartbeatAsync(int guestId, Guid editSessionId, string? verificationToken)
@@ -153,7 +153,7 @@ namespace CasamentoTatianaDiogo.Services
         {
             var access = await verification.GetAccessAsync(verificationToken, model.GuestId);
             if (access == null)
-                return AppResult.Failure(ErrorCode.AccessDenied, "Verifica o teu contacto antes de confirmar ou alterar a resposta.");
+                return AppResult.Failure(ErrorCode.AccessDenied, T("Verifica o teu contacto antes de confirmar ou alterar a resposta."));
             if (model.Status is not (Enums.RsvpStatus.Attending or Enums.RsvpStatus.NotAttending))
                 return AppResult.Failure(ErrorCode.RsvpStatusRequired, messages.Get(ErrorCode.RsvpStatusRequired), nameof(model.Status));
 
@@ -170,10 +170,10 @@ namespace CasamentoTatianaDiogo.Services
 
             if (model.FamilyResponses.Any(x => x.Status.HasValue &&
                 x.Status is not (Enums.RsvpStatus.Attending or Enums.RsvpStatus.NotAttending)))
-                return AppResult.Failure(ErrorCode.InvalidRequest, "Escolhe uma resposta de presença válida.");
+                return AppResult.Failure(ErrorCode.InvalidRequest, T("Escolhe uma resposta de presença válida."));
             var requestedIds = model.FamilyResponses.Where(x => x.Status.HasValue).Select(x => x.GuestId).Distinct().ToList();
             if (requestedIds.Count > 0 && guest.Family?.AllowGroupRsvp != true)
-                return AppResult.Failure(ErrorCode.AccessDenied, "Só podes responder pelos convidados autorizados deste convite.");
+                return AppResult.Failure(ErrorCode.AccessDenied, T("Só podes responder pelos convidados autorizados deste convite."));
 
             var responsesByGuestId = model.FamilyResponses
                 .GroupBy(response => response.GuestId)
@@ -185,7 +185,7 @@ namespace CasamentoTatianaDiogo.Services
                     .Where(g => requestedIds.Contains(g.Id) && g.FamilyId == access.FamilyId && g.Id != guest.Id && !g.IsPlusOne)
                     .ToListAsync();
                 if (familyGuests.Count != requestedIds.Count)
-                    return AppResult.Failure(ErrorCode.AccessDenied, "Só podes responder pelos convidados autorizados deste convite.");
+                    return AppResult.Failure(ErrorCode.AccessDenied, T("Só podes responder pelos convidados autorizados deste convite."));
                 guestsToRespond.AddRange(familyGuests.Where(g => responsesByGuestId[g.Id].Status.HasValue));
             }
 
@@ -257,7 +257,7 @@ namespace CasamentoTatianaDiogo.Services
                 response.UserAgent = userAgent;
 
                 responseGuest.CurrentStatus = response.Status;
-                RsvpHistory.Record(db, responseGuest, guest.Family!.Name, savedAt, $"Convite de {guest.DisplayName}",
+                RsvpHistory.Record(db, responseGuest, guest.Family!.Name, savedAt, TF($"Convite de {guest.DisplayName}"),
                     before, RsvpHistory.Snapshot(response, responseGuest.PlusOnes));
 
                 receiptPeople.Add(new(responseGuest.DisplayName, response.Status, response.DietaryRestrictions,
@@ -268,7 +268,7 @@ namespace CasamentoTatianaDiogo.Services
 
                 emailDetails.Add(new RsvpEmailDetail(
                     responseGuest.DisplayName,
-                    response.Status == CasamentoTatianaDiogo.Models.Enums.RsvpStatus.Attending ? "Confirmada" : "Não confirmada",
+                    response.Status == CasamentoTatianaDiogo.Models.Enums.RsvpStatus.Attending ? "Confirmada" : T("Não confirmada"),
                     response.DietaryRestrictions,
                     response.Message,
                     response.MusicRequest,

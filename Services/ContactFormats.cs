@@ -89,7 +89,7 @@ public static class ContactFormats
     {
         if (string.IsNullOrWhiteSpace(input)) return null;
         var phone = Phone(input, settings);
-        if (phone == null) error("Indica um telefone válido, com o indicativo para números estrangeiros. Para uma extensão usa, por exemplo, «ext. 123».");
+        if (phone == null) error(T("Indica um telefone válido, com o indicativo para números estrangeiros. Para uma extensão usa, por exemplo, «ext. 123»."));
         return phone?.Stored ?? input;
     }
 
@@ -97,7 +97,7 @@ public static class ContactFormats
     {
         if (string.IsNullOrWhiteSpace(input)) return null;
         var email = Email(input, settings, limit, completeDomain: true);
-        if (email == null) error("Indica um email válido dentro do limite do campo.");
+        if (email == null) error(T("Indica um email válido dentro do limite do campo."));
         return email?.Stored ?? input;
     }
 }

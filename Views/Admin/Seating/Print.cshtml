@@ -1,32 +1,32 @@
 @model CasamentoTatianaDiogo.ViewModels.Admin.SeatingPlan
 @{
     bool alphabetical = ViewBag.Alphabetical;
-    ViewData["Title"] = alphabetical ? "Lista alfabética de convidados" : "Lista de lugares por mesa";
+    ViewData["Title"] = alphabetical ? T("Lista alfabética de convidados") : T("Lista de lugares por mesa");
 }
 <div class="container py-5 seating-list">
     <h1>@ViewData["Title"]</h1>
     <div class="seating-print-tools admin-page-actions">
-        <button id="print-seating" type="button" class="btn btn-primary">Imprimir lista</button>
-        <a asp-action="Print" asp-route-alphabetical="@(!alphabetical)" class="btn btn-outline-primary">@(alphabetical ? "Lista por mesa" : "Lista alfabética")</a>
-        <a asp-action="Index" class="btn btn-link">Voltar ao plano</a>
+        <button id="print-seating" type="button" class="btn btn-primary">@T("Imprimir lista")</button>
+        <a asp-action="Print" asp-route-alphabetical="@(!alphabetical)" class="btn btn-outline-primary">@(alphabetical ? T("Lista por mesa") : T("Lista alfabética"))</a>
+        <a asp-action="Index" class="btn btn-link">@T("Voltar ao plano")</a>
     </div>
     @if (alphabetical)
     {
-        <table class="table"><thead><tr><th>Convidado</th><th>Família</th><th>Mesa e lugar</th></tr></thead>
+        <table class="table"><thead><tr><th>@T("Convidado")</th><th>@T("Família")</th><th>@T("Mesa e lugar")</th></tr></thead>
             <tbody>@foreach (var guest in Model.Guests) {
-                <tr><th scope="row">@guest.Name</th><td>@guest.Family</td><td>@Model.Places.GetValueOrDefault(guest.Id, "Sem lugar")</td></tr>
+                <tr><th scope="row">@guest.Name</th><td>@guest.Family</td><td>@Model.Places.GetValueOrDefault(guest.Id, T("Sem lugar"))</td></tr>
             }</tbody>
         </table>
     }
     else
     {
-        @if (Model.Tables.Count == 0) { <p>Ainda não existem mesas.</p> }
+        @if (Model.Tables.Count == 0) { <p>@T("Ainda não existem mesas.")</p> }
         @foreach (var table in Model.Tables)
         {
             <section class="mb-4">
                 <h2>@table.Name</h2>
-                <p>Fila @table.MapRow · Coluna @table.MapColumn · @table.Seats.Count(s => s.Assignment != null) de @table.Seats.Count lugares ocupados</p>
-                <table class="table"><thead><tr><th>Lugar</th><th>Convidado</th><th>Família</th></tr></thead>
+                <p>@T("Fila") @table.MapRow @T("· Coluna") @table.MapColumn · @table.Seats.Count(s => s.Assignment != null) @T("de") @table.Seats.Count @T("lugares ocupados")</p>
+                <table class="table"><thead><tr><th>@T("Lugar")</th><th>@T("Convidado")</th><th>@T("Família")</th></tr></thead>
                     <tbody>@foreach (var seat in table.Seats) {
                         var person = seat.Assignment == null ? null : Model.People.GetValueOrDefault(seat.Assignment.GuestId);
                         <tr><th scope="row">@seat.Number</th><td>@(person?.Name ?? "Livre")</td><td>@person?.Family</td></tr>

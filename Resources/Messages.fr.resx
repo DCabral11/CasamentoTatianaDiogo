@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <data name="RsvpSearchNoResults" xml:space="preserve">
+    <value>Aucun invité trouvé. Essaie un autre nom ou contacte les mariés.</value>
+  </data>
+  <data name="RsvpStatusRequired" xml:space="preserve">
+    <value>Indique si tu seras présent avant de continuer.</value>
+  </data>
+  <data name="RsvpGuestNotFound" xml:space="preserve">
+    <value>Cet invité est introuvable. Reviens à la recherche et réessaie.</value>
+  </data>
+  <data name="RsvpExistingResponse" xml:space="preserve">
+    <value>Un invité sélectionné a déjà une réponse. Coche l’option de modification pour la remplacer.</value>
+  </data>
+  <data name="RsvpInvalidPlusOne" xml:space="preserve">
+    <value>Impossible d’associer cet accompagnant. Actualise la page et réessaie.</value>
+  </data>
+  <data name="RsvpSaved" xml:space="preserve">
+    <value>Ta réponse a été enregistrée. Merci d’avoir confirmé ta présence !</value>
+  </data>
+  <data name="AdminLoginFailed" xml:space="preserve">
+    <value>Connexion impossible. Vérifie ton email et ton mot de passe.</value>
+  </data>
+  <data name="GuestAvatarNotFound" xml:space="preserve">
+    <value>Sélectionne une image disponible dans la liste.</value>
+  </data>
+  <data name="UnexpectedError" xml:space="preserve">
+    <value>Un problème est survenu. Nous examinons la situation. Reviens à l’accueil ou réessaie dans quelques instants.</value>
+  </data>
+  <data name="PageNotFound" xml:space="preserve">
+    <value>Cette page n’est plus ici. L’adresse est peut-être incomplète ou la page a changé.</value>
+  </data>
+  <data name="AccessDenied" xml:space="preserve">
+    <value>Tu n’as pas accès à cette page. Connecte-toi avec un compte autorisé et réessaie.</value>
+  </data>
+  <data name="InvalidRequest" xml:space="preserve">
+    <value>Impossible de terminer la demande. Vérifie les informations et réessaie.</value>
+  </data>
+  <data name="PageUnavailable" xml:space="preserve">
+    <value>Impossible d’ouvrir cette page. Réessaie dans quelques instants.</value>
+  </data>
+</root>

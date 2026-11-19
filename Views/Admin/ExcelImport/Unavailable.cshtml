@@ -1,9 +1,9 @@
-@{ ViewData["Title"] = "Importação indisponível"; }
+@{ ViewData["Title"] = T("Importação indisponível"); }
 <div class="container narrow py-5">
-    <h1>Importação indisponível</h1>
-    <p>Esta pré-visualização expirou, já foi concluída ou cancelada, ou não pertence à tua sessão de administração. Consulta a lista antes de iniciar uma nova importação.</p>
+    <h1>@T("Importação indisponível")</h1>
+    <p>@T("Esta pré-visualização expirou, já foi concluída ou cancelada, ou não pertence à tua sessão de administração. Consulta a lista antes de iniciar uma nova importação.")</p>
     <div class="d-flex flex-wrap gap-2">
-        <a class="btn btn-primary" asp-controller="InvitationGroups" asp-action="Index">Ver famílias</a>
-        <a class="btn btn-outline-primary" asp-controller="Guests" asp-action="Index">Ver convidados</a>
+        <a class="btn btn-primary" asp-controller="InvitationGroups" asp-action="Index">@T("Ver famílias")</a>
+        <a class="btn btn-outline-primary" asp-controller="Guests" asp-action="Index">@T("Ver convidados")</a>
     </div>
 </div>

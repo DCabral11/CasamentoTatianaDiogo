@@ -20,8 +20,8 @@ public class RsvpVerificationException(string message) : Exception(message);
 public class RsvpVerificationService(ApplicationDbContext db, IRsvpVerificationSender sender,
     IDataProtectionProvider protection, TimeProvider time, ILogger<RsvpVerificationService> logger)
 {
-    public const string ContactUnavailable = "Não é possível usar este contacto para este convite. Usa o contacto da primeira confirmação ou fala com os noivos.";
-    public const string InvalidCode = "O código é inválido, expirou ou atingiu o limite de tentativas. Pede um novo código se necessário.";
+    public static string ContactUnavailable => T("Não é possível usar este contacto para este convite. Usa o contacto da primeira confirmação ou fala com os noivos.");
+    public static string InvalidCode => T("O código é inválido, expirou ou atingiu o limite de tentativas. Pede um novo código se necessário.");
     private readonly IDataProtector challengeProtector = protection.CreateProtector("Rsvp.Challenge.v1");
     private readonly IDataProtector accessProtector = protection.CreateProtector("Rsvp.Access.v1");
     private readonly IDataProtector receiptProtector = protection.CreateProtector("Rsvp.Receipt.v1");
@@ -48,22 +48,22 @@ public class RsvpVerificationService(ApplicationDbContext db, IRsvpVerificationS
         CancellationToken cancellationToken = default)
     {
         if (channel != RsvpVerificationChannel.Email)
-            throw new RsvpVerificationException("A verificação está disponível apenas por email.");
+            throw new RsvpVerificationException(T("A verificação está disponível apenas por email."));
         var normalized = RsvpContact.Normalize(channel, contact);
         if (normalized == null)
-            throw new RsvpVerificationException("Indica um endereço de email válido.");
+            throw new RsvpVerificationException(T("Indica um endereço de email válido."));
         var familyId = await db.Guests.Where(x => x.Id == guestId && !x.IsPlusOne).Select(x => (int?)x.FamilyId).SingleOrDefaultAsync(cancellationToken);
-        if (!familyId.HasValue) throw new RsvpVerificationException("O convite não foi encontrado.");
+        if (!familyId.HasValue) throw new RsvpVerificationException(T("O convite não foi encontrado."));
         if (!await ContactAllowedAsync(familyId.Value, channel, normalized, cancellationToken))
             throw new RsvpVerificationException(ContactUnavailable);
         if (!sender.IsAvailable(channel))
-            throw new RsvpVerificationException("Este meio de envio está indisponível de momento. Tenta mais tarde ou contacta os noivos.");
+            throw new RsvpVerificationException(T("Este meio de envio está indisponível de momento. Tenta mais tarde ou contacta os noivos."));
 
         // Each check uses an atomic database update/unique insert, including on separate instances.
         if (!await TryUseLimitAsync($"contact:{channel}:{normalized}", 5, TimeSpan.FromMinutes(1), cancellationToken) ||
             !await TryUseLimitAsync($"ip:{ip ?? "unknown"}", 20, TimeSpan.Zero, cancellationToken) ||
             !await TryUseLimitAsync($"family:{familyId}", 10, TimeSpan.Zero, cancellationToken))
-            throw new RsvpVerificationException("Aguarda um minuto antes de pedir outro código. Se já fizeste vários pedidos, tenta novamente dentro de uma hora.");
+            throw new RsvpVerificationException(T("Aguarda um minuto antes de pedir outro código. Se já fizeste vários pedidos, tenta novamente dentro de uma hora."));
 
         var now = Now;
         await db.RsvpVerificationChallenges.Where(x => x.FamilyId == familyId.Value && x.Channel == channel &&
@@ -84,7 +84,7 @@ public class RsvpVerificationService(ApplicationDbContext db, IRsvpVerificationS
             challenge.ExpiresAt = Now;
             await db.SaveChangesAsync(cancellationToken);
             logger.LogWarning("RSVP verification delivery failed. Channel: {Channel}; failure type: {FailureType}", channel, ex.GetType().Name);
-            throw new RsvpVerificationException("Não foi possível enviar o código. Aguarda um minuto e tenta novamente ou contacta os noivos.");
+            throw new RsvpVerificationException(T("Não foi possível enviar o código. Aguarda um minuto e tenta novamente ou contacta os noivos."));
         }
 
         // Keep short-lived verification data bounded without a background process on Vercel.

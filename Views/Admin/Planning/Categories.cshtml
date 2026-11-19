@@ -1,23 +1,23 @@
 @model PlanningCategory
 @{
-    ViewData["Title"] = "Categorias do orçamento e dos fornecedores";
+    ViewData["Title"] = T("Categorias do orçamento e dos fornecedores");
     var categories = (List<PlanningCategory>)ViewBag.Categories;
 }
 <div class="container py-5 narrow">
-    <h1>Categorias</h1><partial name="~/Views/Admin/Planning/_PlanningNav.cshtml" />
+    <h1>@T("Categorias")</h1><partial name="~/Views/Admin/Planning/_PlanningNav.cshtml" />
     <form method="post" asp-action="SaveCategory" class="admin-form mb-4">
-        <h2 class="h4">@(Model.Id == 0 ? "Adicionar categoria" : "Renomear categoria")</h2>
+        <h2 class="h4">@(Model.Id == 0 ? T("Adicionar categoria") : T("Renomear categoria"))</h2>
         <input asp-for="Id" type="hidden" /><partial name="_FormErrors" />
-        <label asp-for="Name" class="form-label">Nome da categoria</label>
+        <label asp-for="Name" class="form-label">@T("Nome da categoria")</label>
         <input asp-for="Name" required class="form-control" aria-describedby="category-help" />
-        <p class="form-text" id="category-help">A mesma lista é usada no orçamento e nos fornecedores. Ao renomear uma categoria, o nome é atualizado nos dois módulos.</p>
+        <p class="form-text" id="category-help">@T("A mesma lista é usada no orçamento e nos fornecedores. Ao renomear uma categoria, o nome é atualizado nos dois módulos.")</p>
         <div class="admin-form-actions">
-            <button class="btn btn-primary">Guardar categoria</button>
-            @if (Model.Id != 0) { <a class="btn btn-link" asp-action="Categories" asp-route-id="">Cancelar</a> }
+            <button class="btn btn-primary">@T("Guardar categoria")</button>
+            @if (Model.Id != 0) { <a class="btn btn-link" asp-action="Categories" asp-route-id="">@T("Cancelar")</a> }
         </div>
     </form>
     <partial name="_AdminFilters" />
-    @if (categories.Count == 0) { <p>Não há categorias nesta seleção.</p> }
+    @if (categories.Count == 0) { <p>@T("Não há categorias nesta seleção.")</p> }
     else
     {
         <ul class="list-group">
@@ -25,9 +25,9 @@
             {
                 <li class="list-group-item d-flex flex-wrap align-items-center gap-3">
                     <span class="me-auto">@category.Name</span>
-                    <a asp-action="Categories" asp-route-id="@category.Id" aria-label="Renomear @category.Name">Renomear</a>
-                    <form method="post" asp-action="DeleteCategory" asp-route-id="@category.Id" data-delete-confirmation data-delete-message="Eliminar a categoria «@category.Name»?">
-                        <button class="btn btn-sm btn-outline-danger" aria-label="Eliminar @category.Name">Eliminar</button>
+                    <a asp-action="Categories" asp-route-id="@category.Id" aria-label="@T("Renomear {0}", category.Name)">@T("Renomear")</a>
+                    <form method="post" asp-action="DeleteCategory" asp-route-id="@category.Id" data-delete-confirmation data-delete-message="@T("Eliminar a categoria «{0}»?", category.Name)">
+                        <button class="btn btn-sm btn-outline-danger" aria-label="@T("Eliminar {0}", category.Name)">@T("Eliminar")</button>
                     </form>
                 </li>
             }

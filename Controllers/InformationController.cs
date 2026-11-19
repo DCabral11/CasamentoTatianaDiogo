@@ -1,4 +1,4 @@
-﻿#region References
+#region References
 
 using CasamentoTatianaDiogo.Data;
 using CasamentoTatianaDiogo.Services.Interfaces;
@@ -11,12 +11,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CasamentoTatianaDiogo.Controllers
 {
-    public class InformationController(IWeddingSettingsService settings, ApplicationDbContext db, WeddingClock clock, PublicContentCache cache) : Controller
+    public class InformationController(IWeddingSettingsService settings, ApplicationDbContext db, WeddingClock clock, PublicContentCache cache, SiteTranslationService translations) : Controller
     {
-        public async Task<IActionResult> Index() => View(new InformationViewModel(await settings.GetPresentationAsync(),
-            await cache.GetAsync<IReadOnlyList<Models.TimelineEvent>>("timeline", async () =>
+        public async Task<IActionResult> Index()
+        {
+            var originals = await cache.GetAsync<IReadOnlyList<Models.TimelineEvent>>("timeline", async () =>
                 await db.TimelineEvents.AsNoTracking().Where(t => t.IsActive)
-                    .OrderBy(t => t.DisplayOrder).ThenBy(t => t.EventDateTime).ToListAsync())));
+                    .OrderBy(t => t.DisplayOrder).ThenBy(t => t.EventDateTime).ToListAsync());
+            var timeline = new List<Models.TimelineEvent>();
+            foreach (var item in originals) timeline.Add(new()
+            {
+                Id = item.Id, EventDateTime = item.EventDateTime, DisplayOrder = item.DisplayOrder, IconName = item.IconName, IsActive = item.IsActive,
+                Title = await translations.TranslateAsync($"TimelineEvent.{item.Id}.Title", item.Title),
+                Description = await translations.TranslateAsync($"TimelineEvent.{item.Id}.Description", item.Description)
+            });
+            return View(new InformationViewModel(await settings.GetPresentationAsync(), timeline));
+        }
 
         [HttpGet]
         public async Task<IActionResult> Calendar()

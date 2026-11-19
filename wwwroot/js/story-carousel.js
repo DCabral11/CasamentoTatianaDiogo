@@ -28,7 +28,7 @@
     function updatePlayback() {
         clearTimeout(timer);
         const playing = rotationEnabled && visible && !document.hidden && !hovered;
-        const action = rotationEnabled ? 'Pausar apresentação' : 'Iniciar apresentação';
+        const action = rotationEnabled ? window.weddingText("Pausar apresentação") : window.weddingText("Iniciar apresentação");
         toggle.setAttribute('aria-label', action);
         toggle.title = action;
         rotationIcon.className = rotationEnabled ? 'bi bi-pause-fill' : 'bi bi-play-fill';
@@ -61,7 +61,7 @@
     });
 
     album.addEventListener('slid.bs.carousel', event => {
-        position.textContent = `Fotografia ${event.to + 1} de ${slides.length}`;
+        position.textContent = window.weddingText("Fotografia {0} de {1}", event.to + 1, slides.length);
         updatePlayback();
     });
     album.addEventListener('focusin', () => {

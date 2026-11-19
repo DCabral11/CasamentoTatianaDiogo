@@ -9,6 +9,7 @@
         if (!child.document.body?.dataset.postResult && location.href !== url.href)
             history.replaceState(history.state, "", url.href);
         document.title = child.document.title;
+        window.setWeddingLanguage(child.document.documentElement.lang, child.weddingMessages);
     }
     function pageLoaded() {
         try {

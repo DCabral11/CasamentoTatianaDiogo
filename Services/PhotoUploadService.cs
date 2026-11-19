@@ -1,4 +1,4 @@
-﻿using CasamentoTatianaDiogo.Data;
+using CasamentoTatianaDiogo.Data;
 using CasamentoTatianaDiogo.Models;
 using CasamentoTatianaDiogo.Services.Interfaces;
 using CasamentoTatianaDiogo.ViewModels;
@@ -14,15 +14,15 @@ namespace CasamentoTatianaDiogo.Services
             var now = clock.Now;
 
             if (!s.IsEnabled)
-                return (false, "O envio de fotografias não está disponível neste momento.", s);
+                return (false, T("O envio de fotografias não está disponível neste momento."), s);
 
             if (s.OpensAt.HasValue && now < s.OpensAt.Value)
-                return (false, $"O envio de fotografias abre em {s.OpensAt.Value:dd/MM/yyyy 'às' HH:mm}.", s);
+                return (false, TF($"O envio de fotografias abre em {s.OpensAt.Value:dd/MM/yyyy 'às' HH:mm}."), s);
 
             if (s.ClosesAt.HasValue && now > s.ClosesAt.Value)
-                return (false, $"O envio de fotografias encerrou em {s.ClosesAt.Value:dd/MM/yyyy 'às' HH:mm}.", s);
+                return (false, TF($"O envio de fotografias encerrou em {s.ClosesAt.Value:dd/MM/yyyy 'às' HH:mm}."), s);
 
-            return (true, "Partilha as tuas melhores fotografias connosco!", s);
+            return (true, T("Partilha as tuas melhores fotografias connosco!"), s);
         }
 
         public async Task<(bool ok, string message)> UploadAsync(PhotoUploadViewModel vm, string? ip, CancellationToken ct)
@@ -34,11 +34,11 @@ namespace CasamentoTatianaDiogo.Services
 
             var s = window.settings;
             if (vm.Files.Count == 0 || vm.Files.All(file => file.Length == 0))
-                return (false, "Escolhe pelo menos uma fotografia.");
+                return (false, T("Escolhe pelo menos uma fotografia."));
             var folder = s.GoogleDriveFolderId;
 
             if (string.IsNullOrWhiteSpace(folder))
-                return (false, "O envio de fotografias ainda está a ser preparado. Tenta novamente mais tarde.");
+                return (false, T("O envio de fotografias ainda está a ser preparado. Tenta novamente mais tarde."));
 
             var allowed = s.AllowedExtensionsCsv.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).Select(x => x.ToLowerInvariant()).ToHashSet();
             var mimeAllowed = new HashSet<string>
@@ -54,13 +54,13 @@ namespace CasamentoTatianaDiogo.Services
                 var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
 
                 if (!allowed.Contains(ext))
-                    return (false, $"O ficheiro {file.FileName} não tem um formato permitido.");
+                    return (false, TF($"O ficheiro {file.FileName} não tem um formato permitido."));
 
                 if (file.Length > s.MaxFilesSizeMb * 1024L * 1024L)
-                    return (false, $"O ficheiro {file.FileName} excede o limite de {s.MaxFilesSizeMb} MB.");
+                    return (false, TF($"O ficheiro {file.FileName} excede o limite de {s.MaxFilesSizeMb} MB."));
 
                 if (!mimeAllowed.Contains(file.ContentType.ToLowerInvariant()))
-                    return (false, $"O ficheiro {file.FileName} não pode ser enviado.");
+                    return (false, TF($"O ficheiro {file.FileName} não pode ser enviado."));
 
                 var safe = Regex.Replace(Path.GetFileNameWithoutExtension(file.FileName), "[^a-zA-Z0-9_-]", "_");
                 var stored = $"{DateTime.UtcNow:yyyyMMddHHmmss}_{Guid.NewGuid():N}_{safe}{ext}";
@@ -83,7 +83,7 @@ namespace CasamentoTatianaDiogo.Services
 
             await db.SaveChangesAsync();
 
-            return (true, "As tuas fotografias foram enviadas. Obrigado por partilhares este momento connosco!");
+            return (true, T("As tuas fotografias foram enviadas. Obrigado por partilhares este momento connosco!"));
         }
     }
 }

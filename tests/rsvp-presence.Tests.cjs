@@ -21,7 +21,7 @@ function events(extra = {}) {
     }, extra);
 }
 
-async function browser() {
+async function browser({ answerFields = [], savedDraft = null } = {}) {
     let now = 1_000_000;
     let timerId = 0;
     const timers = new Map();
@@ -31,19 +31,20 @@ async function browser() {
     const form = events({
         dataset: { editStatusUrl: '/Rsvp/EditStatus', rsvpDraft: 'family' },
         elements: { namedItem: name => ({ value: { GuestId: '7', EditSessionId: 'session', __RequestVerificationToken: 'csrf' }[name] }) },
-        querySelectorAll: () => [], querySelector: () => submit
+        querySelectorAll: () => answerFields, querySelector: () => submit
     });
     const controls = {
         'guest-status': events({ form, value: 'Attending' }),
         'rsvp-other-editor': { hidden: true },
         'rsvp-concurrency-conflict': { hidden: true },
-        'rsvp-presence-unavailable': { hidden: true }
+        'rsvp-presence-unavailable': { hidden: true },
+        'rsvp-draft-restored': { hidden: true }
     };
     const document = events({ hidden: false, getElementById: id => controls[id], querySelectorAll: () => [], querySelector: () => null });
     const window = events();
     const context = vm.createContext({
         document, window, URLSearchParams, Date: { now: () => now },
-        sessionStorage: { getItem: () => null, setItem() {}, removeItem() {} },
+        sessionStorage: { getItem: () => savedDraft, setItem(key, value) { savedDraft = value; }, removeItem() { savedDraft = null; } },
         setTimeout(callback, delay) { timers.set(++timerId, { callback, at: now + delay }); return timerId; },
         clearTimeout: id => timers.delete(id),
         async fetch(url, options) {
@@ -57,6 +58,7 @@ async function browser() {
     await flush();
     return {
         form, document, window, controls, requests, submit,
+        savedDraft: () => savedDraft,
         reply: callback => { reply = callback; },
         async advance(milliseconds) {
             const end = now + milliseconds;
@@ -75,6 +77,19 @@ async function browser() {
         }
     };
 }
+
+test('preserves editable RSVP answers when changing language and restores them in the translated form', async () => {
+    const field = value => ({ id: 'message', type: 'textarea', value, closest: () => null });
+    const original = await browser({ answerFields: [field('Vegetariano, por favor')] });
+    original.window.emit('wedding:before-language-change');
+    const saved = original.savedDraft();
+    assert.equal(JSON.parse(saved).answers.message, 'Vegetariano, por favor');
+    const translatedField = field('');
+    const translated = await browser({ answerFields: [translatedField], savedDraft: saved });
+    assert.equal(translatedField.value, 'Vegetariano, por favor');
+    assert.equal(translated.controls['rsvp-draft-restored'].hidden, false);
+    assert.equal(translated.savedDraft(), null);
+});
 
 test('checks once per minute and deduplicates activity and initial page events', async () => {
     const page = await browser();

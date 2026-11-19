@@ -19,7 +19,7 @@
 
         event.preventDefault();
         pendingForm = form;
-        message.textContent = form.dataset.deleteMessage || "Esta ação não pode ser anulada.";
+        message.textContent = form.dataset.deleteMessage || window.weddingText("Esta ação não pode ser anulada.");
         modal.show();
     });
 

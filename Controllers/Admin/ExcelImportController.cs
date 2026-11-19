@@ -80,7 +80,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             var errorNumbers = preview.Plan.Where(x => x.Errors.Count > 0).Select(x => x.Number);
 
             if (!ModelState.IsValid || rows.Count == 0 || !rows.Select(x => x.Number).SequenceEqual(errorNumbers) || rows.Any(x => x.Values == null || x.Values.Count != preview.Columns.Length || preview.Columns.Any(c => !x.Values.ContainsKey(c) || (ExcelImportService.IsBooleanColumn(c) && x.Values[c] is not ("Sim" or "Não"))) || x.Values.Values.Any(v => v?.Length > 2000)))
-                return BadRequest("A correção é inválida. Volta à pré-visualização e revê as linhas com erros.");
+                return BadRequest(T("A correção é inválida. Volta à pré-visualização e revê as linhas com erros."));
 
             var originals = preview.Rows.ToDictionary(x => x.Number);
 
@@ -90,7 +90,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             if (!await imports.ReviewAsync(draft, preview.Rows))
                 return Changed(id);
 
-            TempData["Success"] = "Pré-visualização atualizada. Revê as diferenças antes de confirmar a importação.";
+            TempData["Success"] = T("Pré-visualização atualizada. Revê as diferenças antes de confirmar a importação.");
 
             return RedirectToAction(nameof(Preview), new { id });
         }
@@ -115,7 +115,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             {
                 if (await imports.ConfirmAsync(draft))
                 {
-                    TempData["Success"] = $"Importação concluída: {preview.Plan.Count(x => x.Action == "Criar")} criados, " + $"{preview.Plan.Count(x => x.Action == "Atualizar")} atualizados e {preview.Plan.Count(x => x.Action == "Sem alterações")} sem alterações.";
+                    TempData["Success"] = T("Importação concluída: {0} criados, {1} atualizados e {2} sem alterações.", preview.Plan.Count(x => x.Action == "Criar"), preview.Plan.Count(x => x.Action == "Atualizar"), preview.Plan.Count(x => x.Action == "Sem alterações"));
 
                     return RedirectToAction("Index", draft.ImportType == "families" ? "InvitationGroups" : "Guests");
                 }
@@ -127,7 +127,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
 
             await imports.ReviewAsync(draft, preview.Rows);
 
-            TempData["Error"] = "A importação não foi concluída. Os dados podem ter mudado desde a pré-visualização. Revê a versão atualizada e confirma novamente.";
+            TempData["Error"] = T("A importação não foi concluída. Os dados podem ter mudado desde a pré-visualização. Revê a versão atualizada e confirma novamente.");
 
             return RedirectToAction(nameof(Preview), new { id });
         }
@@ -148,7 +148,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
             if (deleted != 1)
                 return Changed(id);
 
-            TempData["Success"] = "Importação cancelada. Nenhum registo foi alterado.";
+            TempData["Success"] = T("Importação cancelada. Nenhum registo foi alterado.");
 
             return RedirectToAction(draft.ImportType == "families" ? nameof(Families) : nameof(Guests));
         }
@@ -182,7 +182,7 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
 
         private IActionResult Changed(Guid id)
         {
-            TempData["Error"] = "Esta pré-visualização foi alterada ou contém erros. Revê a versão atual antes de continuar.";
+            TempData["Error"] = T("Esta pré-visualização foi alterada ou contém erros. Revê a versão atual antes de continuar.");
 
             return RedirectToAction(nameof(Preview), new { id });
         }
@@ -197,8 +197,8 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
         private static ExcelImportViewModel CreateViewModel(string type) => new()
         {
             ImportType = type,
-            Title = "Importar " + ExcelImportService.Sheet(type),
-            Description = "Carrega o Excel, revê e corrige os dados, e só depois confirma as alterações.",
+            Title = T("Importar ") + ExcelImportService.Sheet(type),
+            Description = T("Carrega o Excel, revê e corrige os dados, e só depois confirma as alterações."),
             TemplateAction = type == "families" ? nameof(DownloadFamiliesTemplate) : nameof(DownloadGuestsTemplate),
             SubmitAction = type == "families" ? nameof(ImportFamilies) : nameof(ImportGuests),
             ExpectedSheetName = ExcelImportService.Sheet(type), 
@@ -211,13 +211,13 @@ namespace CasamentoTatianaDiogo.Controllers.Admin
 
             #region Instructions Sheet
 
-            var instructions = book.Worksheets.Add("Instruções");
+            var instructions = book.Worksheets.Add(T("Instruções"));
 
-            instructions.Cell("A1").Value = "Importação com Pré-Visualização e Confirmação";
-            instructions.Cell("A2").Value = "ID vazio: novo registo. ID existente: atualizar esse registo. Consulta o ID na lista da administração.";
-            instructions.Cell("A3").Value = type == "families" ? "Uma referência existente também identifica a família a atualizar. Não repitas a referência ou o ID." : "Para atualizar convidados, indica o ID. Não são associados apenas pelo nome. A referência da família tem de existir.";
-            instructions.Cell("A4").Value = "Os campos opcionais vazios apagam o valor anterior nas atualizações. Revê a comparação antes de confirmar.";
-            instructions.Cell("A5").Value = "Até 500 linhas e 5 MB. Usa valores, não fórmulas. Booleanos: Sim ou Não. Não alteres os títulos nem a folha.";
+            instructions.Cell("A1").Value = T("Importação com Pré-Visualização e Confirmação");
+            instructions.Cell("A2").Value = T("ID vazio: novo registo. ID existente: atualizar esse registo. Consulta o ID na lista da administração.");
+            instructions.Cell("A3").Value = type == "families" ? T("Uma referência existente também identifica a família a atualizar. Não repitas a referência ou o ID.") : T("Para atualizar convidados, indica o ID. Não são associados apenas pelo nome. A referência da família tem de existir.");
+            instructions.Cell("A4").Value = T("Os campos opcionais vazios apagam o valor anterior nas atualizações. Revê a comparação antes de confirmar.");
+            instructions.Cell("A5").Value = T("Até 500 linhas e 5 MB. Usa valores, não fórmulas. Booleanos: Sim ou Não. Não alteres os títulos nem a folha.");
 
             instructions.Column(1).Width = 110;
             instructions.Range("A1:A5").Style.Alignment.WrapText = true;

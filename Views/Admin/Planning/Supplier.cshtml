@@ -1,6 +1,6 @@
 @model Supplier
 @{
-    ViewData["Title"] = Model.Id == 0 ? "Adicionar fornecedor" : "Editar fornecedor";
+    ViewData["Title"] = Model.Id == 0 ? T("Adicionar fornecedor") : T("Editar fornecedor");
     var categories = new SelectList((List<PlanningCategory>)ViewBag.Categories, "Id", "Name");
 }
 <div class="container py-5 narrow">
@@ -9,27 +9,27 @@
         <input asp-for="Id" type="hidden" /><partial name="_FormErrors" />
         <partial name="_ContactFormatHelp" />
         <div class="row g-3">
-            <div class="col-md-6"><label asp-for="CategoryId" class="form-label">Categoria</label><select asp-for="CategoryId" asp-items="categories" class="form-select" required><option value="">Escolhe uma categoria</option></select></div>
-            <div class="col-md-6"><label asp-for="Name" class="form-label">Nome</label><input asp-for="Name" class="form-control" required /></div>
-            <div class="col-md-6"><label asp-for="Contact" class="form-label">Contacto</label><input asp-for="Contact" class="form-control" /></div>
-            <div class="col-md-6"><label asp-for="Phone" class="form-label">Telefone</label><input asp-for="Phone" type="tel" class="form-control" /></div>
-            <div class="col-md-6"><label asp-for="Email" class="form-label">Email</label><input asp-for="Email" type="text" inputmode="email" spellcheck="false" class="form-control" /></div>
-            <div class="col-12"><label asp-for="Website" class="form-label">Site</label><input asp-for="Website" type="url" class="form-control" placeholder="https://" /></div>
-            <div class="col-md-6"><label asp-for="Status" class="form-label">Estado</label><select asp-for="Status" asp-items="new SelectList(Supplier.States)" class="form-select"></select></div>
-            <div class="col-md-6"><label asp-for="Price" class="form-label">Preço proposto (€)</label><input asp-for="Price" type="number" min="0" step="0.01" class="form-control" /></div>
-            <div class="col-12"><label asp-for="Notes" class="form-label">Notas</label><textarea asp-for="Notes" class="form-control" rows="3"></textarea></div>
+            <div class="col-md-6"><label asp-for="CategoryId" class="form-label">@T("Categoria")</label><select asp-for="CategoryId" asp-items="categories" class="form-select" required><option value="">@T("Escolhe uma categoria")</option></select></div>
+            <div class="col-md-6"><label asp-for="Name" class="form-label">@T("Nome")</label><input asp-for="Name" class="form-control" required /></div>
+            <div class="col-md-6"><label asp-for="Contact" class="form-label">@T("Contacto")</label><input asp-for="Contact" class="form-control" /></div>
+            <div class="col-md-6"><label asp-for="Phone" class="form-label">@T("Telefone")</label><input asp-for="Phone" type="tel" class="form-control" /></div>
+            <div class="col-md-6"><label asp-for="Email" class="form-label">@T("Email")</label><input asp-for="Email" type="text" inputmode="email" spellcheck="false" class="form-control" /></div>
+            <div class="col-12"><label asp-for="Website" class="form-label">@T("Site")</label><input asp-for="Website" type="url" class="form-control" placeholder="@T("https://")" /></div>
+            <div class="col-md-6"><label asp-for="Status" class="form-label">@T("Estado")</label><select asp-for="Status" asp-items="Supplier.States.Select(state => new SelectListItem(T(state), state))" class="form-select"></select></div>
+            <div class="col-md-6"><label asp-for="Price" class="form-label">@T("Preço proposto (€)")</label><input asp-for="Price" type="number" min="0" step="0.01" class="form-control" /></div>
+            <div class="col-12"><label asp-for="Notes" class="form-label">@T("Notas")</label><textarea asp-for="Notes" class="form-control" rows="3"></textarea></div>
         </div>
         <div class="admin-form-actions">
-            <button class="btn btn-primary">Guardar fornecedor</button>
-            <a class="btn btn-link" asp-action="Suppliers">Cancelar</a>
+            <button class="btn btn-primary">@T("Guardar fornecedor")</button>
+            <a class="btn btn-link" asp-action="Suppliers">@T("Cancelar")</a>
         </div>
     </form>
     @if (Model.Id != 0)
     {
         <div class="d-flex flex-wrap align-items-center gap-3 mt-3">
-            <a asp-action="Budget" asp-route-supplierId="@Model.Id">Consultar orçamento deste fornecedor</a>
-            <a asp-action="Line" asp-route-supplierId="@Model.Id">Adicionar linha de orçamento</a>
-            <form method="post" asp-action="DeleteSupplier" asp-route-id="@Model.Id" data-delete-confirmation data-delete-message="Eliminar este fornecedor?"><button class="btn btn-outline-danger">Eliminar fornecedor</button></form>
+            <a asp-action="Budget" asp-route-supplierId="@Model.Id">@T("Consultar orçamento deste fornecedor")</a>
+            <a asp-action="Line" asp-route-supplierId="@Model.Id">@T("Adicionar linha de orçamento")</a>
+            <form method="post" asp-action="DeleteSupplier" asp-route-id="@Model.Id" data-delete-confirmation data-delete-message="@T("Eliminar este fornecedor?")"><button class="btn btn-outline-danger">@T("Eliminar fornecedor")</button></form>
         </div>
     }
 </div>

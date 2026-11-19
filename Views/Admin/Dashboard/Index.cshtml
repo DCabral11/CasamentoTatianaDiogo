@@ -1,76 +1,77 @@
 @model CasamentoTatianaDiogo.ViewModels.Admin.DashboardViewModel
 @using System.Globalization
 @{
-    ViewData["Title"] = "Painel de administração";
-    var pt = CultureInfo.GetCultureInfo("pt-PT");
+    ViewData["Title"] = T("Painel de administração");
+    var pt = CultureInfo.CurrentCulture;
     var answered = Model.Attending + Model.NotAttending;
     var responseRate = Model.GuestCount == 0 ? 0m : 100m * answered / Model.GuestCount;
     var modules = new (string Title, string Icon, (string Name, string Controller, string Action)[] Links)[]
     {
-        ("Convidados e convites", "people", [
-            ("Respostas de presença", "RsvpAdmin", "Index"), ("Convidados", "Guests", "Index"),
-            ("Famílias", "InvitationGroups", "Index"), ("Plano de mesas", "Seating", "Index")]),
-        ("Orçamento e fornecedores", "wallet2", [
-            ("Orçamento", "Planning", "Budget"), ("Fornecedores", "Planning", "Suppliers"),
-            ("Categorias", "Planning", "Categories")]),
-        ("Programa do dia", "calendar-event", [
-            ("Horário do dia", "Timeline", "Index"), ("Programa musical", "Music", "Index")]),
-        ("Site e fotografias", "images", [
-            ("Dados e conteúdos do casamento", "Settings", "Index"), ("Textos do site", "Content", "Index"),
-            ("Informações práticas", "Content", "Travel"),
-            ("Mensagens por fase", "Content", "PhaseMessages"),
-            ("Perguntas frequentes", "FaqAdmin", "Index"),
-            ("Fotografias recebidas", "PhotoAdmin", "Index"), ("Definições da galeria", "PhotoAdmin", "Settings")])
+        (T("Convidados e convites"), "people", [
+            (T("Respostas de presença"), "RsvpAdmin", "Index"), ("Convidados", "Guests", "Index"),
+            (T("Famílias"), "InvitationGroups", "Index"), (T("Plano de mesas"), "Seating", "Index")]),
+        (T("Orçamento e fornecedores"), "wallet2", [
+            (T("Orçamento"), "Planning", "Budget"), (T("Fornecedores"), "Planning", "Suppliers"),
+            (T("Categorias"), "Planning", "Categories")]),
+        (T("Programa do dia"), "calendar-event", [
+            (T("Horário do dia"), "Timeline", "Index"), (T("Programa musical"), "Music", "Index")]),
+        (T("Site e fotografias"), "images", [
+            (T("Dados e conteúdos do casamento"), "Settings", "Index"), (T("Textos do site"), "Content", "Index"),
+            (T("Informações práticas"), "Content", "Travel"),
+            (T("Traduções"), "Translations", "Index"),
+            (T("Mensagens por fase"), "Content", "PhaseMessages"),
+            (T("Perguntas frequentes"), "FaqAdmin", "Index"),
+            (T("Fotografias recebidas"), "PhotoAdmin", "Index"), (T("Definições da galeria"), "PhotoAdmin", "Settings")])
     };
 }
 <div class="container dashboard">
-    <h1>Painel de administração</h1>
+    <h1>@T("Painel de administração")</h1>
     <div class="dashboard-overview">
         <section class="dashboard-rsvp" aria-labelledby="rsvp-summary">
-            <h2 id="rsvp-summary">Respostas de presença</h2>
-            <p class="dashboard-rate"><strong>@responseRate.ToString("0", pt)%</strong> de respostas</p>
-            <progress max="100" value="@responseRate.ToString(CultureInfo.InvariantCulture)" aria-label="Percentagem de convidados que responderam"></progress>
-            <p>@answered de @Model.GuestCount convidados responderam</p>
+            <h2 id="rsvp-summary">@T("Respostas de presença")</h2>
+            <p class="dashboard-rate"><strong>@responseRate.ToString("0", pt)%</strong> @T("de respostas")</p>
+            <progress max="100" value="@responseRate.ToString(CultureInfo.InvariantCulture)" aria-label="@T("Percentagem de convidados que responderam")"></progress>
+            <p>@answered @T("de") @Model.GuestCount @T("convidados responderam")</p>
             <dl class="dashboard-counts">
-                <div><dt>Confirmados</dt><dd>@Model.Attending</dd></div>
-                <div><dt>Não vão</dt><dd>@Model.NotAttending</dd></div>
-                <div><dt>Por responder</dt><dd>@Model.Pending</dd></div>
+                <div><dt>@T("Confirmados")</dt><dd>@Model.Attending</dd></div>
+                <div><dt>@T("Não vão")</dt><dd>@Model.NotAttending</dd></div>
+                <div><dt>@T("Por responder")</dt><dd>@Model.Pending</dd></div>
             </dl>
-            <a asp-controller="RsvpAdmin" asp-action="Index">Consultar respostas <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+            <a asp-controller="RsvpAdmin" asp-action="Index">@T("Consultar respostas") <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
         </section>
         <div class="dashboard-metrics">
             <a class="dashboard-metric" asp-controller="Planning" asp-action="Budget">
-                <span><i class="bi bi-wallet2" aria-hidden="true"></i> Valor por pagar</span>
+                <span><i class="bi bi-wallet2" aria-hidden="true"></i> @T("Valor por pagar")</span>
                 <strong>@Model.BudgetBalance.ToString("C2", pt)</strong>
-                <small>@(Model.UnpricedLines > 0 ? $"Linhas com custo por definir: {Model.UnpricedLines}" : "Custo total menos o valor pago")</small>
+                <small>@(Model.UnpricedLines > 0 ? TF($"Linhas com custo por definir: {Model.UnpricedLines}") : T("Custo total menos o valor pago"))</small>
             </a>
             <a class="dashboard-metric" asp-controller="Planning" asp-action="@(Model.PaymentLineId.HasValue ? "Line" : "Budget")" asp-route-id="@Model.PaymentLineId">
-                <span><i class="bi bi-calendar3" aria-hidden="true"></i> @(Model.IsPaymentOverdue ? "Prazo em atraso" : "Próximo prazo")</span>
-                <strong>@(Model.PaymentDate?.ToString("dd/MM/yyyy", pt) ?? "Sem prazo")</strong>
-                <small>@(Model.PaymentCategory ?? "Consultar orçamento")</small>
+                <span><i class="bi bi-calendar3" aria-hidden="true"></i> @(Model.IsPaymentOverdue ? T("Prazo em atraso") : T("Próximo prazo"))</span>
+                <strong>@(Model.PaymentDate?.ToString("dd/MM/yyyy", pt) ?? T("Sem prazo"))</strong>
+                <small>@(Model.PaymentCategory ?? T("Consultar orçamento"))</small>
             </a>
             <a class="dashboard-metric" asp-controller="Music" asp-action="Index">
-                <span><i class="bi bi-music-note-list" aria-hidden="true"></i> Músicas por escolher</span>
-                <strong>@Model.MissingSongs</strong><small>Momentos sem música atribuída</small>
+                <span><i class="bi bi-music-note-list" aria-hidden="true"></i> @T("Músicas por escolher")</span>
+                <strong>@Model.MissingSongs</strong><small>@T("Momentos sem música atribuída")</small>
             </a>
             <a class="dashboard-metric" asp-controller="PhotoAdmin" asp-action="Index">
-                <span><i class="bi bi-camera" aria-hidden="true"></i> Fotografias recebidas</span>
-                <strong>@Model.UploadedPhotos</strong><small>Abrir galeria</small>
+                <span><i class="bi bi-camera" aria-hidden="true"></i> @T("Fotografias recebidas")</span>
+                <strong>@Model.UploadedPhotos</strong><small>@T("Abrir galeria")</small>
             </a>
         </div>
     </div>
 
     <nav class="dashboard-modules" aria-labelledby="modules-title">
-        <h2 id="modules-title">Módulos de administração</h2>
+        <h2 id="modules-title">@T("Módulos de administração")</h2>
         <div class="dashboard-groups">
             @foreach (var group in modules)
             {
                 <div class="dashboard-group">
-                    <h3><i class="bi bi-@group.Icon" aria-hidden="true"></i> @group.Title</h3>
+                    <h3><i class="bi bi-@group.Icon" aria-hidden="true"></i> @T(group.Title)</h3>
                     <ul>
                         @foreach (var link in group.Links)
                         {
-                            <li><a asp-controller="@link.Controller" asp-action="@link.Action">@link.Name<i class="bi bi-chevron-right" aria-hidden="true"></i></a></li>
+                            <li><a asp-controller="@link.Controller" asp-action="@link.Action">@T(link.Name)<i class="bi bi-chevron-right" aria-hidden="true"></i></a></li>
                         }
                     </ul>
                 </div>

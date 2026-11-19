@@ -1,7 +1,7 @@
 document.getElementById('print-seating')?.addEventListener('click', () => window.print());
 const search = document.getElementById('seat-search');
 if (search) {
-    const normalize = text => text.normalize('NFD').replace(/\p{M}/gu, '').toLocaleLowerCase('pt');
+    const normalize = text => text.normalize('NFD').replace(/\p{M}/gu, '').toLocaleLowerCase(document.documentElement.lang);
     const rows = [...document.querySelectorAll('#seating-guests-list [data-name]')]
         .map(row => ({ row, name: normalize(row.dataset.name) }));
     document.getElementById('seat-search-box').hidden = false;
