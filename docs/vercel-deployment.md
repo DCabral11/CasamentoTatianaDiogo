@@ -1,6 +1,6 @@
 # Deploy to Vercel
 
-The application runs as a .NET 10 Linux container on Vercel with an external PostgreSQL database. Vercel's Container Runtime is currently in beta. The root `Dockerfile` and `vercel.json` select the Container preset, HTTP port 8080 and Washington, D.C. (`iad1`), matching the supplied Neon database's AWS `us-east-1` region. If the database moves, update the function region too.
+The application uses Vercel Services: public files are served directly by the CDN, and dynamic routes run as a .NET 10 Linux container with an external PostgreSQL database. Vercel's Container Runtime and Services are in beta. The root `Dockerfile` enables ReadyToRun for Linux x64. `vercel.json` keeps HTTP port 8080 and Washington, D.C. (`iad1`), matching the supplied Neon database's AWS `us-east-1` region. If the database moves, update the function region too.
 
 ## 1. Create the database
 
@@ -48,7 +48,11 @@ Repeat this command before deploying changes that introduce a database migration
 
 ## 3. Configure Vercel and deploy
 
-Import the Git repository into Vercel. Use the repository root as the project root and **Container** as the framework preset. Leave the build and output directory overrides unset; Vercel builds the Dockerfile. The project configuration supplies the non-secret port and runtime settings.
+Import the Git repository into Vercel. Use the repository root as the project root and **Services** as the framework preset. For an existing Container project, change **Settings > Build and Deployment > Framework Preset** to **Services** and save before deploying this configuration. Leave project-level build, install and output directory overrides unset: each service owns its build settings, so a top-level `framework` field cannot be combined with `services` in `vercel.json`.
+
+The `assets` service publishes `wwwroot` with output directory `.` as static files. Requests under `/css`, `/js`, `/images` and `/lib`, plus `/favicon.ico`, go to that service with their original paths and query strings. The `site` service builds the root Dockerfile; the final catch-all sends every other path, including RSVP/admin POSTs and photo uploads, to ASP.NET. There is no API prefix and no public HTML caching. Both services belong to the same deployment and use the existing domain and environment variables.
+
+Keep `wwwroot` in the container as well: Razor computes version hashes and the carousel metadata from these same files. The static service uses the original bytes, so `asp-append-version` URLs still match. A static cache miss no longer starts a .NET instance. This requires the actual **Services** project preset; cache headers alone cannot provide this behavior in Container mode.
 
 Add these environment variables in Project Settings:
 
@@ -67,6 +71,7 @@ Deploy through the Vercel Git integration or `vercel --prod`. The app stores aut
 After deployment, verify:
 
 - `/health/live` returns 200 when the application process is running.
+- A first request to `/images/navbar.png` or a versioned `/js/site.js` is served without a `site` function invocation. Confirm the asset's service/source in Observability and that asset requests no longer produce application-start logs. `x-vercel-cache: MISS` is normal for a first static CDN request; subsequent requests can show `HIT`.
 - `/health` returns 200 when the database is reachable, PostgreSQL migrations are applied, essential tables exist and initial site/photo settings have been seeded. It returns 503 for incomplete setup; details remain in server logs.
 - The home, information and RSVP pages load, and administrator login works.
 - Email verification works and a test RSVP saves successfully. Configure SMTP and enable email verification before opening RSVPs.
@@ -93,6 +98,9 @@ See [Reducing Vercel compute usage](performance.md) for cache lifetimes, invalid
 
 ```powershell
 dotnet test tests/CasamentoTatianaDiogo.Tests/CasamentoTatianaDiogo.Tests.csproj
+node --test tests/rsvp-presence.Tests.cjs
+npm ci --prefix tests/vercel --ignore-scripts --no-audit --no-fund
+npm test --prefix tests/vercel
 dotnet publish CasamentoTatianaDiogo.csproj -c Release
 docker build -t casamento-vercel .
 docker run --rm --env-file .env.docker -p 8080:8080 casamento-vercel
@@ -101,6 +109,10 @@ docker run --rm --env-file .env.docker -p 8080:8080 casamento-vercel
 For the last command, create an ignored `.env.docker` containing real `DATABASE_URL` and any optional integration settings. Initialize the target database first. Use one `NAME=value` entry per line without shell assignments or surrounding quotes. The container runs as a non-root user. Application files are read-only at runtime; only request buffering may use temporary scratch space.
 
 The regression suite checks PostgreSQL migrations and timestamp mappings, shared protection keys, Lisbon daylight saving time, upload limits, chunk retries and HTTP routes. Its isolated application database is SQLite; it does not contact your production database or Drive account.
+
+The Docker build restores and publishes the same Linux runtime identifier with `PublishReadyToRun=true`. For a comparison image or temporary rollback, build with `--build-arg PUBLISH_READY_TO_RUN=false`; this changes compilation without changing features. ReadyToRun increases image size, so measure first-request latency and Active CPU after deployment as well as local startup times.
+
+PostgreSQL connections default to `GSS Encryption Mode=Disable` to avoid Npgsql 10 probing absent Kerberos libraries. TLS and channel binding remain configured as before. Native Npgsql strings can explicitly select another GSS mode; PostgreSQL URLs accept `gssencmode`, and component configuration accepts `PGGSSENCMODE`.
 
 ## HTTP 500 after the first deployment
 

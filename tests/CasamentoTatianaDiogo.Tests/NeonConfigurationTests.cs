@@ -106,6 +106,39 @@ public class NeonConfigurationTests
 
     private static IConfiguration Config(Dictionary<string, string?> values) => new ConfigurationBuilder().AddInMemoryCollection(values).Build();
 
+    [Fact]
+    public void NeonConnectionsSkipKerberosProbingAndKeepTlsAndChannelBinding()
+    {
+        var url = Resolve(new() { ["DATABASE_URL"] = PooledUrl });
+        Assert.Equal(GssEncryptionMode.Disable, url.GssEncryptionMode);
+        Assert.Equal(SslMode.Require, url.SslMode);
+        Assert.Equal(ChannelBinding.Require, url.ChannelBinding);
+
+        var components = Resolve(new() { ["PGHOST"] = PooledHost, ["PGUSER"] = "owner", ["PGPASSWORD"] = "test", ["PGDATABASE"] = "db" });
+        Assert.Equal(GssEncryptionMode.Disable, components.GssEncryptionMode);
+        Assert.Equal(SslMode.VerifyFull, components.SslMode);
+        Assert.Equal(ChannelBinding.Require, components.ChannelBinding);
+
+        var native = new NpgsqlConnectionStringBuilder(DatabaseConfiguration.NormalizePostgresConnection(
+            "Host=example.com;Database=db;Username=owner;Password=test;SSL Mode=VerifyFull;Channel Binding=Require"));
+        Assert.Equal(GssEncryptionMode.Disable, native.GssEncryptionMode);
+        Assert.Equal(SslMode.VerifyFull, native.SslMode);
+        Assert.Equal(ChannelBinding.Require, native.ChannelBinding);
+    }
+
+    [Theory]
+    [InlineData("disable", GssEncryptionMode.Disable)]
+    [InlineData("prefer", GssEncryptionMode.Prefer)]
+    [InlineData("require", GssEncryptionMode.Require)]
+    public void ExplicitKerberosModesRemainAvailable(string mode, GssEncryptionMode expected)
+    {
+        Assert.Equal(expected, Resolve(new() { ["DATABASE_URL"] = DirectUrl + "&gssencmode=" + mode }).GssEncryptionMode);
+        Assert.Equal(expected, new NpgsqlConnectionStringBuilder(DatabaseConfiguration.NormalizePostgresConnection(
+            $"Host=example.com;Database=db;Username=owner;GSS Encryption Mode={mode}")).GssEncryptionMode);
+        Assert.Equal(expected, Resolve(new() { ["PGHOST"] = DirectHost, ["PGUSER"] = "owner", ["PGPASSWORD"] = "test",
+            ["PGDATABASE"] = "db", ["PGGSSENCMODE"] = mode }).GssEncryptionMode);
+    }
+
     [Theory]
     [InlineData("  {0}\r\n")]
     [InlineData("\"{0}\"")]

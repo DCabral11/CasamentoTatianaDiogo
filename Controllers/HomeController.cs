@@ -1,6 +1,7 @@
 #region References
 
 using CasamentoTatianaDiogo.Services.Interfaces;
+using CasamentoTatianaDiogo.Services;
 using CasamentoTatianaDiogo.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,9 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CasamentoTatianaDiogo.Controllers
 {
-    public class HomeController(IWeddingSettingsService settings, IWebHostEnvironment environment) : Controller
+    public class HomeController(IWeddingSettingsService settings, CarouselPhotoService photos) : Controller
     {
-        public async Task<IActionResult> Index() => View(new HomeViewModel(await settings.GetPresentationAsync(), GetCarouselImages()));
+        public async Task<IActionResult> Index() => View(new HomeViewModel(await settings.GetPresentationAsync(), photos.GetPhotos()));
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
@@ -38,33 +39,6 @@ namespace CasamentoTatianaDiogo.Controllers
         }
 
         #region Private Methods
-
-        private IReadOnlyList<CarouselPhoto> GetCarouselImages()
-        {
-            var imagesDirectory = Path.Combine(environment.WebRootPath, "images");
-
-            if (!Directory.Exists(imagesDirectory))
-                return [];
-
-            var validExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { ".jpg", ".jpeg", ".png", ".webp" };
-
-            return Directory.EnumerateFiles(imagesDirectory, "carousel-*")
-                .Where(path => validExtensions.Contains(Path.GetExtension(path)))
-                .OrderBy(Path.GetFileName, StringComparer.OrdinalIgnoreCase)
-                .Select(path =>
-                {
-                    var filename = Path.GetFileName(path);
-                    var url = $"/images/{Uri.EscapeDataString(filename)}";
-                    var variant = $"/images/home/{Uri.EscapeDataString(filename)}";
-                    var prefix = Path.Combine(imagesDirectory, "home", filename);
-                    var srcSet = System.IO.File.Exists(prefix + "-480.webp") && System.IO.File.Exists(prefix + "-768.webp")
-                        ? $"{variant}-480.webp 480w, {variant}-768.webp 768w"
-                        : null;
-                    var thumbnail = System.IO.File.Exists(prefix + "-thumb.webp") ? variant + "-thumb.webp" : url;
-                    return new CarouselPhoto(url, srcSet, thumbnail);
-                })
-                .ToList();
-        }
 
         private ViewResult ErrorView(string title, string message, string icon, string label)
         {

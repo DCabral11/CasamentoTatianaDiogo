@@ -74,6 +74,7 @@ public static class DatabaseConfiguration
             MaxPoolSize = IsNeonPooler(host) ? 2 : 10,
             Timeout = int.Parse(FirstConfigured(config, "PGCONNECT_TIMEOUT") ?? "15", System.Globalization.CultureInfo.InvariantCulture)
         };
+        settings.GssEncryptionMode = Enum.Parse<GssEncryptionMode>(FirstConfigured(config, "PGGSSENCMODE") ?? "disable", true);
         return settings.ConnectionString;
     }
 
@@ -96,7 +97,12 @@ public static class DatabaseConfiguration
             connection = Unquote(connection.Trim());
             if (connection.Length == 0 || connection.Contains('\n') || connection.Contains('\r'))
                 throw new FormatException();
-            return new NpgsqlConnectionStringBuilder(ParsePostgresConnection(connection)).ConnectionString;
+            var settings = new NpgsqlConnectionStringBuilder(ParsePostgresConnection(connection));
+            // Neon uses TLS and password authentication. Avoid probing missing
+            // Kerberos libraries on each cold start; preserve an explicit GSS mode.
+            if (!settings.ShouldSerialize("GSS Encryption Mode"))
+                settings.GssEncryptionMode = GssEncryptionMode.Disable;
+            return settings.ConnectionString;
         }
         catch (Exception ex) when (ex is ArgumentException or FormatException or InvalidOperationException or OverflowException)
         {
@@ -127,6 +133,7 @@ public static class DatabaseConfiguration
             Username = Uri.UnescapeDataString(userInfo[0]),
             Password = Uri.UnescapeDataString(userInfo[1]),
             SslMode = SslMode.VerifyFull,
+            GssEncryptionMode = GssEncryptionMode.Disable,
             MaxPoolSize = IsNeonPooler(uri.Host) ? 2 : 10,
             Timeout = 15
         };
@@ -138,6 +145,7 @@ public static class DatabaseConfiguration
             switch (parts[0].ToLowerInvariant())
             {
                 case "sslmode": builder.SslMode = Enum.Parse<SslMode>(value.Replace("-", ""), true); break;
+                case "gssencmode": builder.GssEncryptionMode = Enum.Parse<GssEncryptionMode>(value, true); break;
                 case "channel_binding": builder.ChannelBinding = Enum.Parse<ChannelBinding>(value, true); break;
                 case "connect_timeout": builder.Timeout = int.Parse(value, System.Globalization.CultureInfo.InvariantCulture); break;
                 case "application_name": builder.ApplicationName = value; break;

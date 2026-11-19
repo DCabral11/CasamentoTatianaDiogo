@@ -85,6 +85,7 @@ builder.Services.AddSingleton<WeddingClock>();
 builder.Services.AddScoped<IWeddingSettingsService, WeddingSettingsService>();
 builder.Services.AddMemoryCache();
 builder.Services.AddSingleton<PublicContentCache>();
+builder.Services.AddSingleton<CarouselPhotoService>();
 builder.Services.AddScoped<PublicContentCacheInvalidationInterceptor>();
 builder.Services.ConfigureDbContext<ApplicationDbContext>((services, options) =>
     options.AddInterceptors(services.GetRequiredService<PublicContentCacheInvalidationInterceptor>()));

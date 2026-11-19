@@ -1,6 +1,46 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": "container",
+  "services": {
+    "assets": {
+      "root": "wwwroot",
+      "outputDirectory": "."
+    },
+    "site": {
+      "root": ".",
+      "runtime": "container",
+      "entrypoint": "Dockerfile"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/:assetType(css|js|images|lib)/:path*",
+      "destination": { "service": "assets" }
+    },
+    {
+      "source": "/favicon.ico",
+      "destination": { "service": "assets" }
+    },
+    {
+      "source": "/(.*)",
+      "destination": { "service": "site" }
+    }
+  ],
+  "headers": [
+    {
+      "source": "/:assetType(css|js|images|lib)/:path*",
+      "missing": [{ "type": "query", "key": "v" }],
+      "headers": [{ "key": "Cache-Control", "value": "public,max-age=3600" }]
+    },
+    {
+      "source": "/:assetType(css|js|images|lib)/:path*",
+      "has": [{ "type": "query", "key": "v", "value": ".+" }],
+      "headers": [{ "key": "Cache-Control", "value": "public,max-age=31536000,immutable" }]
+    },
+    {
+      "source": "/favicon.ico",
+      "headers": [{ "key": "Cache-Control", "value": "public,max-age=3600" }]
+    }
+  ],
   "regions": ["iad1"],
   "env": {
     "PORT": "8080",

@@ -1,0 +1,11 @@
+{
+  "name": "casamento-vercel-routing-tests",
+  "private": true,
+  "scripts": {
+    "test": "node --test routing.Tests.cjs"
+  },
+  "devDependencies": {
+    "@vercel/fs-detectors": "7.12.4",
+    "@vercel/routing-utils": "6.6.1"
+  }
+}
